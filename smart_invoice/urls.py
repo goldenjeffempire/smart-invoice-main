@@ -18,7 +18,13 @@ urlpatterns = [
     path("faq/", views.faq, name="faq"),
     path("support/", views.support, name="support"),
     path("features/", views.features, name="features"),
+    # Settings pages
     path("settings/", views.settings_view, name="settings"),
+    path("settings/profile/", views.settings_profile, name="settings_profile"),
+    path("settings/business/", views.settings_business, name="settings_business"),
+    path("settings/security/", views.settings_security, name="settings_security"),
+    path("settings/notifications/", views.settings_notifications, name="settings_notifications"),
+    path("settings/billing/", views.settings_billing, name="settings_billing"),
     path("about/", views.about, name="about"),
     path("pricing/", views.pricing, name="pricing"),
     path("terms/", views.terms, name="terms"),
