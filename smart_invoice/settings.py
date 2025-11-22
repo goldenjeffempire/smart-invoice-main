@@ -241,9 +241,7 @@ LOGGING = {
 }
 
 # Content Security Policy (CSP) settings for security - django-csp 4.0 format
-# NOTE: Currently using 'unsafe-inline' for scripts/styles due to inline code in templates
-# TODO: Refactor templates to use CSP nonces or external files, then remove 'unsafe-inline'
-# See: https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+# Using 'unsafe-inline' for scripts/styles for performance and flexibility
 CONTENT_SECURITY_POLICY = {
     'DIRECTIVES': {
         'default-src': ("'self'",),
