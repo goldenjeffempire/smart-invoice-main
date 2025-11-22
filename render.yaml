@@ -3,7 +3,12 @@ services:
     name: smart-invoice
     env: python
     plan: free
-    buildCommand: pip install -r requirements.txt && npm install && npm run build:css && python manage.py migrate && python manage.py collectstatic --noinput
+    buildCommand: >
+      pip install -r requirements.txt &&
+      npm install &&
+      npm run build:css &&
+      python manage.py migrate &&
+      python manage.py collectstatic --noinput
     startCommand: gunicorn smart_invoice.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 30
     healthCheckPath: /health/
     envVars:
@@ -31,8 +36,8 @@ services:
         sync: false
       - key: DEFAULT_FROM_EMAIL
         value: "Smart Invoice <noreply@smartinvoice.com>"
-    databases: 
-        DATABASE_URL: postgresql://smart_invoice_8ujv_user:v9yzymFwqNx4qSrvQQXJiqoCSrRGIhv1@dpg-d4h07bshg0os73849cr0-a/smart_invoice_8ujv
-      - name: smartinvoice
-        plan: free
-        version: "14"
+
+databases:
+  - name: smartinvoice
+    plan: free
+    version: "14"
