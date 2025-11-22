@@ -12,9 +12,9 @@ class DarkModeManager {
 
     init() {
         const savedTheme = localStorage.getItem(this.darkModeKey);
-        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         
-        const isDark = savedTheme === 'dark' || (!savedTheme && systemPrefersDark);
+        // Light mode is the default. Dark mode only if explicitly saved.
+        const isDark = savedTheme === 'dark';
         
         if (isDark) {
             this.enableDarkMode(true);
@@ -169,6 +169,17 @@ class DarkModeManager {
                 e.target.classList.remove('transitioning');
             }
         });
+    }
+
+    /**
+     * Update toggle button state
+     */
+    updateToggleButton(isDark) {
+        const toggleButton = document.getElementById('dark-mode-toggle');
+        if (toggleButton) {
+            toggleButton.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+            toggleButton.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        }
     }
 
     /**

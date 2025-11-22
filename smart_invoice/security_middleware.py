@@ -64,10 +64,14 @@ class SecurityEventLoggingMiddleware(MiddlewareMixin):
             return None
             
         if request.method in ["POST", "PUT", "PATCH", "DELETE"]:
+            user_info = 'anonymous'
+            if hasattr(request, 'user') and request.user and hasattr(request.user, 'is_authenticated'):
+                user_info = request.user.username if request.user.is_authenticated else 'anonymous'
+            
             logger.info(
                 f"Security Event: {request.method} {request.path} "
                 f"from {self.get_client_ip(request)} "
-                f"user={request.user.username if request.user.is_authenticated else 'anonymous'}"
+                f"user={user_info}"
             )
         return None
 
@@ -77,10 +81,14 @@ class SecurityEventLoggingMiddleware(MiddlewareMixin):
             return response
             
         if response.status_code >= 400:
+            user_info = 'anonymous'
+            if hasattr(request, 'user') and request.user and hasattr(request.user, 'is_authenticated'):
+                user_info = request.user.username if request.user.is_authenticated else 'anonymous'
+            
             logger.warning(
                 f"HTTP {response.status_code}: {request.method} {request.path} "
                 f"from {self.get_client_ip(request)} "
-                f"user={request.user.username if request.user.is_authenticated else 'anonymous'}"
+                f"user={user_info}"
             )
         return response
 
