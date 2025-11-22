@@ -14,10 +14,13 @@ from weasyprint.text.fonts import FontConfiguration
 import json
 import urllib.parse
 from decimal import Decimal
+import threading
+import os
 
 from .models import Invoice, LineItem, UserProfile, InvoiceTemplate, RecurringInvoice
 from .forms import SignUpForm, InvoiceForm, UserProfileForm, InvoiceTemplateForm, RecurringInvoiceForm, InvoiceSearchForm
 from .search_filters import InvoiceSearch, InvoiceExport
+from .sendgrid_service import send_invoice_email_sendgrid
 
 
 def home(request):
@@ -216,27 +219,29 @@ def generate_pdf(request, invoice_id):
     return response
 
 
-@login_required
-def send_invoice_email(request, invoice_id):
-    invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)
-
-    if request.method == "POST":
-        recipient_email = request.POST.get("email", invoice.client_email)
-        subject = f"Invoice #{invoice.invoice_id} from {invoice.business_name}"
+def _send_email_async(invoice_id, recipient_email):
+    """Send invoice email in background thread using SendGrid."""
+    try:
+        invoice = Invoice.objects.get(id=invoice_id)
         
-        # Generate HTML email from template
-        html_message = render_to_string("emails/invoice_email.html", {"invoice": invoice})
-        
-        # Plain text fallback
-        payment_info = ""
-        if invoice.bank_name:
-            payment_info = f"\n\nPayment Information:\nBank: {invoice.bank_name}\nAccount Name: {invoice.account_name}\nAccount Number: {invoice.account_number}"
-        
-        notes_section = ""
-        if invoice.notes:
-            notes_section = f"\n\nNotes:\n{invoice.notes}"
-        
-        plain_message = f"""Dear {invoice.client_name},
+        # Check if SendGrid API key is configured
+        if os.environ.get("SENDGRID_API_KEY"):
+            # Use SendGrid with dynamic templates
+            send_invoice_email_sendgrid(invoice, recipient_email)
+        else:
+            # Fallback to Django email
+            subject = f"Invoice #{invoice.invoice_id} from {invoice.business_name}"
+            html_message = render_to_string("emails/invoice_email.html", {"invoice": invoice})
+            
+            payment_info = ""
+            if invoice.bank_name:
+                payment_info = f"\n\nPayment Information:\nBank: {invoice.bank_name}\nAccount Name: {invoice.account_name}\nAccount Number: {invoice.account_number}"
+            
+            notes_section = ""
+            if invoice.notes:
+                notes_section = f"\n\nNotes:\n{invoice.notes}"
+            
+            plain_message = f"""Dear {invoice.client_name},
 
 Thank you for your business! Please find attached invoice #{invoice.invoice_id}.
 
@@ -252,28 +257,41 @@ Best regards,
 {invoice.business_name}
 """
 
-        # Generate PDF
-        pdf_html_string = render_to_string("invoices/invoice_pdf.html", {"invoice": invoice})
-        font_config = FontConfiguration()
-        html = HTML(string=pdf_html_string)
-        pdf = html.write_pdf(font_config=font_config)
+            pdf_html_string = render_to_string("invoices/invoice_pdf.html", {"invoice": invoice})
+            font_config = FontConfiguration()
+            html = HTML(string=pdf_html_string)
+            pdf = html.write_pdf(font_config=font_config)
 
-        email = EmailMessage(
-            subject,
-            plain_message,
-            invoice.business_email,
-            [recipient_email],
-        )
-        email.content_subtype = "html"  # Main content is now HTML
-        email.body = html_message
-        email.attach(f"Invoice_{invoice.invoice_id}.pdf", pdf, "application/pdf")
-
-        try:
+            email = EmailMessage(
+                subject,
+                plain_message,
+                invoice.business_email,
+                [recipient_email],
+            )
+            email.content_subtype = "html"
+            email.body = html_message
+            email.attach(f"Invoice_{invoice.invoice_id}.pdf", pdf, "application/pdf")
             email.send()
-            messages.success(request, f"Invoice sent to {recipient_email}!")
-        except Exception as e:
-            messages.error(request, f"Failed to send email: {str(e)}")
+    except Exception as e:
+        print(f"Error sending invoice email: {str(e)}")
 
+
+@login_required
+def send_invoice_email(request, invoice_id):
+    invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)
+
+    if request.method == "POST":
+        recipient_email = request.POST.get("email", invoice.client_email)
+        
+        # Send email in background thread to avoid timeout
+        thread = threading.Thread(
+            target=_send_email_async,
+            args=(invoice.id, recipient_email),
+            daemon=True
+        )
+        thread.start()
+        
+        messages.success(request, f"Invoice is being sent to {recipient_email}. You'll receive a confirmation shortly.")
         return redirect("invoice_detail", invoice_id=invoice.id)
 
     return render(request, "invoices/send_email.html", {"invoice": invoice})
