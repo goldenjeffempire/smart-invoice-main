@@ -31,7 +31,8 @@ services:
         sync: false
       - key: DEFAULT_FROM_EMAIL
         value: "Smart Invoice <noreply@smartinvoice.com>"
-    databases:
+    databases: 
+        DATABASE_URL: postgresql://smart_invoice_8ujv_user:v9yzymFwqNx4qSrvQQXJiqoCSrRGIhv1@dpg-d4h07bshg0os73849cr0-a/smart_invoice_8ujv
       - name: smartinvoice
         plan: free
         version: "14"
