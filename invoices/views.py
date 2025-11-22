@@ -14,6 +14,7 @@ from weasyprint.text.fonts import FontConfiguration
 import json
 import urllib.parse
 from decimal import Decimal
+import threading
 
 from .models import Invoice, LineItem, UserProfile, InvoiceTemplate, RecurringInvoice
 from .forms import SignUpForm, InvoiceForm, UserProfileForm, InvoiceTemplateForm, RecurringInvoiceForm, InvoiceSearchForm
@@ -216,12 +217,10 @@ def generate_pdf(request, invoice_id):
     return response
 
 
-@login_required
-def send_invoice_email(request, invoice_id):
-    invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)
-
-    if request.method == "POST":
-        recipient_email = request.POST.get("email", invoice.client_email)
+def _send_email_async(invoice_id, recipient_email):
+    """Send invoice email in background thread to avoid timeout."""
+    try:
+        invoice = Invoice.objects.get(id=invoice_id)
         subject = f"Invoice #{invoice.invoice_id} from {invoice.business_name}"
         
         # Generate HTML email from template
@@ -264,16 +263,30 @@ Best regards,
             invoice.business_email,
             [recipient_email],
         )
-        email.content_subtype = "html"  # Main content is now HTML
+        email.content_subtype = "html"
         email.body = html_message
         email.attach(f"Invoice_{invoice.invoice_id}.pdf", pdf, "application/pdf")
+        email.send()
+    except Exception as e:
+        print(f"Error sending invoice email: {str(e)}")
 
-        try:
-            email.send()
-            messages.success(request, f"Invoice sent to {recipient_email}!")
-        except Exception as e:
-            messages.error(request, f"Failed to send email: {str(e)}")
 
+@login_required
+def send_invoice_email(request, invoice_id):
+    invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)
+
+    if request.method == "POST":
+        recipient_email = request.POST.get("email", invoice.client_email)
+        
+        # Send email in background thread to avoid timeout
+        thread = threading.Thread(
+            target=_send_email_async,
+            args=(invoice.id, recipient_email),
+            daemon=True
+        )
+        thread.start()
+        
+        messages.success(request, f"Invoice is being sent to {recipient_email}. You'll receive a confirmation shortly.")
         return redirect("invoice_detail", invoice_id=invoice.id)
 
     return render(request, "invoices/send_email.html", {"invoice": invoice})
