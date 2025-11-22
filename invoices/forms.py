@@ -242,13 +242,13 @@ class UserDetailsForm(forms.ModelForm):
         fields = ['first_name', 'last_name', 'email']
         widgets = {
             'first_name': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
+                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
             }),
             'last_name': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
+                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
             }),
             'email': forms.EmailInput(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
+                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
             }),
         }
 
@@ -259,26 +259,30 @@ class UserProfileForm(forms.ModelForm):
         fields = ['company_name', 'company_logo', 'default_currency', 'default_tax_rate', 'invoice_prefix', 'timezone']
         widgets = {
             'company_name': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
                 'placeholder': 'Company Name'
             }),
+            'company_logo': forms.FileInput(attrs={
+                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg transition',
+                'accept': 'image/*'
+            }),
             'default_currency': forms.Select(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
+                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
             }),
             'default_tax_rate': forms.NumberInput(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
                 'step': '0.01',
                 'min': '0',
                 'max': '100',
                 'placeholder': '0.00'
             }),
             'invoice_prefix': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
                 'placeholder': 'INV',
                 'maxlength': '10'
             }),
             'timezone': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
                 'placeholder': 'UTC'
             }),
         }
@@ -307,23 +311,26 @@ class PasswordChangeForm(forms.Form):
     """Form for changing password."""
     current_password = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
-            'placeholder': 'Current password'
+            'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+            'placeholder': 'Current password',
+            'autocomplete': 'current-password'
         }),
         label='Current Password'
     )
     new_password = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
-            'placeholder': 'New password'
+            'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+            'placeholder': 'New password',
+            'autocomplete': 'new-password'
         }),
         label='New Password',
         help_text='Password must be at least 8 characters long'
     )
     confirm_password = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
-            'placeholder': 'Confirm password'
+            'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+            'placeholder': 'Confirm password',
+            'autocomplete': 'new-password'
         }),
         label='Confirm Password'
     )
