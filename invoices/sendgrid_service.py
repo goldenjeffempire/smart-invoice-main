@@ -1,4 +1,4 @@
-"""SendGrid dynamic template email service."""
+"""SendGrid dynamic template email service for all email types."""
 import os
 import base64
 from sendgrid import SendGridAPIClient
@@ -9,8 +9,18 @@ from weasyprint.text.fonts import FontConfiguration
 from django.template.loader import render_to_string
 
 
-class SendGridTemplateService:
+class SendGridEmailService:
     """Service for sending emails using SendGrid dynamic templates."""
+    
+    # Template IDs - set these in your environment variables
+    TEMPLATE_IDS = {
+        'invoice_ready': os.environ.get('SENDGRID_INVOICE_READY_TEMPLATE_ID'),
+        'invoice_paid': os.environ.get('SENDGRID_INVOICE_PAID_TEMPLATE_ID'),
+        'payment_reminder': os.environ.get('SENDGRID_PAYMENT_REMINDER_TEMPLATE_ID'),
+        'new_user_welcome': os.environ.get('SENDGRID_NEW_USER_WELCOME_TEMPLATE_ID'),
+        'password_reset': os.environ.get('SENDGRID_PASSWORD_RESET_TEMPLATE_ID'),
+        'admin_alert': os.environ.get('SENDGRID_ADMIN_ALERT_TEMPLATE_ID'),
+    }
     
     def __init__(self):
         self.api_key = os.environ.get("SENDGRID_API_KEY")
@@ -18,104 +28,213 @@ class SendGridTemplateService:
             raise ValueError("SENDGRID_API_KEY not configured")
         self.client = SendGridAPIClient(self.api_key)
     
-    def send_invoice_with_template(self, invoice, recipient_email, template_id=None):
-        """
-        Send invoice email using SendGrid dynamic template.
-        
-        Args:
-            invoice: Invoice model instance
-            recipient_email: Recipient email address
-            template_id: SendGrid template ID (uses default if not provided)
-        """
-        try:
-            # Use provided template ID or fall back to default
-            sendgrid_template_id = template_id or os.environ.get(
-                "SENDGRID_INVOICE_TEMPLATE_ID",
-                None
-            )
-            
-            if not sendgrid_template_id:
-                # If no dynamic template ID, fall back to simple HTML email
-                return self._send_invoice_simple(invoice, recipient_email)
-            
-            # Prepare template data
-            template_data = self._prepare_template_data(invoice)
-            
-            # Generate PDF attachment
-            pdf_data = self._generate_invoice_pdf(invoice)
-            
-            # Create Mail object
-            message = Mail(
-                from_email=From(invoice.business_email, invoice.business_name),
-                to_emails=To(recipient_email),
-                subject=f"Invoice #{invoice.invoice_id} from {invoice.business_name}",
-            )
-            
-            # Set dynamic template
-            message.template_id = TemplateId(sendgrid_template_id)
-            
-            # Add personalization with template variables
-            message.personalizations = [Personalization()]
-            message.personalizations[0].to = To(recipient_email)
-            message.personalizations[0].dynamic_template_data = template_data
-            
-            # Add PDF attachment
-            if pdf_data:
-                attachment = Attachment(
-                    FileContent(base64.b64encode(pdf_data).decode()),
-                    FileName(f"Invoice_{invoice.invoice_id}.pdf"),
-                    FileType("application/pdf")
-                )
-                message.attachment = attachment
-            
-            # Send email
-            response = self.client.send(message)
-            return {"status": "sent", "response": response}
-            
-        except Exception as e:
-            print(f"Error sending invoice with dynamic template: {str(e)}")
-            # Fall back to simple email
-            return self._send_invoice_simple(invoice, recipient_email)
+    # ============ INVOICE EMAILS ============
     
-    def _prepare_template_data(self, invoice):
-        """Prepare data for SendGrid dynamic template."""
-        line_items = []
-        for item in invoice.line_items.all():
-            line_items.append({
-                "description": item.description,
-                "quantity": str(item.quantity),
-                "unit_price": str(item.unit_price),
-                "total": str(item.total),
-            })
+    def send_invoice_ready(self, invoice, recipient_email, template_id=None):
+        """Send 'Invoice Ready' notification to client."""
+        template_id = template_id or self.TEMPLATE_IDS.get('invoice_ready')
         
-        payment_info = {}
-        if invoice.bank_name:
-            payment_info = {
-                "bank_name": invoice.bank_name,
-                "account_name": invoice.account_name,
-                "account_number": invoice.account_number,
-            }
-        
-        return {
+        template_data = {
             "invoice_id": invoice.invoice_id,
             "invoice_date": invoice.invoice_date.strftime("%B %d, %Y"),
-            "due_date": invoice.due_date.strftime("%B %d, %Y") if invoice.due_date else "",
+            "due_date": invoice.due_date.strftime("%B %d, %Y") if invoice.due_date else "N/A",
             "client_name": invoice.client_name,
-            "client_email": invoice.client_email,
-            "client_address": invoice.client_address,
             "business_name": invoice.business_name,
             "business_email": invoice.business_email,
             "business_phone": invoice.business_phone,
-            "business_address": invoice.business_address,
             "currency": invoice.currency,
-            "subtotal": str(invoice.subtotal),
-            "tax_amount": str(invoice.tax_amount),
-            "total": str(invoice.total),
-            "notes": invoice.notes,
-            "payment_info": payment_info,
-            "line_items": line_items,
-            "status": invoice.get_status_display(),
+            "total_amount": f"{invoice.currency} {invoice.total:.2f}",
+            "invoice_url": self._get_invoice_view_url(invoice),
         }
+        
+        return self._send_email(
+            from_email=invoice.business_email,
+            from_name=invoice.business_name,
+            to_email=recipient_email,
+            template_id=template_id,
+            template_data=template_data,
+            subject=f"Invoice #{invoice.invoice_id} Ready",
+            invoice=invoice
+        )
+    
+    def send_invoice_paid(self, invoice, recipient_email, template_id=None):
+        """Send 'Invoice Paid' notification."""
+        template_id = template_id or self.TEMPLATE_IDS.get('invoice_paid')
+        
+        template_data = {
+            "invoice_id": invoice.invoice_id,
+            "client_name": invoice.client_name,
+            "business_name": invoice.business_name,
+            "currency": invoice.currency,
+            "total_amount": f"{invoice.currency} {invoice.total:.2f}",
+            "paid_date": invoice.updated_at.strftime("%B %d, %Y"),
+        }
+        
+        return self._send_email(
+            from_email=invoice.business_email,
+            from_name=invoice.business_name,
+            to_email=recipient_email,
+            template_id=template_id,
+            template_data=template_data,
+            subject=f"Invoice #{invoice.invoice_id} - Payment Received",
+        )
+    
+    def send_payment_reminder(self, invoice, recipient_email, template_id=None):
+        """Send payment reminder for unpaid invoice."""
+        template_id = template_id or self.TEMPLATE_IDS.get('payment_reminder')
+        
+        template_data = {
+            "invoice_id": invoice.invoice_id,
+            "client_name": invoice.client_name,
+            "business_name": invoice.business_name,
+            "business_email": invoice.business_email,
+            "currency": invoice.currency,
+            "amount_due": f"{invoice.currency} {invoice.total:.2f}",
+            "due_date": invoice.due_date.strftime("%B %d, %Y") if invoice.due_date else "Upon receipt",
+            "days_overdue": self._calculate_days_overdue(invoice),
+            "payment_info": self._format_payment_info(invoice),
+            "invoice_url": self._get_invoice_view_url(invoice),
+        }
+        
+        return self._send_email(
+            from_email=invoice.business_email,
+            from_name=invoice.business_name,
+            to_email=recipient_email,
+            template_id=template_id,
+            template_data=template_data,
+            subject=f"Payment Reminder - Invoice #{invoice.invoice_id}",
+        )
+    
+    # ============ USER EMAILS ============
+    
+    def send_welcome_email(self, user, template_id=None):
+        """Send welcome email to new user."""
+        template_id = template_id or self.TEMPLATE_IDS.get('new_user_welcome')
+        
+        template_data = {
+            "first_name": user.first_name or user.username,
+            "username": user.username,
+            "email": user.email,
+            "dashboard_url": self._get_dashboard_url(),
+            "help_url": self._get_help_url(),
+        }
+        
+        return self._send_email(
+            from_email="noreply@smartinvoice.com",
+            from_name="Smart Invoice",
+            to_email=user.email,
+            template_id=template_id,
+            template_data=template_data,
+            subject="Welcome to Smart Invoice!"
+        )
+    
+    def send_password_reset_email(self, user, reset_token, template_id=None):
+        """Send password reset email."""
+        template_id = template_id or self.TEMPLATE_IDS.get('password_reset')
+        
+        reset_url = self._get_password_reset_url(reset_token)
+        
+        template_data = {
+            "first_name": user.first_name or user.username,
+            "username": user.username,
+            "reset_url": reset_url,
+            "expires_in": "24 hours",
+            "support_email": "support@smartinvoice.com",
+        }
+        
+        return self._send_email(
+            from_email="noreply@smartinvoice.com",
+            from_name="Smart Invoice",
+            to_email=user.email,
+            template_id=template_id,
+            template_data=template_data,
+            subject="Password Reset Request"
+        )
+    
+    # ============ ADMIN EMAILS ============
+    
+    def send_admin_alert(self, alert_type, data, admin_email, template_id=None):
+        """Send admin alert email (invoice viewed, etc)."""
+        template_id = template_id or self.TEMPLATE_IDS.get('admin_alert')
+        
+        template_data = {
+            "alert_type": alert_type,
+            "timestamp": data.get('timestamp', ''),
+            "details": data.get('details', ''),
+            "action_url": data.get('action_url', ''),
+            "invoice_id": data.get('invoice_id', ''),
+            "user_name": data.get('user_name', 'Unknown User'),
+            "action_taken": data.get('action_taken', 'Unknown Action'),
+        }
+        
+        return self._send_email(
+            from_email="noreply@smartinvoice.com",
+            from_name="Smart Invoice Admin",
+            to_email=admin_email,
+            template_id=template_id,
+            template_data=template_data,
+            subject=f"Admin Alert: {alert_type}"
+        )
+    
+    # ============ HELPER METHODS ============
+    
+    def _send_email(self, from_email, from_name, to_email, template_id, template_data, subject, invoice=None):
+        """Send email using SendGrid dynamic template."""
+        try:
+            message = Mail(
+                from_email=From(from_email, from_name),
+                to_emails=To(to_email),
+                subject=subject,
+            )
+            
+            # Use dynamic template if ID is provided
+            if template_id:
+                message.template_id = TemplateId(template_id)
+                message.personalizations = [Personalization()]
+                message.personalizations[0].to = To(to_email)
+                message.personalizations[0].dynamic_template_data = template_data
+            else:
+                # Fallback to simple email if no template
+                return self._send_simple_email(from_email, from_name, to_email, subject, template_data)
+            
+            # Add PDF attachment for invoice emails
+            if invoice:
+                pdf_data = self._generate_invoice_pdf(invoice)
+                if pdf_data:
+                    attachment = Attachment(
+                        FileContent(base64.b64encode(pdf_data).decode()),
+                        FileName(f"Invoice_{invoice.invoice_id}.pdf"),
+                        FileType("application/pdf")
+                    )
+                    message.attachment = attachment
+            
+            # Send email
+            response = self.client.send(message)
+            return {"status": "sent", "response": response.status_code}
+            
+        except Exception as e:
+            print(f"Error sending email via SendGrid: {str(e)}")
+            return {"status": "error", "message": str(e)}
+    
+    def _send_simple_email(self, from_email, from_name, to_email, subject, data):
+        """Fallback: Send simple HTML email without dynamic template."""
+        try:
+            # Create simple text content from template data
+            plain_text = self._format_plain_text(data)
+            
+            message = Mail(
+                from_email=From(from_email, from_name),
+                to_emails=To(to_email),
+                subject=subject,
+                plain_text_content=plain_text,
+            )
+            
+            response = self.client.send(message)
+            return {"status": "sent", "response": response.status_code}
+            
+        except Exception as e:
+            print(f"Error sending simple email: {str(e)}")
+            return {"status": "error", "message": str(e)}
     
     def _generate_invoice_pdf(self, invoice):
         """Generate PDF for attachment."""
@@ -128,57 +247,49 @@ class SendGridTemplateService:
             print(f"Error generating PDF: {str(e)}")
             return None
     
-    def _send_invoice_simple(self, invoice, recipient_email):
-        """Fallback: Send simple HTML email without dynamic template."""
-        try:
-            payment_info = ""
-            if invoice.bank_name:
-                payment_info = f"Bank: {invoice.bank_name}\nAccount: {invoice.account_name}\nAccount #: {invoice.account_number}"
-            
-            plain_message = f"""Dear {invoice.client_name},
-
-Thank you for your business! Please find attached invoice #{invoice.invoice_id}.
-
-Invoice Details:
-- Invoice Number: {invoice.invoice_id}
-- Invoice Date: {invoice.invoice_date.strftime('%B %d, %Y')}
-- Total Amount: {invoice.currency} {invoice.total:.2f}
-- Status: {invoice.get_status_display()}
-
-{payment_info}
-
-If you have any questions, please contact us at {invoice.business_email}.
-
-Best regards,
-{invoice.business_name}
-"""
-            
-            message = Mail(
-                from_email=From(invoice.business_email, invoice.business_name),
-                to_emails=To(recipient_email),
-                subject=f"Invoice #{invoice.invoice_id} from {invoice.business_name}",
-                plain_text_content=plain_message,
-            )
-            
-            # Add PDF attachment
-            pdf_data = self._generate_invoice_pdf(invoice)
-            if pdf_data:
-                attachment = Attachment(
-                    FileContent(base64.b64encode(pdf_data).decode()),
-                    FileName(f"Invoice_{invoice.invoice_id}.pdf"),
-                    FileType("application/pdf")
-                )
-                message.attachment = attachment
-            
-            response = self.client.send(message)
-            return {"status": "sent", "response": response}
-            
-        except Exception as e:
-            print(f"Error sending simple email: {str(e)}")
-            return {"status": "error", "message": str(e)}
+    def _format_plain_text(self, data):
+        """Format template data as plain text."""
+        lines = []
+        for key, value in data.items():
+            if isinstance(value, dict):
+                continue
+            lines.append(f"{key}: {value}")
+        return "\n".join(lines)
+    
+    def _calculate_days_overdue(self, invoice):
+        """Calculate days overdue for payment reminder."""
+        from datetime import datetime
+        if invoice.due_date:
+            delta = datetime.now().date() - invoice.due_date
+            if delta.days > 0:
+                return str(delta.days)
+        return "0"
+    
+    def _format_payment_info(self, invoice):
+        """Format payment information for email."""
+        if invoice.bank_name:
+            return f"Bank: {invoice.bank_name}\nAccount: {invoice.account_name}\nAccount #: {invoice.account_number}"
+        return "N/A"
+    
+    def _get_invoice_view_url(self, invoice):
+        """Get invoice view URL for email links."""
+        # This would be the absolute URL - adjust based on your domain
+        return f"https://smartinvoice.example.com/invoices/invoice/{invoice.id}/"
+    
+    def _get_dashboard_url(self):
+        """Get dashboard URL."""
+        return "https://smartinvoice.example.com/invoices/dashboard/"
+    
+    def _get_help_url(self):
+        """Get help/documentation URL."""
+        return "https://smartinvoice.example.com/faq/"
+    
+    def _get_password_reset_url(self, token):
+        """Get password reset URL."""
+        return f"https://smartinvoice.example.com/password-reset-confirm/{token}/"
 
 
-def send_invoice_email_sendgrid(invoice, recipient_email):
-    """Helper function to send invoice via SendGrid."""
-    service = SendGridTemplateService()
-    return service.send_invoice_with_template(invoice, recipient_email)
+# Convenience function
+def get_email_service():
+    """Get SendGrid email service instance."""
+    return SendGridEmailService()
