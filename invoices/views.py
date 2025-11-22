@@ -15,8 +15,9 @@ import json
 import urllib.parse
 from decimal import Decimal
 
-from .models import Invoice, LineItem
-from .forms import SignUpForm, InvoiceForm
+from .models import Invoice, LineItem, UserProfile, InvoiceTemplate, RecurringInvoice
+from .forms import SignUpForm, InvoiceForm, UserProfileForm, InvoiceTemplateForm, RecurringInvoiceForm, InvoiceSearchForm
+from .search_filters import InvoiceSearch, InvoiceExport
 
 
 def home(request):
@@ -533,3 +534,116 @@ def admin_settings(request):
     if not request.user.is_superuser:
         return redirect("home")
     return render(request, "admin/settings.html")
+
+
+@login_required
+def profile(request):
+    """User profile management view."""
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully!")
+            return redirect("profile")
+    else:
+        form = UserProfileForm(instance=profile)
+    
+    return render(request, "invoices/profile.html", {"form": form, "profile": profile})
+
+
+@login_required
+def invoice_templates(request):
+    """Manage invoice templates."""
+    templates = InvoiceTemplate.objects.filter(user=request.user)
+    
+    if request.method == "POST":
+        form = InvoiceTemplateForm(request.POST)
+        if form.is_valid():
+            template = form.save(commit=False)
+            template.user = request.user
+            template.save()
+            messages.success(request, "Template created successfully!")
+            return redirect("invoice_templates")
+    else:
+        form = InvoiceTemplateForm()
+    
+    return render(request, "invoices/templates.html", {
+        "templates": templates,
+        "form": form
+    })
+
+
+@login_required
+def delete_template(request, template_id):
+    """Delete invoice template."""
+    template = get_object_or_404(InvoiceTemplate, id=template_id, user=request.user)
+    template.delete()
+    messages.success(request, "Template deleted successfully!")
+    return redirect("invoice_templates")
+
+
+@login_required
+def recurring_invoices(request):
+    """Manage recurring invoices."""
+    recurring = RecurringInvoice.objects.filter(user=request.user)
+    
+    if request.method == "POST":
+        form = RecurringInvoiceForm(request.POST)
+        if form.is_valid():
+            rec_invoice = form.save(commit=False)
+            rec_invoice.user = request.user
+            rec_invoice.save()
+            messages.success(request, "Recurring invoice created successfully!")
+            return redirect("recurring_invoices")
+    else:
+        form = RecurringInvoiceForm()
+    
+    return render(request, "invoices/recurring.html", {
+        "recurring_invoices": recurring,
+        "form": form
+    })
+
+
+@login_required
+def bulk_export(request):
+    """Export multiple invoices at once."""
+    invoice_ids = request.POST.getlist('invoice_ids')
+    export_format = request.POST.get('format', 'csv')
+    
+    if not invoice_ids:
+        messages.error(request, "Please select at least one invoice.")
+        return redirect("dashboard")
+    
+    invoices = Invoice.objects.filter(id__in=invoice_ids, user=request.user).prefetch_related('line_items')
+    
+    if export_format == 'csv':
+        csv_data = InvoiceExport.export_to_csv(invoices)
+        response = HttpResponse(csv_data, content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="invoices.csv"'
+        return response
+    elif export_format == 'pdf':
+        pdfs = InvoiceExport.bulk_export_pdfs(invoices)
+        if len(pdfs) == 1:
+            response = HttpResponse(pdfs[0][1], content_type='application/pdf')
+            response['Content-Disposition'] = f'attachment; filename="{pdfs[0][0]}.pdf"'
+            return response
+        else:
+            messages.info(request, f"Exported {len(pdfs)} invoices.")
+            return redirect("dashboard")
+    
+    messages.error(request, "Invalid export format.")
+    return redirect("dashboard")
+
+
+@login_required
+def bulk_delete(request):
+    """Delete multiple invoices at once."""
+    if request.method == "POST":
+        invoice_ids = request.POST.getlist('invoice_ids')
+        if invoice_ids:
+            deleted_count, _ = Invoice.objects.filter(id__in=invoice_ids, user=request.user).delete()
+            messages.success(request, f"Deleted {deleted_count} invoice(s).")
+        return redirect("dashboard")
+    return redirect("dashboard")

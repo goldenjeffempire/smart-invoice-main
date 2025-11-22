@@ -14,7 +14,43 @@
 ✨ **Professional Invoice Creation** | 📄 **PDF Generation** | 📧 **Email Distribution**  
 💬 **WhatsApp Integration** | 💰 **Multi-Currency** | 🎨 **Custom Branding**  
 📊 **Analytics Dashboard** | 🔐 **Bank-Level Security** | 📱 **Mobile-First Design**  
-🌙 **Dark Mode** | ⚡ **Lightning Fast** | 🧪 **Comprehensive Tests**
+🌙 **Dark Mode** | ⚡ **Lightning Fast** | 🧪 **Comprehensive Tests**  
+🔄 **Recurring Invoices** | 📋 **Invoice Templates** | 📤 **Bulk Export/Delete**
+
+---
+
+## 🎯 New in v1.0.0
+
+### Core Features
+- ✅ **Recurring Invoices**: Automate invoice generation (weekly, bi-weekly, monthly, quarterly, yearly)
+- ✅ **Invoice Templates**: Save and reuse templates for faster invoice creation
+- ✅ **Advanced Search**: Multi-filter dashboard with date range, amount range, currency, status
+- ✅ **Bulk Operations**: Export multiple invoices as CSV or delete in bulk
+- ✅ **User Profiles**: Manage company info, preferences, and default settings
+- ✅ **Enhanced Analytics**: Chart.js visualizations with monthly trends
+- ✅ **Accessibility**: ARIA labels, keyboard navigation, screen reader support
+- ✅ **Sentry Integration**: Real-time error tracking and monitoring
+
+### Security & Performance
+- ✅ **Database Optimization**: Strategic indexes and N+1 query elimination
+- ✅ **Enhanced Security Headers**: CSP, HSTS, X-Frame-Options, X-XSS-Protection
+- ✅ **Pre-commit Hooks**: Automated code quality checks
+- ✅ **Comprehensive Testing**: 50%+ code coverage with pytest
+- ✅ **Production Hardening**: Environment variable validation, secure defaults
+
+---
+
+## 📋 Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Backend** | Django 5.2.8 LTS, Gunicorn, PostgreSQL |
+| **Frontend** | Tailwind CSS v3, Responsive HTML5, Vanilla JS |
+| **PDF** | WeasyPrint 66.0 (high-fidelity generation) |
+| **Analytics** | Chart.js for visualizations |
+| **Security** | Encryption, CSP, CSRF, Rate Limiting, Sentry |
+| **Testing** | pytest 9.0.1, 15+ test cases, pre-commit hooks |
+| **Automation** | Django management commands for recurring invoices |
 
 ---
 
@@ -22,7 +58,8 @@
 
 ### Prerequisites
 - Python 3.11+
-- Git
+- Node.js 18+
+- PostgreSQL (recommended)
 
 ### Installation (2 minutes)
 
@@ -34,6 +71,7 @@ python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 
 pip install -r requirements.txt
+npm install
 
 cp .env.example .env
 python manage.py migrate
@@ -45,55 +83,13 @@ Visit `http://localhost:8000`
 
 ---
 
-## 📋 Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| **Backend** | Django 5.2.8 LTS, Gunicorn, PostgreSQL |
-| **Frontend** | Tailwind CSS v3, Responsive HTML5, Vanilla JS |
-| **PDF** | WeasyPrint 66.0 (high-fidelity generation) |
-| **Security** | Encryption, CSP, CSRF, Rate Limiting |
-| **Testing** | pytest 9.0.1, 15+ test cases |
-
----
-
-## 📈 Performance
-
-- ⚡ Page Load: < 1 second
-- 📄 PDF Generation: < 2 seconds  
-- 🔌 API Response: < 100ms
-- 💾 CSS Size: 36KB (minified)
-
----
-
-## 📱 Mobile Optimization
-
-✅ Fully responsive on all devices  
-✅ Touch-optimized forms  
-✅ Mobile-first CSS design  
-✅ Fast load times on 4G  
-
----
-
-## 🔒 Security Features
-
-| Feature | Details |
-|---------|---------|
-| **Authentication** | Secure login, password hashing, session management |
-| **Data Protection** | HTTPS, secure cookies, CSRF tokens |
-| **Encryption** | Field-level encryption for sensitive data |
-| **API Security** | Rate limiting, SQL injection prevention, XSS protection |
-| **Production** | DEBUG=False, secure SECRET_KEY, ALLOWED_HOSTS |
-
----
-
 ## 📊 Dashboard Features
 
-- Invoice list with status filtering
-- Real-time revenue tracking
-- Payment rate analytics
-- Client count monitoring
-- Monthly invoice trends
+- Invoice list with advanced filtering
+- Real-time revenue tracking & payment metrics
+- Monthly trend visualization with Chart.js
+- Client count & payment rate analytics
+- Quick invoice creation & template management
 
 ---
 
@@ -103,12 +99,27 @@ USD • EUR • GBP • NGN • CAD • AUD
 
 ---
 
+## 🔄 Recurring Invoices
+
+Generate invoices automatically with configurable frequency:
+
+```bash
+# Manual trigger
+python manage.py generate_recurring_invoices
+
+# Schedule with cron (daily at 2 AM)
+0 2 * * * cd /path/to/smart-invoice && python manage.py generate_recurring_invoices
+```
+
+---
+
 ## 🧪 Testing
 
 ```bash
-pytest                  # Run all tests
-pytest -v              # Verbose output
-pytest --cov=invoices  # With coverage
+pytest                      # Run all tests
+pytest -v                   # Verbose output
+pytest --cov=invoices       # With coverage report
+pre-commit run --all-files  # Code quality checks
 ```
 
 **Coverage:** 50%+ across all modules
@@ -118,34 +129,90 @@ pytest --cov=invoices  # With coverage
 ## 🚀 Deployment
 
 ### Render (Recommended)
+
+1. Connect GitHub repository to Render
+2. Configure environment variables:
+   - `DEBUG=False`
+   - `SECRET_KEY=<strong-secret>`
+   - `DATABASE_URL=<postgres-connection>`
+   - `ENCRYPTION_SALT=<generated-salt>`
+   - `SENTRY_DSN=<sentry-url>`
+
+3. Build command:
 ```bash
-Build: pip install -r requirements.txt && npm run build:css && python manage.py migrate
-Start: gunicorn smart_invoice.wsgi:application --bind 0.0.0.0:$PORT
+pip install -r requirements.txt && npm install && npm run build:css && python manage.py migrate
+```
+
+4. Start command:
+```bash
+gunicorn smart_invoice.wsgi -b 0.0.0.0:5000 --workers 2
 ```
 
 ### Heroku
+
 ```bash
 heroku create your-app
 heroku addons:create heroku-postgresql:hobby-dev
-heroku config:set DEBUG=False SECRET_KEY=your-key
+heroku config:set DEBUG=False SECRET_KEY=your-key ENCRYPTION_SALT=your-salt
 git push heroku main
 ```
 
-### Environment Variables
-See `.env.example` for all configuration options.
+### Production Checklist
+
+- [ ] Set `DEBUG = False`
+- [ ] Generate strong `SECRET_KEY`
+- [ ] Configure `ALLOWED_HOSTS` for your domain
+- [ ] Setup PostgreSQL database
+- [ ] Generate & set `ENCRYPTION_SALT`
+- [ ] Configure SMTP for email delivery
+- [ ] Enable `HTTPS_ONLY = True`
+- [ ] Setup Sentry error tracking
+- [ ] Configure CSRF trusted origins
+- [ ] Setup SSL certificate (automatic on Render)
+- [ ] Test recurring invoice generation
+- [ ] Configure backup strategy
 
 ---
 
 ## 📚 Documentation
 
-- 📖 [AUDIT_REPORT.md](AUDIT_REPORT.md) - Full audit & security assessment
-- 🔧 [.env.example](.env.example) - Configuration template
+- 📖 [.env.example](.env.example) - Configuration reference
+- 🔧 [.pre-commit-config.yaml](.pre-commit-config.yaml) - Code quality tools
+
+---
+
+## 🔒 Security Features
+
+| Feature | Details |
+|---------|---------|
+| **Authentication** | Secure login, password hashing, session management |
+| **Data Protection** | HTTPS-only, secure cookies, CSRF tokens |
+| **Encryption** | Field-level encryption for sensitive data |
+| **API Security** | Rate limiting, SQL injection prevention, XSS protection |
+| **Headers** | CSP, HSTS, X-Frame-Options, X-XSS-Protection |
+| **Monitoring** | Sentry error tracking, debug logging |
+
+---
+
+## 📱 Mobile Optimization
+
+✅ Fully responsive on all devices  
+✅ Touch-optimized forms  
+✅ Mobile-first CSS design  
+✅ Fast load times on 4G  
+✅ Dark mode support  
 
 ---
 
 ## 🤝 Contributing
 
 Contributions welcome! Fork, create feature branch, submit PR.
+
+```bash
+git checkout -b feature/amazing-feature
+git commit -m "Add amazing feature"
+git push origin feature/amazing-feature
+```
 
 ---
 
@@ -156,3 +223,5 @@ MIT License - Free for personal and commercial use
 ---
 
 **Production-Ready. Fully Tested. Secure. 🎉**
+
+For support: contact@smartinvoice.com

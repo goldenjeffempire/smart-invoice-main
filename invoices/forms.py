@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Invoice, LineItem
+from .models import Invoice, LineItem, UserProfile, InvoiceTemplate, RecurringInvoice
 from .validators import (
     validate_phone_number,
     validate_tax_rate,
@@ -232,3 +232,94 @@ class LineItemForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['quantity'].validators.append(validate_positive_decimal)
         self.fields['unit_price'].validators.append(validate_positive_decimal)
+
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['company_name', 'company_logo', 'default_currency', 'default_tax_rate', 'invoice_prefix', 'timezone']
+        widgets = {
+            'company_name': forms.TextInput(attrs={'class': 'input-field', 'placeholder': 'Company Name'}),
+            'default_currency': forms.Select(attrs={'class': 'input-field'}),
+            'default_tax_rate': forms.NumberInput(attrs={'class': 'input-field', 'step': '0.01', 'min': '0', 'max': '100'}),
+            'invoice_prefix': forms.TextInput(attrs={'class': 'input-field', 'placeholder': 'INV', 'maxlength': '10'}),
+            'timezone': forms.TextInput(attrs={'class': 'input-field', 'placeholder': 'UTC'}),
+        }
+
+
+class InvoiceTemplateForm(forms.ModelForm):
+    class Meta:
+        model = InvoiceTemplate
+        fields = ['name', 'description', 'business_name', 'business_email', 'business_phone', 
+                 'business_address', 'currency', 'tax_rate', 'bank_name', 'account_name', 'is_default']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'input-field', 'placeholder': 'Template Name'}),
+            'description': forms.Textarea(attrs={'class': 'input-field', 'rows': 3, 'placeholder': 'Description'}),
+            'business_name': forms.TextInput(attrs={'class': 'input-field'}),
+            'business_email': forms.EmailInput(attrs={'class': 'input-field'}),
+            'business_phone': forms.TextInput(attrs={'class': 'input-field'}),
+            'business_address': forms.Textarea(attrs={'class': 'input-field', 'rows': 3}),
+            'currency': forms.Select(attrs={'class': 'input-field'}),
+            'tax_rate': forms.NumberInput(attrs={'class': 'input-field', 'step': '0.01'}),
+            'bank_name': forms.TextInput(attrs={'class': 'input-field'}),
+            'account_name': forms.TextInput(attrs={'class': 'input-field'}),
+        }
+
+
+class RecurringInvoiceForm(forms.ModelForm):
+    class Meta:
+        model = RecurringInvoice
+        fields = ['client_name', 'client_email', 'client_phone', 'client_address', 'frequency',
+                 'start_date', 'end_date', 'business_name', 'business_email', 'currency', 
+                 'tax_rate', 'status', 'next_generation', 'notes']
+        widgets = {
+            'client_name': forms.TextInput(attrs={'class': 'input-field'}),
+            'client_email': forms.EmailInput(attrs={'class': 'input-field'}),
+            'client_phone': forms.TextInput(attrs={'class': 'input-field'}),
+            'client_address': forms.Textarea(attrs={'class': 'input-field', 'rows': 3}),
+            'frequency': forms.Select(attrs={'class': 'input-field'}),
+            'start_date': forms.DateInput(attrs={'class': 'input-field', 'type': 'date'}),
+            'end_date': forms.DateInput(attrs={'class': 'input-field', 'type': 'date'}),
+            'business_name': forms.TextInput(attrs={'class': 'input-field'}),
+            'business_email': forms.EmailInput(attrs={'class': 'input-field'}),
+            'currency': forms.Select(attrs={'class': 'input-field'}),
+            'tax_rate': forms.NumberInput(attrs={'class': 'input-field', 'step': '0.01'}),
+            'status': forms.Select(attrs={'class': 'input-field'}),
+            'next_generation': forms.DateInput(attrs={'class': 'input-field', 'type': 'date'}),
+            'notes': forms.Textarea(attrs={'class': 'input-field', 'rows': 3}),
+        }
+
+
+class InvoiceSearchForm(forms.Form):
+    """Advanced search and filter form for invoices."""
+    query = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        'class': 'input-field',
+        'placeholder': 'Search by invoice ID, client, or business name...',
+        'aria-label': 'Search invoices'
+    }))
+    status = forms.ChoiceField(required=False, choices=[('', '-- All Statuses --'), ('paid', 'Paid'), ('unpaid', 'Unpaid')], 
+                               widget=forms.Select(attrs={'class': 'input-field', 'aria-label': 'Filter by status'}))
+    currency = forms.ChoiceField(required=False, choices=[('', '-- All Currencies --')] + list(Invoice.CURRENCY_CHOICES),
+                                widget=forms.Select(attrs={'class': 'input-field', 'aria-label': 'Filter by currency'}))
+    date_from = forms.DateField(required=False, widget=forms.DateInput(attrs={
+        'class': 'input-field',
+        'type': 'date',
+        'aria-label': 'Invoice date from'
+    }))
+    date_to = forms.DateField(required=False, widget=forms.DateInput(attrs={
+        'class': 'input-field',
+        'type': 'date',
+        'aria-label': 'Invoice date to'
+    }))
+    min_amount = forms.DecimalField(required=False, widget=forms.NumberInput(attrs={
+        'class': 'input-field',
+        'placeholder': 'Min Amount',
+        'step': '0.01',
+        'aria-label': 'Minimum amount'
+    }))
+    max_amount = forms.DecimalField(required=False, widget=forms.NumberInput(attrs={
+        'class': 'input-field',
+        'placeholder': 'Max Amount',
+        'step': '0.01',
+        'aria-label': 'Maximum amount'
+    }))
