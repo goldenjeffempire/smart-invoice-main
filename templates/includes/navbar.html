@@ -66,3 +66,45 @@
         </div>
     </div>
 </nav>
+
+<!-- Enhanced Dark Mode Toggle Button (add to navbar if not already present) -->
+<style>
+    .dark-mode-toggle {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background-color: rgba(99, 102, 241, 0.1);
+        border: 2px solid rgba(99, 102, 241, 0.3);
+        cursor: pointer;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        color: #111827;
+    }
+
+    .dark-mode-toggle:hover {
+        background-color: rgba(99, 102, 241, 0.2);
+        border-color: rgba(99, 102, 241, 0.6);
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+    }
+
+    .dark-mode-toggle:active {
+        transform: scale(0.95);
+    }
+
+    .dark .dark-mode-toggle {
+        color: #f9fafb;
+        background-color: rgba(129, 140, 248, 0.1);
+        border-color: rgba(129, 140, 248, 0.3);
+    }
+
+    .dark .dark-mode-toggle:hover {
+        background-color: rgba(129, 140, 248, 0.2);
+        border-color: rgba(129, 140, 248, 0.6);
+        box-shadow: 0 4px 12px rgba(129, 140, 248, 0.3);
+    }
+</style>
