@@ -27,6 +27,13 @@ urlpatterns = [
     path("careers/", views.careers, name="careers"),
     path("status/", views.status, name="status"),
     path("changelog/", views.changelog, name="changelog"),
+    # User features
+    path("profile/", views.profile, name="profile"),
+    path("templates/", views.invoice_templates, name="invoice_templates"),
+    path("templates/<int:template_id>/delete/", views.delete_template, name="delete_template"),
+    path("recurring/", views.recurring_invoices, name="recurring_invoices"),
+    path("bulk/export/", views.bulk_export, name="bulk_export"),
+    path("bulk/delete/", views.bulk_delete, name="bulk_delete"),
     # Admin endpoints
     path("admin-dashboard/", views.admin_dashboard, name="admin_dashboard"),
     path("admin-users/", views.admin_users, name="admin_users"),

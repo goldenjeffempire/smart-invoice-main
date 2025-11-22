@@ -282,3 +282,17 @@ SESSION_COOKIE_AGE = 1209600  # 2 weeks
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = "Lax"
 CSRF_USE_SESSIONS = False
+
+# Sentry Error Tracking Configuration
+SENTRY_DSN = env("SENTRY_DSN", default="")  # type: ignore
+if SENTRY_DSN and not DEBUG:
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+    
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=0.1,
+        send_default_pii=False,
+        environment="production" if not IS_REPLIT else "development",
+    )
