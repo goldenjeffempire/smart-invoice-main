@@ -4,25 +4,25 @@
 <div class="container mx-auto px-6 py-10">
     <h1 class="text-4xl font-bold mb-8">Edit Invoice {{ invoice.invoice_id }}</h1>
     
-    <form method="post" enctype="multipart/form-data" id="invoiceForm" class="bg-white rounded-lg shadow-lg p-8">
+    <form method="post" enctype="multipart/form-data" id="invoiceForm" class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
         {% csrf_token %}
         
         <h2 class="text-2xl font-bold mb-4">Business Information</h2>
         <div class="grid md:grid-cols-2 gap-4 mb-6">
             <div>
-                <label class="block text-gray-700 mb-2">Business Name *</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Business Name *</label>
                 {{ invoice_form.business_name }}
             </div>
             <div>
-                <label class="block text-gray-700 mb-2">Business Email *</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Business Email *</label>
                 {{ invoice_form.business_email }}
             </div>
             <div>
-                <label class="block text-gray-700 mb-2">Business Phone</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Business Phone</label>
                 {{ invoice_form.business_phone }}
             </div>
             <div>
-                <label class="block text-gray-700 mb-2">Business Address *</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Business Address *</label>
                 {{ invoice_form.business_address }}
             </div>
         </div>
@@ -30,19 +30,19 @@
         <h2 class="text-2xl font-bold mb-4 mt-8">Client Information</h2>
         <div class="grid md:grid-cols-2 gap-4 mb-6">
             <div>
-                <label class="block text-gray-700 mb-2">Client Name *</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Client Name *</label>
                 {{ invoice_form.client_name }}
             </div>
             <div>
-                <label class="block text-gray-700 mb-2">Client Email *</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Client Email *</label>
                 {{ invoice_form.client_email }}
             </div>
             <div>
-                <label class="block text-gray-700 mb-2">Client Phone</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Client Phone</label>
                 {{ invoice_form.client_phone }}
             </div>
             <div>
-                <label class="block text-gray-700 mb-2">Client Address *</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Client Address *</label>
                 {{ invoice_form.client_address }}
             </div>
         </div>
@@ -50,15 +50,15 @@
         <h2 class="text-2xl font-bold mb-4 mt-8">Invoice Details</h2>
         <div class="grid md:grid-cols-3 gap-4 mb-6">
             <div>
-                <label class="block text-gray-700 mb-2">Invoice Date</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Invoice Date</label>
                 {{ invoice_form.invoice_date }}
             </div>
             <div>
-                <label class="block text-gray-700 mb-2">Due Date</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Due Date</label>
                 {{ invoice_form.due_date }}
             </div>
             <div>
-                <label class="block text-gray-700 mb-2">Currency</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Currency</label>
                 {{ invoice_form.currency }}
             </div>
         </div>
@@ -76,11 +76,11 @@
         
         <div class="grid md:grid-cols-2 gap-4 mb-6">
             <div>
-                <label class="block text-gray-700 mb-2">Tax Rate (%)</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Tax Rate (%)</label>
                 {{ invoice_form.tax_rate }}
             </div>
             <div>
-                <label class="block text-gray-700 mb-2">Status</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Status</label>
                 {{ invoice_form.status }}
             </div>
         </div>
@@ -88,15 +88,15 @@
         <h2 class="text-2xl font-bold mb-4 mt-8">Branding (Optional)</h2>
         <div class="grid md:grid-cols-3 gap-4 mb-6">
             <div>
-                <label class="block text-gray-700 mb-2">Brand Name</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Brand Name</label>
                 {{ invoice_form.brand_name }}
             </div>
             <div>
-                <label class="block text-gray-700 mb-2">Brand Color</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Brand Color</label>
                 {{ invoice_form.brand_color }}
             </div>
             <div>
-                <label class="block text-gray-700 mb-2">Logo</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Logo</label>
                 {{ invoice_form.logo }}
             </div>
         </div>
@@ -104,28 +104,28 @@
         <h2 class="text-2xl font-bold mb-4 mt-8">Bank Details (Optional)</h2>
         <div class="grid md:grid-cols-3 gap-4 mb-6">
             <div>
-                <label class="block text-gray-700 mb-2">Bank Name</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Bank Name</label>
                 {{ invoice_form.bank_name }}
             </div>
             <div>
-                <label class="block text-gray-700 mb-2">Account Name</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Account Name</label>
                 {{ invoice_form.account_name }}
             </div>
             <div>
-                <label class="block text-gray-700 mb-2">Account Number</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">Account Number</label>
                 {{ invoice_form.account_number }}
             </div>
         </div>
         
         <div class="mb-6">
-            <label class="block text-gray-700 mb-2">Notes</label>
+            <label class="block text-gray-700 dark:text-gray-300 mb-2">Notes</label>
             {{ invoice_form.notes }}
         </div>
         
         <input type="hidden" name="line_items" id="lineItemsData">
         
         <div class="flex justify-end space-x-4">
-            <a href="{% url 'invoice_detail' invoice.id %}" class="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600">Cancel</a>
+            <a href="{% url 'invoice_detail' invoice.id %}" class="bg-gray-50 dark:bg-gray-9000 text-white px-6 py-3 rounded-lg hover:bg-gray-600">Cancel</a>
             <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700">Update Invoice</button>
         </div>
     </form>

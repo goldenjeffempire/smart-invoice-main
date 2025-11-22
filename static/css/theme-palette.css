@@ -1,0 +1,104 @@
+/**
+ * Professional Theme Palette
+ * Unified light and dark mode color system
+ */
+
+:root {
+    /* Primary Colors */
+    --color-primary-light: #f0f4ff;
+    --color-primary: #6366f1;
+    --color-primary-dark: #4f46e5;
+    --color-primary-darker: #4338ca;
+    
+    /* Secondary Colors */
+    --color-secondary-light: #faf5ff;
+    --color-secondary: #8b5cf6;
+    --color-secondary-dark: #7c3aed;
+    
+    /* Accent Colors */
+    --color-accent: #ec4899;
+    --color-accent-light: #f472b6;
+    
+    /* Background Colors */
+    --color-bg-primary: #f9fafb;
+    --color-bg-secondary: #ffffff;
+    --color-bg-tertiary: #f3f4f6;
+    
+    /* Text Colors */
+    --color-text-primary: #111827;
+    --color-text-secondary: #6b7280;
+    --color-text-tertiary: #9ca3af;
+    
+    /* Border & Shadow */
+    --color-border: #e5e7eb;
+    --color-shadow: rgba(0, 0, 0, 0.1);
+    --color-shadow-lg: rgba(0, 0, 0, 0.15);
+}
+
+.dark {
+    /* Primary Colors */
+    --color-primary-light: #1e1b4b;
+    --color-primary: #818cf8;
+    --color-primary-dark: #6366f1;
+    --color-primary-darker: #4f46e5;
+    
+    /* Secondary Colors */
+    --color-secondary-light: #2d1b4e;
+    --color-secondary: #a78bfa;
+    --color-secondary-dark: #8b5cf6;
+    
+    /* Accent Colors */
+    --color-accent: #f472b6;
+    --color-accent-light: #f472b6;
+    
+    /* Background Colors */
+    --color-bg-primary: #111827;
+    --color-bg-secondary: #1f2937;
+    --color-bg-tertiary: #374151;
+    
+    /* Text Colors */
+    --color-text-primary: #f9fafb;
+    --color-text-secondary: #9ca3af;
+    --color-text-tertiary: #6b7280;
+    
+    /* Border & Shadow */
+    --color-border: #374151;
+    --color-shadow: rgba(0, 0, 0, 0.3);
+    --color-shadow-lg: rgba(0, 0, 0, 0.5);
+}
+
+/* Universal Light Card (light mode) */
+.card {
+    background-color: var(--color-bg-secondary);
+    border-color: var(--color-border);
+    color: var(--color-text-primary);
+}
+
+/* Ensure all text colors work in both themes */
+.text-gray-900 { color: var(--color-text-primary); }
+.text-gray-800 { color: var(--color-text-secondary); }
+.text-gray-700 { color: var(--color-text-secondary); }
+.text-gray-600 { color: var(--color-text-secondary); }
+
+/* Ensure all backgrounds adapt */
+.bg-white { background-color: var(--color-bg-secondary); }
+.bg-gray-50 { background-color: var(--color-bg-primary); }
+.bg-gray-100 { background-color: var(--color-bg-tertiary); }
+
+/* Soft colored backgrounds adapt to dark mode */
+.bg-blue-100 { background-color: var(--color-primary-light, #dbeafe); }
+.bg-purple-100 { background-color: var(--color-secondary-light, #f3e8ff); }
+.bg-pink-100 { background-color: #fce7f3; }
+.dark .bg-blue-100 { background-color: rgba(99, 102, 241, 0.1); }
+.dark .bg-purple-100 { background-color: rgba(139, 92, 246, 0.1); }
+.dark .bg-pink-100 { background-color: rgba(236, 72, 153, 0.1); }
+
+/* Ensure buttons have proper contrast */
+.btn-primary {
+    background-color: var(--color-primary);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-dark);
+}

@@ -12,7 +12,7 @@
         </div>
     </div>
     
-    <div class="bg-white rounded-lg shadow-lg p-8">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
         <div class="grid md:grid-cols-2 gap-8 mb-8">
             <div>
                 <h3 class="font-bold text-lg mb-2">From:</h3>
@@ -32,18 +32,18 @@
         
         <div class="grid md:grid-cols-3 gap-4 mb-8">
             <div>
-                <p class="text-gray-600">Invoice Date</p>
+                <p class="text-gray-600 dark:text-gray-400">Invoice Date</p>
                 <p class="font-semibold">{{ invoice.invoice_date|date:"M d, Y" }}</p>
             </div>
             <div>
-                <p class="text-gray-600">Due Date</p>
+                <p class="text-gray-600 dark:text-gray-400">Due Date</p>
                 <p class="font-semibold">{{ invoice.due_date|date:"M d, Y"|default:"N/A" }}</p>
             </div>
             <div>
-                <p class="text-gray-600">Status</p>
+                <p class="text-gray-600 dark:text-gray-400">Status</p>
                 <form method="post" action="{% url 'update_invoice_status' invoice.id %}" class="inline">
                     {% csrf_token %}
-                    <select name="status" onchange="this.form.submit()" class="px-3 py-1 rounded-full text-sm {% if invoice.status == 'paid' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                    <select name="status" onchange="this.form.submit()" class="px-3 py-1 rounded-full text-sm {% if invoice.status == 'paid' %}bg-green-100 dark:bg-green-900/20 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
                         <option value="unpaid" {% if invoice.status == 'unpaid' %}selected{% endif %}>Unpaid</option>
                         <option value="paid" {% if invoice.status == 'paid' %}selected{% endif %}>Paid</option>
                     </select>
@@ -52,7 +52,7 @@
         </div>
         
         <table class="w-full mb-6">
-            <thead class="bg-gray-100">
+            <thead class="bg-gray-100 dark:bg-gray-800">
                 <tr>
                     <th class="px-4 py-3 text-left">Description</th>
                     <th class="px-4 py-3 text-right">Quantity</th>
@@ -90,7 +90,7 @@
         </div>
         
         {% if invoice.bank_name %}
-            <div class="mt-8 p-4 bg-gray-100 rounded-lg">
+            <div class="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
                 <h3 class="font-bold mb-2">Bank Transfer Details</h3>
                 <p><strong>Bank:</strong> {{ invoice.bank_name }}</p>
                 <p><strong>Account Name:</strong> {{ invoice.account_name }}</p>

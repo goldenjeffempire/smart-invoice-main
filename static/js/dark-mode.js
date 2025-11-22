@@ -281,3 +281,26 @@ if (document.readyState === 'loading') {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = DarkModeManager;
 }
+
+// Handle mobile toggle buttons
+document.addEventListener('DOMContentLoaded', () => {
+    const mobileToggleButtons = document.querySelectorAll('#dark-mode-toggle-mobile');
+    mobileToggleButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            if (window.darkModeManager) {
+                e.preventDefault();
+                window.darkModeManager.toggle();
+            }
+        });
+        
+        // Keyboard accessibility
+        button.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                if (window.darkModeManager) {
+                    window.darkModeManager.toggle();
+                }
+            }
+        });
+    });
+});
