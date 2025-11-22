@@ -40,4 +40,4 @@ services:
 databases:
   - name: smartinvoice
     plan: free
-    version: "14"
+    version: "16"
