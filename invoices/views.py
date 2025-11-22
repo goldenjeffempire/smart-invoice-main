@@ -230,10 +230,13 @@ def _send_email_async(invoice_id, recipient_email):
         
         if result.get('status') == 'sent':
             print(f"✓ Invoice ready email sent to {recipient_email}")
+        elif result.get('configured') is False:
+            # SendGrid not configured - this is expected in dev/demo environments
+            print(f"⚠️  Email delivery disabled: {result.get('message')}")
         else:
             print(f"✗ Failed to send invoice email: {result.get('message')}")
     except Exception as e:
-        print(f"Error sending invoice email: {str(e)}")
+        print(f"❌ Error in email async handler: {str(e)}")
 
 
 @login_required
