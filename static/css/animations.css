@@ -146,54 +146,113 @@
     }
 }
 
-/* Dark mode styles */
-:root {
-    --bg-primary: #f9fafb;
-    --bg-secondary: #ffffff;
-    --text-primary: #111827;
-    --text-secondary: #6b7280;
-    --border-color: #e5e7eb;
+/* Dark mode specific animation enhancements */
+@keyframes dark-mode-fade {
+    0% { opacity: 0.7; }
+    100% { opacity: 1; }
 }
 
-.dark {
-    --bg-primary: #111827;
-    --bg-secondary: #1f2937;
-    --text-primary: #f9fafb;
-    --text-secondary: #9ca3af;
-    --border-color: #374151;
+@keyframes light-mode-fade {
+    0% { opacity: 0.7; }
+    100% { opacity: 1; }
 }
 
-.dark body {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
+/* Theme transition */
+.theme-transitioning {
+    animation: theme-transition 300ms ease-in-out;
 }
 
-.dark .bg-gray-50 {
-    background-color: #111827;
+@keyframes theme-transition {
+    0% { opacity: 0.95; }
+    50% { opacity: 0.85; }
+    100% { opacity: 1; }
 }
 
-.dark .bg-white {
-    background-color: #1f2937;
+/* Dark mode card animations */
+.dark .card {
+    animation: card-appear 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.dark .text-gray-900 {
-    color: #f9fafb;
+@keyframes card-appear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.dark .text-gray-600 {
-    color: #9ca3af;
+/* Enhanced dark mode hover effects */
+.dark .hover-lift:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
 }
 
-.dark .border-gray-100,
-.dark .border-gray-200 {
-    border-color: #374151;
+.dark .hover-glow:hover {
+    box-shadow: 0 0 30px rgba(129, 140, 248, 0.6);
 }
 
-.dark .shadow-xl {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+/* Dark mode gradient enhancements */
+.dark .gradient-animated {
+    background: linear-gradient(-45deg, #6366f1, #818cf8, #a78bfa, #f472b6);
+    background-size: 400% 400%;
+    animation: gradient-shift 15s ease infinite;
 }
 
-/* Dark mode transition */
+/* Backdrop blur enhancements for dark mode */
+.dark .glass-panel {
+    background: rgba(31, 41, 55, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Dark mode glass effect */
+.glass-panel-dark {
+    background: rgba(31, 41, 55, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 300ms ease;
+}
+
+.glass-panel-dark:hover {
+    background: rgba(31, 41, 55, 0.6);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Light mode glass effect */
+.glass-panel-light {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all 300ms ease;
+}
+
+.glass-panel-light:hover {
+    background: rgba(255, 255, 255, 0.6);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Neon glow effect for dark mode */
+.neon-glow-dark {
+    text-shadow: 0 0 10px rgba(129, 140, 248, 0.5),
+                 0 0 20px rgba(129, 140, 248, 0.3),
+                 0 0 30px rgba(129, 140, 248, 0.2);
+    animation: neon-flicker 3s infinite;
+}
+
+@keyframes neon-flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        text-shadow: 0 0 10px rgba(129, 140, 248, 0.5),
+                     0 0 20px rgba(129, 140, 248, 0.3),
+                     0 0 30px rgba(129, 140, 248, 0.2);
+    }
+    20%, 24%, 55% {
+        text-shadow: none;
+    }
+}
+
+/* Smooth dark mode transition */
 * {
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }

@@ -1,0 +1,482 @@
+/**
+ * Enhanced Dark Mode CSS
+ * Professional light/dark theme with smooth transitions and modern design
+ */
+
+:root {
+    /* Light mode colors */
+    --color-primary: #6366f1;
+    --color-primary-dark: #4f46e5;
+    --color-primary-light: #818cf8;
+    
+    --color-secondary: #8b5cf6;
+    --color-accent: #ec4899;
+    
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
+    --color-info: #3b82f6;
+    
+    --color-bg-primary: #f9fafb;
+    --color-bg-secondary: #ffffff;
+    --color-bg-tertiary: #f3f4f6;
+    
+    --color-text-primary: #111827;
+    --color-text-secondary: #6b7280;
+    --color-text-tertiary: #9ca3af;
+    
+    --color-border: #e5e7eb;
+    --color-border-light: #f3f4f6;
+    
+    --color-shadow: rgba(0, 0, 0, 0.1);
+    --color-shadow-lg: rgba(0, 0, 0, 0.15);
+    
+    /* Light mode gradients */
+    --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --gradient-accent: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+    
+    /* Transitions */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark mode color overrides */
+.dark {
+    --color-primary: #818cf8;
+    --color-primary-dark: #6366f1;
+    --color-primary-light: #a5b4fc;
+    
+    --color-secondary: #a78bfa;
+    --color-accent: #f472b6;
+    
+    --color-success: #34d399;
+    --color-warning: #fbbf24;
+    --color-error: #f87171;
+    --color-info: #60a5fa;
+    
+    --color-bg-primary: #111827;
+    --color-bg-secondary: #1f2937;
+    --color-bg-tertiary: #374151;
+    
+    --color-text-primary: #f9fafb;
+    --color-text-secondary: #9ca3af;
+    --color-text-tertiary: #6b7280;
+    
+    --color-border: #374151;
+    --color-border-light: #4b5563;
+    
+    --color-shadow: rgba(0, 0, 0, 0.3);
+    --color-shadow-lg: rgba(0, 0, 0, 0.5);
+    
+    /* Dark mode gradients */
+    --gradient-primary: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+    --gradient-accent: linear-gradient(135deg, #f472b6 0%, #ec4899 100%);
+}
+
+/**
+ * Smooth theme transition
+ */
+html.theme-transitioning,
+html.theme-transitioning * {
+    transition: background-color var(--transition-base),
+                color var(--transition-base),
+                border-color var(--transition-base),
+                box-shadow var(--transition-base),
+                fill var(--transition-base),
+                stroke var(--transition-base) !important;
+}
+
+/**
+ * Base element styles with theme support
+ */
+body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    transition: background-color var(--transition-base),
+                color var(--transition-base);
+}
+
+/**
+ * Enhanced toggle button with ripple effect
+ */
+.dark-mode-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--color-bg-tertiary);
+    border: 2px solid var(--color-border);
+    cursor: pointer;
+    overflow: hidden;
+    transition: all var(--transition-base);
+    color: var(--color-text-primary);
+}
+
+.dark-mode-toggle:hover {
+    background-color: var(--color-bg-secondary);
+    border-color: var(--color-primary);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px var(--color-shadow);
+}
+
+.dark-mode-toggle:active {
+    transform: scale(0.95);
+}
+
+.dark-mode-toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-bg-primary),
+                0 0 0 6px var(--color-primary);
+}
+
+/* Ripple effect */
+.dark-mode-toggle .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--color-primary), transparent);
+    opacity: 0.6;
+    animation: ripple-animation 600ms ease-out;
+    pointer-events: none;
+}
+
+@keyframes ripple-animation {
+    0% {
+        transform: scale(0);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+/**
+ * Icon animations
+ */
+.dark-mode-toggle svg {
+    width: 24px;
+    height: 24px;
+    transition: transform var(--transition-base),
+                opacity var(--transition-base);
+}
+
+.sun-icon {
+    animation: rotate-in 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.moon-icon {
+    animation: rotate-in 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes rotate-in {
+    from {
+        transform: rotate(-180deg);
+        opacity: 0;
+    }
+    to {
+        transform: rotate(0);
+        opacity: 1;
+    }
+}
+
+/**
+ * Card and container theme styles
+ */
+.card,
+.bg-white {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    border-color: var(--color-border);
+    transition: all var(--transition-base);
+}
+
+.card:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 10px 30px var(--color-shadow);
+}
+
+/**
+ * Input and form element theming
+ */
+input,
+textarea,
+select {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    border-color: var(--color-border);
+    transition: all var(--transition-base);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    background-color: var(--color-bg-secondary);
+}
+
+input::placeholder {
+    color: var(--color-text-tertiary);
+}
+
+/**
+ * Button theming
+ */
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    transition: all var(--transition-base);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    border: 2px solid var(--color-border);
+    transition: all var(--transition-base);
+}
+
+.btn-secondary:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background-color: var(--color-bg-secondary);
+}
+
+/**
+ * Badge theming
+ */
+.badge {
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    transition: all var(--transition-base);
+}
+
+.badge-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.badge-success {
+    background-color: var(--color-success);
+    color: white;
+}
+
+.badge-warning {
+    background-color: var(--color-warning);
+    color: white;
+}
+
+.badge-error {
+    background-color: var(--color-error);
+    color: white;
+}
+
+/**
+ * Link theming
+ */
+a {
+    color: var(--color-primary);
+    transition: all var(--transition-fast);
+}
+
+a:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+}
+
+.dark a:hover {
+    color: var(--color-primary-light);
+}
+
+/**
+ * Table theming
+ */
+table {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+}
+
+tbody tr {
+    border-color: var(--color-border);
+    transition: all var(--transition-base);
+}
+
+tbody tr:hover {
+    background-color: var(--color-bg-tertiary);
+}
+
+/**
+ * Alert and notification styles
+ */
+.alert {
+    border-radius: 8px;
+    padding: 12px 16px;
+    transition: all var(--transition-base);
+}
+
+.alert-success {
+    background-color: rgba(16, 185, 129, 0.1);
+    border-color: var(--color-success);
+    color: var(--color-text-primary);
+}
+
+.alert-warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    border-color: var(--color-warning);
+    color: var(--color-text-primary);
+}
+
+.alert-error {
+    background-color: rgba(239, 68, 68, 0.1);
+    border-color: var(--color-error);
+    color: var(--color-text-primary);
+}
+
+.alert-info {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-color: var(--color-info);
+    color: var(--color-text-primary);
+}
+
+/**
+ * Scrollbar styling for dark mode
+ */
+.dark ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: var(--color-bg-tertiary);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-tertiary);
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-border-light);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-tertiary);
+}
+
+/**
+ * Focus visible for keyboard navigation
+ */
+:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/**
+ * Selection color
+ */
+::selection {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.dark::selection {
+    background-color: var(--color-primary-light);
+    color: var(--color-bg-primary);
+}
+
+/**
+ * Code block theming
+ */
+code {
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-accent);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.875em;
+}
+
+pre {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+pre code {
+    background: none;
+    padding: 0;
+    color: var(--color-text-primary);
+}
+
+/**
+ * Accessibility - Reduced motion support
+ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/**
+ * High contrast mode
+ */
+@media (prefers-contrast: high) {
+    :root {
+        --color-border: #1a1a1a;
+        --color-shadow: rgba(0, 0, 0, 0.3);
+    }
+    
+    .dark {
+        --color-border: #ffffff;
+        --color-shadow: rgba(255, 255, 255, 0.3);
+    }
+}
+
+/**
+ * Print styles
+ */
+@media print {
+    :root {
+        --color-bg-primary: white;
+        --color-text-primary: black;
+        --color-border: #cccccc;
+    }
+    
+    .dark {
+        --color-bg-primary: white;
+        --color-text-primary: black;
+        --color-border: #cccccc;
+    }
+    
+    .dark-mode-toggle {
+        display: none;
+    }
+}
