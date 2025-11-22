@@ -343,7 +343,68 @@ def features(request):
 
 @login_required
 def settings_view(request):
-    return render(request, "pages/settings.html")
+    """Handle user settings page with profile, security, and notification preferences."""
+    from .forms import UserDetailsForm, UserProfileForm, PasswordChangeForm, NotificationPreferencesForm
+    from django.contrib import messages
+    from django.contrib.auth.hashers import check_password
+    
+    # Get or create user profile
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    
+    # Handle form submissions
+    message = None
+    message_type = None
+    
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        
+        if action == 'update_profile':
+            user_form = UserDetailsForm(request.POST, instance=request.user)
+            profile_form = UserProfileForm(request.POST, request.FILES, instance=profile)
+            
+            if user_form.is_valid() and profile_form.is_valid():
+                user_form.save()
+                profile_form.save()
+                message = "Profile updated successfully!"
+                message_type = "success"
+            else:
+                message = "Please fix the errors below."
+                message_type = "error"
+                
+        elif action == 'change_password':
+            password_form = PasswordChangeForm(request.POST)
+            if password_form.is_valid():
+                current = password_form.cleaned_data.get('current_password')
+                new = password_form.cleaned_data.get('new_password')
+                
+                if not check_password(current, request.user.password):
+                    message = "Current password is incorrect."
+                    message_type = "error"
+                else:
+                    request.user.set_password(new)
+                    request.user.save()
+                    from django.contrib.auth import update_session_auth_hash
+                    update_session_auth_hash(request, request.user)
+                    message = "Password changed successfully!"
+                    message_type = "success"
+            else:
+                message = "Please fix the errors below."
+                message_type = "error"
+    
+    # Prepare forms
+    user_form = UserDetailsForm(instance=request.user)
+    profile_form = UserProfileForm(instance=profile)
+    password_form = PasswordChangeForm()
+    
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'password_form': password_form,
+        'message': message,
+        'message_type': message_type,
+    }
+    
+    return render(request, "pages/settings.html", context)
 
 
 def about(request):
