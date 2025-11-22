@@ -24,9 +24,11 @@ class SendGridEmailService:
     
     def __init__(self):
         self.api_key = os.environ.get("SENDGRID_API_KEY")
-        if not self.api_key:
-            raise ValueError("SENDGRID_API_KEY not configured")
-        self.client = SendGridAPIClient(self.api_key)
+        self.is_configured = bool(self.api_key)
+        if self.is_configured:
+            self.client = SendGridAPIClient(self.api_key)
+        else:
+            self.client = None
     
     # ============ INVOICE EMAILS ============
     
@@ -180,6 +182,12 @@ class SendGridEmailService:
     
     def _send_email(self, from_email, from_name, to_email, template_id, template_data, subject, invoice=None):
         """Send email using SendGrid dynamic template."""
+        # Check if SendGrid is configured
+        if not self.is_configured:
+            error_msg = "SendGrid API key not configured. Email sending is disabled. Please set SENDGRID_API_KEY in environment variables."
+            print(f"⚠️  {error_msg}")
+            return {"status": "error", "message": error_msg, "configured": False}
+        
         try:
             message = Mail(
                 from_email=From(from_email, from_name),
@@ -213,11 +221,17 @@ class SendGridEmailService:
             return {"status": "sent", "response": response.status_code}
             
         except Exception as e:
-            print(f"Error sending email via SendGrid: {str(e)}")
+            print(f"❌ Error sending email via SendGrid: {str(e)}")
             return {"status": "error", "message": str(e)}
     
     def _send_simple_email(self, from_email, from_name, to_email, subject, data):
         """Fallback: Send simple HTML email without dynamic template."""
+        # Check if SendGrid is configured
+        if not self.is_configured:
+            error_msg = "SendGrid API key not configured. Email sending is disabled."
+            print(f"⚠️  {error_msg}")
+            return {"status": "error", "message": error_msg, "configured": False}
+        
         try:
             # Create simple text content from template data
             plain_text = self._format_plain_text(data)
@@ -233,7 +247,7 @@ class SendGridEmailService:
             return {"status": "sent", "response": response.status_code}
             
         except Exception as e:
-            print(f"Error sending simple email: {str(e)}")
+            print(f"❌ Error sending simple email: {str(e)}")
             return {"status": "error", "message": str(e)}
     
     def _generate_invoice_pdf(self, invoice):

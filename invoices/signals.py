@@ -17,10 +17,12 @@ def send_welcome_email_on_signup(sender, instance, created, **kwargs):
                 result = service.send_welcome_email(instance)
                 if result.get('status') == 'sent':
                     print(f"✓ Welcome email sent to {instance.email}")
+                elif result.get('configured') is False:
+                    print(f"⚠️  Email delivery disabled for welcome email")
                 else:
-                    print(f"✗ Failed to send welcome email to {instance.email}")
+                    print(f"✗ Failed to send welcome email: {result.get('message')}")
             except Exception as e:
-                print(f"Error sending welcome email: {str(e)}")
+                print(f"❌ Error in signup signal: {str(e)}")
         
         # Send in background thread to avoid blocking
         thread = threading.Thread(target=_send_in_background, daemon=True)
@@ -42,12 +44,14 @@ def handle_invoice_status_change(sender, instance, created, **kwargs):
                         result = service.send_invoice_paid(instance, instance.client_email)
                         if result.get('status') == 'sent':
                             print(f"✓ Invoice paid email sent for Invoice #{instance.invoice_id}")
+                        elif result.get('configured') is False:
+                            print(f"⚠️  Email delivery disabled for paid notification")
                         else:
-                            print(f"✗ Failed to send invoice paid email")
+                            print(f"✗ Failed to send invoice paid email: {result.get('message')}")
                     except Exception as e:
-                        print(f"Error sending invoice paid email: {str(e)}")
+                        print(f"❌ Error sending invoice paid email: {str(e)}")
                 
                 thread = threading.Thread(target=_send_paid_email, daemon=True)
                 thread.start()
         except Exception as e:
-            print(f"Error in invoice status change handler: {str(e)}")
+            print(f"❌ Error in invoice status change handler: {str(e)}")
