@@ -36,7 +36,3 @@ services:
         sync: false
       - key: DEFAULT_FROM_EMAIL
         value: "Smart Invoice <noreply@smartinvoice.com>"
-
-databases:
-  - name: smartinvoice
-    plan: free
