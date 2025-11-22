@@ -321,68 +321,155 @@ def features(request):
 
 @login_required
 def settings_view(request):
-    """Handle user settings page with profile, security, and notification preferences."""
-    from .forms import UserDetailsForm, UserProfileForm, PasswordChangeForm, NotificationPreferencesForm
-    from django.contrib import messages
+    """Redirect to profile settings page."""
+    return redirect('settings_profile')
+
+
+@login_required
+def settings_profile(request):
+    """Profile Information settings page."""
+    from .forms import UserDetailsForm, UserProfileForm
     from django.contrib.auth.hashers import check_password
     
-    # Get or create user profile
     profile, created = UserProfile.objects.get_or_create(user=request.user)
     
-    # Handle form submissions
     message = None
     message_type = None
     
     if request.method == 'POST':
-        action = request.POST.get('action')
+        user_form = UserDetailsForm(request.POST, instance=request.user)
         
-        if action == 'update_profile':
-            user_form = UserDetailsForm(request.POST, instance=request.user)
-            profile_form = UserProfileForm(request.POST, request.FILES, instance=profile)
-            
-            if user_form.is_valid() and profile_form.is_valid():
-                user_form.save()
-                profile_form.save()
-                message = "Profile updated successfully!"
-                message_type = "success"
-            else:
-                message = "Please fix the errors below."
-                message_type = "error"
-                
-        elif action == 'change_password':
-            password_form = PasswordChangeForm(request.POST)
-            if password_form.is_valid():
-                current = password_form.cleaned_data.get('current_password')
-                new = password_form.cleaned_data.get('new_password')
-                
-                if not check_password(current, request.user.password):
-                    message = "Current password is incorrect."
-                    message_type = "error"
-                else:
-                    request.user.set_password(new)
-                    request.user.save()
-                    from django.contrib.auth import update_session_auth_hash
-                    update_session_auth_hash(request, request.user)
-                    message = "Password changed successfully!"
-                    message_type = "success"
-            else:
-                message = "Please fix the errors below."
-                message_type = "error"
-    
-    # Prepare forms
-    user_form = UserDetailsForm(instance=request.user)
-    profile_form = UserProfileForm(instance=profile)
-    password_form = PasswordChangeForm()
+        if user_form.is_valid():
+            user_form.save()
+            message = "Profile information updated successfully!"
+            message_type = "success"
+        else:
+            message = "Please fix the errors below."
+            message_type = "error"
+    else:
+        user_form = UserDetailsForm(instance=request.user)
     
     context = {
         'user_form': user_form,
+        'profile': profile,
+        'message': message,
+        'message_type': message_type,
+        'active_tab': 'profile',
+    }
+    
+    return render(request, "pages/settings-profile.html", context)
+
+
+@login_required
+def settings_business(request):
+    """Business Settings page."""
+    from .forms import UserProfileForm
+    
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    
+    message = None
+    message_type = None
+    
+    if request.method == 'POST':
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=profile)
+        
+        if profile_form.is_valid():
+            profile_form.save()
+            message = "Business settings updated successfully!"
+            message_type = "success"
+        else:
+            message = "Please fix the errors below."
+            message_type = "error"
+    else:
+        profile_form = UserProfileForm(instance=profile)
+    
+    context = {
         'profile_form': profile_form,
+        'profile': profile,
+        'message': message,
+        'message_type': message_type,
+        'active_tab': 'business',
+    }
+    
+    return render(request, "pages/settings-business.html", context)
+
+
+@login_required
+def settings_security(request):
+    """Security & Password settings page."""
+    from .forms import PasswordChangeForm
+    from django.contrib.auth.hashers import check_password
+    from django.contrib.auth import update_session_auth_hash
+    
+    message = None
+    message_type = None
+    
+    if request.method == 'POST':
+        password_form = PasswordChangeForm(request.POST)
+        if password_form.is_valid():
+            current = password_form.cleaned_data.get('current_password')
+            new = password_form.cleaned_data.get('new_password')
+            
+            if not check_password(current, request.user.password):
+                message = "Current password is incorrect."
+                message_type = "error"
+                password_form = PasswordChangeForm()
+            else:
+                request.user.set_password(new)
+                request.user.save()
+                update_session_auth_hash(request, request.user)
+                message = "Password updated successfully!"
+                message_type = "success"
+                password_form = PasswordChangeForm()
+        else:
+            message = "Please fix the errors below."
+            message_type = "error"
+    else:
+        password_form = PasswordChangeForm()
+    
+    context = {
         'password_form': password_form,
         'message': message,
         'message_type': message_type,
+        'active_tab': 'security',
     }
     
-    return render(request, "pages/settings.html", context)
+    return render(request, "pages/settings-security.html", context)
+
+
+@login_required
+def settings_notifications(request):
+    """Email Notifications settings page."""
+    
+    context = {
+        'active_tab': 'notifications',
+    }
+    
+    return render(request, "pages/settings-notifications.html", context)
+
+
+@login_required
+def settings_billing(request):
+    """Billing & Account settings page."""
+    from django.db.models import Count, Q
+    
+    # Get invoice statistics for user
+    invoices = Invoice.objects.filter(user=request.user)
+    invoice_count = invoices.filter(invoice_date__month=datetime.now().month).count()
+    paid_invoices = invoices.filter(status='paid').count()
+    
+    # Calculate pending amount
+    unpaid_invoices = list(invoices.filter(status='unpaid'))
+    pending_amount = sum(inv.total for inv in unpaid_invoices) if unpaid_invoices else Decimal('0')
+    
+    context = {
+        'active_tab': 'billing',
+        'invoice_count': invoice_count,
+        'paid_invoices': paid_invoices,
+        'pending_amount': f"${pending_amount:,.2f}" if pending_amount > 0 else "$0.00",
+    }
+    
+    return render(request, "pages/settings-billing.html", context)
 
 
 def about(request):
