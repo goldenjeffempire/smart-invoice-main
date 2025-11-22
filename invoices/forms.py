@@ -234,17 +234,112 @@ class LineItemForm(forms.ModelForm):
         self.fields['unit_price'].validators.append(validate_positive_decimal)
 
 
+class UserDetailsForm(forms.ModelForm):
+    """Form for updating user account details."""
+    
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
+            }),
+        }
+
+
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['company_name', 'company_logo', 'default_currency', 'default_tax_rate', 'invoice_prefix', 'timezone']
         widgets = {
-            'company_name': forms.TextInput(attrs={'class': 'input-field', 'placeholder': 'Company Name'}),
-            'default_currency': forms.Select(attrs={'class': 'input-field'}),
-            'default_tax_rate': forms.NumberInput(attrs={'class': 'input-field', 'step': '0.01', 'min': '0', 'max': '100'}),
-            'invoice_prefix': forms.TextInput(attrs={'class': 'input-field', 'placeholder': 'INV', 'maxlength': '10'}),
-            'timezone': forms.TextInput(attrs={'class': 'input-field', 'placeholder': 'UTC'}),
+            'company_name': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+                'placeholder': 'Company Name'
+            }),
+            'default_currency': forms.Select(attrs={
+                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
+            }),
+            'default_tax_rate': forms.NumberInput(attrs={
+                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+                'step': '0.01',
+                'min': '0',
+                'max': '100',
+                'placeholder': '0.00'
+            }),
+            'invoice_prefix': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+                'placeholder': 'INV',
+                'maxlength': '10'
+            }),
+            'timezone': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+                'placeholder': 'UTC'
+            }),
         }
+
+
+class NotificationPreferencesForm(forms.Form):
+    """Form for notification preferences."""
+    email_notifications = forms.BooleanField(
+        required=False,
+        label='Email Notifications',
+        help_text='Receive email updates about your invoices'
+    )
+    payment_reminders = forms.BooleanField(
+        required=False,
+        label='Payment Reminders',
+        help_text='Get notified when invoices are paid'
+    )
+    marketing_updates = forms.BooleanField(
+        required=False,
+        label='Marketing Updates',
+        help_text='Receive updates about new features'
+    )
+
+
+class PasswordChangeForm(forms.Form):
+    """Form for changing password."""
+    current_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+            'placeholder': 'Current password'
+        }),
+        label='Current Password'
+    )
+    new_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+            'placeholder': 'New password'
+        }),
+        label='New Password',
+        help_text='Password must be at least 8 characters long'
+    )
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+            'placeholder': 'Confirm password'
+        }),
+        label='Confirm Password'
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get('new_password')
+        confirm_password = cleaned_data.get('confirm_password')
+
+        if new_password and confirm_password:
+            if new_password != confirm_password:
+                raise forms.ValidationError("Passwords do not match.")
+            if len(new_password) < 8:
+                raise forms.ValidationError("Password must be at least 8 characters long.")
+
+        return cleaned_data
 
 
 class InvoiceTemplateForm(forms.ModelForm):
