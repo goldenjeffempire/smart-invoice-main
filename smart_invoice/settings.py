@@ -19,6 +19,10 @@ DEBUG = env.bool("DEBUG", default=IS_REPLIT)  # type: ignore
 # Get SECRET_KEY or generate a random one for Replit development
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-dev-key-CHANGE-IN-PRODUCTION")  # type: ignore
 
+# Encryption salt for field-level encryption (bank account numbers, etc.)
+# CRITICAL: Must be set in production for data security
+ENCRYPTION_SALT = env("ENCRYPTION_SALT", default="dev-salt-only-for-local-testing")  # type: ignore
+
 # PRODUCTION SAFETY GUARDS
 # Only enforce strict validation in non-Replit production environments
 if not DEBUG and not IS_REPLIT:
@@ -27,6 +31,13 @@ if not DEBUG and not IS_REPLIT:
         raise ValueError(
             "PRODUCTION ERROR: You must set a secure SECRET_KEY environment variable! "
             "Generate one with: python -c \"from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())\""
+        )
+    
+    # Enforce secure ENCRYPTION_SALT in production
+    if ENCRYPTION_SALT == "dev-salt-only-for-local-testing":
+        raise ValueError(
+            "PRODUCTION ERROR: You must set a secure ENCRYPTION_SALT environment variable! "
+            "Generate one with: python -c \"import secrets; print(secrets.token_hex(32))\""
         )
     
     # Enforce ALLOWED_HOSTS in production
@@ -164,13 +175,9 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")  # type: ignore
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")  # type: ignore
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="noreply@smartinvoice.com")  # type: ignore
 
-# Encryption settings
-ENCRYPTION_SALT = env("ENCRYPTION_SALT", default="smart_invoice_salt_v1")  # type: ignore
-
-if not DEBUG:
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+# Additional security headers for non-Replit production (settings above handle Replit)
+# These are redundant with our custom middleware but kept for defense in depth
+if not DEBUG and not IS_REPLIT:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = "DENY"
@@ -234,6 +241,9 @@ LOGGING = {
 }
 
 # Content Security Policy (CSP) settings for security - django-csp 4.0 format
+# NOTE: Currently using 'unsafe-inline' for scripts/styles due to inline code in templates
+# TODO: Refactor templates to use CSP nonces or external files, then remove 'unsafe-inline'
+# See: https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
 CONTENT_SECURITY_POLICY = {
     'DIRECTIVES': {
         'default-src': ("'self'",),
@@ -245,6 +255,8 @@ CONTENT_SECURITY_POLICY = {
         'frame-ancestors': ("'none'",),
         'base-uri': ("'self'",),
         'form-action': ("'self'",),
+        'upgrade-insecure-requests': True,
+        'block-all-mixed-content': True,
     }
 }
 

@@ -10,24 +10,42 @@ logger = logging.getLogger(__name__)
 
 class SecurityHeadersMiddleware(MiddlewareMixin):
     """
-    Add security headers to all responses.
+    Add security headers to all responses for defense in depth.
     
     Headers implemented:
-    - X-Content-Type-Options: nosniff
+    - X-Content-Type-Options: nosniff (prevent MIME sniffing)
     - X-Frame-Options: DENY (prevent clickjacking)
+    - X-XSS-Protection: 1; mode=block (legacy XSS protection)
+    - X-Download-Options: noopen (prevent file execution in IE)
     - Referrer-Policy: strict-origin-when-cross-origin
     - Permissions-Policy: Restrict browser features
+    - Strict-Transport-Security: HTTPS enforcement (HSTS)
     """
 
     def process_response(self, request, response):
+        # MIME type sniffing protection
         response["X-Content-Type-Options"] = "nosniff"
+        
+        # Clickjacking protection
         response["X-Frame-Options"] = "DENY"
+        
+        # Legacy XSS protection (for older browsers)
+        response["X-XSS-Protection"] = "1; mode=block"
+        
+        # Prevent file execution in IE (legacy)
+        response["X-Download-Options"] = "noopen"
+        
+        # Referrer policy for privacy
         response["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        
+        # Permissions policy (restrict browser features)
         response["Permissions-Policy"] = (
-            "geolocation=(), microphone=(), camera=(), payment=()"
+            "geolocation=(), microphone=(), camera=(), payment=(), "
+            "usb=(), magnetometer=(), accelerometer=(), gyroscope=()"
         )
         
-        if not request.is_secure() and not request.get_host().startswith("localhost"):
+        # HSTS for HTTPS enforcement (only on secure connections)
+        if request.is_secure() and not request.get_host().startswith("localhost"):
             response["Strict-Transport-Security"] = (
                 "max-age=31536000; includeSubDomains; preload"
             )

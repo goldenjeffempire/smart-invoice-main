@@ -56,25 +56,32 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
-    invoices = Invoice.objects.filter(user=request.user)
-
+    # Fetch all user's invoices with line_items prefetched (single query with join)
+    all_user_invoices = list(
+        Invoice.objects.filter(user=request.user).prefetch_related('line_items')
+    )
+    
+    # Filter in Python to reuse prefetched data
     filter_status = request.GET.get("status", "all")
     if filter_status == "paid":
-        invoices = invoices.filter(status="paid")
+        invoices = [inv for inv in all_user_invoices if inv.status == "paid"]
     elif filter_status == "unpaid":
-        invoices = invoices.filter(status="unpaid")
+        invoices = [inv for inv in all_user_invoices if inv.status == "unpaid"]
+    else:
+        invoices = all_user_invoices
 
-    total_invoices = Invoice.objects.filter(user=request.user).count()
-    paid_count = Invoice.objects.filter(user=request.user, status="paid").count()
-    unpaid_count = Invoice.objects.filter(user=request.user, status="unpaid").count()
+    # Calculate metrics from the in-memory list (no additional DB queries)
+    total_invoices = len(all_user_invoices)
+    paid_invoices = [inv for inv in all_user_invoices if inv.status == "paid"]
+    unpaid_invoices = [inv for inv in all_user_invoices if inv.status == "unpaid"]
+    paid_count = len(paid_invoices)
+    unpaid_count = len(unpaid_invoices)
 
-    # Calculate total revenue from paid invoices
-    paid_invoices = Invoice.objects.filter(user=request.user, status="paid")
-    revenue_value = sum(invoice.total for invoice in paid_invoices) if paid_invoices.exists() else Decimal("0")
+    # Calculate revenue from prefetched data
+    revenue_value = sum(inv.total for inv in paid_invoices) if paid_invoices else Decimal("0")
 
-    unique_clients = (
-        Invoice.objects.filter(user=request.user).values("client_email").distinct().count()
-    )
+    # Count unique clients from in-memory list
+    unique_clients = len(set(inv.client_email for inv in all_user_invoices))
 
     context = {
         "invoices": invoices,
@@ -372,7 +379,7 @@ def changelog(request):
 
 @login_required
 def analytics(request):
-    invoices = Invoice.objects.filter(user=request.user)
+    invoices = Invoice.objects.filter(user=request.user).prefetch_related('line_items')
 
     total_invoices = invoices.count()
     paid_invoices = invoices.filter(status="paid").count()
@@ -494,8 +501,11 @@ def admin_dashboard(request):
     from django.contrib.auth.models import User
     total_users = User.objects.count()
     total_invoices = Invoice.objects.count()
-    total_revenue = sum(inv.total for inv in Invoice.objects.filter(status="paid")) or Decimal("0")
-    paid_invoices = Invoice.objects.filter(status="paid").count()
+    
+    # Optimize query with prefetch_related to avoid N+1
+    paid_invoices_qs = Invoice.objects.filter(status="paid").prefetch_related('line_items')
+    total_revenue = sum(inv.total for inv in paid_invoices_qs) if paid_invoices_qs.exists() else Decimal("0")
+    paid_invoices = paid_invoices_qs.count()
     paid_rate = (paid_invoices / total_invoices * 100) if total_invoices > 0 else 0
     
     context = {

@@ -85,6 +85,13 @@ class Invoice(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["user", "status"], name="idx_user_status"),
+            models.Index(fields=["user", "-created_at"], name="idx_user_created"),
+            models.Index(fields=["user", "invoice_date"], name="idx_user_date"),
+            models.Index(fields=["invoice_id"], name="idx_invoice_id"),
+            models.Index(fields=["user", "client_email"], name="idx_user_client"),
+        ]
 
 
 class LineItem(models.Model):
