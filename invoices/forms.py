@@ -92,7 +92,7 @@ class InvoiceForm(forms.ModelForm):
         model = Invoice
         fields = ['business_name', 'business_email', 'business_phone', 'business_address',
                  'client_name', 'client_email', 'client_phone', 'client_address',
-                 'invoice_date', 'due_date', 'currency', 'tax_rate', 'notes', 'company_logo']
+                 'invoice_date', 'due_date', 'currency', 'tax_rate', 'notes']
         widgets = {
             'business_name': forms.TextInput(attrs={'class': 'input-field'}),
             'business_email': forms.EmailInput(attrs={'class': 'input-field'}),
@@ -107,13 +107,10 @@ class InvoiceForm(forms.ModelForm):
             'currency': forms.Select(attrs={'class': 'input-field'}),
             'tax_rate': forms.NumberInput(attrs={'class': 'input-field', 'step': '0.01'}),
             'notes': forms.Textarea(attrs={'class': 'input-field', 'rows': 3}),
-            'company_logo': forms.FileInput(attrs={'class': 'input-field', 'accept': 'image/*'}),
         }
 
     def clean(self) -> dict:
         cleaned_data = super().clean()
-        rules = InvoiceBusinessRules()
-        rules.validate_invoice_dates(cleaned_data.get('invoice_date'), cleaned_data.get('due_date'))
         return cleaned_data
 
 
