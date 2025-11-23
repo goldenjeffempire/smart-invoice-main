@@ -5,16 +5,16 @@
     <div class="flex justify-between items-center mb-8">
         <div>
             <h1 class="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">User Management</h1>
-            <p class="text-gray-600 dark:text-gray-400 mt-2">Manage all registered users and their permissions</p>
+            <p class="text-gray-600 mt-2">Manage all registered users and their permissions</p>
         </div>
         <a href="{% url 'admin_dashboard' %}" class="text-indigo-600 hover:underline font-semibold">← Back to Admin</a>
     </div>
     
     <!-- Search & Filters -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <div class="flex flex-col md:flex-row gap-4">
-            <input type="text" placeholder="Search users by name, email, or username..." class="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            <select class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <input type="text" placeholder="Search users by name, email, or username..." class="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <select class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <option>All Users</option>
                 <option>Active</option>
                 <option>Inactive</option>
@@ -24,36 +24,36 @@
     </div>
     
     <!-- Users Table -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
         <table class="w-full">
-            <thead class="bg-gray-100 dark:bg-gray-800 border-b">
+            <thead class="bg-gray-100 border-b">
                 <tr>
-                    <th class="px-6 py-4 text-left font-semibold text-gray-700 dark:text-gray-300">User</th>
-                    <th class="px-6 py-4 text-left font-semibold text-gray-700 dark:text-gray-300">Email</th>
-                    <th class="px-6 py-4 text-left font-semibold text-gray-700 dark:text-gray-300">Invoices</th>
-                    <th class="px-6 py-4 text-left font-semibold text-gray-700 dark:text-gray-300">Status</th>
-                    <th class="px-6 py-4 text-left font-semibold text-gray-700 dark:text-gray-300">Joined</th>
-                    <th class="px-6 py-4 text-left font-semibold text-gray-700 dark:text-gray-300">Actions</th>
+                    <th class="px-6 py-4 text-left font-semibold text-gray-700
+                    <th class="px-6 py-4 text-left font-semibold text-gray-700
+                    <th class="px-6 py-4 text-left font-semibold text-gray-700
+                    <th class="px-6 py-4 text-left font-semibold text-gray-700
+                    <th class="px-6 py-4 text-left font-semibold text-gray-700
+                    <th class="px-6 py-4 text-left font-semibold text-gray-700
                 </tr>
             </thead>
             <tbody>
-                <tr class="border-b hover:bg-gray-50 dark:bg-gray-900">
-                    <td class="px-6 py-4 font-semibold text-gray-900 dark:text-gray-100">John Doe</td>
-                    <td class="px-6 py-4 text-gray-600 dark:text-gray-400">john@example.com</td>
-                    <td class="px-6 py-4 text-gray-600 dark:text-gray-400">24</td>
-                    <td class="px-6 py-4"><span class="px-3 py-1 bg-green-100 dark:bg-green-900/20 text-green-800 rounded-full text-sm font-semibold">Active</span></td>
-                    <td class="px-6 py-4 text-gray-600 dark:text-gray-400">Nov 15, 2024</td>
+                <tr class="border-b hover:bg-gray-50
+                    <td class="px-6 py-4 font-semibold text-gray-900 Doe</td>
+                    <td class="px-6 py-4 text-gray-600
+                    <td class="px-6 py-4 text-gray-600
+                    <td class="px-6 py-4"><span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">Active</span></td>
+                    <td class="px-6 py-4 text-gray-600 15, 2024</td>
                     <td class="px-6 py-4">
                         <button class="text-indigo-600 hover:underline text-sm font-semibold mr-3">Edit</button>
                         <button class="text-red-600 hover:underline text-sm font-semibold">Remove</button>
                     </td>
                 </tr>
-                <tr class="border-b hover:bg-gray-50 dark:bg-gray-900">
-                    <td class="px-6 py-4 font-semibold text-gray-900 dark:text-gray-100">Jane Smith</td>
-                    <td class="px-6 py-4 text-gray-600 dark:text-gray-400">jane@example.com</td>
-                    <td class="px-6 py-4 text-gray-600 dark:text-gray-400">18</td>
-                    <td class="px-6 py-4"><span class="px-3 py-1 bg-green-100 dark:bg-green-900/20 text-green-800 rounded-full text-sm font-semibold">Active</span></td>
-                    <td class="px-6 py-4 text-gray-600 dark:text-gray-400">Nov 10, 2024</td>
+                <tr class="border-b hover:bg-gray-50
+                    <td class="px-6 py-4 font-semibold text-gray-900 Smith</td>
+                    <td class="px-6 py-4 text-gray-600
+                    <td class="px-6 py-4 text-gray-600
+                    <td class="px-6 py-4"><span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">Active</span></td>
+                    <td class="px-6 py-4 text-gray-600 10, 2024</td>
                     <td class="px-6 py-4">
                         <button class="text-indigo-600 hover:underline text-sm font-semibold mr-3">Edit</button>
                         <button class="text-red-600 hover:underline text-sm font-semibold">Remove</button>
