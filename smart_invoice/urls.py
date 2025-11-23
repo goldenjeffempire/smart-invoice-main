@@ -33,6 +33,8 @@ urlpatterns = [
     path("careers/", views.careers, name="careers"),
     path("status/", views.status, name="status"),
     path("changelog/", views.changelog, name="changelog"),
+    path("templates-coming-soon/", views.templates, name="templates"),
+    path("api-access/", views.api, name="api"),
     # User features
     path("profile/", views.profile, name="profile"),
     path("templates/", views.invoice_templates, name="invoice_templates"),

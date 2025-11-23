@@ -507,6 +507,14 @@ def changelog(request):
     return render(request, "pages/changelog.html")
 
 
+def templates(request):
+    return render(request, "pages/templates.html")
+
+
+def api(request):
+    return render(request, "pages/api.html")
+
+
 @login_required
 def analytics(request):
     invoices = Invoice.objects.filter(user=request.user).prefetch_related('line_items')
