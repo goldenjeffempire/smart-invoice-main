@@ -807,3 +807,24 @@ def bulk_delete(request):
             messages.success(request, f"Deleted {deleted_count} invoice(s).")
         return redirect("dashboard")
     return redirect("dashboard")
+
+
+def waitlist_subscribe(request):
+    """Handle email capture from Coming Soon pages and landing page."""
+    from .forms import WaitlistForm
+    from .models import Waitlist
+    
+    if request.method == "POST":
+        form = WaitlistForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "✓ You're on the list! We'll notify you soon.")
+            return redirect(request.META.get('HTTP_REFERER', 'home'))
+        else:
+            if 'email' in form.errors and 'already' in str(form.errors['email'][0]).lower():
+                messages.info(request, "This email is already on our waitlist!")
+            else:
+                messages.error(request, "Please enter a valid email address.")
+            return redirect(request.META.get('HTTP_REFERER', 'home'))
+    
+    return redirect('home')

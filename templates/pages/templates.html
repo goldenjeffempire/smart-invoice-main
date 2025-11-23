@@ -88,12 +88,15 @@
             <div class="card bg-gradient-to-r from-indigo-50 to-purple-50 border-2 border-indigo-200 fade-up">
                 <h3 class="text-2xl font-black mb-4 text-gray-900 text-center">Get Notified When We Launch</h3>
                 <p class="text-gray-600 mb-6 text-center">Be the first to access our new invoice templates</p>
-                <form class="max-w-md mx-auto flex gap-4" method="post" action="">
+                <form class="max-w-md mx-auto" method="post" action="{% url 'waitlist_subscribe' %}">
                     {% csrf_token %}
-                    <input type="email" placeholder="Enter your email" required class="flex-1 px-4 py-3 border-2 border-indigo-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all">
-                    <button type="submit" class="btn btn-primary hover-lift whitespace-nowrap">
-                        Notify Me
-                    </button>
+                    <div class="flex gap-4">
+                        <input type="email" name="email" placeholder="Enter your email" required class="flex-1 px-4 py-3 border-2 border-indigo-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all">
+                        <input type="hidden" name="feature" value="templates">
+                        <button type="submit" class="btn btn-primary hover-lift whitespace-nowrap">
+                            Notify Me
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

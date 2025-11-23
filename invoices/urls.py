@@ -17,4 +17,5 @@ urlpatterns = [
     path("invoice/<int:invoice_id>/pdf/", views.generate_pdf, name="generate_pdf"),
     path("invoice/<int:invoice_id>/email/", views.send_invoice_email, name="send_invoice_email"),
     path("invoice/<int:invoice_id>/whatsapp/", views.whatsapp_share, name="whatsapp_share"),
+    path("waitlist/", views.waitlist_subscribe, name="waitlist_subscribe"),
 ]
