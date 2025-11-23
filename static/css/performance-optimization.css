@@ -1,0 +1,40 @@
+/**
+ * PERFORMANCE OPTIMIZATION
+ * Image loading, lazy loading, caching strategies
+ */
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-display: swap;
+}
+
+.card, .modal-content, .toast {
+    contain: layout style paint;
+}
+
+.animate-fade-in, .animate-slide-up, .animate-slide-down {
+    will-change: opacity, transform;
+}
+
+.btn, .card {
+    transform: translateZ(0);
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+
+@media print {
+    .navbar, .footer, .page-loader { display: none; }
+    body { background: white; color: black; }
+}
+
+@media (prefers-reduced-data: reduce) {
+    *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}

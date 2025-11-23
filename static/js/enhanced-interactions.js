@@ -198,17 +198,7 @@ class NotificationSystem {
     }
 }
 
-class LoadingManager {
-    static show() {
-        const loader = document.querySelector('.page-loader');
-        if (loader) loader.classList.add('active');
-    }
-    
-    static hide() {
-        const loader = document.querySelector('.page-loader');
-        if (loader) loader.classList.remove('active');
-    }
-}
+// LoadingManager is defined in ux-enhancements.js, using from there
 
 class KeyboardNavigation {
     constructor() {
@@ -236,4 +226,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.Notification = NotificationSystem;
-window.Loading = LoadingManager;
+// LoadingManager available from ux-enhancements.js
