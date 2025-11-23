@@ -146,3 +146,39 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
+<style>
+  /* Navbar modern enhancements */
+  nav {
+    transition: all 0.3s ease;
+  }
+  
+  nav.shadow-md {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Mobile menu smooth transitions */
+  .mobile-menu {
+    animation: slideInDown 0.3s ease-out;
+  }
+
+  /* Link hover effects */
+  nav a {
+    position: relative;
+  }
+
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #6366f1, #ec4899);
+    transition: width 0.3s ease;
+  }
+
+  nav a:hover::after {
+    width: 100%;
+  }
+</style>

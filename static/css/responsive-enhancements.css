@@ -1,0 +1,122 @@
+/* ========== RESPONSIVE ENHANCEMENTS ========== */
+
+/* Mobile First Approach */
+@media (max-width: 640px) {
+  /* Reduce font sizes on mobile */
+  h1 { font-size: 1.875rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.25rem; }
+
+  /* Stack cards vertically */
+  .grid { grid-template-columns: 1fr; }
+
+  /* Touch-friendly button sizes */
+  button, a.btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Reduce padding on mobile */
+  .section-lg { padding: 2rem 1rem; }
+  .container { padding-left: 1rem; padding-right: 1rem; }
+
+  /* Simpler animations on mobile */
+  .animate-slide-in-left,
+  .animate-slide-in-right {
+    animation: slideInUp 0.6s ease-out;
+  }
+
+  /* Hover effects on touch devices */
+  @media (hover: none) and (pointer: coarse) {
+    .hover-lift:hover {
+      transform: none;
+    }
+    
+    button:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+/* Tablet Enhancements */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .grid-lg-2 { grid-template-columns: repeat(2, 1fr); }
+  h1 { font-size: 2.25rem; }
+  .section-lg { padding: 3rem 1.5rem; }
+}
+
+/* Desktop Enhancements */
+@media (min-width: 1025px) {
+  /* Full animations on desktop */
+  .hover-lift {
+    cursor: pointer;
+  }
+
+  /* Multi-column layouts */
+  .grid-lg-3 { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Landscape Mobile */
+@media (max-height: 500px) {
+  .section-lg { padding: 1.5rem; }
+  h1 { font-size: 1.5rem; }
+}
+
+/* Print Styles */
+@media print {
+  .btn, button, nav, footer {
+    display: none;
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #0f172a;
+    color: #e2e8f0;
+  }
+
+  .card {
+    background-color: #1e293b;
+    color: #e2e8f0;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: more) {
+  * {
+    border-width: 2px;
+  }
+  
+  button, a.btn {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Landscape Mobile Video Enhancement */
+@media (max-aspect-ratio: 1/1) {
+  video {
+    width: 100%;
+    height: auto;
+  }
+}
+
+/* Small Devices */
+@media (max-width: 320px) {
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+  .container { padding-left: 0.75rem; padding-right: 0.75rem; }
+}
