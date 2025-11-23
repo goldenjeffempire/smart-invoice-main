@@ -43,7 +43,11 @@ class SendGridEmailService:
     # ============ INVOICE EMAILS ============
     
     def send_invoice_ready(self, invoice, recipient_email, template_id=None):
-        """Send 'Invoice Ready' notification to client."""
+        """Send 'Invoice Ready' notification to client.
+        
+        Sends FROM user's business email (verified with SendGrid).
+        Falls back to platform email if user's email not verified.
+        """
         template_id = template_id or self.TEMPLATE_IDS.get('invoice_ready')
         
         template_data = {
@@ -60,7 +64,7 @@ class SendGridEmailService:
         }
         
         return self._send_email(
-            from_email=self.PLATFORM_FROM_EMAIL,
+            from_email=invoice.business_email,
             from_name=invoice.business_name,
             to_email=recipient_email,
             template_id=template_id,
@@ -70,7 +74,11 @@ class SendGridEmailService:
         )
     
     def send_invoice_paid(self, invoice, recipient_email, template_id=None):
-        """Send 'Invoice Paid' notification."""
+        """Send 'Invoice Paid' notification.
+        
+        Sends FROM user's business email (verified with SendGrid).
+        Falls back to platform email if user's email not verified.
+        """
         template_id = template_id or self.TEMPLATE_IDS.get('invoice_paid')
         
         template_data = {
@@ -83,7 +91,7 @@ class SendGridEmailService:
         }
         
         return self._send_email(
-            from_email=self.PLATFORM_FROM_EMAIL,
+            from_email=invoice.business_email,
             from_name=invoice.business_name,
             to_email=recipient_email,
             template_id=template_id,
@@ -92,7 +100,11 @@ class SendGridEmailService:
         )
     
     def send_payment_reminder(self, invoice, recipient_email, template_id=None):
-        """Send payment reminder for unpaid invoice."""
+        """Send payment reminder for unpaid invoice.
+        
+        Sends FROM user's business email (verified with SendGrid).
+        Falls back to platform email if user's email not verified.
+        """
         template_id = template_id or self.TEMPLATE_IDS.get('payment_reminder')
         
         template_data = {
@@ -109,7 +121,7 @@ class SendGridEmailService:
         }
         
         return self._send_email(
-            from_email=self.PLATFORM_FROM_EMAIL,
+            from_email=invoice.business_email,
             from_name=invoice.business_name,
             to_email=recipient_email,
             template_id=template_id,
@@ -191,7 +203,11 @@ class SendGridEmailService:
     # ============ HELPER METHODS ============
     
     def _send_email(self, from_email, from_name, to_email, template_id, template_data, subject, invoice=None):
-        """Send email using SendGrid dynamic template."""
+        """Send email using SendGrid dynamic template.
+        
+        Tries to send from the provided from_email first.
+        If it fails due to unverified sender (403), automatically falls back to platform owner's verified email.
+        """
         # Check if SendGrid is configured
         if not self.is_configured:
             error_msg = "SendGrid API key not configured. Email sending is disabled. Please set SENDGRID_API_KEY in environment variables."
@@ -199,8 +215,6 @@ class SendGridEmailService:
             return {"status": "error", "message": error_msg, "configured": False}
         
         try:
-            # Use fallback email if provided from_email hasn't been verified in SendGrid
-            # This allows testing while business email verification is pending
             actual_from_email = from_email
             actual_from_name = from_name
             
@@ -233,12 +247,54 @@ class SendGridEmailService:
             
             # Send email
             response = self.client.send(message)
-            return {"status": "sent", "response": response.status_code}
+            print(f"✅ Email sent from {actual_from_email}")
+            return {"status": "sent", "response": response.status_code, "from_email": actual_from_email}
             
         except Exception as e:
-            # Handle SendGrid API errors with detailed diagnostics
-            error_detail = self._parse_sendgrid_error(e)
+            # Check if error is due to unverified sender (403 Forbidden)
             status_code = getattr(e, 'status_code', None)
+            error_detail = self._parse_sendgrid_error(e)
+            
+            # If sender is not verified, try with platform owner's verified email
+            if status_code == 403 and from_email != self.PLATFORM_FROM_EMAIL:
+                print(f"⚠️  Email from {from_email} failed (not verified). Trying with platform email...")
+                try:
+                    message = Mail(
+                        from_email=From(self.PLATFORM_FROM_EMAIL, from_name),
+                        to_emails=To(to_email),
+                        subject=subject,
+                    )
+                    
+                    if template_id:
+                        message.template_id = TemplateId(template_id)
+                        message.personalizations = [Personalization()]
+                        message.personalizations[0].to = To(to_email)
+                        message.personalizations[0].dynamic_template_data = template_data
+                    
+                    if invoice:
+                        pdf_data = self._generate_invoice_pdf(invoice)
+                        if pdf_data:
+                            attachment = Attachment(
+                                FileContent(base64.b64encode(pdf_data).decode()),
+                                FileName(f"Invoice_{invoice.invoice_id}.pdf"),
+                                FileType("application/pdf")
+                            )
+                            message.attachment = attachment
+                    
+                    response = self.client.send(message)
+                    print(f"✅ Email sent using fallback platform email ({self.PLATFORM_FROM_EMAIL})")
+                    print(f"💡 To use {from_email}: Verify it in SendGrid Settings → Sender Authentication")
+                    return {
+                        "status": "sent", 
+                        "response": response.status_code, 
+                        "from_email": self.PLATFORM_FROM_EMAIL,
+                        "note": f"Using platform email. To send from {from_email}, verify it in SendGrid"
+                    }
+                except Exception as fallback_error:
+                    fallback_detail = self._parse_sendgrid_error(fallback_error)
+                    print(f"❌ Fallback also failed: {fallback_detail}")
+                    return {"status": "error", "message": fallback_detail, "code": getattr(fallback_error, 'status_code', None)}
+            
             print(f"❌ SendGrid API Error: {error_detail}")
             return {"status": "error", "message": error_detail, "code": status_code}
     
