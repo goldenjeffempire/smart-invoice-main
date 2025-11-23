@@ -310,17 +310,78 @@ Thank you for your business! 🙏
     )
 
 
-def faq(request):
-    return render(request, "pages/faq.html")
+# ============================================================================
+# FOOTER PAGE VIEWS - Professional Public Pages
+# ============================================================================
+
+def features(request):
+    """Features page showcasing platform capabilities."""
+    return render(request, "pages/features.html")
+
+
+def pricing(request):
+    """Pricing page with subscription plans."""
+    return render(request, "pages/pricing.html")
+
+
+def templates_page(request):
+    """Invoice templates coming soon page."""
+    return render(request, "pages/templates.html")
+
+
+def api_access(request):
+    """API access coming soon page."""
+    return render(request, "pages/api.html")
+
+
+def about(request):
+    """About Us page - company story and values."""
+    return render(request, "pages/about.html")
+
+
+def careers(request):
+    """Careers page with open positions."""
+    return render(request, "pages/careers.html")
+
+
+def contact(request):
+    """Contact page with contact form."""
+    return render(request, "pages/contact.html")
+
+
+def changelog(request):
+    """Changelog page with version history."""
+    return render(request, "pages/changelog.html")
+
+
+def system_status(request):
+    """System status page showing service health."""
+    return render(request, "pages/status.html")
 
 
 def support(request):
+    """Support/Help center page."""
     return render(request, "pages/support.html")
 
 
-def features(request):
-    return render(request, "pages/features.html")
+def faq(request):
+    """FAQ page with common questions and answers."""
+    return render(request, "pages/faq.html")
 
+
+def terms(request):
+    """Terms of Service page."""
+    return render(request, "pages/terms.html")
+
+
+def privacy(request):
+    """Privacy Policy page."""
+    return render(request, "pages/privacy.html")
+
+
+# ============================================================================
+# SETTINGS PAGES
+# ============================================================================
 
 @login_required
 def settings_view(request):
@@ -475,36 +536,6 @@ def settings_billing(request):
     return render(request, "pages/settings-billing.html", context)
 
 
-def about(request):
-    return render(request, "pages/about.html")
-
-
-def pricing(request):
-    return render(request, "pages/pricing.html")
-
-
-def terms(request):
-    return render(request, "pages/terms.html")
-
-
-def privacy(request):
-    return render(request, "pages/privacy.html")
-
-
-def contact(request):
-    return render(request, "pages/contact.html")
-
-
-def careers(request):
-    return render(request, "pages/careers.html")
-
-
-def status(request):
-    return render(request, "pages/status.html")
-
-
-def changelog(request):
-    return render(request, "pages/changelog.html")
 
 
 @login_required

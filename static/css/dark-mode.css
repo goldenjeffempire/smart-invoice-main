@@ -4,7 +4,7 @@
  */
 
 :root {
-    /* Light mode colors */
+    /* Light mode colors - Professional & Modern */
     --color-primary: #6366f1;
     --color-primary-dark: #4f46e5;
     --color-primary-light: #818cf8;
@@ -17,19 +17,19 @@
     --color-error: #ef4444;
     --color-info: #3b82f6;
     
-    --color-bg-primary: #f9fafb;
+    --color-bg-primary: #fafbfc;
     --color-bg-secondary: #ffffff;
-    --color-bg-tertiary: #f3f4f6;
+    --color-bg-tertiary: #f0f1f5;
     
-    --color-text-primary: #111827;
-    --color-text-secondary: #6b7280;
-    --color-text-tertiary: #9ca3af;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #475569;
+    --color-text-tertiary: #94a3b8;
     
-    --color-border: #e5e7eb;
-    --color-border-light: #f3f4f6;
+    --color-border: #e2e8f0;
+    --color-border-light: #f1f5f9;
     
-    --color-shadow: rgba(0, 0, 0, 0.1);
-    --color-shadow-lg: rgba(0, 0, 0, 0.15);
+    --color-shadow: rgba(15, 23, 42, 0.08);
+    --color-shadow-lg: rgba(15, 23, 42, 0.12);
     
     /* Light mode gradients */
     --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
@@ -55,19 +55,19 @@
     --color-error: #f87171;
     --color-info: #60a5fa;
     
-    --color-bg-primary: #111827;
-    --color-bg-secondary: #1f2937;
-    --color-bg-tertiary: #374151;
+    --color-bg-primary: #0f172a;
+    --color-bg-secondary: #1e293b;
+    --color-bg-tertiary: #334155;
     
-    --color-text-primary: #f9fafb;
-    --color-text-secondary: #9ca3af;
-    --color-text-tertiary: #6b7280;
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #cbd5e1;
+    --color-text-tertiary: #94a3b8;
     
-    --color-border: #374151;
-    --color-border-light: #4b5563;
+    --color-border: #334155;
+    --color-border-light: #475569;
     
-    --color-shadow: rgba(0, 0, 0, 0.3);
-    --color-shadow-lg: rgba(0, 0, 0, 0.5);
+    --color-shadow: rgba(0, 0, 0, 0.4);
+    --color-shadow-lg: rgba(0, 0, 0, 0.6);
     
     /* Dark mode gradients */
     --gradient-primary: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);

@@ -1,38 +1,45 @@
 /**
- * Professional Theme Palette
- * Unified light and dark mode color system
+ * Professional Theme Palette - Light Mode Default
+ * Unified light and dark mode color system with enhanced light theme
  */
 
 :root {
-    /* Primary Colors */
-    --color-primary-light: #f0f4ff;
+    /* Primary Colors - Enhanced for Light Mode */
+    --color-primary-light: #ede9fe;
     --color-primary: #6366f1;
     --color-primary-dark: #4f46e5;
     --color-primary-darker: #4338ca;
     
-    /* Secondary Colors */
+    /* Secondary Colors - Enhanced for Light Mode */
     --color-secondary-light: #faf5ff;
     --color-secondary: #8b5cf6;
     --color-secondary-dark: #7c3aed;
     
     /* Accent Colors */
     --color-accent: #ec4899;
-    --color-accent-light: #f472b6;
+    --color-accent-light: #fbcfe8;
     
-    /* Background Colors */
-    --color-bg-primary: #f9fafb;
+    /* Background Colors - Professional Light Defaults */
+    --color-bg-primary: #fafbfc;
     --color-bg-secondary: #ffffff;
-    --color-bg-tertiary: #f3f4f6;
+    --color-bg-tertiary: #f0f1f5;
     
-    /* Text Colors */
-    --color-text-primary: #111827;
-    --color-text-secondary: #6b7280;
-    --color-text-tertiary: #9ca3af;
+    /* Text Colors - Optimized for Light Mode */
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #475569;
+    --color-text-tertiary: #94a3b8;
     
-    /* Border & Shadow */
-    --color-border: #e5e7eb;
-    --color-shadow: rgba(0, 0, 0, 0.1);
-    --color-shadow-lg: rgba(0, 0, 0, 0.15);
+    /* Border & Shadow - Refined for Light Mode */
+    --color-border: #e2e8f0;
+    --color-border-light: #f1f5f9;
+    --color-shadow: rgba(15, 23, 42, 0.08);
+    --color-shadow-lg: rgba(15, 23, 42, 0.12);
+    
+    /* Status Colors */
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
+    --color-info: #3b82f6;
 }
 
 .dark {
@@ -52,19 +59,26 @@
     --color-accent-light: #f472b6;
     
     /* Background Colors */
-    --color-bg-primary: #111827;
-    --color-bg-secondary: #1f2937;
-    --color-bg-tertiary: #374151;
+    --color-bg-primary: #0f172a;
+    --color-bg-secondary: #1e293b;
+    --color-bg-tertiary: #334155;
     
     /* Text Colors */
-    --color-text-primary: #f9fafb;
-    --color-text-secondary: #9ca3af;
-    --color-text-tertiary: #6b7280;
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #cbd5e1;
+    --color-text-tertiary: #94a3b8;
     
     /* Border & Shadow */
-    --color-border: #374151;
-    --color-shadow: rgba(0, 0, 0, 0.3);
-    --color-shadow-lg: rgba(0, 0, 0, 0.5);
+    --color-border: #334155;
+    --color-border-light: #475569;
+    --color-shadow: rgba(0, 0, 0, 0.4);
+    --color-shadow-lg: rgba(0, 0, 0, 0.6);
+    
+    /* Status Colors */
+    --color-success: #34d399;
+    --color-warning: #fbbf24;
+    --color-error: #f87171;
+    --color-info: #60a5fa;
 }
 
 /* Universal Light Card (light mode) */
