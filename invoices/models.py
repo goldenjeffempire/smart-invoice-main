@@ -6,6 +6,27 @@ import secrets
 from datetime import timedelta
 
 
+class Waitlist(models.Model):
+    """Email waitlist for upcoming features (Templates, API, etc)."""
+    FEATURE_CHOICES = [
+        ('templates', 'Invoice Templates'),
+        ('api', 'API Access'),
+        ('general', 'General Updates'),
+    ]
+    
+    email = models.EmailField(unique=True)
+    feature = models.CharField(max_length=20, choices=FEATURE_CHOICES, default='general')
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+    is_notified = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['-subscribed_at']
+        verbose_name_plural = 'Waitlist entries'
+    
+    def __str__(self) -> str:
+        return f"{self.email} - {self.get_feature_display()}"
+
+
 class UserProfile(models.Model):
     """Extended user profile with business preferences and settings."""
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')

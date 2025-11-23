@@ -1,26 +1,118 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
-<div class="gradient-bg text-white py-24">
-    <div class="container mx-auto px-6 text-center">
-        <h1 class="text-5xl md:text-6xl font-bold mb-6">Invoice Templates</h1>
-        <p class="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">Professional, customizable invoice templates coming soon</p>
+<!-- Hero Section -->
+<section class="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white py-24 md:py-32">
+    <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute top-20 left-20 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        <div class="absolute bottom-20 right-20 w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
     </div>
-</div>
-<div class="container mx-auto px-6 py-20">
-    <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl p-12 text-center">
-        <div class="w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-8">
-            <svg class="w-12 h-12 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+    
+    <div class="container mx-auto px-6 text-center relative z-10 fade-up">
+        <span class="badge badge-warning mb-6 inline-block">Coming Soon</span>
+        <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">Invoice Templates</h1>
+        <p class="text-xl md:text-2xl opacity-95 max-w-3xl mx-auto leading-relaxed">
+            Professional, customizable invoice templates launching soon
+        </p>
+    </div>
+</section>
+
+<!-- Coming Soon Content -->
+<section class="section-lg bg-gradient-to-b from-white to-gray-50">
+    <div class="container">
+        <div class="max-w-4xl mx-auto">
+            <div class="card text-center mb-16 fade-up">
+                <div class="w-32 h-32 bg-gradient-to-br from-green-500 to-emerald-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl">
+                    <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 2 0 01-2 2z"></path></svg>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-black mb-6 gradient-text">Templates Coming Soon!</h2>
+                <p class="text-xl text-gray-600 mb-10 leading-relaxed max-w-2xl mx-auto">
+                    We're crafting beautiful, industry-specific invoice templates to make your invoicing even more professional. Get ready for a game-changing update!
+                </p>
+                
+                <!-- Feature Preview -->
+                <div class="grid md:grid-cols-2 gap-6 mb-10 text-left">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900 mb-1">Industry-Specific Templates</h3>
+                            <p class="text-gray-600">Tailored designs for consultants, designers, developers, and more</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900 mb-1">Fully Customizable</h3>
+                            <p class="text-gray-600">Adjust colors, fonts, layouts to match your brand perfectly</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900 mb-1">One-Click Application</h3>
+                            <p class="text-gray-600">Apply templates instantly to new or existing invoices</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900 mb-1">Multi-Language Support</h3>
+                            <p class="text-gray-600">Templates available in multiple languages for global businesses</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="text-gray-600 mb-8 text-lg">
+                    Meanwhile, create unlimited professional invoices with our beautiful default template
+                </p>
+                
+                <a href="{% url 'create_invoice' %}" class="btn btn-primary btn-lg inline-flex items-center gap-2 hover-lift">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                    Create Invoice Now
+                </a>
+            </div>
+
+            <!-- Notify Me Form -->
+            <div class="card bg-gradient-to-r from-indigo-50 to-purple-50 border-2 border-indigo-200 fade-up">
+                <h3 class="text-2xl font-black mb-4 text-gray-900 text-center">Get Notified When We Launch</h3>
+                <p class="text-gray-600 mb-6 text-center">Be the first to access our new invoice templates</p>
+                <form class="max-w-md mx-auto flex gap-4" method="post" action="">
+                    {% csrf_token %}
+                    <input type="email" placeholder="Enter your email" required class="flex-1 px-4 py-3 border-2 border-indigo-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all">
+                    <button type="submit" class="btn btn-primary hover-lift whitespace-nowrap">
+                        Notify Me
+                    </button>
+                </form>
+            </div>
         </div>
-        <h2 class="text-3xl font-bold mb-4 text-gray-900 Soon!</h2>
-        <p class="text-gray-600 mb-8 text-lg">Professional invoice templates are being developed</p>
-        <ul class="space-y-3 mb-10 text-left max-w-2xl mx-auto">
-            <li class="flex items-center text-gray-700 class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Industry-specific templates</li>
-            <li class="flex items-center text-gray-700 class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Fully customizable designs</li>
-            <li class="flex items-center text-gray-700 class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Multi-language support</li>
-            <li class="flex items-center text-gray-700 class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>One-click application</li>
-        </ul>
-        <p class="text-gray-600 mb-6">Meanwhile, create unlimited invoices with our professional default template</p>
-        <a href="{% url 'create_invoice' %}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-8 py-3 rounded-lg transition">Create Invoice Now</a>
     </div>
-</div>
+</section>
+
+<style>
+@keyframes blob {
+    0%, 100% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+.animate-blob {
+    animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+    animation-delay: 2s;
+}
+</style>
 {% endblock %}
