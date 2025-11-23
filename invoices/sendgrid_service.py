@@ -11,12 +11,16 @@ from django.template.loader import render_to_string
 
 
 class SendGridEmailService:
-    """Service for sending emails using SendGrid dynamic templates."""
+    """Service for sending emails using SendGrid dynamic templates.
     
-    # Fallback verified email for testing/development
-    # Use this when business email is not yet verified in SendGrid
-    FALLBACK_FROM_EMAIL = "noreply@smartinvoice.com"
-    FALLBACK_FROM_NAME = "Smart Invoice"
+    All emails are sent from the platform owner's verified email address.
+    Users don't need individual SendGrid verification.
+    """
+    
+    # Platform owner's verified email - ALL emails send from this address
+    # Set this to your verified SendGrid sender email
+    PLATFORM_FROM_EMAIL = os.environ.get("SENDGRID_FROM_EMAIL", "noreply@smartinvoice.com")
+    PLATFORM_FROM_NAME = "Smart Invoice"
     
     # Template IDs - set these in your environment variables
     TEMPLATE_IDS = {
@@ -56,7 +60,7 @@ class SendGridEmailService:
         }
         
         return self._send_email(
-            from_email=invoice.business_email,
+            from_email=self.PLATFORM_FROM_EMAIL,
             from_name=invoice.business_name,
             to_email=recipient_email,
             template_id=template_id,
@@ -79,7 +83,7 @@ class SendGridEmailService:
         }
         
         return self._send_email(
-            from_email=invoice.business_email,
+            from_email=self.PLATFORM_FROM_EMAIL,
             from_name=invoice.business_name,
             to_email=recipient_email,
             template_id=template_id,
@@ -105,7 +109,7 @@ class SendGridEmailService:
         }
         
         return self._send_email(
-            from_email=invoice.business_email,
+            from_email=self.PLATFORM_FROM_EMAIL,
             from_name=invoice.business_name,
             to_email=recipient_email,
             template_id=template_id,
@@ -128,7 +132,7 @@ class SendGridEmailService:
         }
         
         return self._send_email(
-            from_email="noreply@smartinvoice.com",
+            from_email=self.PLATFORM_FROM_EMAIL,
             from_name="Smart Invoice",
             to_email=user.email,
             template_id=template_id,
@@ -151,7 +155,7 @@ class SendGridEmailService:
         }
         
         return self._send_email(
-            from_email="noreply@smartinvoice.com",
+            from_email=self.PLATFORM_FROM_EMAIL,
             from_name="Smart Invoice",
             to_email=user.email,
             template_id=template_id,
@@ -176,7 +180,7 @@ class SendGridEmailService:
         }
         
         return self._send_email(
-            from_email="noreply@smartinvoice.com",
+            from_email=self.PLATFORM_FROM_EMAIL,
             from_name="Smart Invoice Admin",
             to_email=admin_email,
             template_id=template_id,
@@ -235,34 +239,6 @@ class SendGridEmailService:
             # Handle SendGrid API errors with detailed diagnostics
             error_detail = self._parse_sendgrid_error(e)
             status_code = getattr(e, 'status_code', None)
-            
-            # If 403 Sender Identity error, offer fallback suggestion
-            if status_code == 403 and "sender" in error_detail.lower():
-                print(f"❌ SendGrid API Error: {error_detail}")
-                print(f"\n💡 TEMPORARY FIX: Using fallback email for this send...")
-                print(f"   Once you verify your business email in SendGrid, emails will come from your business address.")
-                
-                # Try with fallback email
-                try:
-                    message = Mail(
-                        from_email=From(self.FALLBACK_FROM_EMAIL, self.FALLBACK_FROM_NAME),
-                        to_emails=To(to_email),
-                        subject=subject,
-                    )
-                    
-                    if template_id:
-                        message.template_id = TemplateId(template_id)
-                        message.personalizations = [Personalization()]
-                        message.personalizations[0].to = To(to_email)
-                        message.personalizations[0].dynamic_template_data = template_data
-                    
-                    response = self.client.send(message)
-                    print(f"✅ Email sent successfully using fallback address")
-                    return {"status": "sent", "response": response.status_code, "note": "Using fallback email - verify your business email in SendGrid to use custom address"}
-                except Exception as fallback_error:
-                    print(f"❌ Fallback also failed: {str(fallback_error)}")
-                    return {"status": "error", "message": error_detail, "code": status_code}
-            
             print(f"❌ SendGrid API Error: {error_detail}")
             return {"status": "error", "message": error_detail, "code": status_code}
     
@@ -291,27 +267,6 @@ class SendGridEmailService:
         except Exception as e:
             error_detail = self._parse_sendgrid_error(e)
             status_code = getattr(e, 'status_code', None)
-            
-            # If 403 Sender Identity error, try fallback
-            if status_code == 403 and "sender" in error_detail.lower():
-                print(f"❌ SendGrid API Error: {error_detail}")
-                print(f"\n💡 TEMPORARY FIX: Using fallback email...")
-                
-                try:
-                    plain_text = self._format_plain_text(data)
-                    message = Mail(
-                        from_email=From(self.FALLBACK_FROM_EMAIL, self.FALLBACK_FROM_NAME),
-                        to_emails=To(to_email),
-                        subject=subject,
-                        plain_text_content=plain_text,
-                    )
-                    response = self.client.send(message)
-                    print(f"✅ Email sent successfully using fallback address")
-                    return {"status": "sent", "response": response.status_code, "note": "Using fallback email"}
-                except Exception as fallback_error:
-                    print(f"❌ Fallback also failed: {str(fallback_error)}")
-                    return {"status": "error", "message": error_detail, "code": status_code}
-            
             print(f"❌ SendGrid API Error: {error_detail}")
             return {"status": "error", "message": error_detail, "code": status_code}
     
