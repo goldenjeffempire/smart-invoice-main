@@ -246,6 +246,162 @@ a:focus-visible {
     border-radius: var(--radius-sm);
 }
 
+/* ========== ACCESSIBILITY ========== */
+
+/* Skip Link - Keyboard Navigation */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    z-index: 9999;
+    padding: var(--space-3) var(--space-6);
+    background: var(--color-primary-600);
+    color: white;
+    font-weight: var(--font-semibold);
+    text-decoration: none;
+    border-radius: 0 0 var(--radius-base) 0;
+    transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 3px solid var(--color-primary-400);
+    outline-offset: 2px;
+}
+
+/* Focus Ring Utility - WCAG AAA Compliant */
+.focus-ring:focus,
+.focus-ring:focus-visible {
+    outline: 3px solid var(--color-primary-500);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+    transition: outline-offset var(--transition-fast);
+}
+
+.focus-ring:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Enhanced Focus States for Interactive Elements */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid var(--color-primary-500);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+/* Glass Elements Focus Enhancement */
+.glass:focus-visible,
+.card:focus-visible {
+    outline: 3px solid var(--color-primary-500);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+/* ARIA Live Region Styling */
+[aria-live] {
+    position: relative;
+}
+
+/* Reduced Motion Support - WCAG Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .animate-blob,
+    .hover-lift,
+    .fade-up,
+    .fade-in-view {
+        animation: none !important;
+        transform: none !important;
+    }
+    
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    :root {
+        --color-primary-500: #0000ff;
+        --border-base: #000000;
+    }
+    
+    .glass,
+    .glass-nav {
+        background: rgba(255, 255, 255, 0.95) !important;
+        border: 2px solid #000000;
+    }
+    
+    .card {
+        border: 2px solid var(--border-base);
+    }
+}
+
+/* Screen Reader Only Content */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+}
+
+/* Keyboard Navigation Enhancements */
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 3px solid var(--color-primary-500);
+    outline-offset: 2px;
+}
+
+/* Button Focus States */
+.btn:focus-visible {
+    outline: 3px solid var(--color-primary-600);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+}
+
+.btn-primary:focus-visible {
+    outline-color: var(--color-primary-400);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.3);
+}
+
+/* Navigation Link Focus */
+.nav-link:focus-visible,
+.mobile-nav-link:focus-visible {
+    background-color: rgba(99, 102, 241, 0.1);
+    outline: 2px solid var(--color-primary-500);
+    outline-offset: 2px;
+}
+
 strong, b {
     font-weight: var(--font-semibold);
 }
