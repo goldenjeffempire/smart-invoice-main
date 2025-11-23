@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{% static 'css/animations.css' %}">
     <link rel="stylesheet" href="{% static 'css/dark-mode.css' %}">
     <link rel="stylesheet" href="{% static 'css/light-theme-enhancements.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modern-ux-enhancements.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -23,6 +24,9 @@
             -moz-osx-font-smoothing: grayscale;
         }
     </style>
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <script src="{% static 'js/dark-mode.js' %}"></script>
     <script src="{% static 'js/theme-observer.js' %}"></script>
 </head>
@@ -50,6 +54,7 @@
     
     <script src="{% static 'js/interactions.js' %}"></script>
     <script src="{% static 'js/ux-enhancements.js' %}"></script>
+    <script src="{% static 'js/enhanced-interactions.js' %}"></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>
