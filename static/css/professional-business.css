@@ -1,0 +1,521 @@
+/**
+ * PROFESSIONAL BUSINESS STYLING
+ * Enterprise-grade corporate design for Smart Invoice
+ */
+
+:root {
+    /* Professional business spacing */
+    --business-spacing-xs: 6px;
+    --business-spacing-sm: 12px;
+    --business-spacing-md: 16px;
+    --business-spacing-lg: 24px;
+    --business-spacing-xl: 32px;
+    --business-spacing-2xl: 48px;
+    
+    /* Professional border radius */
+    --business-radius-sm: 6px;
+    --business-radius-md: 8px;
+    --business-radius-lg: 12px;
+    
+    /* Professional shadows */
+    --business-shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --business-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --business-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --business-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --business-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+}
+
+/* ========== PROFESSIONAL HERO SECTIONS ========== */
+.hero-professional {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    position: relative;
+    overflow: hidden;
+    padding: 80px 20px;
+}
+
+.hero-professional::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.hero-professional::after {
+    content: '';
+    position: absolute;
+    bottom: -50%;
+    left: -20%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.hero-professional-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.hero-professional-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: white;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+}
+
+.hero-professional-subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.6;
+    margin-bottom: 30px;
+    max-width: 600px;
+}
+
+/* ========== PROFESSIONAL CARDS ========== */
+.card-professional {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--business-radius-lg);
+    padding: var(--business-spacing-xl);
+    box-shadow: var(--business-shadow-sm);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-professional::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-primary-500), var(--color-secondary-500));
+}
+
+.card-professional:hover {
+    border-color: var(--color-primary-500);
+    box-shadow: var(--business-shadow-md);
+    transform: translateY(-2px);
+}
+
+.card-professional-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--color-primary-100), var(--color-secondary-100));
+    border-radius: var(--business-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--business-spacing-lg);
+    color: var(--color-primary-600);
+    font-size: 24px;
+}
+
+.card-professional-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: var(--business-spacing-sm);
+}
+
+.card-professional-description {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--business-spacing-lg);
+}
+
+/* ========== PROFESSIONAL PRICING CARDS ========== */
+.pricing-card-professional {
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-border-default);
+    border-radius: var(--business-radius-lg);
+    padding: var(--business-spacing-xl);
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.pricing-card-professional.featured {
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 1px var(--color-primary-500), var(--business-shadow-lg);
+    transform: scale(1.05);
+}
+
+.pricing-card-professional:hover:not(.featured) {
+    border-color: var(--color-primary-500);
+    box-shadow: var(--business-shadow-md);
+}
+
+.pricing-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--color-primary-500), var(--color-secondary-500));
+    color: white;
+    padding: var(--business-spacing-sm) var(--business-spacing-md);
+    border-radius: var(--business-radius-sm);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--business-spacing-lg);
+}
+
+.pricing-price {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--business-spacing-sm);
+}
+
+.pricing-period {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--business-spacing-xl);
+}
+
+.pricing-features {
+    text-align: left;
+    margin-bottom: var(--business-spacing-xl);
+}
+
+.pricing-features li {
+    padding: var(--business-spacing-sm) 0;
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: var(--business-spacing-md);
+}
+
+.pricing-features li::before {
+    content: '✓';
+    color: var(--color-success-500);
+    font-weight: 700;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+/* ========== PROFESSIONAL BUTTONS ========== */
+.btn-professional {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--business-spacing-sm);
+    padding: 12px 28px;
+    border-radius: var(--business-radius-md);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.btn-professional-primary {
+    background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-500));
+    color: white;
+    box-shadow: var(--business-shadow-md);
+}
+
+.btn-professional-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--business-shadow-lg);
+    background: linear-gradient(135deg, var(--color-primary-700), var(--color-primary-600));
+}
+
+.btn-professional-primary:active {
+    transform: translateY(0);
+    box-shadow: var(--business-shadow-sm);
+}
+
+.btn-professional-secondary {
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border-default);
+}
+
+.btn-professional-secondary:hover {
+    background: var(--color-border-default);
+    border-color: var(--color-primary-500);
+}
+
+.btn-professional-ghost {
+    background: transparent;
+    color: var(--color-primary-600);
+    border: 1.5px solid var(--color-primary-500);
+}
+
+.btn-professional-ghost:hover {
+    background: var(--color-primary-50);
+}
+
+/* ========== PROFESSIONAL SECTIONS ========== */
+.section-professional {
+    padding: var(--business-spacing-2xl) var(--business-spacing-lg);
+}
+
+.section-professional.light {
+    background: var(--color-bg-primary);
+}
+
+.section-professional.dark {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    color: white;
+}
+
+.section-title-professional {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: var(--business-spacing-xl);
+    color: var(--color-text-primary);
+    letter-spacing: -0.5px;
+}
+
+.section-subtitle-professional {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    text-align: center;
+    margin-bottom: var(--business-spacing-2xl);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+/* ========== PROFESSIONAL FEATURES GRID ========== */
+.features-grid-professional {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--business-spacing-xl);
+    margin: var(--business-spacing-xl) 0;
+}
+
+/* ========== PROFESSIONAL STATISTICS ========== */
+.stats-professional {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--business-spacing-xl);
+    text-align: center;
+}
+
+.stat-item-professional {
+    padding: var(--business-spacing-lg);
+}
+
+.stat-number-professional {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: var(--color-primary-600);
+    line-height: 1;
+    margin-bottom: var(--business-spacing-sm);
+}
+
+.stat-label-professional {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+/* ========== PROFESSIONAL TESTIMONIALS ========== */
+.testimonial-professional {
+    background: var(--color-bg-secondary);
+    border-radius: var(--business-radius-lg);
+    padding: var(--business-spacing-xl);
+    box-shadow: var(--business-shadow-sm);
+}
+
+.testimonial-quote-professional {
+    font-size: 1.05rem;
+    font-style: italic;
+    color: var(--color-text-primary);
+    margin-bottom: var(--business-spacing-lg);
+    line-height: 1.8;
+}
+
+.testimonial-author-professional {
+    display: flex;
+    align-items: center;
+    gap: var(--business-spacing-md);
+}
+
+.testimonial-avatar-professional {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary-500), var(--color-secondary-500));
+}
+
+.testimonial-info-professional h4 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.testimonial-info-professional p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+/* ========== PROFESSIONAL NAVBAR ========== */
+.navbar-professional {
+    background: white;
+    border-bottom: 1px solid var(--color-border-light);
+    box-shadow: var(--business-shadow-subtle);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-brand-professional {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--color-primary-600), var(--color-secondary-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+}
+
+/* ========== PROFESSIONAL FOOTER ========== */
+.footer-professional {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    color: rgba(255, 255, 255, 0.8);
+    border-top: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+.footer-professional-link {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-professional-link:hover {
+    color: var(--color-primary-400);
+}
+
+/* ========== PROFESSIONAL FORMS ========== */
+.form-professional {
+    max-width: 600px;
+}
+
+.form-group-professional {
+    margin-bottom: var(--business-spacing-lg);
+}
+
+.form-label-professional {
+    display: block;
+    font-weight: 600;
+    margin-bottom: var(--business-spacing-sm);
+    color: var(--color-text-primary);
+    font-size: 0.95rem;
+}
+
+.form-input-professional,
+.form-textarea-professional,
+.form-select-professional {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--business-radius-md);
+    font-size: 0.95rem;
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    transition: all 0.3s ease;
+}
+
+.form-input-professional:focus,
+.form-textarea-professional:focus,
+.form-select-professional:focus {
+    outline: none;
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 3px var(--color-primary-50);
+}
+
+/* ========== PROFESSIONAL DIVIDER ========== */
+.divider-professional {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-border-default), transparent);
+    margin: var(--business-spacing-xl) 0;
+}
+
+/* ========== RESPONSIVE PROFESSIONAL ========== */
+@media (max-width: 768px) {
+    .hero-professional {
+        padding: 60px 20px;
+    }
+    
+    .hero-professional-title {
+        font-size: 1.75rem;
+    }
+    
+    .hero-professional-subtitle {
+        font-size: 0.95rem;
+    }
+    
+    .pricing-card-professional.featured {
+        transform: scale(1);
+    }
+    
+    .features-grid-professional {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-professional {
+        grid-template-columns: 1fr;
+    }
+    
+    .section-professional {
+        padding: var(--business-spacing-xl) var(--business-spacing-lg);
+    }
+}
+
+/* ========== DARK MODE PROFESSIONAL ========== */
+.dark .hero-professional {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+}
+
+.dark .card-professional {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+.dark .card-professional:hover {
+    border-color: var(--color-primary-500);
+    background: #0f172a;
+}
+
+.dark .pricing-card-professional {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+.dark .testimonial-professional {
+    background: #1e293b;
+    border: 1px solid #334155;
+}
+
+.dark .form-input-professional,
+.dark .form-textarea-professional,
+.dark .form-select-professional {
+    background: #1e293b;
+    border-color: #334155;
+    color: white;
+}
+
+.dark .navbar-professional {
+    background: #0f172a;
+    border-bottom-color: #334155;
+}
