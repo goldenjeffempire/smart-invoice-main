@@ -193,8 +193,8 @@ class InvoiceForm(forms.ModelForm):
             if field.required:
                 field.label_suffix = " *"
 
-    def clean(self):
-        cleaned_data = super().clean()
+    def clean(self) -> dict:
+        cleaned_data: dict = super().clean()
         invoice_date = cleaned_data.get("invoice_date")
         due_date = cleaned_data.get("due_date")
         
@@ -242,13 +242,13 @@ class UserDetailsForm(forms.ModelForm):
         fields = ['first_name', 'last_name', 'email']
         widgets = {
             'first_name': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
+                'class': 'w-full px-4 py-3 bg-gray-50 light:bg-gray-700 text-gray-900 light:text-white border border-gray-300 light:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
             }),
             'last_name': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
+                'class': 'w-full px-4 py-3 bg-gray-50 light:bg-gray-700 text-gray-900 light:text-white border border-gray-300 light:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
             }),
             'email': forms.EmailInput(attrs={
-                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
+                'class': 'w-full px-4 py-3 bg-gray-50 light:bg-gray-700 text-gray-900 light:text-white border border-gray-300 light:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
             }),
         }
 
@@ -259,30 +259,30 @@ class UserProfileForm(forms.ModelForm):
         fields = ['company_name', 'company_logo', 'default_currency', 'default_tax_rate', 'invoice_prefix', 'timezone']
         widgets = {
             'company_name': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+                'class': 'w-full px-4 py-3 bg-gray-50 light:bg-gray-700 text-gray-900 light:text-white border border-gray-300 light:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
                 'placeholder': 'Company Name'
             }),
             'company_logo': forms.FileInput(attrs={
-                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg transition',
+                'class': 'w-full px-4 py-3 bg-gray-50 light:bg-gray-700 text-gray-900 light:text-white border border-gray-300 light:border-gray-600 rounded-lg transition',
                 'accept': 'image/*'
             }),
             'default_currency': forms.Select(attrs={
-                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
+                'class': 'w-full px-4 py-3 bg-gray-50 light:bg-gray-700 text-gray-900 light:text-white border border-gray-300 light:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition'
             }),
             'default_tax_rate': forms.NumberInput(attrs={
-                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+                'class': 'w-full px-4 py-3 bg-gray-50 light:bg-gray-700 text-gray-900 light:text-white border border-gray-300 light:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
                 'step': '0.01',
                 'min': '0',
                 'max': '100',
                 'placeholder': '0.00'
             }),
             'invoice_prefix': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+                'class': 'w-full px-4 py-3 bg-gray-50 light:bg-gray-700 text-gray-900 light:text-white border border-gray-300 light:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
                 'placeholder': 'INV',
                 'maxlength': '10'
             }),
             'timezone': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+                'class': 'w-full px-4 py-3 bg-gray-50 light:bg-gray-700 text-gray-900 light:text-white border border-gray-300 light:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
                 'placeholder': 'UTC'
             }),
         }
@@ -311,7 +311,7 @@ class PasswordChangeForm(forms.Form):
     """Form for changing password."""
     current_password = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+            'class': 'w-full px-4 py-3 bg-gray-50 light:bg-gray-700 text-gray-900 light:text-white border border-gray-300 light:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
             'placeholder': 'Current password',
             'autocomplete': 'current-password'
         }),
@@ -319,7 +319,7 @@ class PasswordChangeForm(forms.Form):
     )
     new_password = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+            'class': 'w-full px-4 py-3 bg-gray-50 light:bg-gray-700 text-gray-900 light:text-white border border-gray-300 light:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
             'placeholder': 'New password',
             'autocomplete': 'new-password'
         }),
@@ -328,15 +328,15 @@ class PasswordChangeForm(forms.Form):
     )
     confirm_password = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            'class': 'w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
+            'class': 'w-full px-4 py-3 bg-gray-50 light:bg-gray-700 text-gray-900 light:text-white border border-gray-300 light:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition',
             'placeholder': 'Confirm password',
             'autocomplete': 'new-password'
         }),
         label='Confirm Password'
     )
 
-    def clean(self):
-        cleaned_data = super().clean()
+    def clean(self) -> dict:
+        cleaned_data: dict = super().clean()
         new_password = cleaned_data.get('new_password')
         confirm_password = cleaned_data.get('confirm_password')
 

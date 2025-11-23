@@ -1,0 +1,17 @@
+{# Reusable form field component for consistency #}
+<div class="form-group">
+    <label for="{{ field.id_for_label }}" class="field-label {% if field.field.required %}field-required{% endif %}">
+        {{ field.label }}
+    </label>
+    {{ field }}
+    {% if field.help_text %}
+        <p class="field-hint">{{ field.help_text|safe }}</p>
+    {% endif %}
+    {% if field.errors %}
+        <div class="field-error">
+            {% for error in field.errors %}
+                <span>{{ error }}</span>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
