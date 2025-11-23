@@ -1,41 +1,35 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en" style="color-scheme: light;">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Smart Invoice - Create professional invoices in minutes. Send via email or WhatsApp. Get paid faster.">
+    <meta name="theme-color" content="#ffffff">
     <title>{% block title %}Smart Invoice - Professional Invoicing Made Simple{% endblock %}</title>
+    <!-- Production-Grade CSS Stack (Optimized & Consolidated) -->
     <link rel="stylesheet" href="{% static 'css/tailwind.output.css' %}">
-    <link rel="stylesheet" href="{% static 'css/professional-color-palette.css' %}">
-    <link rel="stylesheet" href="{% static 'css/animations.css' %}">
-    <link rel="stylesheet" href="{% static 'css/dark-mode.css' %}">
-    <link rel="stylesheet" href="{% static 'css/light-theme-enhancements.css' %}">
-    <link rel="stylesheet" href="{% static 'css/modern-ux-enhancements.css' %}">
-    <link rel="stylesheet" href="{% static 'css/responsive-enhancements.css' %}">
-    <link rel="stylesheet" href="{% static 'css/accessibility-enhancements.css' %}">
-    <link rel="stylesheet" href="{% static 'css/performance-optimization.css' %}">
+    <link rel="stylesheet" href="{% static 'css/professional-design-system.css' %}">
+    <link rel="stylesheet" href="{% static 'css/enterprise-ui-framework.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modern-responsive-system.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/professional-business.css' %}">
-    <link rel="stylesheet" href="{% static 'css/business-components.css' %}">
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #fafbfc;
+            color: #0f172a;
         }
         * {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
     </style>
-    <meta name="theme-color" content="#6366f1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script src="{% static 'js/dark-mode.js' %}"></script>
-    <script src="{% static 'js/theme-observer.js' %}"></script>
+    <meta name="apple-mobile-web-app-status-bar-style" content="white">
 </head>
-<body class="bg-white dark:bg-gray-900 transition-colors duration-200" style="background-color: #fafbfc; color: #0f172a;">
+<body class="bg-white">
     <!-- Page Loader -->
     <div class="page-loader">
         <div class="loader-spinner"></div>
