@@ -1,0 +1,224 @@
+/**
+ * Light Mode Professional Enhancements
+ * Premium styling optimized for light theme as default
+ */
+
+html {
+    color-scheme: light;
+    scrollbar-color: #e2e8f0 #fafbfc;
+}
+
+body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+}
+
+/* Enhanced card styling for light mode */
+.bg-white,
+.card,
+[class*="bg-white"],
+.rounded-lg,
+.rounded-xl,
+.rounded-2xl {
+    background-color: var(--color-bg-secondary);
+    border-color: var(--color-border);
+}
+
+/* Softer shadows in light mode */
+.shadow-lg,
+.shadow-xl,
+.shadow-2xl {
+    box-shadow: 
+        0 10px 25px rgba(15, 23, 42, 0.08),
+        0 5px 10px rgba(15, 23, 42, 0.04) !important;
+}
+
+.shadow {
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08) !important;
+}
+
+.shadow-md {
+    box-shadow: 0 4px 6px rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Enhanced borders */
+.border {
+    border-color: var(--color-border);
+}
+
+/* Text hierarchy improvements */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-text-primary);
+}
+
+p, span, label {
+    color: var(--color-text-secondary);
+}
+
+/* Button enhancements */
+button, .btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bg-indigo-600,
+.bg-purple-600,
+.bg-blue-600 {
+    background: var(--gradient-primary);
+}
+
+.bg-indigo-600:hover,
+.bg-purple-600:hover,
+.bg-blue-600:hover {
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);
+    transform: translateY(-2px);
+}
+
+/* Input focus states */
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    background-color: var(--color-bg-secondary);
+}
+
+input::placeholder {
+    color: var(--color-text-tertiary);
+}
+
+/* Link styling */
+a {
+    color: var(--color-primary);
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--color-primary-dark);
+}
+
+/* Table enhancements */
+table {
+    background-color: var(--color-bg-secondary);
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: var(--color-bg-tertiary);
+    border-bottom: 2px solid var(--color-border);
+}
+
+tbody tr {
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+    background-color: var(--color-bg-tertiary);
+}
+
+/* Badge styles */
+.badge {
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+}
+
+/* Alert boxes */
+.alert {
+    border-radius: 8px;
+    border-left: 4px solid;
+    background-color: var(--color-bg-secondary);
+}
+
+.alert-success {
+    border-left-color: var(--color-success);
+    background-color: rgba(16, 185, 129, 0.05);
+}
+
+.alert-error {
+    border-left-color: var(--color-error);
+    background-color: rgba(239, 68, 68, 0.05);
+}
+
+.alert-warning {
+    border-left-color: var(--color-warning);
+    background-color: rgba(245, 158, 11, 0.05);
+}
+
+.alert-info {
+    border-left-color: var(--color-info);
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+/* Code blocks */
+code {
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-accent);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.875em;
+}
+
+pre {
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+}
+
+pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+}
+
+/* Gradient text */
+.bg-gradient-to-r {
+    background-image: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Professional dividers */
+hr {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    background: none;
+}
+
+/* Form inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea,
+select {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 1rem;
+}
+
+/* Ensure consistent spacing */
+.container {
+    background-color: transparent;
+}
+
+/* Professional gradients for hero sections */
+.gradient-bg {
+    background: var(--gradient-primary);
+}
+
+/* Smooth transitions between themes */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+html.theme-transitioning * {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
