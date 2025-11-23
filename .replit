@@ -45,4 +45,4 @@ externalPort = 3000
 [userenv]
 
 [userenv.shared]
-SENDGRID_FROM_EMAIL = "smartinvoiceteam"
+SENDGRID_FROM_EMAIL = "invoices@smartinvoice.com"
