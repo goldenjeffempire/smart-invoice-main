@@ -7,25 +7,12 @@
     <meta name="description" content="Smart Invoice - Create professional invoices in minutes. Send via email or WhatsApp. Get paid faster.">
     <meta name="theme-color" content="#ffffff">
     <title>{% block title %}Smart Invoice - Professional Invoicing Made Simple{% endblock %}</title>
-    <!-- Production-Grade CSS Stack (Optimized & Consolidated) -->
+    <!-- Optimized CSS Stack - Modern & Unified -->
     <link rel="stylesheet" href="{% static 'css/tailwind.output.css' %}">
-    <link rel="stylesheet" href="{% static 'css/professional-design-system.css' %}">
-    <link rel="stylesheet" href="{% static 'css/enterprise-ui-framework.css' %}">
-    <link rel="stylesheet" href="{% static 'css/modern-responsive-system.css' %}">
+    <link rel="stylesheet" href="{% static 'css/unified-design-system.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #fafbfc;
-            color: #0f172a;
-        }
-        * {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-    </style>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="white">
 </head>
@@ -40,7 +27,7 @@
     {% if messages %}
         <div class="container mx-auto px-4 py-4">
             {% for message in messages %}
-                <div class="django-message bg-{% if message.tags == 'error' %}red{% elif message.tags == 'success' %}green{% else %}blue{% endif %}-100 border border-{% if message.tags == 'error' %}red{% elif message.tags == 'success' %}green{% else %}blue{% endif %}-400 text-{% if message.tags == 'error' %}red{% elif message.tags == 'success' %}green{% else %}blue{% endif %}-700 px-4 py-3 rounded-lg relative mb-4 shadow-md" role="alert" data-type="{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}">
+                <div class="alert alert-{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %} animate-slide-down" role="alert">
                     <span class="block sm:inline">{{ message }}</span>
                 </div>
             {% endfor %}
@@ -51,9 +38,7 @@
     
     {% include 'includes/footer.html' %}
     
-    <script src="{% static 'js/interactions.js' %}"></script>
-    <script src="{% static 'js/ux-enhancements.js' %}"></script>
-    <script src="{% static 'js/enhanced-interactions.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

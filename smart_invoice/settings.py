@@ -14,7 +14,10 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 IS_REPLIT = os.environ.get("REPL_ID") is not None or os.environ.get("REPLIT") is not None
 
 # Default to True in Replit for development, False otherwise
-DEBUG = env.bool("DEBUG", default=IS_REPLIT)  # type: ignore
+if IS_REPLIT:
+    DEBUG = True
+else:
+    DEBUG = env.bool("DEBUG", default=False)  # type: ignore
 
 # Get SECRET_KEY or generate a random one for Replit development
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-dev-key-CHANGE-IN-PRODUCTION")  # type: ignore
