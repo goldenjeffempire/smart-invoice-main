@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero -->
+<div class="gradient-animated text-white py-24">
+    <div class="container mx-auto px-6 text-center fade-up">
+        <h1 class="text-5xl md:text-6xl font-black mb-6">API Access</h1>
+        <p class="text-xl md:text-2xl max-w-3xl mx-auto opacity-90">Integrate invoicing into your application - coming soon</p>
+    </div>
+</div>
+
+<!-- Coming Soon Card -->
+<div class="container mx-auto px-6 py-20">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-12 text-center">
+            <!-- Icon -->
+            <div class="w-24 h-24 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-8">
+                <svg class="w-12 h-12 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+            </div>
+
+            <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Coming Soon!</h2>
+            <p class="text-gray-600 dark:text-gray-400 mb-8 text-lg">Our powerful REST API is in development. Build invoice functionality directly into your application:</p>
+            
+            <!-- Features List -->
+            <ul class="space-y-3 mb-10 text-left max-w-2xl mx-auto">
+                <li class="flex items-center text-gray-700 dark:text-gray-300">
+                    <svg class="w-5 h-5 text-purple-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    RESTful API with comprehensive documentation
+                </li>
+                <li class="flex items-center text-gray-700 dark:text-gray-300">
+                    <svg class="w-5 h-5 text-purple-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Webhooks for real-time invoice events
+                </li>
+                <li class="flex items-center text-gray-700 dark:text-gray-300">
+                    <svg class="w-5 h-5 text-purple-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    OAuth 2.0 authentication
+                </li>
+                <li class="flex items-center text-gray-700 dark:text-gray-300">
+                    <svg class="w-5 h-5 text-purple-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    SDKs for popular languages (Python, JavaScript, Go)
+                </li>
+                <li class="flex items-center text-gray-700 dark:text-gray-300">
+                    <svg class="w-5 h-5 text-purple-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Rate limiting and usage analytics
+                </li>
+            </ul>
+
+            <!-- Use Cases -->
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-6 mb-8">
+                <h3 class="font-bold text-gray-900 dark:text-white mb-4">Perfect For:</h3>
+                <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-700 dark:text-gray-300">
+                    <div class="flex items-start">
+                        <span class="text-purple-500 font-bold mr-2">→</span> Accounting software
+                    </div>
+                    <div class="flex items-start">
+                        <span class="text-purple-500 font-bold mr-2">→</span> E-commerce platforms
+                    </div>
+                    <div class="flex items-start">
+                        <span class="text-purple-500 font-bold mr-2">→</span> Project management tools
+                    </div>
+                    <div class="flex items-start">
+                        <span class="text-purple-500 font-bold mr-2">→</span> Custom integrations
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <p class="text-gray-600 dark:text-gray-400 mb-6">Want early access? Contact our sales team</p>
+            <a href="{% url 'contact' %}" class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-3 rounded-lg transition transform hover:scale-105">
+                Request Early Access
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="bg-gray-50 dark:bg-gray-900 py-20">
+    <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center mb-12">API Roadmap</h2>
+        <div class="max-w-3xl mx-auto space-y-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 hover-lift">
+                <div class="flex items-start">
+                    <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                        <span class="text-purple-600 font-bold">Q1</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-2">Invoice Management APIs</h3>
+                        <p class="text-gray-600 dark:text-gray-400">Create, read, update, and delete invoices programmatically</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 hover-lift">
+                <div class="flex items-start">
+                    <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                        <span class="text-purple-600 font-bold">Q2</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-2">Webhooks & Events</h3>
+                        <p class="text-gray-600 dark:text-gray-400">Real-time notifications for invoice events</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 hover-lift">
+                <div class="flex items-start">
+                    <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                        <span class="text-purple-600 font-bold">Q3</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-2">Payment Integration</h3>
+                        <p class="text-gray-600 dark:text-gray-400">Process payments and manage transactions via API</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Newsletter -->
+<div class="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 py-16">
+    <div class="container mx-auto px-6 text-center">
+        <h3 class="text-2xl font-bold mb-4">Get Updates on API Launch</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-6">Subscribe to receive API news and documentation when it launches</p>
+        <form class="max-w-md mx-auto flex gap-3">
+            <input type="email" placeholder="Enter your email" class="flex-1 px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-purple-600 dark:bg-gray-800 dark:text-white transition">
+            <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition">Subscribe</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
