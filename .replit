@@ -1,7 +1,7 @@
-modules = ["python-3.11", "nodejs-20"]
+modules = ["web", "nodejs-20", "bash", "python-3.12"]
 [nix]
 channel = "stable-25_05"
-packages = ["awsebcli", "cairo", "cargo", "fontconfig", "freetype", "gdk-pixbuf", "ghostscript", "glib", "harfbuzz", "lcms2", "libffi", "libiconv", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "openjpeg", "openssl", "pango", "pgadmin4", "pkg-config", "rustc", "shared-mime-info", "tcl", "tk", "unzip", "zlib"]
+packages = ["awsebcli", "cairo", "cargo", "fontconfig", "freetype", "gdk-pixbuf", "ghostscript", "glib", "harfbuzz", "lcms2", "libffi", "libiconv", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "libyaml", "openjpeg", "openssl", "pango", "pgadmin4", "pkg-config", "rustc", "shared-mime-info", "tcl", "tk", "unzip", "zlib"]
 
 [agent]
 expertMode = true
@@ -33,6 +33,10 @@ outputType = "webview"
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 33449
+externalPort = 4200
 
 [[ports]]
 localPort = 35817
