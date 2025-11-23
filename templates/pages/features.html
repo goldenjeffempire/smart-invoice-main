@@ -1,225 +1,308 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block content %}
-<!-- Professional Hero Section -->
-<div class="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white py-24 md:py-32">
-    <div class="container mx-auto px-6 text-center">
-        <h1 class="text-5xl md:text-6xl font-black mb-6 leading-tight">Powerful Features</h1>
-        <p class="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">Everything you need to manage invoices professionally and grow your business</p>
-    </div>
-</div>
 
-<!-- Features Grid with Images -->
-<div class="bg-gray-50 py-20 md:py-32">
-    <div class="container mx-auto px-6">
+{% block content %}
+<!-- Hero Section -->
+<section class="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white py-24 md:py-32">
+    <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute top-10 left-10 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        <div class="absolute bottom-10 right-10 w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+    </div>
+    
+    <div class="container mx-auto px-6 text-center relative z-10 fade-up">
+        <span class="badge badge-info mb-6 inline-block">Platform Features</span>
+        <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">Powerful Features</h1>
+        <p class="text-xl md:text-2xl opacity-95 max-w-3xl mx-auto leading-relaxed">
+            Everything you need to create, send, and track professional invoices. Built for modern businesses.
+        </p>
+    </div>
+</section>
+
+<!-- Feature Highlights with Images -->
+<section class="section-lg bg-gradient-to-b from-gray-50 to-white">
+    <div class="container">
         <!-- Feature 1: PDF Export -->
-        <div class="mb-20 grid md:grid-cols-2 gap-12 items-center">
-            <div class="order-2 md:order-1">
-                <h3 class="text-3xl md:text-4xl font-black mb-4 text-gray-900 PDF Export</h3>
-                <p class="text-lg text-gray-600 mb-6 leading-relaxed">Generate professional PDF invoices in seconds with custom branding, logos, and beautiful layouts. Your invoices will look like they came from a top agency.</p>
-                <ul class="space-y-3">
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 templates included</span>
+        <div class="mb-32 grid lg:grid-cols-2 gap-16 items-center fade-up">
+            <div class="order-2 lg:order-1">
+                <span class="badge badge-primary mb-4">Core Feature</span>
+                <h2 class="text-4xl md:text-5xl font-black mb-6 text-gray-900">Professional PDF Export</h2>
+                <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+                    Generate stunning PDF invoices in seconds with custom branding, logos, and beautiful layouts. Your invoices will look like they came from a top agency.
+                </p>
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900">Premium Templates</h3>
+                            <p class="text-gray-600">Choose from professionally designed templates</p>
+                        </div>
                     </li>
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 fonts and colors</span>
+                    <li class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900">Custom Fonts & Colors</h3>
+                            <p class="text-gray-600">Match your brand identity perfectly</p>
+                        </div>
                     </li>
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 download or email</span>
+                    <li class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900">Instant Generation</h3>
+                            <p class="text-gray-600">Download or email PDFs in seconds</p>
+                        </div>
                     </li>
                 </ul>
+                <a href="{% url 'signup' %}" class="btn btn-primary btn-lg inline-flex items-center gap-2 hover-lift">
+                    Try It Now
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                </a>
             </div>
-            <div class="order-1 md:order-2">
-                <img src="{% static 'images/professional_busines_09ddc205.jpg' %}" alt="Professional PDF Invoice Export" class="rounded-xl shadow-2xl w-full object-cover h-96">
+            <div class="order-1 lg:order-2">
+                <div class="relative hover-lift">
+                    <div class="absolute -inset-2 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-3xl blur-2xl opacity-30"></div>
+                    <img src="{% static 'images/professional_busines_09ddc205.jpg' %}" alt="Professional PDF Invoice Export" class="relative rounded-3xl shadow-2xl w-full object-cover h-[400px] border-4 border-white">
+                </div>
             </div>
         </div>
 
         <!-- Feature 2: Custom Branding -->
-        <div class="mb-20 grid md:grid-cols-2 gap-12 items-center">
+        <div class="mb-32 grid lg:grid-cols-2 gap-16 items-center fade-up">
             <div>
-                <img src="{% static 'images/modern_office_profes_57bbacad.jpg' %}" alt="Custom Branding and Business Setup" class="rounded-xl shadow-2xl w-full object-cover h-96">
+                <div class="relative hover-lift">
+                    <div class="absolute -inset-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-3xl blur-2xl opacity-30"></div>
+                    <img src="{% static 'images/modern_office_profes_57bbacad.jpg' %}" alt="Custom Branding Options" class="relative rounded-3xl shadow-2xl w-full object-cover h-[400px] border-4 border-white">
+                </div>
             </div>
             <div>
-                <h3 class="text-3xl md:text-4xl font-black mb-4 text-gray-900 Branding</h3>
-                <p class="text-lg text-gray-600 mb-6 leading-relaxed">Upload your logo, set brand colors, and add company details to every invoice. Build trust and maintain consistency across all client communications.</p>
-                <ul class="space-y-3">
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 uploads with auto-sizing</span>
+                <span class="badge badge-success mb-4">Brand Identity</span>
+                <h2 class="text-4xl md:text-5xl font-black mb-6 text-gray-900">Custom Branding</h2>
+                <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+                    Upload your logo, set brand colors, and add company details to every invoice. Build trust and maintain consistency across all client communications.
+                </p>
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900">Logo Upload</h3>
+                            <p class="text-gray-600">Auto-sizing with optimal positioning</p>
+                        </div>
                     </li>
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 color management</span>
+                    <li class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900">Brand Color Management</h3>
+                            <p class="text-gray-600">Consistent color schemes across invoices</p>
+                        </div>
                     </li>
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 customization available</span>
+                    <li class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900">Template Customization</h3>
+                            <p class="text-gray-600">Full control over invoice appearance</p>
+                        </div>
                     </li>
                 </ul>
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-lg inline-flex items-center gap-2 hover-lift">
+                    Customize Now
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                </a>
             </div>
         </div>
 
-        <!-- Feature 3: Email Integration -->
-        <div class="mb-20 grid md:grid-cols-2 gap-12 items-center">
-            <div class="order-2 md:order-1">
-                <h3 class="text-3xl md:text-4xl font-black mb-4 text-gray-900 Integration</h3>
-                <p class="text-lg text-gray-600 mb-6 leading-relaxed">Send invoices directly to clients with PDF attachments and tracking. Know exactly when your invoices are opened and viewed by clients.</p>
-                <ul class="space-y-3">
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 integration for reliability</span>
+        <!-- Feature 3: Multi-Channel Sending -->
+        <div class="mb-32 grid lg:grid-cols-2 gap-16 items-center fade-up">
+            <div class="order-2 lg:order-1">
+                <span class="badge badge-warning mb-4">Communication</span>
+                <h2 class="text-4xl md:text-5xl font-black mb-6 text-gray-900">Email & WhatsApp</h2>
+                <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+                    Send invoices directly via email with PDF attachments or share instantly via WhatsApp. Reach your clients wherever they are.
+                </p>
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900">Email Integration</h3>
+                            <p class="text-gray-600">Reliable email delivery with tracking</p>
+                        </div>
                     </li>
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 tracking and delivery reports</span>
+                    <li class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900">WhatsApp Sharing</h3>
+                            <p class="text-gray-600">One-click sharing with pre-filled messages</p>
+                        </div>
                     </li>
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 send capabilities</span>
+                    <li class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900">Delivery Tracking</h3>
+                            <p class="text-gray-600">Know when clients open your invoices</p>
+                        </div>
                     </li>
                 </ul>
             </div>
-            <div class="order-1 md:order-2">
-                <img src="{% static 'images/business_email_commu_64e88433.jpg' %}" alt="Email Integration and Communication" class="rounded-xl shadow-2xl w-full object-cover h-96">
+            <div class="order-1 lg:order-2">
+                <div class="relative hover-lift">
+                    <div class="absolute -inset-2 bg-gradient-to-r from-green-500 to-emerald-500 rounded-3xl blur-2xl opacity-30"></div>
+                    <img src="{% static 'images/business_email_commu_64e88433.jpg' %}" alt="Email and WhatsApp Integration" class="relative rounded-3xl shadow-2xl w-full object-cover h-[400px] border-4 border-white">
+                </div>
             </div>
         </div>
 
-        <!-- Feature 4: WhatsApp Sharing -->
-        <div class="mb-20 grid md:grid-cols-2 gap-12 items-center">
+        <!-- Feature 4: Real-time Analytics -->
+        <div class="mb-32 grid lg:grid-cols-2 gap-16 items-center fade-up">
             <div>
-                <img src="{% static 'images/professional_using_s_3e869bed.jpg' %}" alt="WhatsApp Invoice Sharing" class="rounded-xl shadow-2xl w-full object-cover h-96">
+                <div class="relative hover-lift">
+                    <div class="absolute -inset-2 bg-gradient-to-r from-red-500 to-pink-500 rounded-3xl blur-2xl opacity-30"></div>
+                    <img src="{% static 'images/business_analytics_d_aeaf1b35.jpg' %}" alt="Analytics Dashboard" class="relative rounded-3xl shadow-2xl w-full object-cover h-[400px] border-4 border-white">
+                </div>
             </div>
             <div>
-                <h3 class="text-3xl md:text-4xl font-black mb-4 text-gray-900 Sharing</h3>
-                <p class="text-lg text-gray-600 mb-6 leading-relaxed">Share invoices via WhatsApp with pre-filled messages for instant communication. Perfect for quick client notifications and payment reminders.</p>
-                <ul class="space-y-3">
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 WhatsApp sending</span>
+                <span class="badge badge-error mb-4">Intelligence</span>
+                <h2 class="text-4xl md:text-5xl font-black mb-6 text-gray-900">Smart Analytics</h2>
+                <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+                    Track invoices, revenue, payment status, and client statistics in real-time. Get insights into your business performance with interactive dashboards.
+                </p>
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900">Revenue Tracking</h3>
+                            <p class="text-gray-600">Real-time revenue and payment monitoring</p>
+                        </div>
                     </li>
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 message templates</span>
+                    <li class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900">Payment Status</h3>
+                            <p class="text-gray-600">Monitor paid, pending, and overdue invoices</p>
+                        </div>
                     </li>
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 worldwide</span>
+                    <li class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900">Client Insights</h3>
+                            <p class="text-gray-600">Comprehensive client statistics and trends</p>
+                        </div>
                     </li>
                 </ul>
-            </div>
-        </div>
-
-        <!-- Feature 5: Multi-Currency -->
-        <div class="mb-20 grid md:grid-cols-2 gap-12 items-center">
-            <div class="order-2 md:order-1">
-                <h3 class="text-3xl md:text-4xl font-black mb-4 text-gray-900 Support</h3>
-                <p class="text-lg text-gray-600 mb-6 leading-relaxed">Work globally with USD, EUR, GBP, NGN, CAD, AUD and more currencies. Automatic currency formatting and proper symbol placement.</p>
-                <ul class="space-y-3">
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 supported currencies</span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 formatting</span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 currency switching</span>
-                    </li>
-                </ul>
-            </div>
-            <div class="order-1 md:order-2">
-                <img src="{% static 'images/multi-currency_payme_cae74595.jpg' %}" alt="Multi-Currency Payment Processing" class="rounded-xl shadow-2xl w-full object-cover h-96">
-            </div>
-        </div>
-
-        <!-- Feature 6: Smart Analytics -->
-        <div class="mb-20 grid md:grid-cols-2 gap-12 items-center">
-            <div>
-                <img src="{% static 'images/business_analytics_d_aeaf1b35.jpg' %}" alt="Smart Analytics and Business Insights" class="rounded-xl shadow-2xl w-full object-cover h-96">
-            </div>
-            <div>
-                <h3 class="text-3xl md:text-4xl font-black mb-4 text-gray-900 Analytics</h3>
-                <p class="text-lg text-gray-600 mb-6 leading-relaxed">Track invoices, revenue, payment status, and client statistics in real-time. Get insights into your business performance and make data-driven decisions.</p>
-                <ul class="space-y-3">
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 revenue tracking</span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 status monitoring</span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span class="text-gray-700 insights and statistics</span>
-                    </li>
-                </ul>
+                <a href="{% url 'analytics' %}" class="btn btn-error btn-lg inline-flex items-center gap-2 hover-lift">
+                    View Analytics
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                </a>
             </div>
         </div>
     </div>
-</div>
+</section>
 
 <!-- Additional Features Grid -->
-<div class="bg-white py-20 md:py-32">
-    <div class="container mx-auto px-6">
-        <h2 class="text-4xl md:text-5xl font-black text-center mb-16 text-gray-900 Powerful Features</h2>
+<section class="section-lg bg-white">
+    <div class="container">
+        <div class="text-center mb-20 fade-up">
+            <span class="badge badge-primary mb-4">Complete Toolkit</span>
+            <h2 class="text-4xl md:text-6xl font-black mb-6 gradient-text">More Powerful Features</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Every tool you need to run a professional invoicing operation
+            </p>
+        </div>
+        
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Feature: Mobile Responsive -->
-            <div class="group bg-gray-50 rounded-2xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200
-                <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 transition-transform">📱</div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 Responsive</h3>
+            <div class="card hover-lift fade-up group">
+                <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 text-3xl shadow-lg group-hover:scale-110 transition-transform">📱</div>
+                <h3 class="text-2xl font-bold mb-3 text-gray-900">Mobile Responsive</h3>
                 <p class="text-gray-600 leading-relaxed">Create and manage invoices on any device - phone, tablet, or desktop. Fully optimized for all screen sizes.</p>
             </div>
 
-            <!-- Feature: Bank Details -->
-            <div class="group bg-gray-50 rounded-2xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200
-                <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 transition-transform">🏦</div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 Details</h3>
+            <div class="card hover-lift fade-up group">
+                <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mb-6 text-3xl shadow-lg group-hover:scale-110 transition-transform">🏦</div>
+                <h3 class="text-2xl font-bold mb-3 text-gray-900">Bank Details</h3>
                 <p class="text-gray-600 leading-relaxed">Add bank account information for easy client payments. Display payment instructions directly on invoices.</p>
             </div>
 
-            <!-- Feature: Easy Editing -->
-            <div class="group bg-gray-50 rounded-2xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200
-                <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 transition-transform">✏️</div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 Editing</h3>
+            <div class="card hover-lift fade-up group">
+                <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 text-3xl shadow-lg group-hover:scale-110 transition-transform">✏️</div>
+                <h3 class="text-2xl font-bold mb-3 text-gray-900">Easy Editing</h3>
                 <p class="text-gray-600 leading-relaxed">Edit invoices anytime after creation with instant updates. Make changes without starting over.</p>
             </div>
 
-            <!-- Feature: Secure & Private -->
-            <div class="group bg-gray-50 rounded-2xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200
-                <div class="w-14 h-14 bg-gradient-to-br from-red-500 to-pink-600 rounded-xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 transition-transform">🔒</div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 & Private</h3>
+            <div class="card hover-lift fade-up group">
+                <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 text-3xl shadow-lg group-hover:scale-110 transition-transform">🔒</div>
+                <h3 class="text-2xl font-bold mb-3 text-gray-900">Secure & Private</h3>
                 <p class="text-gray-600 leading-relaxed">Bank-level security with encrypted data storage and access control. Your data is always protected.</p>
             </div>
 
-            <!-- Feature: Lightning Fast -->
-            <div class="group bg-gray-50 rounded-2xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200
-                <div class="w-14 h-14 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 transition-transform">⚡</div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 Fast</h3>
+            <div class="card hover-lift fade-up group">
+                <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl flex items-center justify-center mb-6 text-3xl shadow-lg group-hover:scale-110 transition-transform">⚡</div>
+                <h3 class="text-2xl font-bold mb-3 text-gray-900">Lightning Fast</h3>
                 <p class="text-gray-600 leading-relaxed">Create professional invoices in under 2 minutes. Optimized for speed and efficiency.</p>
             </div>
 
-            <!-- Feature: Cloud Backup -->
-            <div class="group bg-gray-50 rounded-2xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200
-                <div class="w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 transition-transform">☁️</div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 Backup</h3>
-                <p class="text-gray-600 leading-relaxed">All invoices automatically backed up in the cloud. Never lose important data.</p>
+            <div class="card hover-lift fade-up group">
+                <div class="w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 text-3xl shadow-lg group-hover:scale-110 transition-transform">💰</div>
+                <h3 class="text-2xl font-bold mb-3 text-gray-900">Multi-Currency</h3>
+                <p class="text-gray-600 leading-relaxed">Support for USD, EUR, GBP, NGN, CAD, AUD with automatic formatting and proper symbol placement.</p>
             </div>
         </div>
     </div>
-</div>
+</section>
 
 <!-- CTA Section -->
-<div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-20 md:py-24">
-    <div class="container mx-auto px-6 text-center">
-        <h2 class="text-4xl md:text-5xl font-black mb-6">Ready to get started?</h2>
-        <p class="text-xl md:text-2xl opacity-90 mb-8 max-w-2xl mx-auto">Join thousands of satisfied users creating professional invoices in seconds</p>
-        <a href="{% url 'signup' %}" class="inline-block bg-white text-indigo-600 px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition transform hover:scale-105 shadow-lg">Get Started Free</a>
+<section class="relative overflow-hidden bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white section-lg">
+    <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute top-0 left-0 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
     </div>
-</div>
+    
+    <div class="container text-center relative z-10 fade-up">
+        <h2 class="text-4xl md:text-6xl font-black mb-6">Ready to Get Started?</h2>
+        <p class="text-xl md:text-2xl opacity-95 mb-10 max-w-3xl mx-auto leading-relaxed">
+            Join thousands of businesses creating professional invoices in seconds
+        </p>
+        <a href="{% url 'signup' %}" class="btn btn-lg inline-flex items-center gap-3 bg-white text-indigo-600 hover:bg-gray-100 font-bold shadow-2xl hover-lift px-10">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            Get Started Free
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+        </a>
+    </div>
+</section>
+
+<style>
+@keyframes blob {
+    0%, 100% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+.animate-blob {
+    animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+    animation-delay: 2s;
+}
+</style>
 {% endblock %}
