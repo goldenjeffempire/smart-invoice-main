@@ -1,41 +1,59 @@
 {% extends 'base.html' %}
-
 {% block content %}
+<div class="gradient-bg text-white py-24">
+    <div class="container mx-auto px-6 text-center">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6">Support & Help</h1>
+        <p class="text-xl md:text-2xl opacity-90">We're here to help you succeed</p>
+    </div>
+</div>
 <div class="container mx-auto px-6 py-20">
-    <h1 class="text-5xl font-bold text-center mb-12">Support</h1>
-    
-    <div class="max-w-2xl mx-auto">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mb-8">
-            <h2 class="text-3xl font-bold mb-6">Get Help</h2>
-            <p class="text-gray-600 dark:text-gray-400 mb-6">Need assistance with Smart Invoice? We're here to help! Choose one of the options below to get support.</p>
-            
-            <div class="space-y-4">
-                <div class="border-l-4 border-indigo-600 pl-4 py-2">
-                    <h3 class="font-bold text-lg mb-1">Email Support</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Send us an email at <a href="mailto:support@smartinvoice.com" class="text-indigo-600 hover:underline">support@smartinvoice.com</a></p>
-                    <p class="text-sm text-gray-500 dark:text-gray-500 mt-1">Response time: Within 24 hours</p>
-                </div>
-                
-                <div class="border-l-4 border-green-600 pl-4 py-2">
-                    <h3 class="font-bold text-lg mb-1">Documentation</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Check our <a href="{% url 'faq' %}" class="text-indigo-600 hover:underline">FAQ page</a> for common questions and answers.</p>
-                </div>
-                
-                <div class="border-l-4 border-purple-600 pl-4 py-2">
-                    <h3 class="font-bold text-lg mb-1">Feature Requests</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Have an idea? Email your suggestions to <a href="mailto:features@smartinvoice.com" class="text-indigo-600 hover:underline">features@smartinvoice.com</a></p>
-                </div>
+    <div class="max-w-4xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+                <div class="text-5xl mb-4">📧</div>
+                <h3 class="text-2xl font-bold mb-4">Email Support</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">Contact our support team directly</p>
+                <a href="mailto:support@smartinvoice.com" class="text-indigo-600 hover:underline font-bold">support@smartinvoice.com</a>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-3">Response time: Within 24 hours</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+                <div class="text-5xl mb-4">❓</div>
+                <h3 class="text-2xl font-bold mb-4">FAQ</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">Find answers to common questions</p>
+                <a href="{% url 'faq' %}" class="text-indigo-600 hover:underline font-bold">Browse FAQ →</a>
             </div>
         </div>
-        
-        <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg shadow-lg p-8 text-white text-center">
-            <h2 class="text-3xl font-bold mb-4">Quick Tips</h2>
-            <ul class="text-left space-y-2 max-w-md mx-auto">
-                <li>✓ Make sure to fill all required fields when creating invoices</li>
-                <li>✓ Upload your logo in PNG or JPG format for best results</li>
-                <li>✓ Use the bank details section to add payment information</li>
-                <li>✓ Download PDF before sending to preview your invoice</li>
-                <li>✓ Update invoice status to track payments</li>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl shadow-xl p-12">
+            <h2 class="text-3xl font-bold mb-8">Quick Tips</h2>
+            <ul class="space-y-4">
+                <li class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <div>
+                        <p class="font-bold text-gray-900 dark:text-gray-100">Fill required fields</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Business name, client email, and amounts</p>
+                    </div>
+                </li>
+                <li class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <div>
+                        <p class="font-bold text-gray-900 dark:text-gray-100">Add your logo</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Upload PNG or JPG for best results</p>
+                    </div>
+                </li>
+                <li class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <div>
+                        <p class="font-bold text-gray-900 dark:text-gray-100">Download before sending</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Preview the PDF to verify everything looks good</p>
+                    </div>
+                </li>
+                <li class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <div>
+                        <p class="font-bold text-gray-900 dark:text-gray-100">Update payment status</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Mark as paid to track your analytics</p>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>
