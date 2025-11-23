@@ -1,54 +1,49 @@
 {% extends 'base.html' %}
-
 {% block content %}
+<div class="gradient-bg text-white py-24">
+    <div class="container mx-auto px-6 text-center">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6">Frequently Asked Questions</h1>
+        <p class="text-xl md:text-2xl opacity-90">Find answers to common questions</p>
+    </div>
+</div>
 <div class="container mx-auto px-6 py-20">
-    <h1 class="text-5xl font-bold text-center mb-12">Frequently Asked Questions</h1>
-    
     <div class="max-w-3xl mx-auto space-y-6">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
             <h3 class="text-2xl font-bold mb-3">How do I create an invoice?</h3>
-            <p class="text-gray-600 dark:text-gray-400">Simply sign up for a free account, click "Create Invoice" from the dashboard, fill in your business and client details, add line items, and generate your professional PDF invoice instantly.</p>
+            <p class="text-gray-600 dark:text-gray-400">Sign up, click "Create Invoice," fill in your details, add line items, and download your PDF. It takes less than 2 minutes.</p>
         </div>
-        
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-            <h3 class="text-2xl font-bold mb-3">Is Smart Invoice free to use?</h3>
-            <p class="text-gray-600 dark:text-gray-400">Yes! Smart Invoice is completely free to use. Create unlimited invoices, send them via email or WhatsApp, and track your revenue without any cost.</p>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+            <h3 class="text-2xl font-bold mb-3">Is Smart Invoice free?</h3>
+            <p class="text-gray-600 dark:text-gray-400">Yes! Smart Invoice is completely free. Create unlimited invoices, send them via email or WhatsApp, and track your analytics without any cost.</p>
         </div>
-        
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-            <h3 class="text-2xl font-bold mb-3">Can I customize my invoices?</h3>
-            <p class="text-gray-600 dark:text-gray-400">Absolutely! You can upload your logo, set your brand color, add your business name, and include custom notes on every invoice.</p>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+            <h3 class="text-2xl font-bold mb-3">Can I customize invoices?</h3>
+            <p class="text-gray-600 dark:text-gray-400">Absolutely. Upload your logo, set brand colors, add company details, include bank information, and customize line items.</p>
         </div>
-        
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
             <h3 class="text-2xl font-bold mb-3">What currencies are supported?</h3>
-            <p class="text-gray-600 dark:text-gray-400">Smart Invoice supports USD, EUR, GBP, NGN, CAD, and AUD. You can select your preferred currency for each invoice.</p>
+            <p class="text-gray-600 dark:text-gray-400">We support USD, EUR, GBP, NGN, CAD, and AUD. Select your preferred currency for each invoice.</p>
         </div>
-        
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-            <h3 class="text-2xl font-bold mb-3">How do I send invoices to clients?</h3>
-            <p class="text-gray-600 dark:text-gray-400">You can download the PDF and send it manually, use our built-in email feature to send it directly with the PDF attached, or share via WhatsApp with a pre-filled message.</p>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+            <h3 class="text-2xl font-bold mb-3">How do I send invoices?</h3>
+            <p class="text-gray-600 dark:text-gray-400">You can download the PDF, send via email with our built-in feature, or share via WhatsApp. All options include the full invoice attachment.</p>
         </div>
-        
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
             <h3 class="text-2xl font-bold mb-3">Can I track payment status?</h3>
-            <p class="text-gray-600 dark:text-gray-400">Yes! Each invoice has a status (Paid/Unpaid) that you can update. The dashboard shows your analytics including paid invoices, unpaid invoices, and total revenue.</p>
+            <p class="text-gray-600 dark:text-gray-400">Yes. Each invoice has a status (Paid/Unpaid) you can update. Your dashboard shows analytics with payment tracking.</p>
         </div>
-        
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
             <h3 class="text-2xl font-bold mb-3">Is my data secure?</h3>
-            <p class="text-gray-600 dark:text-gray-400">Yes, all data is securely stored in the cloud with industry-standard encryption. Your invoices and client information are private and only accessible to you.</p>
+            <p class="text-gray-600 dark:text-gray-400">Yes. All data is encrypted and securely stored in the cloud. Your invoices are private and only accessible to you.</p>
         </div>
-        
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
             <h3 class="text-2xl font-bold mb-3">Can I edit invoices after creation?</h3>
-            <p class="text-gray-600 dark:text-gray-400">Yes, you can edit any invoice from your dashboard. Simply click on the invoice and select "Edit" to make changes.</p>
+            <p class="text-gray-600 dark:text-gray-400">Yes. You can edit any invoice from your dashboard. Simply click the invoice and make your changes.</p>
         </div>
     </div>
-    
     <div class="text-center mt-12">
         <p class="text-gray-600 dark:text-gray-400 mb-4">Still have questions?</p>
-        <a href="{% url 'support' %}" class="bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition inline-block">Contact Support</a>
+        <a href="{% url 'contact' %}" class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-indigo-700 transition">Contact Support</a>
     </div>
 </div>
 {% endblock %}
