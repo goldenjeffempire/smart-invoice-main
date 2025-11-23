@@ -180,6 +180,7 @@ class Invoice(models.Model):
 
     @property
     def subtotal(self):
+        """Calculate subtotal from all line items."""
         return sum(item.total for item in self.line_items.all())
 
     @property
