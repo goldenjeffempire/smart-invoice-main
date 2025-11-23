@@ -35,14 +35,10 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 36183
-externalPort = 3001
-
-[[ports]]
 localPort = 42193
 externalPort = 3000
 
 [userenv]
 
 [userenv.shared]
-SENDGRID_FROM_EMAIL = "invoices@smartinvoice.com"
+SENDGRID_FROM_EMAIL = "team@smartinvoice.com"
