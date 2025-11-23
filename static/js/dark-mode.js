@@ -11,15 +11,22 @@ class DarkModeManager {
     }
 
     init() {
-        const savedTheme = localStorage.getItem(this.darkModeKey);
+        // LIGHT MODE IS THE ABSOLUTE DEFAULT
+        // Remove dark class first to prevent any flashing
+        document.documentElement.classList.remove('dark');
+        document.documentElement.style.colorScheme = 'light';
         
-        // Light mode is the default. Dark mode only if explicitly saved.
+        const savedTheme = localStorage.getItem(this.darkModeKey);
         const isDark = savedTheme === 'dark';
         
         if (isDark) {
+            // User previously chose dark mode, apply it
             this.enableDarkMode(true);
         } else {
+            // Default to light mode - always
             this.enableLightMode(true);
+            // Ensure light mode is saved
+            localStorage.setItem(this.darkModeKey, 'light');
         }
         
         this.setupToggleButton();
@@ -146,17 +153,13 @@ class DarkModeManager {
 
     /**
      * Setup system preference listener
+     * NOTE: Light mode is default. System preference is IGNORED unless user explicitly toggles theme.
      */
     setupSystemPreferenceListener() {
         const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
         darkModeQuery.addEventListener('change', (e) => {
-            if (!localStorage.getItem(this.darkModeKey)) {
-                if (e.matches) {
-                    this.enableDarkMode();
-                } else {
-                    this.enableLightMode();
-                }
-            }
+            // Do nothing - we don't follow system preference
+            // Users must explicitly toggle theme to change from light mode default
         });
     }
 
