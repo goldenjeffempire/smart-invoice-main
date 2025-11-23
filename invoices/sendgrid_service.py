@@ -3,7 +3,7 @@ import os
 import base64
 import json
 from sendgrid import SendGridAPIClient, SendGridException
-from sendgrid.helpers.mail import Mail, From, To, TemplateId, Personalization, Attachment, FileContent, FileName, FileType
+from sendgrid.helpers.mail import Mail, From, To, ReplyTo, TemplateId, Personalization, Attachment, FileContent, FileName, FileType
 from django.core.files.base import ContentFile
 from weasyprint import HTML
 from weasyprint.text.fonts import FontConfiguration
@@ -11,7 +11,19 @@ from django.template.loader import render_to_string
 
 
 class SendGridEmailService:
-    """Service for sending emails using SendGrid dynamic templates."""
+    """Service for sending emails using SendGrid dynamic templates.
+    
+    Smart Direct Sending:
+    - Emails send FROM platform owner's verified email (technical requirement)
+    - Emails show user's business details prominently
+    - Reply-To header routes replies directly to user's business email
+    - Users can send directly without SendGrid verification!
+    """
+    
+    # Platform owner's verified email - ALL emails send from this address
+    # Set this to your verified SendGrid sender email
+    PLATFORM_FROM_EMAIL = os.environ.get("SENDGRID_FROM_EMAIL", "noreply@smartinvoice.com")
+    PLATFORM_FROM_NAME = "Smart Invoice"
     
     # Template IDs - set these in your environment variables
     TEMPLATE_IDS = {
@@ -34,7 +46,11 @@ class SendGridEmailService:
     # ============ INVOICE EMAILS ============
     
     def send_invoice_ready(self, invoice, recipient_email, template_id=None):
-        """Send 'Invoice Ready' notification to client."""
+        """Send 'Invoice Ready' notification to client.
+        
+        Sends from platform owner's verified email with Reply-To user's business email.
+        No SendGrid verification needed for users!
+        """
         template_id = template_id or self.TEMPLATE_IDS.get('invoice_ready')
         
         template_data = {
@@ -51,7 +67,7 @@ class SendGridEmailService:
         }
         
         return self._send_email(
-            from_email=invoice.business_email,
+            user_business_email=invoice.business_email,
             from_name=invoice.business_name,
             to_email=recipient_email,
             template_id=template_id,
@@ -61,7 +77,11 @@ class SendGridEmailService:
         )
     
     def send_invoice_paid(self, invoice, recipient_email, template_id=None):
-        """Send 'Invoice Paid' notification."""
+        """Send 'Invoice Paid' notification.
+        
+        Sends from platform owner's verified email with Reply-To user's business email.
+        No SendGrid verification needed for users!
+        """
         template_id = template_id or self.TEMPLATE_IDS.get('invoice_paid')
         
         template_data = {
@@ -74,7 +94,7 @@ class SendGridEmailService:
         }
         
         return self._send_email(
-            from_email=invoice.business_email,
+            user_business_email=invoice.business_email,
             from_name=invoice.business_name,
             to_email=recipient_email,
             template_id=template_id,
@@ -83,7 +103,11 @@ class SendGridEmailService:
         )
     
     def send_payment_reminder(self, invoice, recipient_email, template_id=None):
-        """Send payment reminder for unpaid invoice."""
+        """Send payment reminder for unpaid invoice.
+        
+        Sends from platform owner's verified email with Reply-To user's business email.
+        No SendGrid verification needed for users!
+        """
         template_id = template_id or self.TEMPLATE_IDS.get('payment_reminder')
         
         template_data = {
@@ -100,7 +124,7 @@ class SendGridEmailService:
         }
         
         return self._send_email(
-            from_email=invoice.business_email,
+            user_business_email=invoice.business_email,
             from_name=invoice.business_name,
             to_email=recipient_email,
             template_id=template_id,
@@ -123,7 +147,7 @@ class SendGridEmailService:
         }
         
         return self._send_email(
-            from_email="noreply@smartinvoice.com",
+            from_email=self.PLATFORM_FROM_EMAIL,
             from_name="Smart Invoice",
             to_email=user.email,
             template_id=template_id,
@@ -146,7 +170,7 @@ class SendGridEmailService:
         }
         
         return self._send_email(
-            from_email="noreply@smartinvoice.com",
+            from_email=self.PLATFORM_FROM_EMAIL,
             from_name="Smart Invoice",
             to_email=user.email,
             template_id=template_id,
@@ -171,7 +195,7 @@ class SendGridEmailService:
         }
         
         return self._send_email(
-            from_email="noreply@smartinvoice.com",
+            from_email=self.PLATFORM_FROM_EMAIL,
             from_name="Smart Invoice Admin",
             to_email=admin_email,
             template_id=template_id,
@@ -181,8 +205,15 @@ class SendGridEmailService:
     
     # ============ HELPER METHODS ============
     
-    def _send_email(self, from_email, from_name, to_email, template_id, template_data, subject, invoice=None):
-        """Send email using SendGrid dynamic template."""
+    def _send_email(self, user_business_email, from_name, to_email, template_id, template_data, subject, invoice=None):
+        """Send email using SendGrid dynamic template.
+        
+        Smart Direct Sending System:
+        - Sends FROM platform owner's verified email (technical requirement for deliverability)
+        - Sets Reply-To to user's business email (customers reply directly to user)
+        - No SendGrid verification needed for users!
+        - Recipients see user's business name prominently
+        """
         # Check if SendGrid is configured
         if not self.is_configured:
             error_msg = "SendGrid API key not configured. Email sending is disabled. Please set SENDGRID_API_KEY in environment variables."
@@ -190,11 +221,19 @@ class SendGridEmailService:
             return {"status": "error", "message": error_msg, "configured": False}
         
         try:
+            # Always send from platform owner's verified email for deliverability
+            # But set Reply-To to user's business email for direct replies
+            
             message = Mail(
-                from_email=From(from_email, from_name),
+                from_email=From(self.PLATFORM_FROM_EMAIL, from_name),
                 to_emails=To(to_email),
                 subject=subject,
             )
+            
+            # Set Reply-To header to user's business email
+            # This allows customers to reply directly to the user without verification
+            if user_business_email:
+                message.reply_to = ReplyTo(user_business_email)
             
             # Use dynamic template if ID is provided
             if template_id:
@@ -204,7 +243,7 @@ class SendGridEmailService:
                 message.personalizations[0].dynamic_template_data = template_data
             else:
                 # Fallback to simple email if no template
-                return self._send_simple_email(from_email, from_name, to_email, subject, template_data)
+                return self._send_simple_email(user_business_email, from_name, to_email, subject, template_data)
             
             # Add PDF attachment for invoice emails
             if invoice:
@@ -219,13 +258,21 @@ class SendGridEmailService:
             
             # Send email
             response = self.client.send(message)
-            return {"status": "sent", "response": response.status_code}
+            print(f"✅ Email sent successfully!")
+            print(f"   From: {self.PLATFORM_FROM_EMAIL} (verified platform email)")
+            print(f"   Reply-To: {user_business_email} (user's direct email)")
+            print(f"   Display Name: {from_name}")
+            return {
+                "status": "sent",
+                "response": response.status_code,
+                "from_email": self.PLATFORM_FROM_EMAIL,
+                "reply_to": user_business_email
+            }
             
         except Exception as e:
-            # Handle SendGrid API errors with detailed diagnostics
             error_detail = self._parse_sendgrid_error(e)
-            print(f"❌ SendGrid API Error: {error_detail}")
             status_code = getattr(e, 'status_code', None)
+            print(f"❌ SendGrid API Error: {error_detail}")
             return {"status": "error", "message": error_detail, "code": status_code}
     
     def _send_simple_email(self, from_email, from_name, to_email, subject, data):
@@ -252,8 +299,8 @@ class SendGridEmailService:
             
         except Exception as e:
             error_detail = self._parse_sendgrid_error(e)
-            print(f"❌ SendGrid API Error: {error_detail}")
             status_code = getattr(e, 'status_code', None)
+            print(f"❌ SendGrid API Error: {error_detail}")
             return {"status": "error", "message": error_detail, "code": status_code}
     
     def _parse_sendgrid_error(self, error):
