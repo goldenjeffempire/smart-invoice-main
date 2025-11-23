@@ -1,7 +1,8 @@
 """SendGrid dynamic template email service for all email types."""
 import os
 import base64
-from sendgrid import SendGridAPIClient
+import json
+from sendgrid import SendGridAPIClient, SendGridException
 from sendgrid.helpers.mail import Mail, From, To, TemplateId, Personalization, Attachment, FileContent, FileName, FileType
 from django.core.files.base import ContentFile
 from weasyprint import HTML
@@ -24,9 +25,11 @@ class SendGridEmailService:
     
     def __init__(self):
         self.api_key = os.environ.get("SENDGRID_API_KEY")
-        if not self.api_key:
-            raise ValueError("SENDGRID_API_KEY not configured")
-        self.client = SendGridAPIClient(self.api_key)
+        self.is_configured = bool(self.api_key)
+        if self.is_configured:
+            self.client = SendGridAPIClient(self.api_key)
+        else:
+            self.client = None
     
     # ============ INVOICE EMAILS ============
     
@@ -180,6 +183,12 @@ class SendGridEmailService:
     
     def _send_email(self, from_email, from_name, to_email, template_id, template_data, subject, invoice=None):
         """Send email using SendGrid dynamic template."""
+        # Check if SendGrid is configured
+        if not self.is_configured:
+            error_msg = "SendGrid API key not configured. Email sending is disabled. Please set SENDGRID_API_KEY in environment variables."
+            print(f"⚠️  {error_msg}")
+            return {"status": "error", "message": error_msg, "configured": False}
+        
         try:
             message = Mail(
                 from_email=From(from_email, from_name),
@@ -213,11 +222,20 @@ class SendGridEmailService:
             return {"status": "sent", "response": response.status_code}
             
         except Exception as e:
-            print(f"Error sending email via SendGrid: {str(e)}")
-            return {"status": "error", "message": str(e)}
+            # Handle SendGrid API errors with detailed diagnostics
+            error_detail = self._parse_sendgrid_error(e)
+            print(f"❌ SendGrid API Error: {error_detail}")
+            status_code = getattr(e, 'status_code', None)
+            return {"status": "error", "message": error_detail, "code": status_code}
     
     def _send_simple_email(self, from_email, from_name, to_email, subject, data):
         """Fallback: Send simple HTML email without dynamic template."""
+        # Check if SendGrid is configured
+        if not self.is_configured:
+            error_msg = "SendGrid API key not configured. Email sending is disabled."
+            print(f"⚠️  {error_msg}")
+            return {"status": "error", "message": error_msg, "configured": False}
+        
         try:
             # Create simple text content from template data
             plain_text = self._format_plain_text(data)
@@ -233,8 +251,50 @@ class SendGridEmailService:
             return {"status": "sent", "response": response.status_code}
             
         except Exception as e:
-            print(f"Error sending simple email: {str(e)}")
-            return {"status": "error", "message": str(e)}
+            error_detail = self._parse_sendgrid_error(e)
+            print(f"❌ SendGrid API Error: {error_detail}")
+            status_code = getattr(e, 'status_code', None)
+            return {"status": "error", "message": error_detail, "code": status_code}
+    
+    def _parse_sendgrid_error(self, error):
+        """Parse SendGrid API error and provide helpful diagnostics."""
+        try:
+            status_code = error.status_code if hasattr(error, 'status_code') else 'Unknown'
+            
+            # Try to parse error body for details
+            try:
+                if hasattr(error, 'body') and error.body:
+                    error_data = json.loads(error.body)
+                    if isinstance(error_data, dict):
+                        errors = error_data.get('errors', [])
+                        if errors and len(errors) > 0:
+                            messages = [e.get('message', '') for e in errors]
+                            error_msg = '; '.join(messages)
+                            
+                            # Provide specific guidance based on error type
+                            if 'sender' in error_msg.lower() or 'from' in error_msg.lower():
+                                return f"[{status_code}] SENDER VERIFICATION ISSUE: {error_msg}\n→ Fix: Go to SendGrid → Sender Authentication → Verify your business email"
+                            elif 'api key' in error_msg.lower() or 'invalid' in error_msg.lower():
+                                return f"[{status_code}] INVALID API KEY: {error_msg}\n→ Fix: Check your API key has Full Access permissions and is valid"
+                            elif 'permission' in error_msg.lower() or '403' in str(status_code):
+                                return f"[{status_code}] PERMISSION DENIED: API key lacks required permissions\n→ Fix: Create new API key with 'Full Access' at SendGrid → API Keys"
+                            else:
+                                return f"[{status_code}] {error_msg}"
+            except (json.JSONDecodeError, AttributeError, TypeError):
+                pass
+            
+            # Fallback with status code specific guidance
+            if status_code == 401 or status_code == 403:
+                return f"[{status_code}] Authentication/Permission Error: Check API key has 'Full Access' and verify sender email in SendGrid"
+            elif status_code == 400:
+                return f"[{status_code}] Bad Request: Check email format and invoice data"
+            elif status_code == 429:
+                return f"[{status_code}] Rate Limited: Too many requests, try again later"
+            else:
+                return f"[{status_code}] SendGrid API Error: {str(error)}"
+                
+        except Exception as parse_error:
+            return f"Error encountered: {str(error)}\n(Unable to parse details: {str(parse_error)})"
     
     def _generate_invoice_pdf(self, invoice):
         """Generate PDF for attachment."""
