@@ -360,6 +360,7 @@
 
         animateCounter(element) {
             const target = parseInt(element.getAttribute('data-target') || element.textContent);
+            const prefix = element.getAttribute('data-prefix') || '';
             const suffix = element.getAttribute('data-suffix') || '';
             const duration = CONFIG.animations.counterDuration;
             const increment = target / (duration / 16);
@@ -368,10 +369,10 @@
             const updateCounter = () => {
                 current += increment;
                 if (current < target) {
-                    element.textContent = Math.floor(current).toLocaleString() + suffix;
+                    element.textContent = prefix + Math.floor(current).toLocaleString() + suffix;
                     requestAnimationFrame(updateCounter);
                 } else {
-                    element.textContent = target.toLocaleString() + suffix;
+                    element.textContent = prefix + target.toLocaleString() + suffix;
                 }
             };
 

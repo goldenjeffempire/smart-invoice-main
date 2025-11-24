@@ -41,7 +41,7 @@
             <!-- Left Content -->
             <div class="space-y-8">
                 <!-- Trust Badge with pulse -->
-                <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full backdrop-blur-xl bg-white/70 shadow-lg border border-white/40 animate-slide-in-down hover:scale-105 transition-transform cursor-pointer group">
+                <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full backdrop-blur-xl bg-white/70 shadow-lg border border-white/40 animate-slide-in-down hover:scale-105 transition-transform cursor-pointer group" data-animate>
                     <span class="relative flex w-3 h-3">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
@@ -50,7 +50,7 @@
                 </div>
                 
                 <!-- Main Headline with gradient -->
-                <div class="animate-slide-in-down" style="animation-delay: 0.15s">
+                <div class="animate-slide-in-down" style="animation-delay: 0.15s" data-animate>
                     <h1 class="text-7xl md:text-8xl lg:text-9xl font-black leading-none tracking-tighter text-gray-900 mb-6 relative">
                         <span class="block">Professional</span>
                         <span class="block bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient-shift">Invoices in 60s</span>
@@ -59,22 +59,22 @@
                 </div>
                 
                 <!-- Value Props with icons -->
-                <div class="space-y-3 animate-slide-in-down" style="animation-delay: 0.3s">
-                    <div class="flex items-center gap-4 p-4 rounded-xl bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-all group cursor-default">
+                <div class="space-y-3 animate-slide-in-down" style="animation-delay: 0.3s" data-animate>
+                    <div class="flex items-center gap-4 p-4 rounded-xl bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-all group cursor-default" data-stagger>
                         <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-xl flex-shrink-0 group-hover:scale-110 transition-transform">⚡</div>
                         <div>
                             <p class="font-bold text-gray-900">Automate everything</p>
                             <p class="text-sm text-gray-600">From creation to tracking to payment reminders</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-4 p-4 rounded-xl bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-all group cursor-default">
+                    <div class="flex items-center gap-4 p-4 rounded-xl bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-all group cursor-default" data-stagger>
                         <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center text-xl flex-shrink-0 group-hover:scale-110 transition-transform">📈</div>
                         <div>
                             <p class="font-bold text-gray-900">Get paid 3x faster</p>
                             <p class="text-sm text-gray-600">Average payment: 7 days instead of 21 days</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-4 p-4 rounded-xl bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-all group cursor-default">
+                    <div class="flex items-center gap-4 p-4 rounded-xl bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-all group cursor-default" data-stagger>
                         <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-pink-600 rounded-lg flex items-center justify-center text-xl flex-shrink-0 group-hover:scale-110 transition-transform">🎯</div>
                         <div>
                             <p class="font-bold text-gray-900">Your brand, perfected</p>
@@ -84,7 +84,7 @@
                 </div>
                 
                 <!-- CTA with momentum -->
-                <div class="flex flex-col sm:flex-row gap-4 pt-8 animate-slide-in-down" style="animation-delay: 0.45s">
+                <div class="flex flex-col sm:flex-row gap-4 pt-8 animate-slide-in-down" style="animation-delay: 0.45s" data-animate>
                     <a href="{% url 'signup' %}" class="group relative px-10 py-6 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-2xl hover:shadow-purple-500/50 hover:scale-105 transition-all duration-300 overflow-hidden border border-white/20">
                         <span class="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                         <div class="relative flex items-center justify-center gap-3">
@@ -99,7 +99,7 @@
                 </div>
                 
                 <!-- Social Proof -->
-                <div class="flex flex-wrap gap-6 pt-8 animate-slide-in-down" style="animation-delay: 0.6s">
+                <div class="flex flex-wrap gap-6 pt-8 animate-slide-in-down" style="animation-delay: 0.6s" data-animate>
                     <div class="flex items-center gap-2 group">
                         <svg class="w-5 h-5 text-green-500 group-hover:scale-125 transition-transform" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
                         <span class="font-bold text-gray-900">Forever Free</span>
@@ -116,7 +116,7 @@
             </div>
             
             <!-- Right: Dashboard Visual -->
-            <div class="hidden lg:block relative group">
+            <div class="hidden lg:block relative group" data-animate>
                 <div class="absolute -inset-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-3xl blur-3xl opacity-40 group-hover:opacity-60 transition-all duration-500 animate-pulse"></div>
                 <div class="relative">
                     <img src="{% static 'images/professional_busines_232186d2.jpg' %}" alt="Smart Invoice Dashboard" class="w-full rounded-3xl shadow-2xl border-4 border-white/60 group-hover:scale-105 transition-transform duration-500 object-cover h-[600px]">
@@ -125,7 +125,7 @@
                     <div class="absolute top-8 -left-12 bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl p-6 animate-float hover:shadow-3xl transition-all" style="animation-delay: 0.5s">
                         <div class="space-y-2">
                             <p class="text-sm font-semibold text-gray-600 uppercase tracking-wider">💰 This Month</p>
-                            <p class="text-3xl font-black text-transparent bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text">$24,580</p>
+                            <p class="text-3xl font-black text-transparent bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text counter" data-target="24580" data-prefix="$">$0</p>
                             <p class="text-xs text-green-600 font-bold">↑ 34% from last month</p>
                         </div>
                     </div>
@@ -133,7 +133,7 @@
                     <div class="absolute bottom-8 -right-12 bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl p-6 animate-float hover:shadow-3xl transition-all" style="animation-delay: 1s">
                         <div class="space-y-2">
                             <p class="text-sm font-semibold text-gray-600 uppercase tracking-wider">📊 Paid Rate</p>
-                            <p class="text-3xl font-black text-transparent bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text">94%</p>
+                            <p class="text-3xl font-black text-transparent bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text counter" data-target="94" data-suffix="%">0%</p>
                             <p class="text-xs text-blue-600 font-bold">↑ 12% improvement</p>
                         </div>
                     </div>
@@ -144,12 +144,27 @@
 </section>
 
 <!-- ============================================================ -->
+<!-- TRUST LOGOS - Brand Recognition -->
+<!-- ============================================================ -->
+<section class="py-12 bg-white border-y border-gray-200">
+    <div class="container px-6">
+        <p class="text-center text-sm font-semibold text-gray-500 uppercase tracking-wider mb-8">Trusted by businesses worldwide</p>
+        <div class="flex flex-wrap justify-center items-center gap-12 max-w-5xl mx-auto opacity-50">
+            <div class="text-3xl font-black text-gray-400">STARTUP</div>
+            <div class="text-3xl font-black text-gray-400">AGENCY</div>
+            <div class="text-3xl font-black text-gray-400">FREELANCE</div>
+            <div class="text-3xl font-black text-gray-400">ENTERPRISE</div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
 <!-- PROBLEM/SOLUTION - Advanced Comparison -->
 <!-- ============================================================ -->
 <section class="py-24 bg-gradient-to-b from-white to-gray-50 relative">
     <div class="container px-6">
         <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-20 space-y-4">
+            <div class="text-center mb-20 space-y-4" data-animate>
                 <span class="inline-block px-6 py-2 bg-red-100 text-red-700 rounded-full font-bold text-sm uppercase tracking-wider">The Real Cost</span>
                 <h2 class="text-6xl md:text-7xl font-black text-gray-900">Manual Invoicing is Costing You Thousands</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">See the hidden ROI of Smart Invoice</p>
@@ -157,7 +172,7 @@
             
             <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
                 <!-- Without Smart Invoice -->
-                <div class="group relative">
+                <div class="group relative" data-animate>
                     <div class="absolute inset-0 bg-gradient-to-br from-red-100 to-orange-50 rounded-3xl blur-xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
                     <div class="relative bg-white rounded-3xl p-10 shadow-xl border-2 border-red-200">
                         <div class="flex items-center gap-3 mb-10">
@@ -169,28 +184,28 @@
                         </div>
                         
                         <div class="space-y-4 mb-8">
-                            <div class="flex items-start gap-4 p-4 bg-red-50 rounded-xl border border-red-200/50">
+                            <div class="flex items-start gap-4 p-4 bg-red-50 rounded-xl border border-red-200/50" data-stagger>
                                 <div class="text-2xl flex-shrink-0">😩</div>
                                 <div>
                                     <p class="font-bold text-gray-900">3 hours per invoice</p>
                                     <p class="text-sm text-gray-600">At $50/hour = $150 per invoice</p>
                                 </div>
                             </div>
-                            <div class="flex items-start gap-4 p-4 bg-red-50 rounded-xl border border-red-200/50">
+                            <div class="flex items-start gap-4 p-4 bg-red-50 rounded-xl border border-red-200/50" data-stagger>
                                 <div class="text-2xl flex-shrink-0">❌</div>
                                 <div>
                                     <p class="font-bold text-gray-900">Manual errors</p>
                                     <p class="text-sm text-gray-600">Embarrassing calculation mistakes</p>
                                 </div>
                             </div>
-                            <div class="flex items-start gap-4 p-4 bg-red-50 rounded-xl border border-red-200/50">
+                            <div class="flex items-start gap-4 p-4 bg-red-50 rounded-xl border border-red-200/50" data-stagger>
                                 <div class="text-2xl flex-shrink-0">🕐</div>
                                 <div>
                                     <p class="font-bold text-gray-900">21 days average payment</p>
                                     <p class="text-sm text-gray-600">Late payments drain cash flow</p>
                                 </div>
                             </div>
-                            <div class="flex items-start gap-4 p-4 bg-red-50 rounded-xl border border-red-200/50">
+                            <div class="flex items-start gap-4 p-4 bg-red-50 rounded-xl border border-red-200/50" data-stagger>
                                 <div class="text-2xl flex-shrink-0">😕</div>
                                 <div>
                                     <p class="font-bold text-gray-900">Unprofessional branding</p>
@@ -200,13 +215,13 @@
                         </div>
                         
                         <div class="p-4 bg-red-100 rounded-xl border-2 border-red-300">
-                            <p class="text-sm font-bold text-red-700">📊 Monthly cost: 50 invoices × $150 = <span class="text-2xl">$7,500</span></p>
+                            <p class="text-sm font-bold text-red-700">📊 Monthly cost: 50 invoices × $150 = <span class="text-2xl counter" data-target="7500" data-prefix="$">$0</span></p>
                         </div>
                     </div>
                 </div>
                 
                 <!-- With Smart Invoice -->
-                <div class="group relative">
+                <div class="group relative" data-animate>
                     <div class="absolute inset-0 bg-gradient-to-br from-green-100 to-emerald-50 rounded-3xl blur-xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
                     <div class="relative bg-white rounded-3xl p-10 shadow-xl border-2 border-green-200">
                         <div class="flex items-center gap-3 mb-10">
@@ -218,28 +233,28 @@
                         </div>
                         
                         <div class="space-y-4 mb-8">
-                            <div class="flex items-start gap-4 p-4 bg-green-50 rounded-xl border border-green-200/50">
+                            <div class="flex items-start gap-4 p-4 bg-green-50 rounded-xl border border-green-200/50" data-stagger>
                                 <div class="text-2xl flex-shrink-0">⚡</div>
                                 <div>
                                     <p class="font-bold text-gray-900">60 seconds per invoice</p>
                                     <p class="text-sm text-gray-600">Save 179 hours/month</p>
                                 </div>
                             </div>
-                            <div class="flex items-start gap-4 p-4 bg-green-50 rounded-xl border border-green-200/50">
+                            <div class="flex items-start gap-4 p-4 bg-green-50 rounded-xl border border-green-200/50" data-stagger>
                                 <div class="text-2xl flex-shrink-0">✅</div>
                                 <div>
                                     <p class="font-bold text-gray-900">Zero calculation errors</p>
                                     <p class="text-sm text-gray-600">Automated precision</p>
                                 </div>
                             </div>
-                            <div class="flex items-start gap-4 p-4 bg-green-50 rounded-xl border border-green-200/50">
+                            <div class="flex items-start gap-4 p-4 bg-green-50 rounded-xl border border-green-200/50" data-stagger>
                                 <div class="text-2xl flex-shrink-0">⏱️</div>
                                 <div>
                                     <p class="font-bold text-gray-900">7 days average payment</p>
                                     <p class="text-sm text-gray-600">2x faster cash flow</p>
                                 </div>
                             </div>
-                            <div class="flex items-start gap-4 p-4 bg-green-50 rounded-xl border border-green-200/50">
+                            <div class="flex items-start gap-4 p-4 bg-green-50 rounded-xl border border-green-200/50" data-stagger>
                                 <div class="text-2xl flex-shrink-0">😊</div>
                                 <div>
                                     <p class="font-bold text-gray-900">Professional branding</p>
@@ -249,7 +264,7 @@
                         </div>
                         
                         <div class="p-4 bg-green-100 rounded-xl border-2 border-green-300">
-                            <p class="text-sm font-bold text-green-700">💰 Monthly savings: <span class="text-2xl">$7,500</span> + faster payments</p>
+                            <p class="text-sm font-bold text-green-700">💰 Monthly savings: <span class="text-2xl counter" data-target="7500" data-prefix="$">$0</span> + faster payments</p>
                         </div>
                     </div>
                 </div>
@@ -263,7 +278,7 @@
 <!-- ============================================================ -->
 <section id="demo" class="py-24 bg-white relative overflow-hidden">
     <div class="container px-6">
-        <div class="text-center mb-20 space-y-4">
+        <div class="text-center mb-20 space-y-4" data-animate>
             <span class="inline-block px-6 py-2 bg-blue-100 text-blue-700 rounded-full font-bold text-sm uppercase tracking-wider">Simplified Process</span>
             <h2 class="text-6xl md:text-7xl font-black text-gray-900">3 Steps to Professional Invoices</h2>
             <p class="text-xl text-gray-600">From idea to paid in minutes, not hours</p>
@@ -273,18 +288,18 @@
             <!-- Step 1 -->
             <div class="mb-24">
                 <div class="grid md:grid-cols-2 gap-12 items-center">
-                    <div class="group">
+                    <div class="group" data-animate>
                         <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-12 shadow-xl border-2 border-blue-200 hover:shadow-2xl transition-all duration-300">
                             <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl text-white font-black text-3xl mb-8 shadow-lg group-hover:scale-110 transition-transform">1</div>
                             <h3 class="text-4xl font-black text-gray-900 mb-4">Add Your Details</h3>
                             <p class="text-lg text-gray-700 leading-relaxed mb-6">Enter client info, invoice items, and amounts. Our smart form auto-calculates taxes, discounts, and totals instantly.</p>
                             <div class="flex items-center gap-3 text-blue-600 font-bold">
                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
-                                <span>Takes just 45 seconds</span>
+                                <span>Takes just <span class="counter" data-target="45">0</span> seconds</span>
                             </div>
                         </div>
                     </div>
-                    <div class="relative group hidden md:block">
+                    <div class="relative group hidden md:block" data-animate>
                         <div class="absolute -inset-4 bg-gradient-to-r from-blue-400 to-blue-500 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
                         <div class="relative bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
                             <div class="space-y-4">
@@ -306,7 +321,7 @@
             <!-- Step 2 -->
             <div class="mb-24">
                 <div class="grid md:grid-cols-2 gap-12 items-center">
-                    <div class="relative group hidden md:block order-2 md:order-1">
+                    <div class="relative group hidden md:block order-2 md:order-1" data-animate>
                         <div class="absolute -inset-4 bg-gradient-to-r from-purple-400 to-purple-500 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
                         <div class="relative bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
                             <div class="space-y-4">
@@ -324,7 +339,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="group order-1 md:order-2">
+                    <div class="group order-1 md:order-2" data-animate>
                         <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-3xl p-12 shadow-xl border-2 border-purple-200 hover:shadow-2xl transition-all duration-300">
                             <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl text-white font-black text-3xl mb-8 shadow-lg group-hover:scale-110 transition-transform">2</div>
                             <h3 class="text-4xl font-black text-gray-900 mb-4">Customize & Brand</h3>
@@ -341,18 +356,18 @@
             <!-- Step 3 -->
             <div>
                 <div class="grid md:grid-cols-2 gap-12 items-center">
-                    <div class="group">
+                    <div class="group" data-animate>
                         <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-3xl p-12 shadow-xl border-2 border-green-200 hover:shadow-2xl transition-all duration-300">
                             <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl text-white font-black text-3xl mb-8 shadow-lg group-hover:scale-110 transition-transform">3</div>
                             <h3 class="text-4xl font-black text-gray-900 mb-4">Send & Get Paid</h3>
                             <p class="text-lg text-gray-700 leading-relaxed mb-6">Send via email or WhatsApp instantly. Track opens, set smart reminders, get paid 3x faster with automated follow-ups.</p>
                             <div class="flex items-center gap-3 text-green-600 font-bold">
                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
-                                <span>Average payment: 7 days vs 21 days</span>
+                                <span>Average payment: <span class="counter" data-target="7">0</span> days vs <span class="counter" data-target="21">0</span> days</span>
                             </div>
                         </div>
                     </div>
-                    <div class="relative group hidden md:block">
+                    <div class="relative group hidden md:block" data-animate>
                         <div class="absolute -inset-4 bg-gradient-to-r from-green-400 to-green-500 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
                         <div class="relative bg-white rounded-3xl shadow-2xl p-8 border border-gray-100 space-y-4">
                             <div class="flex items-center gap-3 p-4 bg-green-50 rounded-xl border-2 border-green-200">
@@ -383,43 +398,43 @@
 <!-- ============================================================ -->
 <section class="py-24 bg-gradient-to-b from-gray-50 to-white">
     <div class="container px-6">
-        <div class="text-center mb-20 space-y-4">
+        <div class="text-center mb-20 space-y-4" data-animate>
             <span class="inline-block px-6 py-2 bg-purple-100 text-purple-700 rounded-full font-bold text-sm uppercase tracking-wider">Powerful Features</span>
             <h2 class="text-6xl md:text-7xl font-black text-gray-900">Everything Built for Scale</h2>
         </div>
         
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-blue-300 cursor-pointer">
+            <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-blue-300 cursor-pointer" data-animate>
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-4xl mb-6 group-hover:scale-110 transition-transform shadow-lg">⚡</div>
                 <h3 class="text-2xl font-black text-gray-900 mb-3">Lightning Speed</h3>
-                <p class="text-gray-600 leading-relaxed">60-second invoices. Say goodbye to spreadsheets and slow processes.</p>
+                <p class="text-gray-600 leading-relaxed"><span class="counter" data-target="60">0</span>-second invoices. Say goodbye to spreadsheets and slow processes.</p>
             </div>
             
-            <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-purple-300 cursor-pointer">
+            <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-purple-300 cursor-pointer" data-animate>
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl text-4xl mb-6 group-hover:scale-110 transition-transform shadow-lg">🎨</div>
                 <h3 class="text-2xl font-black text-gray-900 mb-3">Your Brand</h3>
                 <p class="text-gray-600 leading-relaxed">Fully branded templates that look like design professionals created them.</p>
             </div>
             
-            <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-green-300 cursor-pointer">
+            <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-green-300 cursor-pointer" data-animate>
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-xl text-4xl mb-6 group-hover:scale-110 transition-transform shadow-lg">📊</div>
                 <h3 class="text-2xl font-black text-gray-900 mb-3">Real Analytics</h3>
                 <p class="text-gray-600 leading-relaxed">Powerful dashboards showing revenue, payments, and cash flow trends.</p>
             </div>
             
-            <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-cyan-300 cursor-pointer">
+            <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-cyan-300 cursor-pointer" data-animate>
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-xl text-4xl mb-6 group-hover:scale-110 transition-transform shadow-lg">✉️</div>
                 <h3 class="text-2xl font-black text-gray-900 mb-3">Email & WhatsApp</h3>
                 <p class="text-gray-600 leading-relaxed">Send professional PDFs instantly through any channel your clients prefer.</p>
             </div>
             
-            <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-yellow-300 cursor-pointer">
+            <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-yellow-300 cursor-pointer" data-animate>
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl text-4xl mb-6 group-hover:scale-110 transition-transform shadow-lg">🔔</div>
                 <h3 class="text-2xl font-black text-gray-900 mb-3">Smart Reminders</h3>
                 <p class="text-gray-600 leading-relaxed">Automated payment reminders that get clients to pay faster naturally.</p>
             </div>
             
-            <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-indigo-300 cursor-pointer">
+            <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-indigo-300 cursor-pointer" data-animate>
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl text-4xl mb-6 group-hover:scale-110 transition-transform shadow-lg">🌍</div>
                 <h3 class="text-2xl font-black text-gray-900 mb-3">Global Ready</h3>
                 <p class="text-gray-600 leading-relaxed">Multi-currency support for billing clients anywhere in the world.</p>
@@ -433,14 +448,14 @@
 <!-- ============================================================ -->
 <section class="py-24 bg-white">
     <div class="container px-6">
-        <div class="text-center mb-20 space-y-4">
+        <div class="text-center mb-20 space-y-4" data-animate>
             <span class="inline-block px-6 py-2 bg-yellow-100 text-yellow-700 rounded-full font-bold text-sm uppercase tracking-wider">Success Stories</span>
             <h2 class="text-6xl md:text-7xl font-black text-gray-900">Loved by Thousands</h2>
             <p class="text-xl text-gray-600">Real results from real users like you</p>
         </div>
         
         <div class="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            <div class="group bg-gradient-to-br from-white to-gray-50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-blue-300">
+            <div class="group bg-gradient-to-br from-white to-gray-50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-blue-300" data-animate>
                 <div class="flex gap-1 mb-6 text-2xl">⭐⭐⭐⭐⭐</div>
                 <p class="text-lg text-gray-700 leading-relaxed mb-8 font-medium">"Cut my invoicing time from 3 hours to 60 seconds. The tracking feature alone has saved me thousands in unpaid invoices."</p>
                 <div class="flex items-center gap-4 pt-6 border-t border-gray-200">
@@ -452,7 +467,7 @@
                 </div>
             </div>
             
-            <div class="group bg-gradient-to-br from-white to-gray-50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-green-300">
+            <div class="group bg-gradient-to-br from-white to-gray-50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-green-300" data-animate>
                 <div class="flex gap-1 mb-6 text-2xl">⭐⭐⭐⭐⭐</div>
                 <p class="text-lg text-gray-700 leading-relaxed mb-8 font-medium">"No credit card required was huge for us. Been using it for 6 months and it's genuinely the best solution we've found."</p>
                 <div class="flex items-center gap-4 pt-6 border-t border-gray-200">
@@ -464,7 +479,7 @@
                 </div>
             </div>
             
-            <div class="group bg-gradient-to-br from-white to-gray-50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-purple-300">
+            <div class="group bg-gradient-to-br from-white to-gray-50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-purple-300" data-animate>
                 <div class="flex gap-1 mb-6 text-2xl">⭐⭐⭐⭐⭐</div>
                 <p class="text-lg text-gray-700 leading-relaxed mb-8 font-medium">"My payment cycle went from 25 days to 7 days. This tool literally changed my cash flow and business growth trajectory."</p>
                 <div class="flex items-center gap-4 pt-6 border-t border-gray-200">
@@ -480,7 +495,7 @@
 </section>
 
 <!-- ============================================================ -->
-<!-- SOCIAL PROOF - Stats Section -->
+<!-- SOCIAL PROOF - Stats Section with Counter Animations -->
 <!-- ============================================================ -->
 <section class="py-24 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 text-white overflow-hidden relative">
     <div class="absolute inset-0 opacity-20">
@@ -489,35 +504,98 @@
     </div>
     
     <div class="container px-6 relative z-10">
-        <div class="text-center mb-20">
+        <div class="text-center mb-20" data-animate>
             <h2 class="text-5xl md:text-6xl font-black mb-4">The Smart Invoice Impact</h2>
             <p class="text-2xl text-white/80">Join thousands of successful businesses</p>
         </div>
         
         <div class="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            <div class="group bg-white/10 backdrop-blur-xl rounded-2xl p-8 text-center border border-white/30 hover:bg-white/20 transition-all duration-300 hover:scale-110">
-                <div class="text-6xl font-black mb-3 text-white group-hover:scale-110 transition-transform">10K+</div>
+            <div class="group bg-white/10 backdrop-blur-xl rounded-2xl p-8 text-center border border-white/30 hover:bg-white/20 transition-all duration-300 hover:scale-110" data-animate>
+                <div class="text-6xl font-black mb-3 text-white group-hover:scale-110 transition-transform counter" data-target="10000" data-suffix="+" data-prefix="">0+</div>
                 <p class="text-lg font-semibold text-white/90">Active Users</p>
                 <p class="text-sm text-white/60 mt-2">Growing every day</p>
             </div>
             
-            <div class="group bg-white/10 backdrop-blur-xl rounded-2xl p-8 text-center border border-white/30 hover:bg-white/20 transition-all duration-300 hover:scale-110">
-                <div class="text-6xl font-black mb-3 text-white group-hover:scale-110 transition-transform">$50M+</div>
+            <div class="group bg-white/10 backdrop-blur-xl rounded-2xl p-8 text-center border border-white/30 hover:bg-white/20 transition-all duration-300 hover:scale-110" data-animate>
+                <div class="text-6xl font-black mb-3 text-white group-hover:scale-110 transition-transform counter" data-target="50" data-suffix="M+" data-prefix="$">$0M+</div>
                 <p class="text-lg font-semibold text-white/90">Invoices Sent</p>
                 <p class="text-sm text-white/60 mt-2">Processed monthly</p>
             </div>
             
-            <div class="group bg-white/10 backdrop-blur-xl rounded-2xl p-8 text-center border border-white/30 hover:bg-white/20 transition-all duration-300 hover:scale-110">
-                <div class="text-6xl font-black mb-3 text-white group-hover:scale-110 transition-transform">3x</div>
+            <div class="group bg-white/10 backdrop-blur-xl rounded-2xl p-8 text-center border border-white/30 hover:bg-white/20 transition-all duration-300 hover:scale-110" data-animate>
+                <div class="text-6xl font-black mb-3 text-white group-hover:scale-110 transition-transform counter" data-target="3" data-suffix="x">0x</div>
                 <p class="text-lg font-semibold text-white/90">Faster Payments</p>
                 <p class="text-sm text-white/60 mt-2">Average improvement</p>
             </div>
             
-            <div class="group bg-white/10 backdrop-blur-xl rounded-2xl p-8 text-center border border-white/30 hover:bg-white/20 transition-all duration-300 hover:scale-110">
-                <div class="text-6xl font-black mb-3 text-white group-hover:scale-110 transition-transform">99%</div>
+            <div class="group bg-white/10 backdrop-blur-xl rounded-2xl p-8 text-center border border-white/30 hover:bg-white/20 transition-all duration-300 hover:scale-110" data-animate>
+                <div class="text-6xl font-black mb-3 text-white group-hover:scale-110 transition-transform counter" data-target="99" data-suffix="%">0%</div>
                 <p class="text-lg font-semibold text-white/90">Satisfaction</p>
                 <p class="text-sm text-white/60 mt-2">Customer rated</p>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- FAQ SECTION - Comprehensive -->
+<!-- ============================================================ -->
+<section class="py-24 bg-gradient-to-b from-white to-gray-50">
+    <div class="container px-6">
+        <div class="text-center mb-20 space-y-4" data-animate>
+            <span class="inline-block px-6 py-2 bg-green-100 text-green-700 rounded-full font-bold text-sm uppercase tracking-wider">Questions?</span>
+            <h2 class="text-6xl md:text-7xl font-black text-gray-900">Frequently Asked Questions</h2>
+            <p class="text-xl text-gray-600">Everything you need to know to get started</p>
+        </div>
+        
+        <div class="max-w-4xl mx-auto space-y-4">
+            <details class="group bg-white rounded-2xl p-8 shadow-lg border border-gray-200 hover:border-blue-300 transition-all" data-animate>
+                <summary class="cursor-pointer list-none flex items-center justify-between font-black text-xl text-gray-900">
+                    <span>Is Smart Invoice really free?</span>
+                    <svg class="w-6 h-6 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <p class="mt-6 text-gray-700 leading-relaxed text-lg">Yes! Smart Invoice is completely free to use with unlimited invoices. No hidden fees, no credit card required, no trial periods. We also offer premium features for businesses that need advanced functionality, but the core invoicing platform is always free.</p>
+            </details>
+            
+            <details class="group bg-white rounded-2xl p-8 shadow-lg border border-gray-200 hover:border-purple-300 transition-all" data-animate>
+                <summary class="cursor-pointer list-none flex items-center justify-between font-black text-xl text-gray-900">
+                    <span>How does the 60-second invoice creation work?</span>
+                    <svg class="w-6 h-6 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <p class="mt-6 text-gray-700 leading-relaxed text-lg">Our smart form interface auto-saves your business info and client details. You just select the client, add items, and click send. Taxes, discounts, and totals are calculated automatically. Most users create their first invoice in under 60 seconds!</p>
+            </details>
+            
+            <details class="group bg-white rounded-2xl p-8 shadow-lg border border-gray-200 hover:border-green-300 transition-all" data-animate>
+                <summary class="cursor-pointer list-none flex items-center justify-between font-black text-xl text-gray-900">
+                    <span>Can I customize invoices with my brand?</span>
+                    <svg class="w-6 h-6 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <p class="mt-6 text-gray-700 leading-relaxed text-lg">Absolutely! Upload your logo, choose brand colors, customize email templates, and add your business information. Every invoice you send will look professionally designed and perfectly on-brand.</p>
+            </details>
+            
+            <details class="group bg-white rounded-2xl p-8 shadow-lg border border-gray-200 hover:border-yellow-300 transition-all" data-animate>
+                <summary class="cursor-pointer list-none flex items-center justify-between font-black text-xl text-gray-900">
+                    <span>How do payment reminders work?</span>
+                    <svg class="w-6 h-6 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <p class="mt-6 text-gray-700 leading-relaxed text-lg">Set automated reminders that send friendly payment notifications before and after the due date. Our system tracks opens and sends gentle nudges that maintain good client relationships while getting you paid faster.</p>
+            </details>
+            
+            <details class="group bg-white rounded-2xl p-8 shadow-lg border border-gray-200 hover:border-indigo-300 transition-all" data-animate>
+                <summary class="cursor-pointer list-none flex items-center justify-between font-black text-xl text-gray-900">
+                    <span>What payment methods can I accept?</span>
+                    <svg class="w-6 h-6 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <p class="mt-6 text-gray-700 leading-relaxed text-lg">Smart Invoice integrates with popular payment gateways like Stripe, PayPal, and bank transfers. Your clients can pay directly from the invoice with one click. You can also add custom payment instructions for checks, wire transfers, or other methods.</p>
+            </details>
+            
+            <details class="group bg-white rounded-2xl p-8 shadow-lg border border-gray-200 hover:border-pink-300 transition-all" data-animate>
+                <summary class="cursor-pointer list-none flex items-center justify-between font-black text-xl text-gray-900">
+                    <span>Is my data secure?</span>
+                    <svg class="w-6 h-6 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <p class="mt-6 text-gray-700 leading-relaxed text-lg">Yes! We use bank-level encryption (256-bit SSL), secure cloud storage, and regular security audits. Your data is backed up daily, and we never sell or share your information with third parties. We're GDPR and SOC 2 compliant.</p>
+            </details>
         </div>
     </div>
 </section>
@@ -532,10 +610,10 @@
     </div>
     
     <div class="container px-6 relative z-10">
-        <div class="max-w-4xl mx-auto text-center space-y-10">
+        <div class="max-w-4xl mx-auto text-center space-y-10" data-animate>
             <div class="space-y-4">
                 <h2 class="text-6xl md:text-7xl font-black leading-tight">Your Invoicing Just Got Easier</h2>
-                <p class="text-2xl text-white/80">Join thousands and start creating professional invoices in 60 seconds</p>
+                <p class="text-2xl text-white/80">Join <span class="counter" data-target="10000" data-suffix="+">0+</span> businesses and start creating professional invoices in <span class="counter" data-target="60">0</span> seconds</p>
             </div>
             
             <div class="flex flex-col sm:flex-row gap-4 justify-center pt-8">
@@ -558,4 +636,26 @@
         </div>
     </div>
 </section>
+
+<style>
+@keyframes blob-morph {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+.animate-blob-morph {
+    animation: blob-morph 8s ease-in-out infinite;
+}
+
+@keyframes blob {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+.animate-blob {
+    animation: blob 7s ease-in-out infinite;
+}
+</style>
 {% endblock %}
