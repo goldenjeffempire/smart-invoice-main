@@ -3,19 +3,19 @@
 {% block settings_content %}
 <!-- Notification Settings Card -->
 <div class="setting-card">
-    <div class="setting-card-header bg-gradient-to-r from-purple-50 to-purple-100
-        <h2 class="text-xl font-bold text-purple-900 Notifications</h2>
+    <div class="setting-card-header bg-gradient-to-r from-purple-50 to-purple-100">
+        <h2 class="text-xl font-bold text-purple-900">Email Notifications</h2>
         <p class="text-purple-700 text-sm mt-1">Choose which emails you'd like to receive</p>
     </div>
     <div class="setting-card-body space-y-6">
         <!-- Invoice Notifications -->
-        <div class="pb-6 border-b border-gray-200
+        <div class="pb-6 border-b border-gray-200">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Invoice Notifications</h3>
             <div class="space-y-3">
                 <label class="flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition">
                     <input type="checkbox" checked class="w-5 h-5 rounded text-purple-600 focus:ring-2 focus:ring-purple-500">
                     <div class="flex-1">
-                        <p class="font-medium text-gray-900 Created</p>
+                        <p class="font-medium text-gray-900">Invoice Created</p>
                         <p class="text-sm text-gray-600 mt-0.5">Notify when a new invoice is created</p>
                     </div>
                 </label>
@@ -23,7 +23,7 @@
                 <label class="flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition">
                     <input type="checkbox" checked class="w-5 h-5 rounded text-purple-600 focus:ring-2 focus:ring-purple-500">
                     <div class="flex-1">
-                        <p class="font-medium text-gray-900 Received</p>
+                        <p class="font-medium text-gray-900">Payment Received</p>
                         <p class="text-sm text-gray-600 mt-0.5">Alert when a payment is marked as received</p>
                     </div>
                 </label>
@@ -31,7 +31,7 @@
                 <label class="flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition">
                     <input type="checkbox" checked class="w-5 h-5 rounded text-purple-600 focus:ring-2 focus:ring-purple-500">
                     <div class="flex-1">
-                        <p class="font-medium text-gray-900 Viewed</p>
+                        <p class="font-medium text-gray-900">Invoice Viewed</p>
                         <p class="text-sm text-gray-600 mt-0.5">Notify when a client views your invoice</p>
                     </div>
                 </label>
@@ -39,13 +39,13 @@
         </div>
 
         <!-- Account Notifications -->
-        <div class="pb-6 border-b border-gray-200
+        <div class="pb-6 border-b border-gray-200">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Account Notifications</h3>
             <div class="space-y-3">
                 <label class="flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition">
                     <input type="checkbox" checked class="w-5 h-5 rounded text-purple-600 focus:ring-2 focus:ring-purple-500">
                     <div class="flex-1">
-                        <p class="font-medium text-gray-900 Alerts</p>
+                        <p class="font-medium text-gray-900">Security Alerts</p>
                         <p class="text-sm text-gray-600 mt-0.5">Get alerts for security-related activities</p>
                     </div>
                 </label>
@@ -53,7 +53,7 @@
                 <label class="flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition">
                     <input type="checkbox" checked class="w-5 h-5 rounded text-purple-600 focus:ring-2 focus:ring-purple-500">
                     <div class="flex-1">
-                        <p class="font-medium text-gray-900 Changes</p>
+                        <p class="font-medium text-gray-900">Password Changes</p>
                         <p class="text-sm text-gray-600 mt-0.5">Confirm when your password is changed</p>
                     </div>
                 </label>
@@ -61,7 +61,7 @@
                 <label class="flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition">
                     <input type="checkbox" class="w-5 h-5 rounded text-purple-600 focus:ring-2 focus:ring-purple-500">
                     <div class="flex-1">
-                        <p class="font-medium text-gray-900 Updates</p>
+                        <p class="font-medium text-gray-900">Product Updates</p>
                         <p class="text-sm text-gray-600 mt-0.5">Receive updates about new features and improvements</p>
                     </div>
                 </label>
@@ -91,7 +91,7 @@
         </div>
 
         <!-- Save Button -->
-        <div class="pt-6 border-t border-gray-200
+        <div class="pt-6 border-t border-gray-200">
             <button class="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -104,8 +104,8 @@
 
 <!-- Email Frequency -->
 <div class="setting-card mt-8">
-    <div class="setting-card-header bg-gradient-to-r from-slate-50 to-slate-100
-        <h3 class="text-lg font-bold text-slate-900 Digest Frequency</h3>
+    <div class="setting-card-header bg-gradient-to-r from-slate-50 to-slate-100">
+        <h3 class="text-lg font-bold text-slate-900">Email Digest Frequency</h3>
         <p class="text-slate-700 text-sm mt-1">How often you want to receive email summaries</p>
     </div>
     <div class="setting-card-body">
@@ -113,24 +113,24 @@
             <label class="flex items-center gap-3 p-4 rounded-lg border-2 border-purple-200 bg-purple-50 cursor-pointer">
                 <input type="radio" checked name="digest" class="w-5 h-5">
                 <div>
-                    <p class="font-medium text-gray-900
-                    <p class="text-sm text-gray-600 notifications as they happen</p>
+                    <p class="font-medium text-gray-900">Immediate</p>
+                    <p class="text-sm text-gray-600">Get notifications as they happen</p>
                 </div>
             </label>
 
             <label class="flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition">
                 <input type="radio" name="digest" class="w-5 h-5">
                 <div>
-                    <p class="font-medium text-gray-900 Digest</p>
-                    <p class="text-sm text-gray-600 a summary once per day</p>
+                    <p class="font-medium text-gray-900">Daily Digest</p>
+                    <p class="text-sm text-gray-600">Get a summary once per day</p>
                 </div>
             </label>
 
             <label class="flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition">
                 <input type="radio" name="digest" class="w-5 h-5">
                 <div>
-                    <p class="font-medium text-gray-900 Digest</p>
-                    <p class="text-sm text-gray-600 a weekly summary on Monday</p>
+                    <p class="font-medium text-gray-900">Weekly Digest</p>
+                    <p class="text-sm text-gray-600">Get a weekly summary on Monday</p>
                 </div>
             </label>
         </div>

@@ -513,7 +513,7 @@ def settings_billing(request):
     from django.db.models import Count, Q
     
     # Get invoice statistics for user
-    invoices = Invoice.objects.filter  # type: ignore(user=request.user)
+    invoices = Invoice.objects.filter(user=request.user)  # type: ignore
     invoice_count = invoices.filter(invoice_date__month=datetime.now().month).count()
     paid_invoices = invoices.filter(status='paid').count()
     
@@ -605,7 +605,7 @@ def admin_dashboard(request):
     total_invoices = Invoice.objects.count()
     
     # Optimize query with prefetch_related to avoid N+1
-    paid_invoices_qs = Invoice.objects.filter  # type: ignore(status="paid").prefetch_related('line_items')
+    paid_invoices_qs = Invoice.objects.filter(status="paid").prefetch_related('line_items')  # type: ignore
     total_revenue = sum(inv.total for inv in paid_invoices_qs) if paid_invoices_qs.exists() else Decimal("0")
     paid_invoices = paid_invoices_qs.count()
     paid_rate = (paid_invoices / total_invoices * 100) if total_invoices > 0 else 0
@@ -657,7 +657,7 @@ def profile(request):
 @login_required
 def invoice_templates(request):
     """Manage invoice templates."""
-    templates = InvoiceTemplate.objects.filter  # type: ignore(user=request.user)
+    templates = InvoiceTemplate.objects.filter(user=request.user)  # type: ignore
     
     if request.method == "POST":
         form = InvoiceTemplateForm(request.POST)
@@ -688,7 +688,7 @@ def delete_template(request, template_id):
 @login_required
 def recurring_invoices(request):
     """Manage recurring invoices."""
-    recurring = RecurringInvoice.objects.filter  # type: ignore(user=request.user)
+    recurring = RecurringInvoice.objects.filter(user=request.user)  # type: ignore
     
     if request.method == "POST":
         form = RecurringInvoiceForm(request.POST)
@@ -717,7 +717,7 @@ def bulk_export(request):
         messages.error(request, "Please select at least one invoice.")
         return redirect("dashboard")
     
-    invoices = Invoice.objects.filter  # type: ignore(id__in=invoice_ids, user=request.user).prefetch_related('line_items')
+    invoices = Invoice.objects.filter(id__in=invoice_ids, user=request.user).prefetch_related('line_items')  # type: ignore
     
     if export_format == 'csv':
         csv_data = InvoiceExport.export_to_csv(invoices)
@@ -744,7 +744,7 @@ def bulk_delete(request):
     if request.method == "POST":
         invoice_ids = request.POST.getlist('invoice_ids')
         if invoice_ids:
-            deleted_count, _ = Invoice.objects.filter  # type: ignore(id__in=invoice_ids, user=request.user).delete()
+            deleted_count, _ = Invoice.objects.filter(id__in=invoice_ids, user=request.user).delete()  # type: ignore
             messages.success(request, f"Deleted {deleted_count} invoice(s).")
         return redirect("dashboard")
     return redirect("dashboard")
