@@ -2,11 +2,32 @@
 
 ## Project Overview
 
-**Smart Invoice v4.0** is a professional Django 5.2.8-based invoicing SaaS platform with production-grade optimizations, comprehensive testing, and deployment infrastructure.
+**Smart Invoice v5.0** is undergoing a complete full-stack production-grade rebuild with modern component architecture, enhanced UI/UX, and enterprise-ready performance optimizations.
 
-**Status:** Production Ready ✅  
-**Version:** 4.0.0 (November 24, 2025)  
+**Status:** Rebuild In Progress 🚧  
+**Version:** 5.0.0-alpha (November 24, 2025)  
+**Previous Version:** 4.0.0 (Production Ready)  
 **Environment:** Replit Python 3.11 with Node.js
+
+## V5.0 Rebuild Initiative
+
+### Vision
+Complete modernization of Smart Invoice platform with modern frontend architecture, enhanced landing page experience, backend performance optimization, comprehensive testing, and production-ready CI/CD pipeline.
+
+### Current Phase: Phase 0 Complete ✅
+**Phase 0: Discovery & Architecture Baseline (COMPLETED)**
+- ✅ Comprehensive codebase audit completed
+- ✅ Architecture baseline document created
+- ✅ Preservation vs. rebuild strategy defined
+- ✅ Technology stack validated
+- ✅ Risk register established
+
+### Next Phase: Phase 1 Starting
+**Phase 1: Design System & Component Library (2 weeks)**
+- Component inventory and pattern library
+- Tailwind design tokens
+- Vite build system setup
+- Modern development workflow
 
 ## Current State
 
