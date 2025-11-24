@@ -61,7 +61,7 @@ def logout_view(request):
 def dashboard(request):
     # Fetch all user's invoices with line_items prefetched (single query with join)
     all_user_invoices = list(
-        Invoice.objects.filter  # type: ignore(user=request.user).prefetch_related('line_items')
+        Invoice.objects.filter(user=request.user).prefetch_related('line_items')  # type: ignore
     )
     
     # Filter in Python to reuse prefetched data
@@ -153,7 +153,7 @@ def invoice_detail(request, invoice_id):
 @login_required
 def edit_invoice(request, invoice_id):
     invoice = get_object_or_404(
-        Invoice.objects.prefetch_related(  # type: ignore'line_items'),
+        Invoice.objects.prefetch_related('line_items'),  # type: ignore
         id=invoice_id,
         user=request.user
     )
