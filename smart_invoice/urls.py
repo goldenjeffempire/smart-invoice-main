@@ -31,6 +31,9 @@ urlpatterns = [
     path("settings/security/", views.settings_security, name="settings_security"),
     path("settings/notifications/", views.settings_notifications, name="settings_notifications"),
     path("settings/billing/", views.settings_billing, name="settings_billing"),
+    # Design System (Phase 1)
+    path("components-showcase/", views.components_showcase, name="components_showcase"),
+    
     # Footer pages
     path("features/", views.features, name="features"),
     path("pricing/", views.pricing, name="pricing"),

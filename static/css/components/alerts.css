@@ -1,0 +1,294 @@
+/**
+ * Alert & Badge Components
+ * Version: 5.0.0
+ */
+
+/* ===================================
+   ALERTS
+   =================================== */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+
+.alert-icon {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.125rem;
+}
+
+.alert-content {
+  flex: 1;
+}
+
+.alert-title {
+  margin: 0 0 0.25rem 0;
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+}
+
+.alert-close {
+  flex-shrink: 0;
+  padding: 0.25rem;
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity var(--transition-fast);
+}
+
+.alert-close:hover {
+  opacity: 1;
+}
+
+/* Alert Variants */
+.alert-success {
+  background-color: var(--color-success-light);
+  border-color: var(--color-success);
+  color: var(--color-success-dark);
+}
+
+.alert-success .alert-icon {
+  color: var(--color-success-dark);
+}
+
+.alert-warning {
+  background-color: var(--color-warning-light);
+  border-color: var(--color-warning);
+  color: var(--color-warning-dark);
+}
+
+.alert-warning .alert-icon {
+  color: var(--color-warning-dark);
+}
+
+.alert-error {
+  background-color: var(--color-error-light);
+  border-color: var(--color-error);
+  color: var(--color-error-dark);
+}
+
+.alert-error .alert-icon {
+  color: var(--color-error-dark);
+}
+
+.alert-info {
+  background-color: var(--color-info-light);
+  border-color: var(--color-info);
+  color: var(--color-info-dark);
+}
+
+.alert-info .alert-icon {
+  color: var(--color-info-dark);
+}
+
+/* ===================================
+   BADGES
+   =================================== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  line-height: 1;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+/* Badge Variants */
+.badge-primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.badge-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-text-inverse);
+}
+
+.badge-success {
+  background-color: var(--color-success);
+  color: var(--color-text-inverse);
+}
+
+.badge-warning {
+  background-color: var(--color-warning);
+  color: #000000;
+}
+
+.badge-error {
+  background-color: var(--color-error);
+  color: var(--color-text-inverse);
+}
+
+.badge-info {
+  background-color: var(--color-info);
+  color: var(--color-text-inverse);
+}
+
+.badge-gray {
+  background-color: var(--color-gray-200);
+  color: var(--color-gray-700);
+}
+
+/* Outline Badges */
+.badge-outline {
+  background-color: transparent;
+  border: 1px solid currentColor;
+}
+
+.badge-outline.badge-primary {
+  color: var(--color-primary);
+}
+
+.badge-outline.badge-success {
+  color: var(--color-success);
+}
+
+.badge-outline.badge-warning {
+  color: var(--color-warning);
+}
+
+.badge-outline.badge-error {
+  color: var(--color-error);
+}
+
+.badge-outline.badge-info {
+  color: var(--color-info);
+}
+
+/* Badge Sizes */
+.badge-sm {
+  padding: 0.125rem 0.5rem;
+  font-size: var(--text-xs);
+}
+
+.badge-lg {
+  padding: 0.375rem 1rem;
+  font-size: var(--text-base);
+}
+
+/* Badge with Dot */
+.badge-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.badge-dot::before {
+  content: "";
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--radius-full);
+  background-color: currentColor;
+}
+
+/* ===================================
+   TOAST NOTIFICATIONS
+   =================================== */
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 400px;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--color-bg-primary);
+  border-left: 4px solid;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl);
+  animation: slideLeft 0.3s ease-out;
+}
+
+@keyframes slideLeft {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast-icon {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.toast-content {
+  flex: 1;
+  font-size: var(--text-sm);
+}
+
+.toast-close {
+  flex-shrink: 0;
+  padding: 0.25rem;
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity var(--transition-fast);
+}
+
+.toast-close:hover {
+  opacity: 1;
+}
+
+/* Toast Variants */
+.toast-success {
+  border-left-color: var(--color-success);
+}
+
+.toast-success .toast-icon {
+  color: var(--color-success);
+}
+
+.toast-error {
+  border-left-color: var(--color-error);
+}
+
+.toast-error .toast-icon {
+  color: var(--color-error);
+}
+
+.toast-warning {
+  border-left-color: var(--color-warning);
+}
+
+.toast-warning .toast-icon {
+  color: var(--color-warning);
+}
+
+.toast-info {
+  border-left-color: var(--color-info);
+}
+
+.toast-info .toast-icon {
+  color: var(--color-info);
+}

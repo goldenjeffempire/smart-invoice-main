@@ -1,0 +1,119 @@
+/**
+ * Smart Invoice Design System - Component Library
+ * Version: 5.0.0
+ * 
+ * This file imports all component modules
+ */
+
+/* Design Tokens (must be first) */
+@import 'design-tokens.css';
+
+/* Component Modules */
+@import 'components/buttons.css';
+@import 'components/forms.css';
+@import 'components/cards.css';
+@import 'components/alerts.css';
+@import 'components/tables.css';
+@import 'components/navigation.css';
+
+/* ===================================
+   GLOBAL UTILITY CLASSES
+   =================================== */
+
+/* Typography */
+.heading-1 { font-size: var(--text-5xl); font-weight: var(--font-bold); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); }
+.heading-2 { font-size: var(--text-4xl); font-weight: var(--font-bold); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); }
+.heading-3 { font-size: var(--text-3xl); font-weight: var(--font-semibold); line-height: var(--leading-tight); }
+.heading-4 { font-size: var(--text-2xl); font-weight: var(--font-semibold); line-height: var(--leading-tight); }
+.heading-5 { font-size: var(--text-xl); font-weight: var(--font-semibold); line-height: var(--leading-normal); }
+.heading-6 { font-size: var(--text-lg); font-weight: var(--font-semibold); line-height: var(--leading-normal); }
+
+.text-body-lg { font-size: var(--text-lg); line-height: var(--leading-relaxed); }
+.text-body { font-size: var(--text-base); line-height: var(--leading-normal); }
+.text-body-sm { font-size: var(--text-sm); line-height: var(--leading-normal); }
+
+.text-muted { color: var(--color-text-muted); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-error { color: var(--color-error); }
+.text-success { color: var(--color-success); }
+.text-warning { color: var(--color-warning); }
+.text-info { color: var(--color-info); }
+
+/* Layout */
+.container {
+  width: 100%;
+  max-width: var(--container-xl);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.section {
+  padding-top: var(--section-padding-mobile);
+  padding-bottom: var(--section-padding-mobile);
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-top: var(--section-padding-desktop);
+    padding-bottom: var(--section-padding-desktop);
+  }
+}
+
+/* Display */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-sm { gap: var(--spacing-sm); }
+.gap-md { gap: var(--spacing-md); }
+.gap-lg { gap: var(--spacing-lg); }
+
+/* Spacing */
+.m-0 { margin: 0; }
+.mt-auto { margin-top: auto; }
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+.mb-xl { margin-bottom: var(--spacing-xl); }
+
+.p-0 { padding: 0; }
+.p-sm { padding: var(--spacing-sm); }
+.p-md { padding: var(--spacing-md); }
+.p-lg { padding: var(--spacing-lg); }
+
+/* Borders */
+.border { border: 1px solid var(--color-border-light); }
+.border-t { border-top: 1px solid var(--color-border-light); }
+.border-b { border-bottom: 1px solid var(--color-border-light); }
+.rounded { border-radius: var(--radius-md); }
+.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-full { border-radius: var(--radius-full); }
+
+/* Shadows */
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+
+/* Backgrounds */
+.bg-white { background-color: var(--color-bg-primary); }
+.bg-gray-50 { background-color: var(--color-gray-50); }
+.bg-gray-100 { background-color: var(--color-gray-100); }
+.bg-primary { background-color: var(--color-primary); }
+.bg-success { background-color: var(--color-success); }
+.bg-error { background-color: var(--color-error); }
+
+/* Text Alignment */
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+/* Miscellaneous */
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.cursor-pointer { cursor: pointer; }
+.hidden { display: none; }
+.block { display: block; }
+.inline-block { display: inline-block; }

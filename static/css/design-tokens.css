@@ -1,0 +1,245 @@
+/**
+ * Smart Invoice Design System - Design Tokens
+ * Version: 5.0.0
+ * 
+ * This file contains all design tokens (CSS variables) for the Smart Invoice platform.
+ * These tokens ensure consistency across all components and pages.
+ */
+
+:root {
+  /* ===================================
+     BRAND COLORS
+     =================================== */
+  --color-primary: #6366f1;        /* Indigo 500 - Primary brand color */
+  --color-primary-hover: #4f46e5;  /* Indigo 600 - Hover state */
+  --color-primary-light: #818cf8;  /* Indigo 400 - Light variant */
+  --color-primary-dark: #3730a3;   /* Indigo 700 - Dark variant */
+  
+  --color-secondary: #64748b;      /* Slate 500 - Secondary actions */
+  --color-secondary-hover: #475569; /* Slate 600 */
+  --color-secondary-light: #94a3b8; /* Slate 400 */
+  
+  /* ===================================
+     SEMANTIC COLORS
+     =================================== */
+  --color-success: #10b981;        /* Green 500 - Success states */
+  --color-success-light: #d1fae5;  /* Green 100 - Backgrounds */
+  --color-success-dark: #059669;   /* Green 600 - Text */
+  
+  --color-warning: #f59e0b;        /* Amber 500 - Warning states */
+  --color-warning-light: #fef3c7;  /* Amber 100 */
+  --color-warning-dark: #d97706;   /* Amber 600 */
+  
+  --color-error: #ef4444;          /* Red 500 - Error states */
+  --color-error-light: #fee2e2;    /* Red 100 */
+  --color-error-dark: #dc2626;     /* Red 600 */
+  
+  --color-info: #3b82f6;           /* Blue 500 - Info states */
+  --color-info-light: #dbeafe;     /* Blue 100 */
+  --color-info-dark: #2563eb;      /* Blue 600 */
+  
+  /* ===================================
+     NEUTRAL COLORS (Gray Scale)
+     =================================== */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  
+  /* ===================================
+     TEXT COLORS
+     =================================== */
+  --color-text-primary: #1f2937;   /* Gray 800 - Primary text */
+  --color-text-secondary: #6b7280; /* Gray 500 - Secondary text */
+  --color-text-muted: #9ca3af;     /* Gray 400 - Muted text */
+  --color-text-disabled: #d1d5db;  /* Gray 300 - Disabled text */
+  --color-text-inverse: #ffffff;   /* White - Text on dark backgrounds */
+  
+  /* ===================================
+     BACKGROUND COLORS
+     =================================== */
+  --color-bg-primary: #ffffff;     /* White - Main background */
+  --color-bg-secondary: #f9fafb;   /* Gray 50 - Secondary background */
+  --color-bg-tertiary: #f3f4f6;    /* Gray 100 - Tertiary background */
+  --color-bg-dark: #1f2937;        /* Gray 800 - Dark background */
+  --color-bg-overlay: rgba(0, 0, 0, 0.5); /* Modal overlay */
+  
+  /* ===================================
+     BORDER COLORS
+     =================================== */
+  --color-border-light: #e5e7eb;   /* Gray 200 - Light borders */
+  --color-border-medium: #d1d5db;  /* Gray 300 - Medium borders */
+  --color-border-dark: #9ca3af;    /* Gray 400 - Dark borders */
+  --color-border-focus: #6366f1;   /* Primary - Focus state */
+  
+  /* ===================================
+     SPACING SCALE
+     =================================== */
+  --spacing-xs: 0.25rem;    /* 4px */
+  --spacing-sm: 0.5rem;     /* 8px */
+  --spacing-md: 1rem;       /* 16px */
+  --spacing-lg: 1.5rem;     /* 24px */
+  --spacing-xl: 2rem;       /* 32px */
+  --spacing-2xl: 3rem;      /* 48px */
+  --spacing-3xl: 4rem;      /* 64px */
+  --spacing-4xl: 6rem;      /* 96px */
+  --spacing-5xl: 8rem;      /* 128px */
+  
+  /* ===================================
+     TYPOGRAPHY
+     =================================== */
+  
+  /* Font Families */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+  
+  /* Font Sizes */
+  --text-xs: 0.75rem;       /* 12px */
+  --text-sm: 0.875rem;      /* 14px */
+  --text-base: 1rem;        /* 16px */
+  --text-lg: 1.125rem;      /* 18px */
+  --text-xl: 1.25rem;       /* 20px */
+  --text-2xl: 1.5rem;       /* 24px */
+  --text-3xl: 1.875rem;     /* 30px */
+  --text-4xl: 2.25rem;      /* 36px */
+  --text-5xl: 3rem;         /* 48px */
+  --text-6xl: 3.75rem;      /* 60px */
+  
+  /* Font Weights */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  
+  /* Line Heights */
+  --leading-tight: 1.2;     /* Headings */
+  --leading-normal: 1.5;    /* Body text */
+  --leading-relaxed: 1.75;  /* Long-form content */
+  
+  /* Letter Spacing */
+  --tracking-tight: -0.02em;  /* Headings */
+  --tracking-normal: 0;       /* Body text */
+  --tracking-wide: 0.025em;   /* Uppercase text */
+  
+  /* ===================================
+     SHADOWS
+     =================================== */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-none: 0 0 0 rgba(0, 0, 0, 0);
+  
+  /* Focus Shadow */
+  --shadow-focus: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  
+  /* ===================================
+     BORDER RADIUS
+     =================================== */
+  --radius-none: 0;
+  --radius-sm: 0.25rem;     /* 4px */
+  --radius-md: 0.375rem;    /* 6px */
+  --radius-lg: 0.5rem;      /* 8px */
+  --radius-xl: 1rem;        /* 16px */
+  --radius-2xl: 1.5rem;     /* 24px */
+  --radius-full: 9999px;    /* Pill shape */
+  
+  /* ===================================
+     TRANSITIONS
+     =================================== */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* ===================================
+     Z-INDEX SCALE
+     =================================== */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-toast: 1060;
+  --z-tooltip: 1070;
+  
+  /* ===================================
+     COMPONENT-SPECIFIC TOKENS
+     =================================== */
+  
+  /* Buttons */
+  --btn-padding-sm: 0.5rem 1rem;
+  --btn-padding-md: 0.625rem 1.25rem;
+  --btn-padding-lg: 0.75rem 1.5rem;
+  --btn-padding-xl: 1rem 2rem;
+  --btn-border-radius: var(--radius-md);
+  
+  /* Forms */
+  --input-height: 2.5rem;           /* 40px */
+  --input-padding: 0.5rem 0.75rem;
+  --input-border-width: 1px;
+  --input-border-color: var(--color-border-light);
+  --input-border-color-focus: var(--color-border-focus);
+  --input-border-radius: var(--radius-md);
+  
+  /* Cards */
+  --card-padding: 1.5rem;
+  --card-border-radius: var(--radius-lg);
+  --card-border-color: var(--color-border-light);
+  --card-shadow: var(--shadow-sm);
+  --card-shadow-hover: var(--shadow-md);
+  
+  /* Container */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1536px;
+  
+  /* Section Padding */
+  --section-padding-mobile: 2rem;
+  --section-padding-desktop: 4rem;
+  
+  /* Grid Gap */
+  --grid-gap-sm: 1rem;
+  --grid-gap-md: 1.5rem;
+  --grid-gap-lg: 2rem;
+}
+
+/* ===================================
+   DARK MODE TOKENS (Optional)
+   =================================== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Override tokens for dark mode */
+    --color-bg-primary: #111827;
+    --color-bg-secondary: #1f2937;
+    --color-bg-tertiary: #374151;
+    --color-text-primary: #f9fafb;
+    --color-text-secondary: #d1d5db;
+    --color-text-muted: #9ca3af;
+    --color-border-light: #374151;
+    --color-border-medium: #4b5563;
+  }
+}
+
+/* ===================================
+   PRINT STYLES TOKENS
+   =================================== */
+@media print {
+  :root {
+    --color-text-primary: #000000;
+    --color-bg-primary: #ffffff;
+    --shadow-sm: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+  }
+}
