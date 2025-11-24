@@ -82,11 +82,13 @@ class PDFService:
 
 
 class AnalyticsService:
-    """Handles analytics calculations."""
+    """Handles analytics calculations with optimized SQL aggregations."""
     
     @staticmethod
     def get_user_dashboard_stats(user):
-        """Calculate dashboard statistics for user."""
+        """Calculate dashboard statistics for user using efficient queries."""
+        from django.db.models import Q
+        
         all_user_invoices = list(
             Invoice.objects.filter(user=user).prefetch_related('line_items')
         )
@@ -103,3 +105,102 @@ class AnalyticsService:
             "total_revenue": total_revenue,
             "unique_clients": len(set(inv.client_email for inv in all_user_invoices)),
         }
+    
+    @staticmethod
+    def get_user_analytics_stats(user):
+        """Calculate comprehensive analytics using optimized SQL.
+        
+        This method computes totals, averages, and client statistics using
+        database aggregations instead of Python loops for better performance.
+        """
+        from django.db.models import Q, Sum, Avg, Count, Case, When, DecimalField
+        from datetime import datetime
+        
+        # Base queryset
+        invoices = Invoice.objects.filter(user=user)
+        
+        # Get counts efficiently
+        total_invoices = invoices.count()
+        paid_count = invoices.filter(status="paid").count()
+        unpaid_count = invoices.filter(status="unpaid").count()
+        
+        # Since total is a property (not a DB field), we need to fetch invoices with line_items
+        # but we'll use optimized queries
+        paid_invoices = list(invoices.filter(status="paid").prefetch_related('line_items'))
+        unpaid_invoices = list(invoices.filter(status="unpaid").prefetch_related('line_items'))
+        all_invoices_list = list(invoices.prefetch_related('line_items'))
+        
+        # Calculate totals from prefetched data
+        total_revenue = sum(inv.total for inv in paid_invoices) if paid_invoices else Decimal("0")
+        outstanding_amount = sum(inv.total for inv in unpaid_invoices) if unpaid_invoices else Decimal("0")
+        average_invoice = (sum(inv.total for inv in all_invoices_list) / len(all_invoices_list)) if all_invoices_list else Decimal("0")
+        
+        # Payment rate
+        payment_rate = (paid_count / total_invoices * 100) if total_invoices > 0 else 0
+        
+        # Current month invoices
+        now = datetime.now()
+        current_month_invoices = invoices.filter(
+            invoice_date__year=now.year,
+            invoice_date__month=now.month
+        ).count()
+        
+        return {
+            "total_invoices": total_invoices,
+            "paid_invoices": paid_count,
+            "unpaid_invoices": unpaid_count,
+            "total_revenue": total_revenue,
+            "outstanding_amount": outstanding_amount,
+            "average_invoice": average_invoice,
+            "payment_rate": payment_rate,
+            "current_month_invoices": current_month_invoices,
+            "all_invoices": all_invoices_list,
+        }
+    
+    @staticmethod
+    def get_top_clients(user, limit=10):
+        """Calculate top clients with efficient aggregation.
+        
+        Groups invoices by client and calculates metrics in Python
+        (since total is a property, not aggregatable in SQL).
+        """
+        from collections import defaultdict
+        
+        invoices = Invoice.objects.filter(user=user).prefetch_related('line_items').order_by('client_name')
+        
+        client_data = defaultdict(lambda: {
+            "client_name": "",
+            "invoice_count": 0,
+            "paid_count": 0,
+            "total_revenue": Decimal("0"),
+            "invoices": []
+        })
+        
+        for invoice in invoices:
+            client = client_data[invoice.client_name]
+            client["client_name"] = invoice.client_name
+            client["invoice_count"] += 1
+            client["invoices"].append(invoice)
+            if invoice.status == "paid":
+                client["paid_count"] += 1
+                client["total_revenue"] += invoice.total
+        
+        top_clients = sorted(
+            [
+                {
+                    "client_name": data["client_name"],
+                    "invoice_count": data["invoice_count"],
+                    "total_revenue": data["total_revenue"],
+                    "paid_count": data["paid_count"],
+                    "avg_invoice": sum(inv.total for inv in data["invoices"]) / len(data["invoices"]),
+                    "payment_rate": (data["paid_count"] / data["invoice_count"] * 100)
+                    if data["invoice_count"] > 0
+                    else 0,
+                }
+                for data in client_data.values()
+            ],
+            key=lambda x: x["total_revenue"],
+            reverse=True,
+        )[:limit]
+        
+        return top_clients

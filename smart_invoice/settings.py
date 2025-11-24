@@ -100,7 +100,6 @@ MIDDLEWARE = [
     "smart_invoice.security_middleware.SecurityEventLoggingMiddleware",
     "invoices.middleware.RequestResponseLoggingMiddleware",
     "invoices.middleware.RateLimitingMiddleware",
-    "invoices.middleware.SecurityHeadersEnhancedMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",

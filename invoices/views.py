@@ -535,33 +535,16 @@ def settings_billing(request):
 
 @login_required
 def analytics(request):
-    invoices = Invoice.objects.filter  # type: ignore(user=request.user).prefetch_related('line_items')
-
-    total_invoices = invoices.count()
-    paid_invoices = invoices.filter(status="paid").count()
-    unpaid_invoices = invoices.filter(status="unpaid").count()
-
-    # Calculate totals using invoice properties
-    paid_invoice_list = list(invoices.filter(status="paid"))
-    total_revenue = sum(inv.total for inv in paid_invoice_list) if paid_invoice_list else Decimal("0")
-
-    unpaid_invoice_list = list(invoices.filter(status="unpaid"))
-    outstanding_amount = sum(inv.total for inv in unpaid_invoice_list) if unpaid_invoice_list else Decimal("0")
-
-    all_invoices = list(invoices)
-    average_invoice = (
-        sum(inv.total for inv in all_invoices) / len(all_invoices)
-        if all_invoices
-        else Decimal("0")
-    )
-
-    payment_rate = (paid_invoices / total_invoices * 100) if total_invoices > 0 else 0
-
+    from invoices.services import AnalyticsService
+    
+    # Get optimized analytics stats
+    stats = AnalyticsService.get_user_analytics_stats(request.user)
+    top_clients = AnalyticsService.get_top_clients(request.user, limit=10)
+    
+    # Get monthly trend data
+    invoices = Invoice.objects.filter(user=request.user)
     now = datetime.now()
-    current_month_invoices = invoices.filter(
-        invoice_date__year=now.year, invoice_date__month=now.month
-    ).count()
-
+    
     monthly_data_raw = (
         invoices.annotate(month=TruncMonth("invoice_date"))
         .values("month")
@@ -592,54 +575,17 @@ def analytics(request):
         count = data_by_month.get((year, month), 0)
         monthly_data.append(count)
 
-    # Calculate top clients manually since total is a property
-    from collections import defaultdict
-    client_data = defaultdict(lambda: {
-        "client_name": "",
-        "invoice_count": 0,
-        "paid_count": 0,
-        "total_revenue": Decimal("0"),
-        "invoices": []
-    })
-
-    for invoice in all_invoices:
-        client = client_data[invoice.client_name]
-        client["client_name"] = invoice.client_name
-        client["invoice_count"] += 1
-        client["invoices"].append(invoice)
-        if invoice.status == "paid":
-            client["paid_count"] += 1
-            client["total_revenue"] += invoice.total
-
-    top_clients = sorted(
-        [
-            {
-                "client_name": data["client_name"],
-                "invoice_count": data["invoice_count"],
-                "total_revenue": data["total_revenue"],
-                "paid_count": data["paid_count"],
-                "avg_invoice": sum(inv.total for inv in data["invoices"]) / len(data["invoices"]),
-                "payment_rate": (data["paid_count"] / data["invoice_count"] * 100)
-                if data["invoice_count"] > 0
-                else 0,
-            }
-            for data in client_data.values()
-        ],
-        key=lambda x: x["total_revenue"],
-        reverse=True,
-    )[:10]
-
-    recent_invoices = invoices.order_by("-created_at")[:10]
+    recent_invoices = invoices.prefetch_related('line_items').order_by("-created_at")[:10]
 
     context = {
-        "total_invoices": total_invoices,
-        "paid_invoices": paid_invoices,
-        "unpaid_invoices": unpaid_invoices,
-        "total_revenue": total_revenue,
-        "outstanding_amount": outstanding_amount,
-        "average_invoice": average_invoice,
-        "payment_rate": payment_rate,
-        "current_month_invoices": current_month_invoices,
+        "total_invoices": stats["total_invoices"],
+        "paid_invoices": stats["paid_invoices"],
+        "unpaid_invoices": stats["unpaid_invoices"],
+        "total_revenue": stats["total_revenue"],
+        "outstanding_amount": stats["outstanding_amount"],
+        "average_invoice": stats["average_invoice"],
+        "payment_rate": stats["payment_rate"],
+        "current_month_invoices": stats["current_month_invoices"],
         "monthly_labels": json.dumps(monthly_labels),
         "monthly_data": json.dumps(monthly_data),
         "top_clients": top_clients,

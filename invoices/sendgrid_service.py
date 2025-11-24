@@ -4,7 +4,7 @@ import base64
 import json
 from typing import Dict, Any, Optional, Tuple
 from sendgrid import SendGridAPIClient, SendGridException
-from sendgrid.helpers.mail import Mail, From, To, ReplyTo, TemplateId, Personalization, Attachment, FileContent, FileName, FileType
+from sendgrid.helpers.mail import Mail, From, To, ReplyTo, TemplateId, Personalization, Attachment, FileContent, FileName, FileType, Content
 from django.core.files.base import ContentFile
 from django.http import HttpRequest
 from weasyprint import HTML
@@ -396,6 +396,45 @@ class SendGridEmailService:
     def _get_password_reset_url(self, token):
         """Get password reset URL."""
         return f"https://smartinvoice.example.com/password-reset-confirm/{token}/"
+    
+    def send_test_email(self, recipient_email):
+        """Send a test email to verify SendGrid configuration.
+        
+        Args:
+            recipient_email: Email address to send test to
+            
+        Returns:
+            dict: Result with 'status' and 'message' keys
+        """
+        if not self.is_configured:
+            return {
+                'status': 'error',
+                'configured': False,
+                'message': 'SendGrid API key not configured'
+            }
+        
+        try:
+            message = Mail()
+            message.from_email = From(self.PLATFORM_FROM_EMAIL, self.PLATFORM_FROM_NAME)
+            message.to = To(recipient_email)
+            message.subject = 'Smart Invoice - Email Test'
+            message.content = [
+                Content("text/plain", "If you received this email, your SendGrid configuration is working correctly!"),
+                Content("text/html", "<strong>Success!</strong> If you received this email, your SendGrid configuration is working correctly!")
+            ]
+            
+            response = self.client.send(message)
+            
+            return {
+                'status': 'sent',
+                'message': f'Test email sent successfully to {recipient_email}',
+                'status_code': response.status_code
+            }
+        except Exception as e:
+            return {
+                'status': 'error',
+                'message': f'Failed to send test email: {str(e)}'
+            }
 
 
 # Convenience function

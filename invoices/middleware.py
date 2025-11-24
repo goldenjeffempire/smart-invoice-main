@@ -77,34 +77,8 @@ class RateLimitingMiddleware(MiddlewareMixin):
         return None
 
 
-class SecurityHeadersEnhancedMiddleware(MiddlewareMixin):
-    """Add additional security headers."""
-    
-    def process_response(self, request, response):
-        # Referrer Policy
-        response['Referrer-Policy'] = 'strict-origin-when-cross-origin'
-        
-        # Permissions Policy (previously Feature-Policy)
-        response['Permissions-Policy'] = (
-            'geolocation=(), microphone=(), camera=(), payment=(), usb=(), '
-            'accelerometer=(), gyroscope=(), magnetometer=(), vr=(), xr=(), '
-            'sync-xhr=(), fullscreen=(self)'
-        )
-        
-        # X-Content-Type-Options (already set but enforce)
-        response['X-Content-Type-Options'] = 'nosniff'
-        
-        # X-Frame-Options
-        response['X-Frame-Options'] = 'DENY'
-        
-        # X-XSS-Protection
-        response['X-XSS-Protection'] = '1; mode=block'
-        
-        # Cache-Control for no-cache
-        if not response.get('Cache-Control'):
-            response['Cache-Control'] = 'public, max-age=3600'
-        
-        return response
+# Security headers are now handled by smart_invoice.security_middleware.SecurityHeadersMiddleware
+# This duplicate middleware class has been removed to clean up codebase
 
 
 def rate_limit_decorator(requests_per_hour=60):
