@@ -2,144 +2,98 @@
 
 {% block settings_content %}
 <!-- Business Settings Card -->
-<div class="setting-card">
-    <div class="setting-card-header bg-gradient-to-r from-blue-50 to-blue-100">
-        <h2 class="text-xl font-bold text-blue-900">Business Settings</h2>
-        <p class="text-blue-700 text-sm mt-1">Configure your business details, branding, and preferences</p>
+<div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden animate-slide-in-up">
+    <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-6">
+        <h2 class="text-2xl font-black text-white">Business Settings</h2>
+        <p class="text-blue-100 text-sm mt-1">Configure your company details and branding</p>
     </div>
-    <form method="POST" enctype="multipart/form-data" class="setting-card-body">
+    <form method="POST" enctype="multipart/form-data" class="p-8 space-y-6">
         {% csrf_token %}
         <input type="hidden" name="tab" value="business">
 
         <!-- Company Name -->
         <div>
-            <label for="id_company_name" class="block text-sm font-semibold text-gray-700 mb-2">
-                Company Name
-                <span class="text-red-500">*</span>
-            </label>
+            <label class="block text-sm font-bold text-gray-900 mb-2">Company Name *</label>
             {{ profile_form.company_name }}
-            {% if profile_form.company_name.errors %}
-            <p class="mt-1 text-xs text-red-600">{{ profile_form.company_name.errors.0 }}</p>
-            {% endif %}
+            {% if profile_form.company_name.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.company_name.errors.0 }}</p>{% endif %}
         </div>
 
         <!-- Logo Upload -->
-        <div>
-            <label for="id_company_logo" class="block text-sm font-semibold text-gray-700 mb-3">Company Logo</label>
+        <div class="border-t-2 border-gray-200 pt-6">
+            <label class="block text-sm font-bold text-gray-900 mb-3">Company Logo</label>
             <div class="flex items-start gap-6">
                 <div class="flex-1">
-                    <div class="relative">
-                        {{ profile_form.company_logo }}
-                        <p class="mt-2 text-xs text-gray-500">Upload PNG, JPG or GIF (Max 5MB)</p>
-                    </div>
-                    {% if profile_form.company_logo.errors %}
-                    <p class="mt-1 text-xs text-red-600">{{ profile_form.company_logo.errors.0 }}</p>
-                    {% endif %}
+                    {{ profile_form.company_logo }}
+                    <p class="text-xs text-gray-600 mt-2">PNG, JPG or GIF (Max 5MB)</p>
+                    {% if profile_form.company_logo.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.company_logo.errors.0 }}</p>{% endif %}
                 </div>
                 {% if profile.company_logo %}
-                <div class="flex-shrink-0">
-                    <div class="w-24 h-24 rounded-lg bg-gray-100 border-2 border-gray-300 flex items-center justify-center overflow-hidden shadow-sm">
-                        <img src="{{ profile.company_logo.url }}" alt="Company logo" class="w-full h-full object-cover">
+                    <div class="w-24 h-24 rounded-lg bg-gray-100 border-2 border-gray-300 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-md">
+                        <img src="{{ profile.company_logo.url }}" alt="Logo" class="w-full h-full object-cover">
                     </div>
-                </div>
                 {% endif %}
             </div>
         </div>
 
-        <!-- Default Settings Row -->
-        <div class="grid md:grid-cols-3 gap-6 pt-4 border-t border-gray-200">
+        <!-- Default Settings Grid -->
+        <div class="border-t-2 border-gray-200 pt-6 grid md:grid-cols-3 gap-6">
             <div>
-                <label for="id_default_currency" class="block text-sm font-semibold text-gray-700 mb-2">
-                    Default Currency
-                    <span class="text-red-500">*</span>
-                </label>
+                <label class="block text-sm font-bold text-gray-900 mb-2">Default Currency *</label>
                 {{ profile_form.default_currency }}
-                {% if profile_form.default_currency.errors %}
-                <p class="mt-1 text-xs text-red-600">{{ profile_form.default_currency.errors.0 }}</p>
-                {% endif %}
+                {% if profile_form.default_currency.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.default_currency.errors.0 }}</p>{% endif %}
             </div>
-
             <div>
-                <label for="id_default_tax_rate" class="block text-sm font-semibold text-gray-700 mb-2">
-                    Default Tax Rate (%)
-                    <span class="text-red-500">*</span>
-                </label>
+                <label class="block text-sm font-bold text-gray-900 mb-2">Default Tax Rate (%) *</label>
                 {{ profile_form.default_tax_rate }}
-                {% if profile_form.default_tax_rate.errors %}
-                <p class="mt-1 text-xs text-red-600">{{ profile_form.default_tax_rate.errors.0 }}</p>
-                {% endif %}
+                {% if profile_form.default_tax_rate.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.default_tax_rate.errors.0 }}</p>{% endif %}
             </div>
-
             <div>
-                <label for="id_invoice_prefix" class="block text-sm font-semibold text-gray-700 mb-2">
-                    Invoice Prefix
-                    <span class="text-red-500">*</span>
-                </label>
+                <label class="block text-sm font-bold text-gray-900 mb-2">Invoice Prefix *</label>
                 {{ profile_form.invoice_prefix }}
-                {% if profile_form.invoice_prefix.errors %}
-                <p class="mt-1 text-xs text-red-600">{{ profile_form.invoice_prefix.errors.0 }}</p>
-                {% endif %}
-                <p class="mt-2 text-xs text-gray-500">Example: INV-2025-001</p>
+                {% if profile_form.invoice_prefix.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.invoice_prefix.errors.0 }}</p>{% endif %}
+                <p class="text-xs text-gray-600 mt-2">Example: INV-</p>
             </div>
         </div>
 
         <!-- Timezone -->
         <div>
-            <label for="id_timezone" class="block text-sm font-semibold text-gray-700 mb-2">
-                Timezone
-                <span class="text-red-500">*</span>
-            </label>
+            <label class="block text-sm font-bold text-gray-900 mb-2">Timezone *</label>
             {{ profile_form.timezone }}
-            {% if profile_form.timezone.errors %}
-            <p class="mt-1 text-xs text-red-600">{{ profile_form.timezone.errors.0 }}</p>
-            {% endif %}
+            {% if profile_form.timezone.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.timezone.errors.0 }}</p>{% endif %}
         </div>
 
-        <!-- Button Group -->
-        <div class="flex gap-3 pt-4 border-t border-gray-200">
-            <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
+        <!-- Buttons -->
+        <div class="flex gap-3 pt-6 border-t-2 border-gray-200">
+            <button type="submit" class="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-lg hover:shadow-lg transition-all flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 Save Settings
             </button>
-            <button type="reset" class="px-6 py-2.5 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition">
-                Reset
-            </button>
+            <button type="reset" class="px-6 py-3 bg-gray-200 text-gray-900 font-bold rounded-lg hover:bg-gray-300 transition-all">Reset</button>
         </div>
     </form>
 </div>
 
 <!-- Info Cards -->
-<div class="grid md:grid-cols-2 gap-6 mt-8">
-    <div class="setting-card">
-        <div class="setting-card-body">
-            <div class="flex items-start gap-4">
-                <div class="p-3 bg-blue-100 rounded-lg">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-gray-900 mb-1">Invoice Prefix Guide</h4>
-                    <p class="text-sm text-gray-600">Your invoice prefix helps organize invoices. Use letters and dashes. Example: MY-CO-</p>
-                </div>
+<div class="grid md:grid-cols-2 gap-6 mt-6">
+    <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+        <div class="flex items-start gap-4">
+            <div class="p-3 bg-blue-100 rounded-lg">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-900 mb-1">Invoice Prefix Guide</h4>
+                <p class="text-sm text-gray-600">Use letters and dashes. Example: MY-CO- → MY-CO-0001</p>
             </div>
         </div>
     </div>
-
-    <div class="setting-card">
-        <div class="setting-card-body">
-            <div class="flex items-start gap-4">
-                <div class="p-3 bg-green-100 rounded-lg">
-                    <svg class="w-6 h-6 text-green-600 fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-gray-900 mb-1">Auto-Applied Defaults</h4>
-                    <p class="text-sm text-gray-600 settings will be automatically applied to all new invoices you create</p>
-                </div>
+    <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+        <div class="flex items-start gap-4">
+            <div class="p-3 bg-green-100 rounded-lg">
+                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-900 mb-1">Auto-Applied Settings</h4>
+                <p class="text-sm text-gray-600">These defaults apply to all new invoices you create</p>
             </div>
         </div>
     </div>
