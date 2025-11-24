@@ -4,13 +4,7 @@ services:
     env: python
     plan: free
     region: oregon
-    buildCommand: >
-      pip install --upgrade pip &&
-      pip install -r requirements.txt &&
-      npm install &&
-      npm run build:css &&
-      python manage.py migrate --noinput &&
-      python manage.py collectstatic --noinput --clear
+    buildCommand: ./build.sh
     startCommand: >
       gunicorn smart_invoice.wsgi:application
       --bind 0.0.0.0:$PORT

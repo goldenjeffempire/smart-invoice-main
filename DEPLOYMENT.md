@@ -1,244 +1,247 @@
-# Smart Invoice - Deployment Guide
+# Smart Invoice - Production Deployment Guide
 
-Complete step-by-step guide for deploying Smart Invoice to production on Render.
+## 🚀 Quick Start
 
-## Table of Contents
+### Prerequisites
+- Render account (or any platform supporting Django/PostgreSQL)
+- SendGrid account (for email) or SMTP provider
+- Domain name (optional)
 
-1. [Email Configuration](#email-configuration)
-2. [Render Deployment](#render-deployment)
-3. [Recurring Invoice Scheduler](#recurring-invoice-scheduler)
-4. [Post-Deployment Checklist](#post-deployment-checklist)
-5. [Troubleshooting](#troubleshooting)
+### 1. Environment Setup
 
----
-
-## Email Configuration
-
-### Option A: SendGrid (Recommended for Production)
-
-1. Create account at https://sendgrid.com
-2. Generate API key in Settings → API Keys
-3. Add to `.env`:
-```
-EMAIL_HOST=smtp.sendgrid.net
-EMAIL_PORT=587
-EMAIL_HOST_USER=apikey
-EMAIL_HOST_PASSWORD=SG.xxxxxxxxxxxxxxxxxxxxxx
-EMAIL_USE_TLS=True
-DEFAULT_FROM_EMAIL=Smart Invoice <noreply@smartinvoice.com>
+**Required Environment Variables:**
+```bash
+SECRET_KEY=<generate-with-python>
+ENCRYPTION_SALT=<generate-with-python>
+ALLOWED_HOSTS=yourdomain.com,yourapp.onrender.com
+DATABASE_URL=postgresql://user:password@host:port/dbname
+CSRF_TRUSTED_ORIGINS=https://yourdomain.com,https://*.onrender.com
 ```
 
-### Option B: Gmail (Development Only)
+**Email Configuration (choose one):**
+```bash
+# Option A: SendGrid
+SENDGRID_API_KEY=your-key
+SENDGRID_FROM_EMAIL=noreply@yourdomain.com
 
-1. Enable 2-Factor Authentication on your Google account
-2. Generate App Password: https://myaccount.google.com/apppasswords
-3. Add to `.env`:
-```
+# Option B: Generic SMTP
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
+EMAIL_USE_TLS=true
 EMAIL_HOST_USER=your-email@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password-here
-EMAIL_USE_TLS=True
-DEFAULT_FROM_EMAIL=Smart Invoice <your-email@gmail.com>
+EMAIL_HOST_PASSWORD=your-app-password
 ```
 
-### Test Email Configuration
-
-**Local Testing:**
+**Optional:**
 ```bash
-python manage.py send_test_email your-test@email.com
+SENTRY_DSN=<for-error-tracking>
+DEBUG=False
+WEB_CONCURRENCY=4
 ```
 
-Expected: "Test email sent successfully!"
+### 2. Generate Secrets
 
----
+```bash
+# Generate SECRET_KEY
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
 
-## Render Deployment
-
-### Step 1: Prepare Repository
-
-Ensure these files are committed to GitHub:
-- ✅ `render.yaml` - Render configuration
-- ✅ `Procfile` - Process file
-- ✅ `requirements.txt` - Python dependencies
-- ✅ `.env.example` - Example configuration
-
-### Step 2: Create Render Account
-
-1. Go to https://render.com
-2. Sign up with GitHub
-3. Authorize Render to access your repositories
-
-### Step 3: Create Web Service
-
-1. Dashboard → "New +" → "Web Service"
-2. Select your GitHub repository
-3. Configure:
-   - **Name:** smart-invoice
-   - **Environment:** Python 3
-   - **Region:** Choose closest to users
-   - **Plan:** Free (can upgrade later)
-4. Click "Create Web Service"
-
-Render will automatically:
-- Build from `render.yaml`
-- Install dependencies
-- Run migrations
-- Start the server
-
-### Step 4: Configure Environment Variables
-
-In Render Dashboard → Web Service → Environment:
-
-| Key | Value |
-|-----|-------|
-| `SECRET_KEY` | Run: `python -c "import secrets; print(secrets.token_urlsafe(50))"` |
-| `ENCRYPTION_SALT` | Run: `python -c "import secrets; print(secrets.token_hex(32))"` |
-| `ALLOWED_HOSTS` | `your-app-name.onrender.com` |
-| `EMAIL_HOST` | `smtp.sendgrid.net` |
-| `EMAIL_HOST_PASSWORD` | Your SendGrid API key |
-| `SENTRY_DSN` | (Optional) From Sentry.io |
-
-### Step 5: Create PostgreSQL Database
-
-1. Dashboard → "New +" → "PostgreSQL"
-2. Configure:
-   - **Name:** smart-invoice-db
-   - **Database:** smartinvoice
-   - **Region:** Same as web service
-   - **Plan:** Free
-3. Copy "Internal Database URL"
-4. Add to Web Service environment: `DATABASE_URL`
-
-### Step 6: Deploy
-
-Render automatically deploys when you push to GitHub.
-
-**Check deployment:**
-- Dashboard → Deployments
-- Look for green checkmark
-- Visit your app URL
-
-Your app is live at: `https://your-app-name.onrender.com`
-
----
-
-## Recurring Invoice Scheduler
-
-### Option 1: Render Background Worker (Recommended)
-
-**Create Background Worker:**
-
-1. Dashboard → "New +" → "Background Worker"
-2. Select same repository
-3. Configure:
-   - **Name:** recurring-invoice-generator
-   - **Environment:** Python 3
-   - **Region:** Same as web service
-   - **Plan:** Free
-   - **Build Command:** `pip install -r requirements.txt`
-   - **Start Command:** `python manage.py generate_recurring_invoices`
-4. Add same environment variables as web service
-5. Deploy
-
-**Schedule the task:**
-
-The background worker runs once. To run daily, use a cron service:
-
-**Using EasyCron (Free):**
-1. Go to https://easycron.com
-2. Create new cron job:
-   - **URL:** `https://your-app.onrender.com/admin/`
-   - **Frequency:** Daily at 2 AM UTC
-3. Render will wake up and run the task
-
-### Option 2: External Cron Service
-
-**Using GitHub Actions (Free):**
-
-Create `.github/workflows/recurring-invoices.yml`:
-
-```yaml
-name: Generate Recurring Invoices
-on:
-  schedule:
-    - cron: '0 2 * * *'  # Daily at 2 AM UTC
-
-jobs:
-  generate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Trigger recurring invoice generation
-        run: |
-          curl -X POST https://your-app.onrender.com/api/recurring/generate \
-            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}"
+# Generate ENCRYPTION_SALT
+python -c "import secrets; print(secrets.token_hex(32))"
 ```
 
----
+### 3. Deploy to Render
 
-## Post-Deployment Checklist
+#### Option A: Using render.yaml (Recommended)
+1. Push code to GitHub
+2. Connect repository to Render
+3. Render will auto-detect `render.yaml`
+4. Set required environment variables in Render dashboard
+5. Deploy!
 
-- [ ] App loads at your URL
-- [ ] Test email: `python manage.py send_test_email your-email@example.com`
-- [ ] Create admin user: `python manage.py createsuperuser`
-- [ ] Test user signup
-- [ ] Create sample invoice
-- [ ] Download PDF
+#### Option B: Manual Setup
+1. Create new Web Service on Render
+2. Build Command: `./build.sh`
+3. Start Command: `gunicorn smart_invoice.wsgi:application --bind 0.0.0.0:$PORT --workers 2`
+4. Environment: Python 3.11+
+5. Add PostgreSQL database
+6. Set environment variables
+7. Deploy!
+
+### 4. Post-Deployment
+
+**Create superuser:**
+```bash
+python manage.py createsuperuser
+```
+
+**Verify deployment:**
+- Visit: `https://yourapp.onrender.com/health/`
+- Should return: `{"status": "healthy"}`
+
+**Test critical flows:**
+- [ ] User signup
+- [ ] User login
+- [ ] Create invoice
 - [ ] Send invoice via email
-- [ ] Check recurring invoices run daily
-- [ ] Monitor Sentry for errors
-- [ ] Configure SSL (automatic on Render)
+- [ ] Mark invoice as paid
+- [ ] View dashboard analytics
 
----
+## 📋 Pre-Deployment Checklist
 
-## Troubleshooting
+### Security
+- [x] CSRF protection enabled
+- [x] XSS protection enabled
+- [x] HSTS headers configured
+- [x] CSP headers configured
+- [x] Rate limiting enabled
+- [x] SQL injection protection (Django ORM)
+- [x] Secure password hashing (Django defaults)
+- [ ] SECRET_KEY set to secure random value
+- [ ] ENCRYPTION_SALT set to secure random value
+- [ ] ALLOWED_HOSTS configured with actual domains
+- [ ] DEBUG=False in production
 
-### Email Not Sending
+### Database
+- [x] PostgreSQL configured via DATABASE_URL
+- [x] Migrations ready
+- [ ] Database backup strategy in place
+- [ ] Connection pooling configured (if needed)
 
-**Check logs:**
+### Static Files
+- [x] WhiteNoise configured for static file serving
+- [x] Compression enabled (CompressedManifestStaticFilesStorage)
+- [x] collectstatic in build command
+- [x] STATIC_ROOT configured
+
+### Email
+- [ ] SendGrid API key or SMTP credentials configured
+- [ ] FROM_EMAIL set to valid email
+- [ ] Test email sending works
+- [ ] Template IDs configured (if using SendGrid templates)
+
+### Monitoring
+- [ ] Health check endpoint accessible (/health/)
+- [ ] Error tracking configured (Sentry optional)
+- [ ] Logging configured
+- [ ] Performance monitoring setup (optional)
+
+### Performance
+- [x] Gunicorn with multiple workers
+- [x] Database query optimization completed
+- [x] Static file caching enabled
+- [x] Gzip/Brotli compression enabled
+
+## 🔧 Configuration Files
+
+### Requirements
+- `requirements.txt` - Development dependencies
+- `requirements-production.txt` - Production dependencies
+- `package.json` - Node.js dependencies (Tailwind CSS)
+
+### Deployment
+- `render.yaml` - Render.com configuration
+- `Procfile` - Heroku-style process definition
+- `build.sh` - Production build script
+- `.env.example` - Environment variable template
+
+### Django
+- `smart_invoice/settings.py` - Production-ready settings
+- `smart_invoice/wsgi.py` - WSGI application entry
+
+## 🛠️ Troubleshooting
+
+### Static files not loading
 ```bash
-# In Render Dashboard
-Web Service → Logs (look for email errors)
+python manage.py collectstatic --noinput --clear
 ```
 
-**Test configuration:**
+### Database connection errors
+- Verify DATABASE_URL is correct
+- Check PostgreSQL service is running
+- Verify firewall/network settings
+
+### CSRF errors
+- Add your domain to CSRF_TRUSTED_ORIGINS
+- Verify ALLOWED_HOSTS includes your domain
+
+### Email not sending
+- Check SendGrid API key is valid
+- Verify FROM_EMAIL is verified in SendGrid
+- Check spam folders
+- Review error logs
+
+## 📊 Performance Optimization
+
+### Database
+- Indexes on frequently queried fields (already configured)
+- Connection pooling for high traffic
+- Regular VACUUM/ANALYZE maintenance
+
+### Caching
+- Configure Redis for session/cache storage (optional upgrade)
+- Enable database query caching
+- Use CDN for static assets (optional)
+
+### Monitoring
+- Set up Sentry for error tracking
+- Configure New Relic/DataDog for APM (optional)
+- Regular security audits
+
+## 🔄 Updates & Maintenance
+
+### Regular Updates
 ```bash
-python manage.py send_test_email your-test@email.com
-```
+# Update dependencies
+pip list --outdated
+pip install --upgrade <package>
 
-**Common issues:**
-- Wrong SendGrid API key
-- EMAIL_USE_TLS not set to True
-- Firewall blocking port 587
-
-### App Won't Start
-
-**Check logs:**
-- Dashboard → Deployments → Latest → Build Log
-
-**Fix database issues:**
-```bash
+# Run migrations
 python manage.py migrate
+
+# Collect static files
 python manage.py collectstatic --noinput
 ```
 
-### Migrations Failed
+### Database Backups
+- Enable automated backups on Render
+- Test restore procedures regularly
+- Keep backups for 30+ days
 
-**SSH into Render:**
-1. Web Service → Shell
-2. Run: `python manage.py migrate --verbose`
+### Security Updates
+- Monitor Django security releases
+- Update dependencies regularly
+- Review security headers periodically
+
+## 🌐 Domain Configuration
+
+### Custom Domain Setup (Render)
+1. Go to Render Dashboard → Settings
+2. Add custom domain
+3. Update DNS records (A or CNAME)
+4. Wait for SSL certificate provisioning
+5. Update ALLOWED_HOSTS and CSRF_TRUSTED_ORIGINS
+
+### DNS Configuration
+```
+Type: CNAME
+Name: www
+Value: yourapp.onrender.com
+TTL: 3600
+```
+
+## 📞 Support
+
+### Resources
+- Django Documentation: https://docs.djangoproject.com/
+- Render Documentation: https://render.com/docs
+- SendGrid Documentation: https://docs.sendgrid.com/
+
+### Common Issues
+- Check logs: Render Dashboard → Logs tab
+- Health check: `/health/` endpoint
+- Admin panel: `/admin/` (create superuser first)
 
 ---
 
-## Performance & Scaling
-
-- **Free tier:** Good for development/testing
-- **Paid tier:** For production traffic (can scale horizontally)
-- **Database:** Upgrade if >50GB needed
-- **Cache:** Enable Redis for better performance
-
----
-
-**Version:** 1.0.0  
 **Last Updated:** November 2025
+**Platform Version:** Django 5.2.8, Python 3.11+
