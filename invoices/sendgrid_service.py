@@ -2,9 +2,11 @@
 import os
 import base64
 import json
+from typing import Dict, Any, Optional, Tuple
 from sendgrid import SendGridAPIClient, SendGridException
 from sendgrid.helpers.mail import Mail, From, To, ReplyTo, TemplateId, Personalization, Attachment, FileContent, FileName, FileType
 from django.core.files.base import ContentFile
+from django.http import HttpRequest
 from weasyprint import HTML
 from weasyprint.text.fonts import FontConfiguration
 from django.template.loader import render_to_string

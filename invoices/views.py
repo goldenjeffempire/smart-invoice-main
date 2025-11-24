@@ -2,12 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.db.models import Count
 from django.db.models.functions import TruncMonth
+from django.views.decorators.http import require_http_methods
 from datetime import datetime
+from typing import Dict, Any, Optional, List, Tuple
 import calendar
 from weasyprint import HTML
 from weasyprint.text.fonts import FontConfiguration

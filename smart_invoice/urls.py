@@ -80,3 +80,11 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+# Health check endpoints
+from invoices.health import health_check, readiness_check, liveness_check
+urlpatterns += [
+    path('health/', health_check, name='health'),
+    path('health/ready/', readiness_check, name='readiness'),
+    path('health/live/', liveness_check, name='liveness'),
+]
