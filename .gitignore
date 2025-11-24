@@ -4,10 +4,6 @@ __pycache__/
 *$py.class
 *.so
 .Python
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
 build/
 develop-eggs/
 dist/
@@ -20,28 +16,16 @@ parts/
 sdist/
 var/
 wheels/
-pip-wheel-metadata/
-share/python-wheels/
-
-# Virtual environments
-venv/
-env/
-ENV/
-env.bak/
-venv.bak/
-.venv
+*.egg-info/
+.installed.cfg
+*.egg
 
 # Django
 *.log
 *.pot
 db.sqlite3
-db.sqlite3-journal
 /media
 /staticfiles
-/static_collected
-local_settings.py
-
-# Environment
 .env
 .env.local
 .env.*.local
@@ -52,30 +36,18 @@ local_settings.py
 *.swp
 *.swo
 *~
-
-# OS
 .DS_Store
-Thumbs.db
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+.next/
 
 # Testing
-htmlcov/
-.coverage
 .pytest_cache/
-.tox/
-*.cover
+.coverage
+htmlcov/
 
-# Node.js
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-package-lock.json
-.npm/
-
-# Tailwind CSS
-static/css/tailwind.output.css
-
-# DO NOT IGNORE REPLIT CONFIG
-!.replit
-!replit.nix
-!replit.md
+# Tailwind
+/static/css/tailwind.output.css is NOT in .gitignore - it's built and committed

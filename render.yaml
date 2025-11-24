@@ -10,29 +10,12 @@ services:
       python manage.py migrate &&
       python manage.py collectstatic --noinput
     startCommand: gunicorn smart_invoice.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 30
-    healthCheckPath: /health/
     envVars:
-      - key: DEBUG
-        value: false
-      - key: SECRET_KEY
-        generateValue: true
-      - key: ALLOWED_HOSTS
-        value: smart-invoice.onrender.com
-      - key: IS_REPLIT
-        value: false
-      - key: DATABASE_URL
-        fromDatabase:
-          name: smart-invoice-db
-          property: connectionString
-      - key: EMAIL_HOST
-        value: smtp.sendgrid.net
-      - key: EMAIL_PORT
-        value: "587"
-      - key: EMAIL_USE_TLS
-        value: "True"
-      - key: EMAIL_HOST_USER
-        value: apikey
-      - key: EMAIL_HOST_PASSWORD
-        sync: false
-      - key: DEFAULT_FROM_EMAIL
-        value: "Smart Invoice <noreply@smartinvoice.com>"
+      - key: DJANGO_SETTINGS_MODULE
+        value: smart_invoice.settings
+      - key: PYTHON_VERSION
+        value: 3.11.13
+
+databases:
+  - name: postgres-db
+    ipAllowList: []

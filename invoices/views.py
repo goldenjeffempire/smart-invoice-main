@@ -102,25 +102,31 @@ def dashboard(request):
 @login_required
 def create_invoice(request):
     if request.method == "POST":
+        from invoices.services import InvoiceService
+        from django.db import transaction
+        
         invoice_form = InvoiceForm(request.POST, request.FILES)
-
         line_items_data = json.loads(request.POST.get("line_items", "[]"))
 
         if invoice_form.is_valid() and line_items_data:
-            invoice = invoice_form.save(commit=False)
-            invoice.user = request.user
-            invoice.save()
+            try:
+                with transaction.atomic():
+                    invoice = invoice_form.save(commit=False)
+                    invoice.user = request.user
+                    invoice.save()
 
-            for item_data in line_items_data:
-                LineItem.objects.create(
-                    invoice=invoice,
-                    description=item_data["description"],
-                    quantity=Decimal(item_data["quantity"]),
-                    unit_price=Decimal(item_data["unit_price"]),
-                )
+                    for item_data in line_items_data:
+                        LineItem.objects.create(
+                            invoice=invoice,
+                            description=item_data["description"],
+                            quantity=Decimal(item_data["quantity"]),
+                            unit_price=Decimal(item_data["unit_price"]),
+                        )
 
-            messages.success(request, f"Invoice {invoice.invoice_id} created successfully!")
-            return redirect("invoice_detail", invoice_id=invoice.id)
+                messages.success(request, f"Invoice {invoice.invoice_id} created successfully!")
+                return redirect("invoice_detail", invoice_id=invoice.id)
+            except Exception as e:
+                messages.error(request, f"Error creating invoice: {str(e)}")
         else:
             messages.error(request, "Please correct the errors below.")
     else:
