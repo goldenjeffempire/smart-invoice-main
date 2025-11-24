@@ -50,3 +50,8 @@ externalPort = 3002
 
 [userenv.shared]
 SENDGRID_FROM_EMAIL = "team@smartinvoice.com"
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["gunicorn", "smart_invoice.wsgi:application", "--bind=0.0.0.0:5000", "--workers=4", "--timeout=120", "--access-logfile=-", "--error-logfile=-", "--log-level=info", "--worker-class=sync", "--max-requests=5000"]
+build = ["python", "-m", "whitenoise.cli", "compress", "--in-dir", "static", "--out-dir", "static_compressed"]

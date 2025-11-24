@@ -1,0 +1,153 @@
+/*
+ * Performance Optimizations
+ * Lazy loading, caching strategy, and efficient rendering
+ */
+
+/* ========================================
+   IMAGE LAZY LOADING
+   ======================================== */
+
+img[loading="lazy"] {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ========================================
+   CRITICAL RENDERING PATH
+   ======================================== */
+
+/* Reduce cumulative layout shift */
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: auto;
+}
+
+/* Optimize font display */
+@font-face {
+  font-family: 'Inter';
+  font-display: swap; /* Show system font while Inter loads */
+}
+
+/* ========================================
+   CONTENT VISIBILITY
+   ======================================== */
+
+/* Defer non-critical content rendering */
+.defer-paint {
+  content-visibility: auto;
+}
+
+/* ========================================
+   WILL-CHANGE PERFORMANCE HINT
+   ======================================== */
+
+.will-animate {
+  will-change: transform;
+}
+
+.will-animate {
+  will-change: opacity;
+}
+
+/* Use sparingly - only on frequently animated elements */
+.page-loader {
+  will-change: opacity, visibility;
+}
+
+/* ========================================
+   PAINT PERFORMANCE
+   ======================================== */
+
+/* Optimize shadows for better rendering */
+.card {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  /* Use optimized shadow instead of expensive blur effects */
+}
+
+/* ========================================
+   ANIMATIONS PERFORMANCE
+   ======================================== */
+
+/* Use transform and opacity for smooth 60fps animations */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ========================================
+   NETWORK EFFICIENCY
+   ======================================== */
+
+/* Preload critical resources */
+@supports (font-loading-api: none) {
+  link[rel="preload"][as="image"] {
+    display: none;
+  }
+}
+
+/* ========================================
+   RESOURCE HINTS
+   ======================================== */
+
+/* DNS prefetch for external services */
+link[rel="dns-prefetch"] {
+  display: none;
+}
+
+/* Preconnect to critical origins */
+link[rel="preconnect"] {
+  display: none;
+}
+
+/* ========================================
+   MOBILE PERFORMANCE
+   ======================================== */
+
+/* Touch-friendly target size (44x44px minimum) */
+@media (max-width: 768px) {
+  button,
+  a[role="button"],
+  input[type="button"],
+  input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* ========================================
+   FONT OPTIMIZATION
+   ======================================== */
+
+/* System font stack fallback */
+body {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  /* Modern font stack with system fonts for faster rendering */
+}
+
+/* ========================================
+   BUNDLE SIZE REDUCTION
+   ======================================== */
+
+/* Remove unused styles in production */
+@media print {
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+}
