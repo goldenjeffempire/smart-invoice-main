@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="{% block meta_title %}Smart Invoice - Create Professional Invoices in 60 Seconds{% endblock %}">
+    <meta name="description" content="{% block meta_description %}Free professional invoice generator. Create, send via email/WhatsApp, and track payments in real-time. No credit card required. Trusted by 10,000+ businesses worldwide.{% endblock %}">
+    <meta name="keywords" content="invoice generator, free invoice, professional invoices, invoice maker, online invoicing, small business invoicing, freelance invoicing, invoice tracking">
+    <meta name="author" content="Smart Invoice">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{% block canonical %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endblock %}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{% block og_url %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}Smart Invoice - Create Professional Invoices in 60 Seconds{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Free professional invoice generator. Create, send, and track invoices in real-time. Trusted by 10,000+ businesses.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% static 'images/professional_busines_232186d2.jpg' %}{% endblock %}">
+    <meta property="og:site_name" content="Smart Invoice">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{% block twitter_url %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endblock %}">
+    <meta property="twitter:title" content="{% block twitter_title %}Smart Invoice - Create Professional Invoices in 60 Seconds{% endblock %}">
+    <meta property="twitter:description" content="{% block twitter_description %}Free professional invoice generator. Create, send, and track invoices in real-time.{% endblock %}">
+    <meta property="twitter:image" content="{% block twitter_image %}{% static 'images/professional_busines_232186d2.jpg' %}{% endblock %}">
+    
+    <!-- Additional Meta Tags -->
+    <meta name="theme-color" content="var(--color-primary)">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    
+    <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
+    <link rel="apple-touch-icon" href="{% static 'favicon.svg' %}">
+    <title>{% block title %}Smart Invoice - Professional Invoicing Made Simple{% endblock %}</title>
+    
+    <!-- Design System v5.0 - Modern Components -->
+    <link rel="stylesheet" href="{% static 'css/design-tokens.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/buttons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/forms.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/alerts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/cards.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/tables.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/navigation.css' %}">
+    {% if not debug %}
+    <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tailwind.output.css' %}">
+    {% else %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tailwind.output.css' %}">
+    {% endif %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Smart Invoice",
+        "url": "{{ request.scheme }}://{{ request.get_host }}",
+        "logo": "{{ request.scheme }}://{{ request.get_host }}{% static 'favicon.svg' %}",
+        "description": "Professional invoice generator for modern businesses. Create, send, and track invoices in real-time.",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "Customer Support",
+            "email": "support@smartinvoice.com"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Smart Invoice",
+        "applicationCategory": "BusinessApplication",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "operatingSystem": "Web",
+        "description": "Create professional invoices in 60 seconds. Free invoice generator with email and WhatsApp sending, payment tracking, and real-time analytics."
+    }
+    </script>
+    {% block structured_data %}{% endblock %}
+    <style>
+        :root {
+            --cache-control: no-cache;
+        }
+        body {
+            background-color: var(--color-bg-primary);
+            color: var(--color-text-primary);
+            font-family: var(--font-sans);
+        }
+        a {
+            color: var(--color-primary);
+            text-decoration: none;
+        }
+        a:hover {
+            color: var(--color-primary-hover);
+        }
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--color-primary);
+            color: white;
+            padding: 8px;
+            z-index: var(--z-toast);
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+    </style>
+</head>
+<body class="bg-color-bg-primary">
+    <!-- Skip to main content for keyboard navigation -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    {% include 'includes/navbar.html' %}
+    
+    {% if messages %}
+        <div class="container-lg px-spacing-md py-spacing-md" role="region" aria-label="Notifications" aria-live="polite">
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}" role="alert">
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <main id="main-content" role="main">
+        {% block content %}{% endblock %}
+    </main>
+    
+    {% include 'includes/footer.html' %}
+    
+    {% if not debug %}
+    <script src="{% static 'js/app.min.js' %}" defer></script>
+    {% else %}
+    <script src="{% static 'js/app.js' %}" defer></script>
+    {% endif %}
+    {% block scripts %}{% endblock %}
+</body>
+</html>

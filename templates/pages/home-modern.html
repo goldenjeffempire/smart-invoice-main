@@ -1,0 +1,280 @@
+{% extends 'base-modern.html' %}
+{% load static %}
+
+{% block title %}Smart Invoice - Professional Invoices in 60 Seconds{% endblock %}
+{% block meta_title %}Smart Invoice - Create Professional Invoices in 60 Seconds{% endblock %}
+{% block meta_description %}Free invoice generator trusted by 10,000+ businesses. Create, send, and track invoices instantly. No credit card required. Automate billing and get paid faster.{% endblock %}
+
+{% block content %}
+
+<!-- ============================================================ -->
+<!-- HERO SECTION -->
+<!-- ============================================================ -->
+<section class="py-spacing-4xl px-spacing-md" style="background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 50%, #fce7f3 100%);">
+    <div class="container-lg">
+        <div class="grid lg:grid-cols-2 gap-spacing-xl items-center">
+            <!-- Left Content -->
+            <div class="space-y-spacing-xl">
+                <!-- Trust Badge -->
+                <div class="inline-flex items-center gap-spacing-sm px-spacing-md py-spacing-sm rounded-full backdrop-blur-xl bg-white/70 border border-white/40 shadow-sm hover:shadow-md transition-all">
+                    <span class="relative flex w-3 h-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                    </span>
+                    <span class="text-sm font-medium text-gray-800">✨ Trusted by 10,000+ Businesses</span>
+                </div>
+                
+                <!-- Headline -->
+                <div>
+                    <h1 class="text-6xl md:text-7xl lg:text-8xl font-bold leading-tight text-gray-900 mb-spacing-md">
+                        Professional
+                        <span class="block bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">Invoices in 60s</span>
+                    </h1>
+                    <p class="text-xl md:text-2xl text-gray-600 font-light">Stop spreadsheets. Start getting paid faster.</p>
+                </div>
+                
+                <!-- Value Props -->
+                <div class="space-y-spacing-md">
+                    <div class="flex items-start gap-spacing-md">
+                        <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold">⚡</div>
+                        <div>
+                            <p class="font-semibold text-gray-900">Automate everything</p>
+                            <p class="text-sm text-gray-600">From creation to tracking to payment reminders</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-spacing-md">
+                        <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold">📈</div>
+                        <div>
+                            <p class="font-semibold text-gray-900">Get paid 3x faster</p>
+                            <p class="text-sm text-gray-600">Average payment: 7 days instead of 21 days</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-spacing-md">
+                        <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-pink-500 to-pink-600 rounded-lg flex items-center justify-center text-white font-bold">🎯</div>
+                        <div>
+                            <p class="font-semibold text-gray-900">Your brand, perfected</p>
+                            <p class="text-sm text-gray-600">Professional templates with full customization</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CTA Buttons -->
+                <div class="flex flex-col sm:flex-row gap-spacing-md pt-spacing-md">
+                    <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        Start Free - 60 Second Setup
+                    </a>
+                    <a href="#demo" class="btn btn-secondary btn-lg">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                        Live Demo (2 min)
+                    </a>
+                </div>
+                
+                <!-- Trust Signals -->
+                <div class="flex flex-wrap gap-spacing-lg pt-spacing-lg">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                        <span class="font-medium text-gray-900">Forever Free</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                        <span class="font-medium text-gray-900">No Credit Card</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                        <span class="font-medium text-gray-900">99% Uptime</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right: Dashboard Visual -->
+            <div class="hidden lg:block">
+                <img src="{% static 'images/professional_busines_232186d2.jpg' %}" alt="Smart Invoice Dashboard" class="w-full rounded-2xl shadow-lg border-2 border-white/60">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- FEATURES SECTION -->
+<!-- ============================================================ -->
+<section class="py-spacing-4xl px-spacing-md">
+    <div class="container-lg">
+        <div class="text-center mb-spacing-3xl">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-spacing-md">Everything You Need</h2>
+            <p class="text-xl text-gray-600">Professional invoicing features for modern businesses</p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-spacing-lg">
+            <!-- Feature Cards -->
+            {% for feature in features %}
+            <div class="card p-spacing-lg hover:shadow-lg transition-shadow">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-white text-2xl mb-spacing-md">{{ feature.icon }}</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-spacing-sm">{{ feature.title }}</h3>
+                <p class="text-gray-600">{{ feature.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PRICING SECTION -->
+<!-- ============================================================ -->
+<section class="py-spacing-4xl px-spacing-md bg-gray-50">
+    <div class="container-lg">
+        <div class="text-center mb-spacing-3xl">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-spacing-md">Simple, Transparent Pricing</h2>
+            <p class="text-xl text-gray-600">Choose the perfect plan for your business</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-spacing-lg">
+            <!-- Basic Plan -->
+            <div class="card">
+                <h3 class="text-2xl font-bold text-gray-900 mb-spacing-md">Starter</h3>
+                <div class="mb-spacing-lg">
+                    <span class="text-4xl font-bold text-gray-900">Free</span>
+                    <p class="text-gray-600">Forever free, no credit card</p>
+                </div>
+                <ul class="space-y-spacing-sm mb-spacing-lg">
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                        <span>Up to 5 invoices</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                        <span>Email delivery</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                        <span>Basic templates</span>
+                    </li>
+                </ul>
+                <a href="{% url 'signup' %}" class="btn btn-secondary btn-md w-full">Get Started</a>
+            </div>
+            
+            <!-- Pro Plan (Featured) -->
+            <div class="card relative ring-2 ring-blue-600">
+                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-spacing-md py-spacing-xs rounded-full text-sm font-bold">Most Popular</div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-spacing-md">Professional</h3>
+                <div class="mb-spacing-lg">
+                    <span class="text-4xl font-bold text-gray-900">$9<span class="text-lg text-gray-600">/mo</span></span>
+                    <p class="text-gray-600">Best for growing businesses</p>
+                </div>
+                <ul class="space-y-spacing-sm mb-spacing-lg">
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                        <span>Unlimited invoices</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                        <span>WhatsApp & email</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                        <span>Advanced analytics</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                        <span>Custom branding</span>
+                    </li>
+                </ul>
+                <a href="{% url 'signup' %}" class="btn btn-primary btn-md w-full">Start Free Trial</a>
+            </div>
+            
+            <!-- Enterprise Plan -->
+            <div class="card">
+                <h3 class="text-2xl font-bold text-gray-900 mb-spacing-md">Enterprise</h3>
+                <div class="mb-spacing-lg">
+                    <span class="text-4xl font-bold text-gray-900">$29<span class="text-lg text-gray-600">/mo</span></span>
+                    <p class="text-gray-600">For large teams</p>
+                </div>
+                <ul class="space-y-spacing-sm mb-spacing-lg">
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                        <span>Everything in Pro</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                        <span>Team management</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                        <span>API access</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                        <span>Priority support</span>
+                    </li>
+                </ul>
+                <a href="{% url 'contact' %}" class="btn btn-secondary btn-md w-full">Contact Sales</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- FAQ SECTION -->
+<!-- ============================================================ -->
+<section class="py-spacing-4xl px-spacing-md">
+    <div class="container-md">
+        <div class="text-center mb-spacing-3xl">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-spacing-md">Frequently Asked Questions</h2>
+        </div>
+        <div class="space-y-spacing-md">
+            <details class="card p-spacing-lg group cursor-pointer" open>
+                <summary class="font-bold text-gray-900 flex items-center justify-between gap-spacing-md">
+                    Is Smart Invoice really free?
+                    <span class="group-open:rotate-180 transition-transform">▼</span>
+                </summary>
+                <p class="text-gray-600 mt-spacing-md">Yes! Our Starter plan is 100% free forever. No credit card required. You can upgrade anytime.</p>
+            </details>
+            
+            <details class="card p-spacing-lg group cursor-pointer">
+                <summary class="font-bold text-gray-900 flex items-center justify-between gap-spacing-md">
+                    How do I send invoices to clients?
+                    <span class="group-open:rotate-180 transition-transform">▼</span>
+                </summary>
+                <p class="text-gray-600 mt-spacing-md">You can send invoices via email, WhatsApp, or generate a shareable link. All methods are supported on our free plan.</p>
+            </details>
+            
+            <details class="card p-spacing-lg group cursor-pointer">
+                <summary class="font-bold text-gray-900 flex items-center justify-between gap-spacing-md">
+                    Can I customize my invoices?
+                    <span class="group-open:rotate-180 transition-transform">▼</span>
+                </summary>
+                <p class="text-gray-600 mt-spacing-md">Absolutely! Add your logo, choose colors, customize text, and more. Professional templates included.</p>
+            </details>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CTA SECTION -->
+<!-- ============================================================ -->
+<section class="py-spacing-4xl px-spacing-md bg-gradient-to-r from-blue-600 to-purple-600">
+    <div class="container-md text-center">
+        <h2 class="text-4xl md:text-5xl font-bold text-white mb-spacing-md">Ready to get started?</h2>
+        <p class="text-xl text-blue-100 mb-spacing-lg">Create your first professional invoice in just 60 seconds. No credit card required.</p>
+        <a href="{% url 'signup' %}" class="btn bg-white text-blue-600 hover:bg-gray-100 btn-lg inline-block">
+            Start Free Now
+        </a>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
