@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="utf-8">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+  <title>Payment Received - Invoice {{invoice_id}}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    
+    body { margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background-color: #f3f4f6; }
+    table { border-collapse: collapse; }
+    img { max-width: 100%; height: auto; border: 0; line-height: 100%; vertical-align: middle; }
+    .container { width: 100%; max-width: 600px; margin: 0 auto; }
+    .card { background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .header { background: linear-gradient(135deg, #10B981 0%, #059669 100%); padding: 40px 32px; text-align: center; }
+    .header-icon { font-size: 64px; margin-bottom: 16px; }
+    .header-title { margin: 0; color: #ffffff; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+    .header-subtitle { margin: 8px 0 0; color: #D1FAE5; font-size: 16px; }
+    .content { padding: 32px; }
+    .success-badge { display: inline-block; background: #D1FAE5; color: #059669; font-size: 14px; font-weight: 600; padding: 8px 16px; border-radius: 20px; margin-bottom: 16px; }
+    .greeting { margin: 0 0 16px; font-size: 18px; font-weight: 600; color: #111827; }
+    .text { margin: 0 0 24px; font-size: 16px; line-height: 24px; color: #4B5563; }
+    .payment-details { background: #ECFDF5; border-radius: 8px; padding: 24px; margin: 24px 0; border: 2px solid #10B981; }
+    .detail-row { display: flex; justify-content: space-between; padding: 12px 0; }
+    .detail-label { font-size: 14px; color: #065F46; font-weight: 500; }
+    .detail-value { font-size: 14px; color: #111827; font-weight: 600; }
+    .amount-paid { background: #ffffff; margin-top: 16px; padding: 16px; border-radius: 6px; text-align: center; }
+    .amount-label { font-size: 14px; color: #059669; font-weight: 600; margin: 0 0 8px; }
+    .amount-value { font-size: 32px; color: #059669; font-weight: 700; margin: 0; }
+    .next-steps { background: #F9FAFB; border-radius: 8px; padding: 24px; margin: 24px 0; }
+    .next-steps-title { font-size: 16px; font-weight: 700; color: #111827; margin: 0 0 16px; }
+    .step-item { padding: 12px 0; display: flex; align-items: start; gap: 12px; }
+    .step-icon { flex-shrink: 0; width: 24px; height: 24px; background: #10B981; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+    .step-text { flex: 1; font-size: 14px; color: #4B5563; line-height: 20px; }
+    .footer { background: #F9FAFB; padding: 24px 32px; text-align: center; border-top: 1px solid #E5E7EB; }
+    .footer-text { margin: 8px 0; font-size: 14px; color: #6B7280; }
+    .footer-link { color: #10B981; text-decoration: none; }
+    
+    @media only screen and (max-width: 600px) {
+      .header { padding: 32px 24px; }
+      .content { padding: 24px; }
+      .header-title { font-size: 24px; }
+      .detail-row { flex-direction: column; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <table role="presentation" class="container" cellpadding="0" cellspacing="0">
+    <tr>
+      <td style="padding: 40px 16px;">
+        <table role="presentation" class="card" width="100%" cellpadding="0" cellspacing="0">
+          <!-- Header -->
+          <tr>
+            <td class="header">
+              <div class="header-icon">✅</div>
+              <h1 class="header-title">Payment Received!</h1>
+              <p class="header-subtitle">Thank you for your payment</p>
+            </td>
+          </tr>
+          
+          <!-- Content -->
+          <tr>
+            <td class="content">
+              <span class="success-badge">✓ Payment Confirmed</span>
+              
+              <p class="greeting">Hello {{client_name}},</p>
+              
+              <p class="text">
+                Great news! We've received your payment for invoice <strong>#{{invoice_id}}</strong> from <strong>{{business_name}}</strong>.
+                Your transaction has been successfully processed.
+              </p>
+              
+              <!-- Payment Details -->
+              <div class="payment-details">
+                <div class="detail-row">
+                  <span class="detail-label">Invoice Number</span>
+                  <span class="detail-value">#{{invoice_id}}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Payment Date</span>
+                  <span class="detail-value">{{paid_date}}</span>
+                </div>
+                
+                <div class="amount-paid">
+                  <p class="amount-label">Amount Paid</p>
+                  <p class="amount-value">{{total_amount}}</p>
+                </div>
+              </div>
+              
+              <p class="text">
+                A receipt for this transaction has been generated and is available in your account. 
+                If you need any additional documentation, please contact <strong>{{business_name}}</strong>.
+              </p>
+              
+              <!-- Next Steps -->
+              <div class="next-steps">
+                <h3 class="next-steps-title">What happens next?</h3>
+                <div class="step-item">
+                  <span class="step-icon">1</span>
+                  <span class="step-text">Your payment has been recorded in our system</span>
+                </div>
+                <div class="step-item">
+                  <span class="step-icon">2</span>
+                  <span class="step-text">{{business_name}} will process your order/service</span>
+                </div>
+                <div class="step-item">
+                  <span class="step-icon">3</span>
+                  <span class="step-text">You'll receive updates directly from the business</span>
+                </div>
+              </div>
+              
+              <p class="text" style="font-size: 14px;">
+                Thank you for your business! If you have questions, contact <strong>{{business_name}}</strong> directly.
+              </p>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td class="footer">
+              <p class="footer-text">
+                This receipt was sent via <a href="https://smartinvoice.com" class="footer-link">Smart Invoice</a>
+              </p>
+              <p class="footer-text">
+                Professional invoicing made simple
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
