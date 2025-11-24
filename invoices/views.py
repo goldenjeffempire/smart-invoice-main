@@ -219,7 +219,7 @@ def update_invoice_status(request, invoice_id):
 @login_required
 def generate_pdf(request, invoice_id):
     invoice = get_object_or_404(
-        Invoice.objects.prefetch_related(  # type: ignore'line_items'),
+        Invoice.objects.prefetch_related('line_items'),  # type: ignore
         id=invoice_id,
         user=request.user
     )
@@ -230,18 +230,18 @@ def generate_pdf(request, invoice_id):
     html = HTML(string=html_string)
     pdf = html.write_pdf(font_config=font_config)
 
-    response = HttpResponse(pdf or b"",  # type: ignore content_type="application/pdf")
+    response = HttpResponse(pdf or b"", content_type="application/pdf")  # type: ignore
     response["Content-Disposition"] = f'attachment; filename="Invoice_{invoice.invoice_id}.pdf"'
 
     return response
 
 
-def _send_email_async(invoice_id: int, recipient_email: str) -> None:  # type: ignore
+def _send_email_async(invoice_id: int, recipient_email: str) -> None:
     """Send invoice email in background thread using SendGrid."""
     import logging
     logger = logging.getLogger(__name__)
     try:
-        invoice = Invoice.objects.get(  # type: ignoreid=invoice_id)  # type: ignore
+        invoice = Invoice.objects.get(id=invoice_id)  # type: ignore
         service = SendGridEmailService()
         result = service.send_invoice_ready(invoice, recipient_email)
         
