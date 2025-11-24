@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.db.models import Count
 from django.db.models.functions import TruncMonth
@@ -388,7 +388,7 @@ def settings_profile(request):
     from .forms import UserDetailsForm, UserProfileForm
     from django.contrib.auth.hashers import check_password
     
-    profile, created = UserProfile.objects.get  # type: ignore_or_create(user=request.user)
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
     
     message = None
     message_type = None
@@ -422,7 +422,7 @@ def settings_business(request):
     """Business Settings page."""
     from .forms import UserProfileForm
     
-    profile, created = UserProfile.objects.get  # type: ignore_or_create(user=request.user)
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
     
     message = None
     message_type = None
@@ -638,7 +638,7 @@ def admin_settings(request):
 @login_required
 def profile(request):
     """User profile management view."""
-    profile, _ = UserProfile.objects.get  # type: ignore_or_create(user=request.user)
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
     
     if request.method == "POST":
         form = UserProfileForm(request.POST, request.FILES, instance=profile)

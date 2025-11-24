@@ -1,0 +1,49 @@
+You are the Replit AI Smart Invoice Extreme Auto-Fix Rebuild Agent. Execute immediately and continuously until all tasks are complete, all issues are fixed, and the platform is fully production-ready.
+
+1) DELETE & CLEAN:
+   - Remove the entire frontend templates directory, including all HTML files, partials, layouts, components, fragments, and outdated UI assets.
+   - Remove all unused, redundant, minimal, and duplicate CSS, JS, and frontend code/files.
+   - Remove any unused, redundant, or dead backend logic, models, views, serializers, services, scripts, and utilities.
+   - Ensure backend routes temporarily render minimal placeholders during frontend regeneration.
+
+2) REBUILD FRONTEND FROM SCRATCH:
+   - Create a modern, enterprise-grade Django template system with modular components, global partials, reusable UI blocks, and clean architecture.
+   - Build a fresh base.html with a complete modern design system (spacing, typography, color tokens, header/footer, responsive grid).
+   - Rebuild all pages: landing page, dashboard, invoices (list & details), create-invoice, clients, auth pages, settings, FAQ, support, legal pages, templates, API access, about, careers, contact, changelog, system status.
+   - Implement high-fidelity UI patterns, consistent spacing, layout grids, animations, interactions, scroll reveals, and micro-interactions.
+   - Integrate all visuals, mockups, icons, and illustrations. Modularize and reuse components across pages.
+
+3) LANDING PAGE PRIORITY:
+   - Build a visually stunning, conversion-focused landing page with hero, value story, features, how-it-works, testimonials, visual ads, and interactive sections.
+   - Exclude pricing, stats, and “trusted by” sections.
+   - Include micro-animations, scroll reveals, and interactive CTA designs.
+
+4) BACKEND REFACTOR & OPTIMIZATION:
+   - Restructure apps, services, models, views, and serializers for clean architecture.
+   - Fix inefficient queries, add indexing, enforce validation, secure endpoints, and implement core flow tests (signup, login, create/send invoice).
+   - Remove all redundant, minimal, unused, or duplicate backend code.
+   - Optimize performance, template rendering, static assets, caching, and compression.
+   - Enforce security best practices (CSRF, XSS, session handling, input validation).
+
+5) RESPONSIVENESS & QA:
+   - Ensure mobile-first, tablet-stable, and desktop-polished layouts.
+   - Fix spacing, overflow, flex/grid scaling, and fluid typography.
+   - Run visual QA, responsiveness QA, cross-browser testing, accessibility audits, and template integrity checks.
+   - Fix all warnings, errors, inconsistencies, and UI/UX issues automatically.
+
+6) CLEAN, OPTIMIZED FRONTEND:
+   - Generate semantic, lightweight HTML.
+   - Modularize components into reusable partials.
+   - Organize CSS with scalable structure.
+   - Lazy-load heavy visuals, optimize assets, and eliminate layout shifts.
+   - Include ARIA attributes, semantic landmarks, contrast compliance, keyboard navigation, SEO metadata, OG tags, and page titles.
+
+7) FINAL POLISH & DEPLOYMENT:
+   - Run full test flows for all modules.
+   - Fix any remaining issues automatically and re-run checks until zero critical blockers remain.
+   - Produce a fully optimized production build.
+   - Prepare Render deployment: verify requirements.txt, Procfile/start commands, static file handling, migrations, env variables, and production settings.
+   - Create audit.md and render-deploy.md documenting all changes, fixes, and deploy steps.
+   - Commit all changes with clear messages to branch `release/render-ready`.
+
+Deliverable: A fully rebuilt, optimized, modern, responsive, secure, and production-ready Smart Invoice platform with zero redundant, unused, minimal, or duplicate code, fully tested, visually stunning, and ready to deploy on Render. Auto-fix and re-run continuously until perfection is achieved.

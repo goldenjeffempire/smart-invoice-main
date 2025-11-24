@@ -127,40 +127,40 @@ class AnalyticsService:
     def get_user_analytics_stats(user):
         """Calculate comprehensive analytics using optimized SQL.
         
-        This method computes totals, averages, and client statistics using
-        database aggregations instead of Python loops for better performance.
+        Optimized version: Fetches all invoices once with prefetch_related,
+        then performs calculations in Python to avoid multiple database queries.
         """
-        from django.db.models import Q, Sum, Avg, Count, Case, When, DecimalField
         from datetime import datetime
         
-        # Base queryset
-        invoices = Invoice.objects.filter(user=user)
+        # Fetch all invoices with line_items in ONE query
+        all_invoices_list = list(
+            Invoice.objects.filter(user=user)
+            .prefetch_related('line_items')
+            .order_by('-created_at')
+        )
         
-        # Get counts efficiently
-        total_invoices = invoices.count()
-        paid_count = invoices.filter(status="paid").count()
-        unpaid_count = invoices.filter(status="unpaid").count()
+        # Calculate all metrics from the single fetch
+        total_invoices = len(all_invoices_list)
+        paid_invoices = [inv for inv in all_invoices_list if inv.status == "paid"]
+        unpaid_invoices = [inv for inv in all_invoices_list if inv.status == "unpaid"]
         
-        # Since total is a property (not a DB field), we need to fetch invoices with line_items
-        # but we'll use optimized queries
-        paid_invoices = list(invoices.filter(status="paid").prefetch_related('line_items'))
-        unpaid_invoices = list(invoices.filter(status="unpaid").prefetch_related('line_items'))
-        all_invoices_list = list(invoices.prefetch_related('line_items'))
+        paid_count = len(paid_invoices)
+        unpaid_count = len(unpaid_invoices)
         
         # Calculate totals from prefetched data
         total_revenue = sum(inv.total for inv in paid_invoices) if paid_invoices else Decimal("0")
         outstanding_amount = sum(inv.total for inv in unpaid_invoices) if unpaid_invoices else Decimal("0")
-        average_invoice = (sum(inv.total for inv in all_invoices_list) / len(all_invoices_list)) if all_invoices_list else Decimal("0")
+        average_invoice = (sum(inv.total for inv in all_invoices_list) / total_invoices) if total_invoices > 0 else Decimal("0")
         
         # Payment rate
         payment_rate = (paid_count / total_invoices * 100) if total_invoices > 0 else 0
         
-        # Current month invoices
+        # Current month invoices - filter from prefetched list
         now = datetime.now()
-        current_month_invoices = invoices.filter(
-            invoice_date__year=now.year,
-            invoice_date__month=now.month
-        ).count()
+        current_month_invoices = len([
+            inv for inv in all_invoices_list
+            if inv.invoice_date.year == now.year and inv.invoice_date.month == now.month
+        ])
         
         return {
             "total_invoices": total_invoices,
