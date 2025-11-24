@@ -137,13 +137,21 @@ def create_invoice(request):
 
 @login_required
 def invoice_detail(request, invoice_id):
-    invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)
+    invoice = get_object_or_404(
+        Invoice.objects.prefetch_related('line_items'),
+        id=invoice_id,
+        user=request.user
+    )
     return render(request, "invoices/invoice_detail.html", {"invoice": invoice})
 
 
 @login_required
 def edit_invoice(request, invoice_id):
-    invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)
+    invoice = get_object_or_404(
+        Invoice.objects.prefetch_related('line_items'),
+        id=invoice_id,
+        user=request.user
+    )
 
     if request.method == "POST":
         invoice_form = InvoiceForm(request.POST, request.FILES, instance=invoice)
@@ -205,7 +213,11 @@ def update_invoice_status(request, invoice_id):
 
 @login_required
 def generate_pdf(request, invoice_id):
-    invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)
+    invoice = get_object_or_404(
+        Invoice.objects.prefetch_related('line_items'),
+        id=invoice_id,
+        user=request.user
+    )
 
     html_string = render_to_string("invoices/invoice_pdf.html", {"invoice": invoice})
 
