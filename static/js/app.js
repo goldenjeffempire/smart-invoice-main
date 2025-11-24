@@ -1,11 +1,56 @@
 /**
- * SMART INVOICE - Unified Application JavaScript
- * Modern, performant, accessible interactions
- * Version: 2.0
+ * SMART INVOICE - Unified Application JavaScript v3.0
+ * Modern, performant, accessible interactions with zero duplication
+ * All features consolidated from app.js + ui-enhancements.js
  */
 
 (function() {
     'use strict';
+
+    // ========== CONFIGURATION ==========
+    const CONFIG = {
+        toast: {
+            defaultDuration: 5000,
+            zIndex: 1700
+        },
+        animations: {
+            observerThreshold: 0.1,
+            observerMargin: '0px 0px -100px 0px',
+            staggerDelay: 100,
+            counterDuration: 2000
+        },
+        navbar: {
+            scrollThreshold: 10
+        }
+    };
+
+    // ========== UTILITIES ==========
+    const Utils = {
+        isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        },
+
+        isValidUrl(url) {
+            try {
+                new URL(url);
+                return true;
+            } catch {
+                return false;
+            }
+        },
+
+        debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+    };
 
     // ========== PAGE LOADER ==========
     class PageLoader {
@@ -20,6 +65,7 @@
                     if (this.loader) {
                         this.loader.classList.add('hidden');
                     }
+                    document.body.classList.add('animate-page-enter');
                 }, 300);
             });
         }
@@ -37,13 +83,13 @@
                 container = document.createElement('div');
                 container.id = 'toast-container';
                 container.className = 'fixed top-4 right-4 z-50 space-y-2 pointer-events-none';
-                container.style.zIndex = '1700';
+                container.style.zIndex = CONFIG.toast.zIndex;
                 document.body.appendChild(container);
             }
             return container;
         }
 
-        show(message, type = 'info', duration = 5000) {
+        show(message, type = 'info', duration = CONFIG.toast.defaultDuration) {
             const toast = document.createElement('div');
             
             const icons = {
@@ -101,6 +147,22 @@
                     input.addEventListener('input', () => this.clearError(input));
                 });
             });
+
+            this.setupFormInteractions();
+        }
+
+        setupFormInteractions() {
+            const inputs = document.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.closest('.form-group')?.classList.add('focused');
+                });
+                input.addEventListener('blur', function() {
+                    if (!this.value) {
+                        this.closest('.form-group')?.classList.remove('focused');
+                    }
+                });
+            });
         }
 
         validateField(field) {
@@ -110,9 +172,9 @@
 
             if (field.hasAttribute('required') && !value) {
                 error = 'This field is required';
-            } else if (type === 'email' && value && !this.isValidEmail(value)) {
+            } else if (type === 'email' && value && !Utils.isValidEmail(value)) {
                 error = 'Please enter a valid email address';
-            } else if (type === 'url' && value && !this.isValidUrl(value)) {
+            } else if (type === 'url' && value && !Utils.isValidUrl(value)) {
                 error = 'Please enter a valid URL';
             } else if (field.hasAttribute('minlength')) {
                 const min = parseInt(field.getAttribute('minlength'));
@@ -132,7 +194,7 @@
 
         showError(field, message) {
             this.clearError(field);
-            field.classList.add('border-red-500');
+            field.classList.add('border-red-500', 'form-input-error');
             field.setAttribute('aria-invalid', 'true');
             
             const errorDiv = document.createElement('div');
@@ -143,7 +205,7 @@
         }
 
         clearError(field) {
-            field.classList.remove('border-red-500');
+            field.classList.remove('border-red-500', 'form-input-error');
             field.removeAttribute('aria-invalid');
             const errorDiv = field.parentNode.querySelector('.form-error');
             if (errorDiv) {
@@ -164,19 +226,6 @@
             if (!isValid) {
                 e.preventDefault();
                 window.toast.show('Please fix the errors in the form', 'error');
-            }
-        }
-
-        isValidEmail(email) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        }
-
-        isValidUrl(url) {
-            try {
-                new URL(url);
-                return true;
-            } catch {
-                return false;
             }
         }
     }
@@ -233,31 +282,48 @@
         }
     }
 
-    // ========== INTERSECTION OBSERVER FOR ANIMATIONS ==========
+    // ========== UNIFIED ANIMATION OBSERVER ==========
     class AnimationObserver {
         constructor() {
             this.init();
         }
 
         init() {
-            const fadeElements = document.querySelectorAll('.fade-up, .fade-in-view');
+            this.setupScrollAnimations();
+            this.setupStaggerAnimations();
+            this.setupCounterAnimations();
+            this.setupLazyLoadImages();
+        }
+
+        setupScrollAnimations() {
+            const fadeElements = document.querySelectorAll('.fade-up, .fade-in-view, [data-animate]');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('opacity-100', 'translate-y-0', 'animate-fade-in');
+                        entry.target.classList.add('opacity-100', 'translate-y-0', 'animate-slide-in-up');
                         entry.target.classList.remove('opacity-0', 'translate-y-8');
+                        observer.unobserve(entry.target);
                     }
                 });
             }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
+                threshold: CONFIG.animations.observerThreshold,
+                rootMargin: CONFIG.animations.observerMargin
             });
 
             fadeElements.forEach(el => {
                 el.classList.add('opacity-0', 'translate-y-8', 'transition-all', 'duration-700');
                 observer.observe(el);
             });
+        }
 
+        setupStaggerAnimations() {
+            const staggerElements = document.querySelectorAll('[data-stagger]');
+            staggerElements.forEach((el, index) => {
+                el.style.animationDelay = `${index * CONFIG.animations.staggerDelay}ms`;
+            });
+        }
+
+        setupCounterAnimations() {
             const counters = document.querySelectorAll('.counter');
             const counterObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -271,10 +337,31 @@
             counters.forEach(counter => counterObserver.observe(counter));
         }
 
+        setupLazyLoadImages() {
+            if (!('IntersectionObserver' in window)) return;
+
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        if (img.dataset.src) {
+                            img.src = img.dataset.src;
+                            img.classList.add('fade-in');
+                        }
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
         animateCounter(element) {
             const target = parseInt(element.getAttribute('data-target') || element.textContent);
             const suffix = element.getAttribute('data-suffix') || '';
-            const duration = 2000;
+            const duration = CONFIG.animations.counterDuration;
             const increment = target / (duration / 16);
             let current = 0;
 
@@ -303,9 +390,9 @@
                 anchor.addEventListener('click', (e) => {
                     const href = anchor.getAttribute('href');
                     if (href !== '#' && href !== '') {
-                        e.preventDefault();
                         const target = document.querySelector(href);
                         if (target) {
+                            e.preventDefault();
                             const offset = 80;
                             const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
                             window.scrollTo({
@@ -319,26 +406,64 @@
         }
     }
 
-    // ========== CONFIRMATION DIALOGS ==========
-    class ConfirmDialog {
+    // ========== NAVBAR SCROLL EFFECTS ==========
+    class NavbarEffects {
+        constructor() {
+            this.navbar = document.querySelector('nav');
+            if (this.navbar) {
+                this.init();
+            }
+        }
+
+        init() {
+            const handleScroll = Utils.debounce(() => {
+                if (window.scrollY > CONFIG.navbar.scrollThreshold) {
+                    this.navbar.classList.add('shadow-md', 'backdrop-blur-sm');
+                } else {
+                    this.navbar.classList.remove('shadow-md', 'backdrop-blur-sm');
+                }
+            }, 10);
+
+            window.addEventListener('scroll', handleScroll, { passive: true });
+        }
+    }
+
+    // ========== BUTTON RIPPLE EFFECT ==========
+    class RippleEffect {
         constructor() {
             this.init();
         }
 
         init() {
             document.addEventListener('click', (e) => {
-                if (e.target.matches('[data-confirm]')) {
-                    const message = e.target.getAttribute('data-confirm');
-                    if (!confirm(message)) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                    }
+                const button = e.target.closest('button, a.btn');
+                if (button && !button.hasAttribute('data-no-ripple')) {
+                    this.createRipple(e, button);
                 }
             });
         }
+
+        createRipple(e, element) {
+            const ripple = document.createElement('span');
+            const rect = element.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+
+            element.style.position = element.style.position || 'relative';
+            element.style.overflow = 'hidden';
+            element.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        }
     }
 
-    // ========== TOOLTIPS ==========
+    // ========== TOOLTIP MANAGER ==========
     class TooltipManager {
         constructor() {
             this.init();
@@ -357,7 +482,7 @@
         show(element) {
             const text = element.getAttribute('data-tooltip');
             const tooltip = document.createElement('div');
-            tooltip.className = 'tooltip fixed bg-gray-900 text-white text-sm px-3 py-2 rounded shadow-lg z-50 pointer-events-none';
+            tooltip.className = 'tooltip fixed bg-gray-900 text-white text-sm px-3 py-2 rounded shadow-lg z-50 pointer-events-none animate-fade-in';
             tooltip.style.zIndex = '1600';
             tooltip.textContent = text;
             tooltip.id = `tooltip-${Date.now()}`;
@@ -382,7 +507,7 @@
         }
     }
 
-    // ========== AUTO-DISMISS ALERTS ==========
+    // ========== ALERT MANAGER ==========
     class AlertManager {
         constructor() {
             this.init();
@@ -391,13 +516,37 @@
         init() {
             const alerts = document.querySelectorAll('.alert[data-auto-dismiss]');
             alerts.forEach(alert => {
-                const duration = parseInt(alert.getAttribute('data-auto-dismiss')) || 5000;
+                const duration = parseInt(alert.getAttribute('data-auto-dismiss')) || CONFIG.toast.defaultDuration;
                 setTimeout(() => {
                     alert.style.transition = 'opacity 300ms ease, transform 300ms ease';
                     alert.style.opacity = '0';
                     alert.style.transform = 'translateY(-10px)';
                     setTimeout(() => alert.remove(), 300);
                 }, duration);
+            });
+
+            const djangoMessages = document.querySelectorAll('.alert[role="alert"]:not([data-auto-dismiss])');
+            djangoMessages.forEach(msg => {
+                msg.setAttribute('data-auto-dismiss', CONFIG.toast.defaultDuration.toString());
+            });
+        }
+    }
+
+    // ========== CONFIRMATION DIALOGS ==========
+    class ConfirmDialog {
+        constructor() {
+            this.init();
+        }
+
+        init() {
+            document.addEventListener('click', (e) => {
+                if (e.target.matches('[data-confirm]')) {
+                    const message = e.target.getAttribute('data-confirm');
+                    if (!confirm(message)) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                }
             });
         }
     }
@@ -450,19 +599,18 @@
         new ModalManager();
         new AnimationObserver();
         new SmoothScroll();
-        new ConfirmDialog();
+        new NavbarEffects();
+        new RippleEffect();
         new TooltipManager();
         new AlertManager();
+        new ConfirmDialog();
         new KeyboardNav();
         new ClipboardManager();
 
-        const djangoMessages = document.querySelectorAll('.alert[role="alert"]');
-        djangoMessages.forEach(msg => {
-            msg.setAttribute('data-auto-dismiss', '5000');
-        });
-
         document.body.classList.remove('no-js');
         document.body.classList.add('js-enabled');
+
+        console.log('Smart Invoice v3.0 initialized successfully');
     }
 
     if (document.readyState === 'loading') {
