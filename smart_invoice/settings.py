@@ -96,6 +96,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "smart_invoice.cache_middleware.CacheControlMiddleware",
+    "smart_invoice.monitoring.PerformanceMiddleware",
     "csp.middleware.CSPMiddleware",
     "smart_invoice.security_middleware.SecurityHeadersMiddleware",
     "smart_invoice.security_middleware.SecurityEventLoggingMiddleware",
