@@ -66,15 +66,8 @@ else:
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
 
-CSRF_TRUSTED_ORIGINS: list[str] = env.list(
-    "CSRF_TRUSTED_ORIGINS",
-    default=[
-        "https://*.replit.dev",
-        "https://*.repl.co",
-        "https://*.onrender.com",
-        "https://*.render.com",
-    ],
-)  # type: ignore
+_default_csrf = "https://*.replit.dev,https://*.repl.co,https://*.onrender.com,https://*.render.com"
+CSRF_TRUSTED_ORIGINS: list[str] = env.list("CSRF_TRUSTED_ORIGINS", default=_default_csrf)  # type: ignore
 
 INSTALLED_APPS = [
     "django.contrib.admin",

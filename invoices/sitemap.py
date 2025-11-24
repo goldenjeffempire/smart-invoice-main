@@ -37,8 +37,10 @@ class InvoiceSitemap(Sitemap):
     
     def items(self) -> List[Any]:
         # Only include paid invoices in sitemap for public visibility
-        from typing import cast
-        return cast(List[Any], list(Invoice.objects.filter(status='paid').order_by('-invoice_date')[:50000]))
+        try:
+            return list(Invoice.objects.filter(status='paid').order_by('-invoice_date')[:50000])  # type: ignore
+        except Exception:
+            return []
     
     def location(self, item: Any) -> str:
         return reverse('invoice_detail', args=[item.id])
