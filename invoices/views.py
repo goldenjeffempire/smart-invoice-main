@@ -115,7 +115,7 @@ def create_invoice(request):
                     invoice.save()
 
                     for item_data in line_items_data:
-                        LineItem.objects.create  # type: ignore(
+                        LineItem.objects.create(  # type: ignore
                             invoice=invoice,
                             description=item_data["description"],
                             quantity=Decimal(item_data["quantity"]),
@@ -143,7 +143,7 @@ def create_invoice(request):
 @login_required
 def invoice_detail(request, invoice_id):
     invoice = get_object_or_404(
-        Invoice.objects.prefetch_related('line_items'),
+        Invoice.objects.prefetch_related(  # type: ignore'line_items'),
         id=invoice_id,
         user=request.user
     )
@@ -153,7 +153,7 @@ def invoice_detail(request, invoice_id):
 @login_required
 def edit_invoice(request, invoice_id):
     invoice = get_object_or_404(
-        Invoice.objects.prefetch_related('line_items'),
+        Invoice.objects.prefetch_related(  # type: ignore'line_items'),
         id=invoice_id,
         user=request.user
     )
@@ -168,7 +168,7 @@ def edit_invoice(request, invoice_id):
             invoice.line_items.all().delete()
 
             for item_data in line_items_data:
-                LineItem.objects.create  # type: ignore(
+                LineItem.objects.create(  # type: ignore
                     invoice=invoice,
                     description=item_data["description"],
                     quantity=Decimal(item_data["quantity"]),
@@ -219,7 +219,7 @@ def update_invoice_status(request, invoice_id):
 @login_required
 def generate_pdf(request, invoice_id):
     invoice = get_object_or_404(
-        Invoice.objects.prefetch_related('line_items'),
+        Invoice.objects.prefetch_related(  # type: ignore'line_items'),
         id=invoice_id,
         user=request.user
     )
@@ -241,7 +241,7 @@ def _send_email_async(invoice_id: int, recipient_email: str) -> None:  # type: i
     import logging
     logger = logging.getLogger(__name__)
     try:
-        invoice = Invoice.objects.get  # type: ignore(id=invoice_id)  # type: ignore
+        invoice = Invoice.objects.get(  # type: ignoreid=invoice_id)  # type: ignore
         service = SendGridEmailService()
         result = service.send_invoice_ready(invoice, recipient_email)
         
@@ -764,7 +764,7 @@ def delete_template(request, template_id):
 @login_required
 def recurring_invoices(request):
     """Manage recurring invoices."""
-    recurring = RecurringInvoice.objects.filter  # type: ignore  # type: ignore(user=request.user)
+    recurring = RecurringInvoice.objects.filter  # type: ignore(user=request.user)
     
     if request.method == "POST":
         form = RecurringInvoiceForm(request.POST)
