@@ -51,3 +51,9 @@ htmlcov/
 
 # Tailwind
 /static/css/tailwind.output.css is NOT in .gitignore - it's built and committed
+
+# Build artifacts - Generated during production build
+static/js/*.min.js
+static/js/*.min.js.map
+static/css/*.min.css
+static/css/*.min.css.map

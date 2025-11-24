@@ -95,6 +95,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "smart_invoice.cache_middleware.CacheControlMiddleware",
     "csp.middleware.CSPMiddleware",
     "smart_invoice.security_middleware.SecurityHeadersMiddleware",
     "smart_invoice.security_middleware.SecurityEventLoggingMiddleware",
@@ -167,6 +168,9 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# Use minified assets in production
+USE_MINIFIED_ASSETS = not DEBUG
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"

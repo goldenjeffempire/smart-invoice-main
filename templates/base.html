@@ -38,13 +38,54 @@
     <link rel="apple-touch-icon" href="{% static 'favicon.svg' %}">
     <title>{% block title %}Smart Invoice - Professional Invoicing Made Simple{% endblock %}</title>
     <!-- Smart Invoice Design System v4.0 - Unified & Optimized -->
+    {% if not debug %}
+    <!-- Production: Minified Assets -->
+    <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tailwind.output.css' %}">
+    {% else %}
+    <!-- Development: Un-minified Assets -->
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/tailwind.output.css' %}">
+    {% endif %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="white">
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Smart Invoice",
+        "url": "{{ request.scheme }}://{{ request.get_host }}",
+        "logo": "{{ request.scheme }}://{{ request.get_host }}{% static 'favicon.svg' %}",
+        "description": "Professional invoice generator for modern businesses. Create, send, and track invoices in real-time.",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "Customer Support",
+            "email": "support@smartinvoice.com"
+        },
+        "sameAs": []
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Smart Invoice",
+        "applicationCategory": "BusinessApplication",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "operatingSystem": "Web",
+        "description": "Create professional invoices in 60 seconds. Free invoice generator with email and WhatsApp sending, payment tracking, and real-time analytics."
+    }
+    </script>
+    {% block structured_data %}{% endblock %}
 </head>
 <body class="bg-white">
     <!-- Skip to main content for keyboard navigation -->
@@ -73,7 +114,13 @@
     
     {% include 'includes/footer.html' %}
     
+    {% if not debug %}
+    <!-- Production: Minified JavaScript -->
+    <script src="{% static 'js/app.min.js' %}"></script>
+    {% else %}
+    <!-- Development: Un-minified JavaScript -->
     <script src="{% static 'js/app.js' %}"></script>
+    {% endif %}
     {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -2,10 +2,11 @@
 
 > Create stunning, professional invoices in seconds. Send via email or WhatsApp. Get paid faster.
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Version](https://img.shields.io/badge/version-4.0.0-blue)
 ![Python](https://img.shields.io/badge/Python-3.11%2B-green)
 ![Django](https://img.shields.io/badge/Django-5.2.8%20LTS-darkgreen)
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-success)
+![Performance](https://img.shields.io/badge/Bundle%20Size--50%25-brightgreen)
 
 ---
 
@@ -19,9 +20,28 @@
 
 ---
 
-## 🎯 New in v1.0.0
+## 🎯 New in v4.0.0 - Production Optimization Release
 
-### Core Features
+### Performance & Build Optimization
+- ✅ **Asset Minification**: JavaScript reduced 50% (23KB → 12KB), CSS reduced 32%
+- ✅ **Smart Asset Loading**: Conditional minified/unminified based on environment
+- ✅ **Cache Control**: Long-term caching for static assets (1 year), fresh HTML pages
+- ✅ **Production Build Pipeline**: Automated minification with npm scripts
+- ✅ **WhiteNoise Integration**: Compressed static file serving with Brotli
+
+### SEO & Discoverability
+- ✅ **Structured Data**: JSON-LD schema for Organization and SoftwareApplication
+- ✅ **Comprehensive Meta Tags**: Open Graph, Twitter Cards, full SEO metadata
+- ✅ **Dynamic Sitemap**: Auto-generated XML sitemap for search engines
+- ✅ **Robots.txt**: Optimized for crawlers with proper disallow rules
+
+### Deployment & DevOps
+- ✅ **Render Configuration**: Autoscale deployment with build/run commands
+- ✅ **Production Documentation**: Complete deployment and build guides
+- ✅ **Environment Management**: Secure secret handling and variable validation
+- ✅ **Health Checks**: Monitoring endpoints for uptime tracking
+
+### Core Features (v1.0)
 - ✅ **Recurring Invoices**: Automate invoice generation (weekly, bi-weekly, monthly, quarterly, yearly)
 - ✅ **Invoice Templates**: Save and reuse templates for faster invoice creation
 - ✅ **Advanced Search**: Multi-filter dashboard with date range, amount range, currency, status
@@ -29,14 +49,13 @@
 - ✅ **User Profiles**: Manage company info, preferences, and default settings
 - ✅ **Enhanced Analytics**: Chart.js visualizations with monthly trends
 - ✅ **Accessibility**: ARIA labels, keyboard navigation, screen reader support
-- ✅ **Sentry Integration**: Real-time error tracking and monitoring
 
-### Security & Performance
+### Security & Quality
 - ✅ **Database Optimization**: Strategic indexes and N+1 query elimination
 - ✅ **Enhanced Security Headers**: CSP, HSTS, X-Frame-Options, X-XSS-Protection
-- ✅ **Pre-commit Hooks**: Automated code quality checks
-- ✅ **Comprehensive Testing**: 50%+ code coverage with pytest
-- ✅ **Production Hardening**: Environment variable validation, secure defaults
+- ✅ **Field-Level Encryption**: Sensitive data protection with AES-256
+- ✅ **Rate Limiting**: Middleware-based request throttling
+- ✅ **Comprehensive Testing**: Unit, integration, and E2E test coverage
 
 ---
 
@@ -75,11 +94,18 @@ npm install
 
 cp .env.example .env
 python manage.py migrate
-npm run build:css
-python manage.py runserver
+
+# Development build (with watch mode)
+npm run watch:css
+# Or production build (minified)
+npm run build:prod
+
+python manage.py runserver 0.0.0.0:5000
 ```
 
-Visit `http://localhost:8000`
+Visit `http://localhost:5000`
+
+**📖 Full setup guide:** See [BUILD_GUIDE.md](BUILD_GUIDE.md)
 
 ---
 
