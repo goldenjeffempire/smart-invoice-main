@@ -86,10 +86,12 @@ class InvoiceExport:
     @staticmethod
     def bulk_export_pdfs(invoices):
         """Prepare multiple invoices for bulk PDF export."""
-        from weasyprint import HTML, CSS
+        from weasyprint import HTML
         from django.template.loader import render_to_string
-        from weasyprint.fonts import FontConfiguration
+        from weasyprint.text.fonts import FontConfiguration
+        import logging
         
+        logger = logging.getLogger(__name__)
         pdfs = []
         for invoice in invoices:
             try:
@@ -99,6 +101,6 @@ class InvoiceExport:
                 pdf = html.write_pdf(font_config=font_config)
                 pdfs.append((invoice.invoice_id, pdf))
             except Exception as e:
-                print(f"Error generating PDF for invoice {invoice.invoice_id}: {str(e)}")
+                logger.error(f"Error generating PDF for invoice {invoice.invoice_id}: {str(e)}")
         
         return pdfs
