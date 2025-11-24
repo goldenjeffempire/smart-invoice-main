@@ -66,10 +66,6 @@ externalPort = 5000
 localPort = 45037
 externalPort = 3002
 
-[[ports]]
-localPort = 45971
-externalPort = 6800
-
 [userenv]
 
 [userenv.shared]

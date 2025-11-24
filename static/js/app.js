@@ -592,6 +592,150 @@
         }
     }
 
+    // ========== ANALYTICS & EVENT TRACKING ==========
+    class AnalyticsTracker {
+        constructor() {
+            this.sessionId = this.generateSessionId();
+            this.init();
+        }
+
+        generateSessionId() {
+            return 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        init() {
+            this.trackPageView();
+            this.trackButtonClicks();
+            this.trackFormSubmissions();
+            this.trackScrollDepth();
+            this.trackTimeOnPage();
+        }
+
+        track(eventName, properties = {}) {
+            const event = {
+                event: eventName,
+                timestamp: new Date().toISOString(),
+                sessionId: this.sessionId,
+                url: window.location.href,
+                referrer: document.referrer,
+                userAgent: navigator.userAgent,
+                ...properties
+            };
+
+            console.log('[Analytics]', event);
+            
+            // Send to backend if consent given (check for consent cookie)
+            if (this.hasConsent()) {
+                this.sendToBackend(event);
+            }
+        }
+
+        hasConsent() {
+            // Check for analytics consent cookie
+            return document.cookie.includes('analytics_consent=true') || 
+                   !document.cookie.includes('analytics_consent');  // Default to true if not set
+        }
+
+        sendToBackend(event) {
+            // Send event to backend for processing
+            if (navigator.sendBeacon) {
+                navigator.sendBeacon('/api/analytics/', JSON.stringify(event));
+            } else {
+                fetch('/api/analytics/', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(event),
+                    keepalive: true
+                }).catch(err => console.warn('Analytics send failed:', err));
+            }
+        }
+
+        trackPageView() {
+            this.track('page_view', {
+                title: document.title,
+                path: window.location.pathname
+            });
+        }
+
+        trackButtonClicks() {
+            document.addEventListener('click', (e) => {
+                const button = e.target.closest('button, a.btn, [role="button"]');
+                if (button) {
+                    this.track('button_click', {
+                        label: button.textContent.trim().substring(0, 50),
+                        href: button.href || null,
+                        type: button.tagName.toLowerCase()
+                    });
+                }
+
+                // Track CTA clicks specifically
+                if (e.target.closest('[href*="signup"]')) {
+                    this.track('cta_click', {
+                        location: this.getElementLocation(e.target),
+                        text: e.target.textContent.trim()
+                    });
+                }
+            });
+        }
+
+        trackFormSubmissions() {
+            document.addEventListener('submit', (e) => {
+                if (e.target.tagName === 'FORM') {
+                    const formId = e.target.id || 'unnamed-form';
+                    const formAction = e.target.action || window.location.href;
+                    
+                    this.track('form_submit', {
+                        formId: formId,
+                        action: formAction,
+                        method: e.target.method || 'GET'
+                    });
+                }
+            });
+        }
+
+        trackScrollDepth() {
+            let maxScroll = 0;
+            const updateMaxScroll = Utils.debounce(() => {
+                const scrolled = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+                if (scrolled > maxScroll) {
+                    maxScroll = scrolled;
+                    if (maxScroll >= 25 && maxScroll < 50) {
+                        this.track('scroll_depth', {depth: '25%'});
+                    } else if (maxScroll >= 50 && maxScroll < 75) {
+                        this.track('scroll_depth', {depth: '50%'});
+                    } else if (maxScroll >= 75 && maxScroll < 90) {
+                        this.track('scroll_depth', {depth: '75%'});
+                    } else if (maxScroll >= 90) {
+                        this.track('scroll_depth', {depth: '90%+'});
+                    }
+                }
+            }, 500);
+
+            window.addEventListener('scroll', updateMaxScroll);
+        }
+
+        trackTimeOnPage() {
+            const startTime = Date.now();
+            
+            window.addEventListener('beforeunload', () => {
+                const timeOnPage = Math.round((Date.now() - startTime) / 1000);
+                this.track('time_on_page', {
+                    seconds: timeOnPage,
+                    minutes: Math.round(timeOnPage / 60)
+                });
+            });
+        }
+
+        getElementLocation(element) {
+            let location = 'unknown';
+            const closestSection = element.closest('section');
+            if (closestSection) {
+                location = closestSection.className.split(' ')[0] || 'section';
+            }
+            return location;
+        }
+    }
+
     // ========== INITIALIZE ALL MODULES ==========
     function init() {
         new PageLoader();
@@ -607,6 +751,7 @@
         new ConfirmDialog();
         new KeyboardNav();
         new ClipboardManager();
+        window.analytics = new AnalyticsTracker();
 
         document.body.classList.remove('no-js');
         document.body.classList.add('js-enabled');
