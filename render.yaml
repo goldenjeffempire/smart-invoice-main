@@ -3,19 +3,56 @@ services:
     name: smart-invoice
     env: python
     plan: free
+    region: oregon
     buildCommand: >
+      pip install --upgrade pip &&
       pip install -r requirements.txt &&
       npm install &&
       npm run build:css &&
-      python manage.py migrate &&
-      python manage.py collectstatic --noinput
-    startCommand: gunicorn smart_invoice.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 30
+      python manage.py migrate --noinput &&
+      python manage.py collectstatic --noinput --clear
+    startCommand: >
+      gunicorn smart_invoice.wsgi:application
+      --bind 0.0.0.0:$PORT
+      --workers 2
+      --worker-class sync
+      --timeout 60
+      --keep-alive 5
+      --max-requests 1000
+      --max-requests-jitter 100
+      --access-logfile -
+      --error-logfile -
+      --log-level info
+    healthCheckPath: /health/
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: smart_invoice.settings
       - key: PYTHON_VERSION
         value: 3.11.13
+      - key: DEBUG
+        value: false
+      - key: WEB_CONCURRENCY
+        value: 4
+      # Required: Set these in Render dashboard
+      - key: SECRET_KEY
+        sync: false
+      - key: ENCRYPTION_SALT
+        sync: false
+      - key: ALLOWED_HOSTS
+        sync: false
+      # Optional: Email configuration
+      - key: SENDGRID_API_KEY
+        sync: false
+      - key: SENDGRID_FROM_EMAIL
+        sync: false
+      # Optional: Error tracking
+      - key: SENTRY_DSN
+        sync: false
 
 databases:
   - name: postgres-db
+    databaseName: smartinvoice
+    user: smartinvoice
+    plan: free
+    region: oregon
     ipAllowList: []

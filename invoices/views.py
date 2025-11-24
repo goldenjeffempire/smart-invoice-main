@@ -152,6 +152,8 @@ def invoice_detail(request, invoice_id):
 
 @login_required
 def edit_invoice(request, invoice_id):
+    from django.db import transaction
+    
     invoice = get_object_or_404(
         Invoice.objects.prefetch_related('line_items'),  # type: ignore
         id=invoice_id,
@@ -163,20 +165,24 @@ def edit_invoice(request, invoice_id):
         line_items_data = json.loads(request.POST.get("line_items", "[]"))
 
         if invoice_form.is_valid() and line_items_data:
-            invoice = invoice_form.save()
-
-            invoice.line_items.all().delete()
-
-            for item_data in line_items_data:
-                LineItem.objects.create(  # type: ignore
-                    invoice=invoice,
-                    description=item_data["description"],
-                    quantity=Decimal(item_data["quantity"]),
-                    unit_price=Decimal(item_data["unit_price"]),
-                )
-
-            messages.success(request, f"Invoice {invoice.invoice_id} updated successfully!")
-            return redirect("invoice_detail", invoice_id=invoice.id)
+            try:
+                with transaction.atomic():
+                    invoice = invoice_form.save()
+                    
+                    invoice.line_items.all().delete()
+                    
+                    for item_data in line_items_data:
+                        LineItem.objects.create(  # type: ignore
+                            invoice=invoice,
+                            description=item_data["description"],
+                            quantity=Decimal(item_data["quantity"]),
+                            unit_price=Decimal(item_data["unit_price"]),
+                        )
+                
+                messages.success(request, f"Invoice {invoice.invoice_id} updated successfully!")
+                return redirect("invoice_detail", invoice_id=invoice.id)
+            except Exception as e:
+                messages.error(request, f"Error updating invoice: {str(e)}")
     else:
         invoice_form = InvoiceForm(instance=invoice)
 
@@ -236,42 +242,23 @@ def generate_pdf(request, invoice_id):
     return response
 
 
-def _send_email_async(invoice_id: int, recipient_email: str) -> None:
-    """Send invoice email in background thread using SendGrid."""
-    import logging
-    logger = logging.getLogger(__name__)
-    try:
-        invoice = Invoice.objects.get(id=invoice_id)  # type: ignore
-        service = SendGridEmailService()
-        result = service.send_invoice_ready(invoice, recipient_email)
-        
-        if result.get('status') == 'sent':
-            logger.info(f"Invoice ready email sent to {recipient_email}")
-        elif result.get('configured') is False:
-            logger.warning(f"Email delivery disabled: {result.get('message')}")
-        else:
-            logger.error(f"Failed to send invoice email: {result.get('message')}")
-    except Exception as e:
-        logger.error(f"Error in email async handler: {str(e)}")
-
-
 @login_required
 def send_invoice_email(request, invoice_id: int):  # type: ignore
-    import threading
+    from .email_service import EmailService
+    
     invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)  # type: ignore
 
     if request.method == "POST":
         recipient_email = request.POST.get("email", invoice.client_email)
         
-        # Send email in background thread to avoid timeout
-        thread = threading.Thread(
-            target=_send_email_async,
-            args=(invoice.id, recipient_email),
-            daemon=True
-        )
-        thread.start()
+        # Send email using improved async service with error handling
+        EmailService.send_invoice_email_async(invoice.id, recipient_email)
         
-        messages.success(request, f"Invoice is being sent to {recipient_email}. You'll receive a confirmation shortly.")
+        messages.success(
+            request, 
+            f"Invoice #{invoice.invoice_id} is being sent to {recipient_email}. "
+            "You'll be notified once delivered."
+        )
         return redirect("invoice_detail", invoice_id=invoice.id)
 
     return render(request, "invoices/send_email.html", {"invoice": invoice})
