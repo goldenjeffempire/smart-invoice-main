@@ -86,24 +86,41 @@ class AnalyticsService:
     
     @staticmethod
     def get_user_dashboard_stats(user):
-        """Calculate dashboard statistics for user using efficient queries."""
-        from django.db.models import Q
+        """Calculate dashboard statistics using optimized database queries.
         
-        all_user_invoices = list(
-            Invoice.objects.filter(user=user).prefetch_related('line_items')
+        Uses COUNT aggregations for counts and DISTINCT for unique clients.
+        Only fetches paid invoices with line_items for revenue calculation.
+        """
+        from django.db.models import Count
+        
+        # Base queryset
+        invoices = Invoice.objects.filter(user=user)
+        
+        # Use database aggregations for counts (no Python loops)
+        total_invoices = invoices.count()
+        paid_count = invoices.filter(status="paid").count()
+        unpaid_count = invoices.filter(status="unpaid").count()
+        
+        # Unique clients using database DISTINCT (efficient)
+        unique_clients = invoices.values('client_email').distinct().count()
+        
+        # Only fetch paid invoices for revenue calculation (not all invoices)
+        # This reduces memory usage significantly for users with many unpaid invoices
+        paid_invoices_with_items = list(
+            invoices.filter(status="paid")
+            .prefetch_related('line_items')
+            .only('id', 'tax_rate')  # Only fetch needed fields
         )
         
-        paid_invoices = [inv for inv in all_user_invoices if inv.status == "paid"]
-        unpaid_invoices = [inv for inv in all_user_invoices if inv.status == "unpaid"]
-        
-        total_revenue = sum(inv.total for inv in paid_invoices) if paid_invoices else Decimal("0")
+        # Calculate revenue from paid invoices only
+        total_revenue = sum(inv.total for inv in paid_invoices_with_items) if paid_invoices_with_items else Decimal("0")
         
         return {
-            "total_invoices": len(all_user_invoices),
-            "paid_count": len(paid_invoices),
-            "unpaid_count": len(unpaid_invoices),
+            "total_invoices": total_invoices,
+            "paid_count": paid_count,
+            "unpaid_count": unpaid_count,
             "total_revenue": total_revenue,
-            "unique_clients": len(set(inv.client_email for inv in all_user_invoices)),
+            "unique_clients": unique_clients,
         }
     
     @staticmethod

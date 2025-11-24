@@ -88,6 +88,30 @@ class LoginForm(forms.Form):
 
 
 class InvoiceForm(forms.ModelForm):
+    business_phone = forms.CharField(
+        max_length=50,
+        required=False,
+        validators=[validate_phone_number],
+        widget=forms.TextInput(attrs={'class': 'input-field'})
+    )
+    client_phone = forms.CharField(
+        max_length=50,
+        required=False,
+        validators=[validate_phone_number],
+        widget=forms.TextInput(attrs={'class': 'input-field'})
+    )
+    tax_rate = forms.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        initial=0,
+        validators=[validate_tax_rate],
+        widget=forms.NumberInput(attrs={'class': 'input-field', 'step': '0.01'})
+    )
+    invoice_date = forms.DateField(
+        validators=[validate_invoice_date],
+        widget=forms.DateInput(attrs={'class': 'input-field', 'type': 'date'})
+    )
+    
     class Meta:
         model = Invoice
         fields = ['business_name', 'business_email', 'business_phone', 'business_address',
@@ -96,21 +120,18 @@ class InvoiceForm(forms.ModelForm):
         widgets = {
             'business_name': forms.TextInput(attrs={'class': 'input-field'}),
             'business_email': forms.EmailInput(attrs={'class': 'input-field'}),
-            'business_phone': forms.TextInput(attrs={'class': 'input-field'}),
             'business_address': forms.Textarea(attrs={'class': 'input-field', 'rows': 3}),
             'client_name': forms.TextInput(attrs={'class': 'input-field'}),
             'client_email': forms.EmailInput(attrs={'class': 'input-field'}),
-            'client_phone': forms.TextInput(attrs={'class': 'input-field'}),
             'client_address': forms.Textarea(attrs={'class': 'input-field', 'rows': 3}),
-            'invoice_date': forms.DateInput(attrs={'class': 'input-field', 'type': 'date'}),
             'due_date': forms.DateInput(attrs={'class': 'input-field', 'type': 'date'}),
             'currency': forms.Select(attrs={'class': 'input-field'}),
-            'tax_rate': forms.NumberInput(attrs={'class': 'input-field', 'step': '0.01'}),
             'notes': forms.Textarea(attrs={'class': 'input-field', 'rows': 3}),
         }
 
     def clean(self) -> dict:
         cleaned_data = super().clean()
+        InvoiceBusinessRules.validate_due_date(cleaned_data.get('invoice_date'), cleaned_data.get('due_date'))
         return cleaned_data
 
 

@@ -59,40 +59,38 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
-    # Fetch all user's invoices with line_items prefetched (single query with join)
-    all_user_invoices = list(
-        Invoice.objects.filter(user=request.user).prefetch_related('line_items')  # type: ignore
-    )
+    from django.db.models import Count
+    from invoices.services import AnalyticsService
     
-    # Filter in Python to reuse prefetched data
+    # Base queryset - use database-level filtering for efficiency
+    base_queryset = Invoice.objects.filter(user=request.user)  # type: ignore
+    
+    # Apply status filter at database level (not in Python)
     filter_status = request.GET.get("status", "all")
     if filter_status == "paid":
-        invoices = [inv for inv in all_user_invoices if inv.status == "paid"]
+        invoices_queryset = base_queryset.filter(status="paid")
     elif filter_status == "unpaid":
-        invoices = [inv for inv in all_user_invoices if inv.status == "unpaid"]
+        invoices_queryset = base_queryset.filter(status="unpaid")
     else:
-        invoices = all_user_invoices
-
-    # Calculate metrics from the in-memory list (no additional DB queries)
-    total_invoices = len(all_user_invoices)
-    paid_invoices = [inv for inv in all_user_invoices if inv.status == "paid"]
-    unpaid_invoices = [inv for inv in all_user_invoices if inv.status == "unpaid"]
-    paid_count = len(paid_invoices)
-    unpaid_count = len(unpaid_invoices)
-
-    # Calculate revenue from prefetched data
-    revenue_value = sum(inv.total for inv in paid_invoices) if paid_invoices else Decimal("0")
-
-    # Count unique clients from in-memory list
-    unique_clients = len(set(inv.client_email for inv in all_user_invoices))
-
+        invoices_queryset = base_queryset
+    
+    # Fetch filtered invoices with prefetched line_items (efficient join)
+    # Limit to recent 100 invoices for performance (pagination can be added later)
+    invoices = list(
+        invoices_queryset.prefetch_related('line_items')
+        .order_by('-created_at')[:100]
+    )
+    
+    # Use AnalyticsService for efficient stats calculation
+    stats = AnalyticsService.get_user_dashboard_stats(request.user)
+    
     context = {
         "invoices": invoices,
-        "total_invoices": total_invoices,
-        "paid_count": paid_count,
-        "unpaid_count": unpaid_count,
-        "total_revenue": revenue_value,
-        "unique_clients": unique_clients,
+        "total_invoices": stats['total_invoices'],
+        "paid_count": stats['paid_count'],
+        "unpaid_count": stats['unpaid_count'],
+        "total_revenue": stats['total_revenue'],
+        "unique_clients": stats['unique_clients'],
         "filter_status": filter_status,
     }
     return render(request, "invoices/dashboard.html", context)
