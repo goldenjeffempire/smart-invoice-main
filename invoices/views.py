@@ -100,49 +100,39 @@ def dashboard(request):
 
 @login_required
 def create_invoice(request):
+    from invoices.services import InvoiceService
+    
     if request.method == "POST":
-        from invoices.services import InvoiceService
-        from django.db import transaction
-        
-        invoice_form = InvoiceForm(request.POST, request.FILES)
         line_items_data = json.loads(request.POST.get("line_items", "[]"))
-
-        if invoice_form.is_valid() and line_items_data:
-            try:
-                with transaction.atomic():
-                    invoice = invoice_form.save(commit=False)
-                    invoice.user = request.user
-                    invoice.save()
-
-                    for item_data in line_items_data:
-                        LineItem.objects.create(  # type: ignore
-                            invoice=invoice,
-                            description=item_data["description"],
-                            quantity=Decimal(item_data["quantity"]),
-                            unit_price=Decimal(item_data["unit_price"]),
-                        )
-
-                messages.success(request, f"Invoice {invoice.invoice_id} created successfully!")
-                return redirect("invoice_detail", invoice_id=invoice.id)
-            except Exception as e:
-                messages.error(request, f"Error creating invoice: {str(e)}")
+        
+        if not line_items_data:
+            messages.error(request, "Please add at least one line item.")
+            return render(request, "invoices/create_invoice.html", {
+                "invoice_form": InvoiceForm(request.POST, request.FILES)
+            })
+        
+        invoice, invoice_form = InvoiceService.create_invoice(
+            user=request.user,
+            invoice_data=request.POST,
+            files_data=request.FILES,
+            line_items_data=line_items_data
+        )
+        
+        if invoice:
+            messages.success(request, f"Invoice {invoice.invoice_id} created successfully!")
+            return redirect("invoice_detail", invoice_id=invoice.id)
         else:
             messages.error(request, "Please correct the errors below.")
-    else:
-        invoice_form = InvoiceForm()
-
-    return render(
-        request,
-        "invoices/create_invoice.html",
-        {
-            "invoice_form": invoice_form,
-        },
-    )
+            return render(request, "invoices/create_invoice.html", {
+                "invoice_form": invoice_form
+            })
+    
+    return render(request, "invoices/create_invoice.html", {"invoice_form": InvoiceForm()})
 
 
 @login_required
 def invoice_detail(request, invoice_id):
-    invoice = get_object_or_404(  # type: ignore
+    invoice = get_object_or_404(
         Invoice.objects.prefetch_related('line_items'),
         id=invoice_id,
         user=request.user
@@ -152,39 +142,43 @@ def invoice_detail(request, invoice_id):
 
 @login_required
 def edit_invoice(request, invoice_id):
-    from django.db import transaction
+    from invoices.services import InvoiceService
     
     invoice = get_object_or_404(
-        Invoice.objects.prefetch_related('line_items'),  # type: ignore
+        Invoice.objects.prefetch_related('line_items'),
         id=invoice_id,
         user=request.user
     )
 
     if request.method == "POST":
-        invoice_form = InvoiceForm(request.POST, request.FILES, instance=invoice)
         line_items_data = json.loads(request.POST.get("line_items", "[]"))
-
-        if invoice_form.is_valid() and line_items_data:
-            try:
-                with transaction.atomic():
-                    invoice = invoice_form.save()
-                    
-                    invoice.line_items.all().delete()
-                    
-                    for item_data in line_items_data:
-                        LineItem.objects.create(  # type: ignore
-                            invoice=invoice,
-                            description=item_data["description"],
-                            quantity=Decimal(item_data["quantity"]),
-                            unit_price=Decimal(item_data["unit_price"]),
-                        )
-                
-                messages.success(request, f"Invoice {invoice.invoice_id} updated successfully!")
-                return redirect("invoice_detail", invoice_id=invoice.id)
-            except Exception as e:
-                messages.error(request, f"Error updating invoice: {str(e)}")
-    else:
-        invoice_form = InvoiceForm(instance=invoice)
+        
+        if not line_items_data:
+            messages.error(request, "Please add at least one line item.")
+            return render(request, "invoices/edit_invoice.html", {
+                "invoice_form": InvoiceForm(request.POST, request.FILES, instance=invoice),
+                "invoice": invoice,
+                "line_items_json": json.dumps([], default=str),
+            })
+        
+        updated_invoice, invoice_form = InvoiceService.update_invoice(
+            invoice=invoice,
+            invoice_data=request.POST,
+            files_data=request.FILES,
+            line_items_data=line_items_data
+        )
+        
+        if updated_invoice:
+            messages.success(request, f"Invoice {updated_invoice.invoice_id} updated successfully!")
+            return redirect("invoice_detail", invoice_id=updated_invoice.id)
+        else:
+            messages.error(request, "Please correct the errors below.")
+            line_items = list(invoice.line_items.values("description", "quantity", "unit_price"))
+            return render(request, "invoices/edit_invoice.html", {
+                "invoice_form": invoice_form,
+                "invoice": invoice,
+                "line_items_json": json.dumps(line_items, default=str),
+            })
 
     line_items = list(invoice.line_items.values("description", "quantity", "unit_price"))
 
@@ -192,7 +186,7 @@ def edit_invoice(request, invoice_id):
         request,
         "invoices/edit_invoice.html",
         {
-            "invoice_form": invoice_form,
+            "invoice_form": InvoiceForm(instance=invoice),
             "invoice": invoice,
             "line_items_json": json.dumps(line_items, default=str),
         },
@@ -224,34 +218,31 @@ def update_invoice_status(request, invoice_id):
 
 @login_required
 def generate_pdf(request, invoice_id):
+    from .services import PDFService
+    
     invoice = get_object_or_404(
-        Invoice.objects.prefetch_related('line_items'),  # type: ignore
+        Invoice.objects.prefetch_related('line_items'),
         id=invoice_id,
         user=request.user
     )
 
-    html_string = render_to_string("invoices/invoice_pdf.html", {"invoice": invoice})
+    pdf = PDFService.generate_pdf_bytes(invoice)
 
-    font_config = FontConfiguration()
-    html = HTML(string=html_string)
-    pdf = html.write_pdf(font_config=font_config)
-
-    response = HttpResponse(pdf or b"", content_type="application/pdf")  # type: ignore
+    response = HttpResponse(pdf, content_type="application/pdf")
     response["Content-Disposition"] = f'attachment; filename="Invoice_{invoice.invoice_id}.pdf"'
 
     return response
 
 
 @login_required
-def send_invoice_email(request, invoice_id: int):  # type: ignore
+def send_invoice_email(request, invoice_id: int):
     from .email_service import EmailService
     
-    invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)  # type: ignore
+    invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)
 
     if request.method == "POST":
         recipient_email = request.POST.get("email", invoice.client_email)
         
-        # Send email using improved async service with error handling
         EmailService.send_invoice_email_async(invoice.id, recipient_email)
         
         messages.success(

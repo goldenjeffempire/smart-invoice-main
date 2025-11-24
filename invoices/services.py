@@ -17,12 +17,16 @@ class InvoiceService:
     
     @staticmethod
     @transaction.atomic
-    def create_invoice(user, invoice_data, line_items_data):
-        """Create invoice with line items in atomic transaction."""
+    def create_invoice(user, invoice_data, files_data, line_items_data):
+        """Create invoice with line items in atomic transaction.
+        
+        Returns: (invoice, form) tuple where invoice is the created Invoice or None,
+                 and form is the bound form (for displaying errors if invalid).
+        """
         from .forms import InvoiceForm
-        invoice_form = InvoiceForm(invoice_data)
+        invoice_form = InvoiceForm(invoice_data, files_data)
         if not invoice_form.is_valid():
-            return None, invoice_form.errors
+            return None, invoice_form
         
         invoice = invoice_form.save(commit=False)
         invoice.user = user
@@ -36,16 +40,20 @@ class InvoiceService:
                 unit_price=Decimal(item_data["unit_price"]),
             )
         
-        return invoice, None
+        return invoice, invoice_form
     
     @staticmethod
     @transaction.atomic
-    def update_invoice(invoice, invoice_data, line_items_data):
-        """Update invoice with line items in atomic transaction."""
+    def update_invoice(invoice, invoice_data, files_data, line_items_data):
+        """Update invoice with line items in atomic transaction.
+        
+        Returns: (invoice, form) tuple where invoice is the updated Invoice or None,
+                 and form is the bound form (for displaying errors if invalid).
+        """
         from .forms import InvoiceForm
-        invoice_form = InvoiceForm(invoice_data, instance=invoice)
+        invoice_form = InvoiceForm(invoice_data, files_data, instance=invoice)
         if not invoice_form.is_valid():
-            return None, invoice_form.errors
+            return None, invoice_form
         
         invoice = invoice_form.save()
         invoice.line_items.all().delete()
@@ -58,7 +66,7 @@ class InvoiceService:
                 unit_price=Decimal(item_data["unit_price"]),
             )
         
-        return invoice, None
+        return invoice, invoice_form
 
 
 class PDFService:
