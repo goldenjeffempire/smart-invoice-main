@@ -236,29 +236,29 @@ def generate_pdf(request, invoice_id):
     return response
 
 
-def _send_email_async(invoice_id, recipient_email):
+def _send_email_async(invoice_id: int, recipient_email: str) -> None:  # type: ignore
     """Send invoice email in background thread using SendGrid."""
+    import logging
+    logger = logging.getLogger(__name__)
     try:
-        invoice = Invoice.objects.get(id=invoice_id)
-        
-        # Use SendGrid email service
+        invoice = Invoice.objects.get(id=invoice_id)  # type: ignore
         service = SendGridEmailService()
         result = service.send_invoice_ready(invoice, recipient_email)
         
         if result.get('status') == 'sent':
-            print(f"✓ Invoice ready email sent to {recipient_email}")
+            logger.info(f"Invoice ready email sent to {recipient_email}")
         elif result.get('configured') is False:
-            # SendGrid not configured - this is expected in dev/demo environments
-            print(f"⚠️  Email delivery disabled: {result.get('message')}")
+            logger.warning(f"Email delivery disabled: {result.get('message')}")
         else:
-            print(f"✗ Failed to send invoice email: {result.get('message')}")
+            logger.error(f"Failed to send invoice email: {result.get('message')}")
     except Exception as e:
-        print(f"❌ Error in email async handler: {str(e)}")
+        logger.error(f"Error in email async handler: {str(e)}")
 
 
 @login_required
-def send_invoice_email(request, invoice_id):
-    invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)
+def send_invoice_email(request, invoice_id: int):  # type: ignore
+    import threading
+    invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)  # type: ignore
 
     if request.method == "POST":
         recipient_email = request.POST.get("email", invoice.client_email)

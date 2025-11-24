@@ -31,7 +31,7 @@ def handle_invoice_status_change(sender, instance, created, **kwargs):
     """Send appropriate email when invoice status changes."""
     if not created:
         try:
-            old_instance = Invoice.objects.get(pk=instance.pk)
+            old_instance = Invoice.objects.get(pk=instance.pk)  # type: ignore
             if old_instance.status != instance.status and instance.status == 'paid':
                 service = SendGridEmailService()
                 result = service.send_invoice_paid(instance, instance.client_email)

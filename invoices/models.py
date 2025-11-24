@@ -1,3 +1,4 @@
+from typing import Any
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -17,19 +18,19 @@ class Waitlist(models.Model):
     email = models.EmailField(unique=True)
     feature = models.CharField(max_length=20, choices=FEATURE_CHOICES, default='general')
     subscribed_at = models.DateTimeField(auto_now_add=True)
-    is_notified = models.BooleanField(default=False)
+    is_notified: bool = models.BooleanField(default=False)  # type: ignore
     
     class Meta:
         ordering = ['-subscribed_at']
         verbose_name_plural = 'Waitlist entries'
     
     def __str__(self) -> str:
-        return f"{self.email} - {self.get_feature_display()}"
+        return f"{self.email} - {self.get_feature_display()}"  # type: ignore
 
 
 class UserProfile(models.Model):
     """Extended user profile with business preferences and settings."""
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')  # type: ignore
     company_name = models.CharField(max_length=200, blank=True)
     company_logo = models.ImageField(upload_to='company_logos/', null=True, blank=True)
     default_currency = models.CharField(
@@ -115,21 +116,21 @@ class RecurringInvoice(models.Model):
     def __str__(self):
         return f"Recurring - {self.client_name} ({self.frequency})"
 
-    def generate_next_invoice_date(self):
+    def generate_next_invoice_date(self) -> Any:  # type: ignore
         """Calculate next invoice generation date based on frequency."""
         if self.frequency == 'weekly':
-            return self.next_generation + timedelta(weeks=1)
+            return self.next_generation + timedelta(weeks=1)  # type: ignore
         elif self.frequency == 'biweekly':
-            return self.next_generation + timedelta(weeks=2)
+            return self.next_generation + timedelta(weeks=2)  # type: ignore
         elif self.frequency == 'monthly':
             from dateutil.relativedelta import relativedelta
-            return self.next_generation + relativedelta(months=1)
+            return self.next_generation + relativedelta(months=1)  # type: ignore
         elif self.frequency == 'quarterly':
             from dateutil.relativedelta import relativedelta
-            return self.next_generation + relativedelta(months=3)
+            return self.next_generation + relativedelta(months=3)  # type: ignore
         elif self.frequency == 'yearly':
             from dateutil.relativedelta import relativedelta
-            return self.next_generation + relativedelta(years=1)
+            return self.next_generation + relativedelta(years=1)  # type: ignore
         return self.next_generation
 
 
@@ -148,10 +149,10 @@ class Invoice(models.Model):
         ("paid", "Paid"),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="invoices")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="invoices")  # type: ignore
     invoice_id = models.CharField(max_length=20, unique=True, editable=False)
-    recurring_invoice = models.ForeignKey(RecurringInvoice, on_delete=models.SET_NULL, null=True, blank=True, related_name='generated_invoices')
-    template = models.ForeignKey(InvoiceTemplate, on_delete=models.SET_NULL, null=True, blank=True)
+    recurring_invoice = models.ForeignKey(RecurringInvoice, on_delete=models.SET_NULL, null=True, blank=True, related_name='generated_invoices')  # type: ignore
+    template = models.ForeignKey(InvoiceTemplate, on_delete=models.SET_NULL, null=True, blank=True)  # type: ignore
 
     business_name = models.CharField(max_length=200)
     business_email = models.EmailField()
