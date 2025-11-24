@@ -109,7 +109,6 @@ class AnalyticsService:
         paid_invoices_with_items = list(
             invoices.filter(status="paid")
             .prefetch_related('line_items')
-            .only('id', 'tax_rate')  # Only fetch needed fields
         )
         
         # Calculate revenue from paid invoices only
