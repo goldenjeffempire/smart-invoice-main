@@ -66,7 +66,7 @@ else:
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
 
-CSRF_TRUSTED_ORIGINS = env.list(
+CSRF_TRUSTED_ORIGINS: list[str] = env.list(
     "CSRF_TRUSTED_ORIGINS",
     default=[
         "https://*.replit.dev",
@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sitemaps",
     "csp",
     "invoices",
 ]
@@ -93,6 +94,9 @@ MIDDLEWARE = [
     "csp.middleware.CSPMiddleware",
     "smart_invoice.security_middleware.SecurityHeadersMiddleware",
     "smart_invoice.security_middleware.SecurityEventLoggingMiddleware",
+    "invoices.middleware.RequestResponseLoggingMiddleware",
+    "invoices.middleware.RateLimitingMiddleware",
+    "invoices.middleware.SecurityHeadersEnhancedMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",

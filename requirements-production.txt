@@ -16,3 +16,4 @@ redis==5.0.1
 
 # Optional: Celery for async tasks
 celery==5.3.4
+django-environ==0.21.0
