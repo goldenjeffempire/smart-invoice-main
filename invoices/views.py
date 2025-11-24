@@ -3,21 +3,18 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
-from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.db.models import Count
 from django.db.models.functions import TruncMonth
 from django.views.decorators.http import require_http_methods
 from datetime import datetime
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Dict, Any, Optional, List
 import calendar
 from weasyprint import HTML
 from weasyprint.text.fonts import FontConfiguration
 import json
 import urllib.parse
 from decimal import Decimal
-import threading
-import os
 
 from .models import Invoice, LineItem, UserProfile, InvoiceTemplate, RecurringInvoice
 from .forms import SignUpForm, InvoiceForm, UserProfileForm, InvoiceTemplateForm, RecurringInvoiceForm, InvoiceSearchForm

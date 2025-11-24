@@ -1,57 +1,45 @@
 """Signal handlers for Smart Invoice emails."""
-from django.db.models.signals import post_save, post_delete
+import logging
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
-from .models import Invoice, UserProfile
+from .models import Invoice
 from .sendgrid_service import SendGridEmailService
-import threading
+
+logger = logging.getLogger(__name__)
 
 
 @receiver(post_save, sender=User)
 def send_welcome_email_on_signup(sender, instance, created, **kwargs):
     """Send welcome email when new user is created."""
     if created:
-        def _send_in_background():
-            try:
-                service = SendGridEmailService()
-                result = service.send_welcome_email(instance)
-                if result.get('status') == 'sent':
-                    print(f"✓ Welcome email sent to {instance.email}")
-                elif result.get('configured') is False:
-                    print(f"⚠️  Email delivery disabled for welcome email")
-                else:
-                    print(f"✗ Failed to send welcome email: {result.get('message')}")
-            except Exception as e:
-                print(f"❌ Error in signup signal: {str(e)}")
-        
-        # Send in background thread to avoid blocking
-        thread = threading.Thread(target=_send_in_background, daemon=True)
-        thread.start()
+        try:
+            service = SendGridEmailService()
+            result = service.send_welcome_email(instance)
+            if result.get('status') == 'sent':
+                logger.info(f"Welcome email sent to {instance.email}")
+            elif result.get('configured') is False:
+                logger.warning(f"Email delivery disabled for welcome email")
+            else:
+                logger.error(f"Failed to send welcome email: {result.get('message')}")
+        except Exception as e:
+            logger.error(f"Error in signup signal: {str(e)}")
 
 
 @receiver(post_save, sender=Invoice)
 def handle_invoice_status_change(sender, instance, created, **kwargs):
     """Send appropriate email when invoice status changes."""
-    if not created:  # Only on update, not on create
-        # Check if status was just changed to 'paid'
+    if not created:
         try:
             old_instance = Invoice.objects.get(pk=instance.pk)
             if old_instance.status != instance.status and instance.status == 'paid':
-                # Invoice was just marked as paid - send payment notification
-                def _send_paid_email():
-                    try:
-                        service = SendGridEmailService()
-                        result = service.send_invoice_paid(instance, instance.client_email)
-                        if result.get('status') == 'sent':
-                            print(f"✓ Invoice paid email sent for Invoice #{instance.invoice_id}")
-                        elif result.get('configured') is False:
-                            print(f"⚠️  Email delivery disabled for paid notification")
-                        else:
-                            print(f"✗ Failed to send invoice paid email: {result.get('message')}")
-                    except Exception as e:
-                        print(f"❌ Error sending invoice paid email: {str(e)}")
-                
-                thread = threading.Thread(target=_send_paid_email, daemon=True)
-                thread.start()
+                service = SendGridEmailService()
+                result = service.send_invoice_paid(instance, instance.client_email)
+                if result.get('status') == 'sent':
+                    logger.info(f"Invoice paid email sent for Invoice #{instance.invoice_id}")
+                elif result.get('configured') is False:
+                    logger.warning(f"Email delivery disabled for paid notification")
+                else:
+                    logger.error(f"Failed to send invoice paid email: {result.get('message')}")
         except Exception as e:
-            print(f"❌ Error in invoice status change handler: {str(e)}")
+            logger.error(f"Error in invoice status change handler: {str(e)}")
