@@ -142,8 +142,8 @@ def create_invoice(request):
 
 @login_required
 def invoice_detail(request, invoice_id):
-    invoice = get_object_or_404(
-        Invoice.objects.prefetch_related(  # type: ignore'line_items'),
+    invoice = get_object_or_404(  # type: ignore
+        Invoice.objects.prefetch_related('line_items'),
         id=invoice_id,
         user=request.user
     )
