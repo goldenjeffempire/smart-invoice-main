@@ -273,13 +273,25 @@ RATELIMIT_ENABLE = not DEBUG
 RATELIMIT_USE_CACHE = "default"
 RATELIMIT_VIEW = "django_ratelimit.decorators.ratelimit"
 
-# Cache configuration (for rate limiting in development)
+# Cache configuration - enhanced for performance
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "LOCATION": "smart-invoice-cache",
+        "OPTIONS": {
+            "MAX_ENTRIES": 10000
+        }
     }
 }
+
+# Template caching for performance
+if not DEBUG:
+    TEMPLATES[0]['OPTIONS']['loaders'] = [
+        ('django.template.loaders.cached.Loader', [
+            'django.template.loaders.filesystem.Loader',
+            'django.template.loaders.app_directories.Loader',
+        ]),
+    ]
 
 # Session security
 SESSION_COOKIE_HTTPONLY = True

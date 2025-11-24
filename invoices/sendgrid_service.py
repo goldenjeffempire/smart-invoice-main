@@ -13,7 +13,7 @@ from django.template.loader import render_to_string
 
 
 class SendGridEmailService:
-    """Service for sending emails using SendGrid dynamic templates.
+    """Service for sending emails using SendGrid dynamic templates with Replit integration support.
     
     Smart Direct Sending:
     - Emails send FROM platform owner's verified email (technical requirement)
@@ -21,11 +21,6 @@ class SendGridEmailService:
     - Reply-To header routes replies directly to user's business email
     - Users can send directly without SendGrid verification!
     """
-    
-    # Platform owner's verified email - ALL emails send from this address
-    # Set this to your verified SendGrid sender email
-    PLATFORM_FROM_EMAIL = os.environ.get("SENDGRID_FROM_EMAIL", "noreply@smartinvoice.com")
-    PLATFORM_FROM_NAME = "Smart Invoice"
     
     # Template IDs - set these in your environment variables
     TEMPLATE_IDS = {
@@ -38,12 +33,60 @@ class SendGridEmailService:
     }
     
     def __init__(self):
-        self.api_key = os.environ.get("SENDGRID_API_KEY")
-        self.is_configured = bool(self.api_key)
-        if self.is_configured:
+        # Try to get credentials from Replit integration first, fall back to environment variables
+        self.api_key = None
+        self.from_email = os.environ.get("SENDGRID_FROM_EMAIL", "noreply@smartinvoice.com")
+        self.platform_from_name = "Smart Invoice"
+        
+        # Try Replit integration if available
+        if self._try_replit_integration():
+            self.is_configured = True
+        else:
+            # Fall back to environment variables
+            self.api_key = os.environ.get("SENDGRID_API_KEY")
+            self.is_configured = bool(self.api_key)
+        
+        if self.is_configured and self.api_key:
             self.client = SendGridAPIClient(self.api_key)
         else:
             self.client = None
+    
+    def _try_replit_integration(self) -> bool:
+        """Try to get SendGrid credentials from Replit integration connector."""
+        try:
+            # Check if we're in Replit environment
+            hostname = os.environ.get('REPLIT_CONNECTORS_HOSTNAME')
+            token = os.environ.get('REPL_IDENTITY') or os.environ.get('WEB_REPL_RENEWAL')
+            
+            if not hostname or not token:
+                return False
+            
+            # Prepare token header
+            token_header = f'repl {token}' if 'REPL_IDENTITY' in os.environ else f'depl {token}'
+            
+            # For synchronous operation, we'll try async operations
+            import urllib.request
+            import json
+            
+            url = f'https://{hostname}/api/v2/connection?include_secrets=true&connector_names=sendgrid'
+            req = urllib.request.Request(url)
+            req.add_header('Accept', 'application/json')
+            req.add_header('X_REPLIT_TOKEN', token_header)
+            
+            with urllib.request.urlopen(req, timeout=5) as response:
+                data = json.loads(response.read().decode())
+                connection = data.get('items', [{}])[0]
+                settings = connection.get('settings', {})
+                
+                if settings.get('api_key') and settings.get('from_email'):
+                    self.api_key = settings['api_key']
+                    self.from_email = settings['from_email']
+                    return True
+        except Exception as e:
+            # Silently fall back to environment variables
+            pass
+        
+        return False
     
     # ============ INVOICE EMAILS ============
     
@@ -227,7 +270,7 @@ class SendGridEmailService:
             # But set Reply-To to user's business email for direct replies
             
             message = Mail(
-                from_email=From(self.PLATFORM_FROM_EMAIL, from_name),
+                from_email=From(self.from_email, from_name),
                 to_emails=To(to_email),
                 subject=subject,
             )
@@ -261,13 +304,13 @@ class SendGridEmailService:
             # Send email
             response = self.client.send(message)
             print(f"✅ Email sent successfully!")
-            print(f"   From: {self.PLATFORM_FROM_EMAIL} (verified platform email)")
+            print(f"   From: {self.from_email} (verified platform email)")
             print(f"   Reply-To: {user_business_email} (user's direct email)")
             print(f"   Display Name: {from_name}")
             return {
                 "status": "sent",
                 "response": response.status_code,
-                "from_email": self.PLATFORM_FROM_EMAIL,
+                "from_email": self.from_email,
                 "reply_to": user_business_email
             }
             
@@ -415,7 +458,7 @@ class SendGridEmailService:
         
         try:
             message = Mail()
-            message.from_email = From(self.PLATFORM_FROM_EMAIL, self.PLATFORM_FROM_NAME)
+            message.from_email = From(self.from_email, self.platform_from_name)
             message.to = To(recipient_email)
             message.subject = 'Smart Invoice - Email Test'
             message.content = [
