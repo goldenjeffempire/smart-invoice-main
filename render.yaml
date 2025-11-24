@@ -45,6 +45,9 @@ services:
         sync: false
       - key: SENDGRID_FROM_EMAIL
         sync: false
+      # CSRF configuration (production)
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://smart-invoice.onrender.com,https://*.onrender.com"
       # Optional: Error tracking
       - key: SENTRY_DSN
         sync: false

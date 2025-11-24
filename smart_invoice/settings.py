@@ -66,8 +66,19 @@ else:
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
 
-_default_csrf = "https://*.replit.dev,https://*.repl.co,https://*.onrender.com,https://*.render.com"
-CSRF_TRUSTED_ORIGINS: list[str] = env.list("CSRF_TRUSTED_ORIGINS", default=_default_csrf)  # type: ignore
+# Django 4.0+ requires CSRF_TRUSTED_ORIGINS to be a list of origins with schemes
+_default_csrf = [
+    "https://*.replit.dev",
+    "https://*.repl.co", 
+    "https://*.onrender.com",
+    "https://*.render.com"
+]
+# Parse from env if set, or use defaults
+_csrf_env = os.environ.get("CSRF_TRUSTED_ORIGINS", "")
+if _csrf_env:
+    CSRF_TRUSTED_ORIGINS = [x.strip() for x in _csrf_env.split(",") if x.strip()]
+else:
+    CSRF_TRUSTED_ORIGINS = _default_csrf
 
 INSTALLED_APPS = [
     "django.contrib.admin",
