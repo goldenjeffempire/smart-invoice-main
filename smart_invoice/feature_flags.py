@@ -16,8 +16,8 @@ class FeatureFlagManager:
     Supports percentage rollouts, user targeting, and A/B testing.
     """
     
-    # Default flag definitions
-    DEFAULT_FLAGS = {
+    # Default flag definitions (immutable reference)
+    _DEFAULT_FLAGS_TEMPLATE = {
         # Landing page experiments
         'hero_variant_gradient': {
             'enabled': True,
@@ -80,8 +80,10 @@ class FeatureFlagManager:
         if cached_flags:
             return cached_flags
         
-        # Load from settings or use defaults
-        flags = getattr(settings, 'FEATURE_FLAGS', self.DEFAULT_FLAGS)
+        # Load from settings or use defaults (deep copy to prevent mutation)
+        import copy
+        default_flags = getattr(settings, 'FEATURE_FLAGS', self._DEFAULT_FLAGS_TEMPLATE)
+        flags = copy.deepcopy(default_flags)
         cache.set('feature_flags', flags, timeout=300)  # Cache for 5 minutes
         return flags
     

@@ -604,6 +604,12 @@
         }
 
         init() {
+            // Only initialize tracking if consent is given
+            if (!this.hasConsent()) {
+                console.log('[Analytics] Tracking disabled - no consent');
+                return;
+            }
+            
             this.trackPageView();
             this.trackButtonClicks();
             this.trackFormSubmissions();
@@ -631,9 +637,8 @@
         }
 
         hasConsent() {
-            // Check for analytics consent cookie
-            return document.cookie.includes('analytics_consent=true') || 
-                   !document.cookie.includes('analytics_consent');  // Default to true if not set
+            // Check for analytics consent cookie - default to FALSE for GDPR compliance
+            return document.cookie.includes('analytics_consent=true');
         }
 
         sendToBackend(event) {
