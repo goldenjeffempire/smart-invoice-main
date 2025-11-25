@@ -125,6 +125,11 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.media",
             ],
+            "builtins": [
+                "django.template.defaulttags",
+                "django.template.defaultfilters",
+                "django.template.loader_tags",
+            ],
         },
     },
 ]
@@ -289,14 +294,9 @@ CACHES = {
     }
 }
 
-# Template caching for performance
-if not DEBUG:
-    TEMPLATES[0]['OPTIONS']['loaders'] = [
-        ('django.template.loaders.cached.Loader', [
-            'django.template.loaders.filesystem.Loader',
-            'django.template.loaders.app_directories.Loader',
-        ]),
-    ]
+# Template caching for performance (disabled when APP_DIRS=True)
+# Note: APP_DIRS=True handles template discovery automatically
+# Conditional loaders would cause ImproperlyConfigured error
 
 # Session security
 SESSION_COOKIE_HTTPONLY = True

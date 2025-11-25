@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+<section class="relative pt-32 pb-20 bg-gradient-to-br from-blue-50 to-purple-50">
+    <div class="container px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-6xl md:text-7xl font-black text-gray-900 mb-6">Powerful Features, Simply Designed</h1>
+            <p class="text-2xl text-gray-600 leading-relaxed">Everything you need to create, send, and track invoices with confidence</p>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES DETAILED SECTION -->
+<section class="py-24 bg-white">
+    <div class="container px-6">
+        <!-- Core Features -->
+        <div class="mb-32">
+            <h2 class="text-4xl font-black text-gray-900 mb-16">Core Features</h2>
+            <div class="grid md:grid-cols-2 gap-16 max-w-5xl">
+                <div class="space-y-6">
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600 text-white text-2xl">⚡</div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-black text-gray-900 mb-3">60-Second Invoice Creation</h3>
+                            <p class="text-gray-600 leading-relaxed">Smart auto-fill learns your business details and client information. Create professional invoices in seconds, not hours.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-600 text-white text-2xl">🎨</div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-black text-gray-900 mb-3">Complete Branding Control</h3>
+                            <p class="text-gray-600 leading-relaxed">Upload logos, customize colors, fonts, and layouts. Every invoice represents your brand perfectly.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-pink-600 text-white text-2xl">📧</div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-black text-gray-900 mb-3">Multi-Channel Delivery</h3>
+                            <p class="text-gray-600 leading-relaxed">Send via email, WhatsApp, or let clients download PDF. Track opens and engagement in real-time.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-green-600 text-white text-2xl">💰</div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-black text-gray-900 mb-3">Online Payment Collection</h3>
+                            <p class="text-gray-600 leading-relaxed">Accept payments directly from invoices. Integrate Stripe, PayPal, or bank transfers seamlessly.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Advanced Features -->
+        <div class="mb-32">
+            <h2 class="text-4xl font-black text-gray-900 mb-16">Advanced Capabilities</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-8 border border-blue-200">
+                    <div class="text-4xl mb-4">📊</div>
+                    <h3 class="text-xl font-black text-gray-900 mb-3">Analytics & Reporting</h3>
+                    <p class="text-gray-600">Track invoice performance, payment trends, and cash flow. Export detailed reports for accounting.</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-purple-50 to-white rounded-2xl p-8 border border-purple-200">
+                    <div class="text-4xl mb-4">🔔</div>
+                    <h3 class="text-xl font-black text-gray-900 mb-3">Smart Reminders</h3>
+                    <p class="text-gray-600">Automated payment reminders that are friendly but effective. Never miss a payment again.</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-pink-50 to-white rounded-2xl p-8 border border-pink-200">
+                    <div class="text-4xl mb-4">🔐</div>
+                    <h3 class="text-xl font-black text-gray-900 mb-3">Bank-Level Security</h3>
+                    <p class="text-gray-600">256-bit SSL encryption, daily backups, SOC 2 compliance. Your data is always protected.</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-green-50 to-white rounded-2xl p-8 border border-green-200">
+                    <div class="text-4xl mb-4">🔗</div>
+                    <h3 class="text-xl font-black text-gray-900 mb-3">API & Integrations</h3>
+                    <p class="text-gray-600">Connect with your tools. Zapier, Stripe, PayPal, and more integrations available.</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-yellow-50 to-white rounded-2xl p-8 border border-yellow-200">
+                    <div class="text-4xl mb-4">👥</div>
+                    <h3 class="text-xl font-black text-gray-900 mb-3">Team Collaboration</h3>
+                    <p class="text-gray-600">Add team members, assign roles, and collaborate on invoicing. Perfect for agencies.</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-indigo-50 to-white rounded-2xl p-8 border border-indigo-200">
+                    <div class="text-4xl mb-4">🌍</div>
+                    <h3 class="text-xl font-black text-gray-900 mb-3">Multi-Currency & Tax</h3>
+                    <p class="text-gray-600">Support 150+ currencies, automatic tax calculation, and localization for global business.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Industry-Specific Features -->
+        <div>
+            <h2 class="text-4xl font-black text-gray-900 mb-16">Built For Your Industry</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="rounded-2xl p-8 bg-gradient-to-br from-blue-600 to-blue-700 text-white">
+                    <h3 class="text-2xl font-black mb-4">For Freelancers</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3"><span class="text-lg">✓</span> <span>Multiple client management</span></li>
+                        <li class="flex items-center gap-3"><span class="text-lg">✓</span> <span>Time tracking integration</span></li>
+                        <li class="flex items-center gap-3"><span class="text-lg">✓</span> <span>Recurring invoice templates</span></li>
+                    </ul>
+                </div>
+                
+                <div class="rounded-2xl p-8 bg-gradient-to-br from-purple-600 to-purple-700 text-white">
+                    <h3 class="text-2xl font-black mb-4">For Agencies</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3"><span class="text-lg">✓</span> <span>White-label invoicing</span></li>
+                        <li class="flex items-center gap-3"><span class="text-lg">✓</span> <span>Team permissions & roles</span></li>
+                        <li class="flex items-center gap-3"><span class="text-lg">✓</span> <span>Unlimited clients & invoices</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA SECTION -->
+<section class="py-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+    <div class="container px-6 text-center">
+        <h2 class="text-4xl font-black mb-6">Ready to experience the difference?</h2>
+        <a href="{% url 'signup' %}" class="inline-block px-10 py-4 bg-white text-blue-600 font-bold rounded-lg hover:bg-gray-100 transition-all">
+            Start Free Today →
+        </a>
+    </div>
+</section>
+
+{% endblock %}
