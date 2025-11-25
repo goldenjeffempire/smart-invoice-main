@@ -20,8 +20,8 @@ class Migration(migrations.Migration):
             reverse_sql='DROP INDEX IF EXISTS idx_invoice_user_status'
         ),
         migrations.RunSQL(
-            sql='CREATE INDEX IF NOT EXISTS idx_invoice_number ON invoices_invoice(invoice_number)',
-            reverse_sql='DROP INDEX IF EXISTS idx_invoice_number'
+            sql='CREATE INDEX IF NOT EXISTS idx_invoice_id ON invoices_invoice(invoice_id)',
+            reverse_sql='DROP INDEX IF EXISTS idx_invoice_id'
         ),
         migrations.RunSQL(
             sql='CREATE INDEX IF NOT EXISTS idx_invoice_status_created ON invoices_invoice(status, created_at DESC)',

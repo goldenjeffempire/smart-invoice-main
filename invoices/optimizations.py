@@ -15,7 +15,7 @@ class QueryOptimizer:
     def get_user_invoices_optimized(user):
         """Get user invoices with optimal queries"""
         return Invoice.objects.filter(user=user).select_related('user').only(
-            'id', 'invoice_number', 'client_name', 'amount', 'currency', 'status', 'created_at'
+            'id', 'invoice_id', 'client_name', 'amount', 'currency', 'status', 'created_at'
         )
     
     @staticmethod
@@ -42,7 +42,7 @@ class QueryOptimizer:
         return Invoice.objects.filter(user=user).order_by(
             '-created_at'
         )[:limit].select_related('user').values(
-            'id', 'invoice_number', 'client_name', 'amount', 'status'
+            'id', 'invoice_id', 'client_name', 'amount', 'status'
         )
 
 
@@ -93,7 +93,7 @@ class IndexOptimization:
         ('Invoice', ['currency', 'amount']),
         
         # Search optimization
-        ('Invoice', ['invoice_number']),
+        ('Invoice', ['invoice_id']),
         ('Invoice', ['client_name']),
         
         # Date range queries
@@ -108,7 +108,7 @@ class IndexOptimization:
         CREATE INDEX idx_invoice_user_created ON invoices_invoice(user_id, created_at);
         CREATE INDEX idx_invoice_user_status ON invoices_invoice(user_id, status);
         CREATE INDEX idx_invoice_status_created ON invoices_invoice(status, created_at);
-        CREATE INDEX idx_invoice_number ON invoices_invoice(invoice_number);
+        CREATE INDEX idx_invoice_id ON invoices_invoice(invoice_id);
         CREATE INDEX idx_invoice_client ON invoices_invoice(client_name);
         """
 
