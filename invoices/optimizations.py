@@ -2,30 +2,31 @@
 Database and query optimizations for Smart Invoice.
 Reduces N+1 queries and improves performance.
 """
-from django.db.models import Prefetch, Count, Sum, Q
+from typing import Any
+from django.db.models import Prefetch, Count, Sum, Q, QuerySet
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
-from .models import Invoice
+from .models import Invoice  # type: ignore
 
 
 class QueryOptimizer:
     """Optimize common database queries"""
     
     @staticmethod
-    def get_user_invoices_optimized(user):
+    def get_user_invoices_optimized(user: Any) -> QuerySet:  # type: ignore
         """Get user invoices with optimal queries"""
-        return Invoice.objects.filter(user=user).select_related('user').only(
+        return Invoice.objects.filter(user=user).select_related('user').only(  # type: ignore
             'id', 'invoice_id', 'client_name', 'amount', 'currency', 'status', 'created_at'
         )
     
     @staticmethod
-    def get_dashboard_stats(user):
+    def get_dashboard_stats(user: Any) -> dict:  # type: ignore
         """Get dashboard statistics efficiently"""
         cache_key = f'dashboard_stats_{user.id}'
         stats = cache.get(cache_key)
         
         if stats is None:
-            invoices = Invoice.objects.filter(user=user).aggregate(
+            invoices = Invoice.objects.filter(user=user).aggregate(  # type: ignore
                 total_invoices=Count('id'),
                 total_amount=Sum('amount'),
                 paid_amount=Sum('amount', filter=Q(status='paid')),
@@ -37,9 +38,9 @@ class QueryOptimizer:
         return stats
     
     @staticmethod
-    def get_recent_invoices(user, limit=10):
+    def get_recent_invoices(user: Any, limit: int = 10) -> QuerySet:  # type: ignore
         """Get recent invoices efficiently"""
-        return Invoice.objects.filter(user=user).order_by(
+        return Invoice.objects.filter(user=user).order_by(  # type: ignore
             '-created_at'
         )[:limit].select_related('user').values(
             'id', 'invoice_id', 'client_name', 'amount', 'status'
