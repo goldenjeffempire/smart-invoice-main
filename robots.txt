@@ -1,24 +1,11 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
-Disallow: /login/
-Disallow: /signup/
 Disallow: /settings/
-Disallow: /invoices/
-Disallow: /api-access/
-Disallow: /health/
-Disallow: /media/
-Disallow: /*.pdf
-Disallow: /search/
-Allow: /static/
+Disallow: /api/
+Allow: /sitemap.xml
 
-# Sitemaps
-Sitemap: https://smartinvoice.com/sitemap.xml
+Sitemap: {{ request.scheme }}://{{ request.get_host }}/sitemap.xml
 
-# Crawl-delay to prevent overload
+# Crawl delay for respectful indexing
 Crawl-delay: 1
-Request-rate: 1/10s
-
-# GoogleBot specific
-User-agent: Googlebot
-Crawl-delay: 0
