@@ -27,6 +27,10 @@ services:
         value: false
       - key: WEB_CONCURRENCY
         value: 4
+      - key: RENDER
+        value: true
+      - key: RENDER_SERVICE_NAME
+        value: smart-invoice
       # Required: Set these in Render dashboard
       - key: SECRET_KEY
         sync: false

@@ -1,3 +1,4 @@
+import os
 from django.apps import AppConfig
 
 
@@ -7,3 +8,8 @@ class InvoicesConfig(AppConfig):
     
     def ready(self):
         import invoices.signals
+        
+        # Start keep-alive on Render to prevent free tier spin-down
+        if os.environ.get('RENDER'):
+            from invoices.keep_alive import start_keep_alive
+            start_keep_alive()
