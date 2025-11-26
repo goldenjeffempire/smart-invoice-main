@@ -27,8 +27,8 @@
   "dependencies": {
     "cssnano": "^7.1.2",
     "cssnano-cli": "^1.0.5",
-    "imagemin-cli": "^8.0.0",
-    "imagemin-webp": "^8.0.0",
+    "imagemin-cli": "^3.0.0",
+    "imagemin-webp": "^6.1.0",
     "terser": "^5.44.1"
   }
 }

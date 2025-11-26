@@ -1,4 +1,5 @@
 from typing import Any
+from decimal import Decimal
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -62,14 +63,14 @@ class InvoiceTemplate(models.Model):
     tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     bank_name = models.CharField(max_length=200, blank=True)
     account_name = models.CharField(max_length=200, blank=True)
-    is_default = models.BooleanField(default=False)
+    is_default: bool = models.BooleanField(default=False)  # type: ignore
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"{self.name} - {self.user.username}"
+        return f"{self.name} - {self.user.username}"  # type: ignore
 
 
 class RecurringInvoice(models.Model):
@@ -201,16 +202,16 @@ class Invoice(models.Model):
         return invoice_id
 
     @property
-    def subtotal(self) -> float:  # type: ignore
+    def subtotal(self) -> Decimal:
         """Calculate subtotal from all line items."""
-        return sum(item.total for item in self.line_items.all())  # type: ignore
+        return sum((item.total for item in self.line_items.all()), Decimal('0'))  # type: ignore
 
     @property
-    def tax_amount(self) -> float:  # type: ignore
-        return float((self.subtotal * self.tax_rate) / 100)
+    def tax_amount(self) -> Decimal:
+        return (self.subtotal * self.tax_rate) / Decimal('100')  # type: ignore
 
     @property
-    def total(self) -> float:  # type: ignore
+    def total(self) -> Decimal:
         return self.subtotal + self.tax_amount
 
     def __str__(self):
@@ -234,8 +235,8 @@ class LineItem(models.Model):
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
 
     @property
-    def total(self) -> float:  # type: ignore
-        return float(self.quantity * self.unit_price)
+    def total(self) -> Decimal:
+        return self.quantity * self.unit_price  # type: ignore
 
     def __str__(self) -> str:
         return f"{self.description} - {self.invoice.invoice_id}"  # type: ignore

@@ -7,16 +7,16 @@ echo "=== Smart Invoice Production Build Script ==="
 # Install Python dependencies
 echo "📦 Installing Python dependencies..."
 pip install --upgrade pip
-pip install -r requirements-production.txt
+pip install -r requirements.txt
 
-# Install Node dependencies for Tailwind CSS
+# Install Node dependencies and build assets
 if [ -f "package.json" ]; then
     echo "📦 Installing Node.js dependencies..."
-    npm install
+    npm install --production=false
     
-    # Build Tailwind CSS
-    echo "🎨 Building Tailwind CSS..."
-    npm run build:css
+    # Build all production assets (CSS + minified JS/CSS)
+    echo "🎨 Building production assets..."
+    npm run build:prod
 fi
 
 # Run Django migrations
