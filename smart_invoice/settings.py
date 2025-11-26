@@ -138,6 +138,13 @@ WSGI_APPLICATION = "smart_invoice.wsgi.application"
 
 if env("DATABASE_URL", default=None):  # type: ignore
     DATABASES = {"default": env.db()}
+    # Add connection pooling for production performance
+    DATABASES["default"]["CONN_MAX_AGE"] = 600  # Keep connections alive for 10 minutes
+    DATABASES["default"]["CONN_HEALTH_CHECKS"] = True  # Django 4.1+ health checks
+    DATABASES["default"]["OPTIONS"] = {
+        "connect_timeout": 10,
+        "options": "-c statement_timeout=30000",  # 30 second query timeout
+    }
 else:
     DATABASES = {
         "default": {
