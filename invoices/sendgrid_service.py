@@ -36,6 +36,7 @@ class SendGridEmailService:
         # Try to get credentials from Replit integration first, fall back to environment variables
         self.api_key = None
         self.from_email = os.environ.get("SENDGRID_FROM_EMAIL", "noreply@smartinvoice.com")
+        self.PLATFORM_FROM_EMAIL = self.from_email  # Alias for backward compatibility
         self.platform_from_name = "Smart Invoice"
         
         # Try Replit integration if available

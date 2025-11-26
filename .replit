@@ -39,6 +39,10 @@ localPort = 35621
 externalPort = 6000
 
 [[ports]]
+localPort = 36585
+externalPort = 8000
+
+[[ports]]
 localPort = 38587
 externalPort = 5173
 
@@ -67,10 +71,6 @@ localPort = 42587
 externalPort = 5000
 
 [[ports]]
-localPort = 44809
-externalPort = 8000
-
-[[ports]]
 localPort = 45037
 externalPort = 3002
 
@@ -81,5 +81,5 @@ SENDGRID_FROM_EMAIL = "team@smartinvoice.com"
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["gunicorn", "smart_invoice.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "4", "--timeout", "30", "--access-logfile", "-", "--error-logfile", "-", "--log-level", "info"]
-build = ["bash", "-c", "pip install -r requirements.txt && npm install && npm run build:prod && python manage.py collectstatic --noinput && python manage.py migrate"]
+run = ["gunicorn", "smart_invoice.wsgi:application", "--bind", "0.0.0.0:5000", "--workers", "4", "--timeout", "60", "--keep-alive", "5", "--max-requests", "1000", "--max-requests-jitter", "100", "--access-logfile", "-", "--error-logfile", "-", "--log-level", "info"]
+build = ["bash", "-c", "pip install --upgrade pip && pip install -r requirements.txt && npm install && npm run build:prod && python manage.py migrate --noinput && python manage.py collectstatic --noinput --clear"]
