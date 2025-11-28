@@ -275,7 +275,7 @@
     {% endif %}
     {% if invoice.logo %}
         <div class="logo-section">
-            <img src="{{ invoice.logo.path }}" alt="{{ invoice.brand_name }} Logo">
+            <img src="{{ invoice.logo.url }}" alt="{{ invoice.brand_name|default:'Company' }} Logo">
         </div>
     {% endif %}
     

@@ -766,10 +766,13 @@
                 <p class="text-xl text-white/90">Learn how successful businesses manage cash flow, automate payments, and scale operations. No spam, just value.</p>
             </div>
             
-            <form class="max-w-md mx-auto space-y-4" id="newsletter-form">
+            <form method="post" action="{% url 'newsletter_signup' %}" class="max-w-md mx-auto space-y-4" id="newsletter-form">
+                {% csrf_token %}
                 <div class="flex flex-col sm:flex-row gap-3">
+                    <label for="newsletter-email" class="sr-only">Email address</label>
                     <input 
                         type="email" 
+                        id="newsletter-email"
                         name="email" 
                         required 
                         placeholder="Enter your email" 
@@ -780,10 +783,10 @@
                         type="submit" 
                         class="px-8 py-4 font-bold bg-white text-indigo-600 rounded-xl hover:bg-gray-100 hover:scale-105 transition-all shadow-2xl whitespace-nowrap"
                     >
-                        Subscribe Free →
+                        Subscribe Free
                     </button>
                 </div>
-                <p class="text-white/70 text-sm">✓ Weekly tips  •  ✓ Unsubscribe anytime  •  ✓ No spam ever</p>
+                <p class="text-white/70 text-sm">Weekly tips  |  Unsubscribe anytime  |  No spam ever</p>
             </form>
         </div>
     </div>

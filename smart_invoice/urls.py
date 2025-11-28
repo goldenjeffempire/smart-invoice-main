@@ -53,6 +53,7 @@ urlpatterns = [
     path("faq/", views.faq, name="faq"),
     path("terms/", views.terms, name="terms"),
     path("privacy/", views.privacy, name="privacy"),
+    path("newsletter/signup/", views.newsletter_signup, name="newsletter_signup"),
     # User features
     path("profile/", views.profile, name="profile"),
     path("my-templates/", views.invoice_templates, name="invoice_templates"),

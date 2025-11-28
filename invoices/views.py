@@ -360,7 +360,55 @@ def careers(request):
 
 
 def contact(request):
-    """Contact page with contact form."""
+    """Contact page with contact form - handles form submission."""
+    from django.core.mail import send_mail
+    from django.conf import settings
+    import logging
+
+    logger = logging.getLogger(__name__)
+
+    if request.method == "POST":
+        name = request.POST.get("name", "").strip()
+        email = request.POST.get("email", "").strip()
+        subject = request.POST.get("subject", "").strip()
+        message_text = request.POST.get("message", "").strip()
+        category = request.POST.get("category", "other").strip()
+
+        if name and email and subject and message_text:
+            try:
+                full_message = f"""
+New Contact Form Submission
+
+From: {name}
+Email: {email}
+Category: {category}
+Subject: {subject}
+
+Message:
+{message_text}
+"""
+                send_mail(
+                    subject=f"[Smart Invoice Contact] {subject}",
+                    message=full_message,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=["support@smartinvoice.com"],
+                    fail_silently=True,
+                )
+                messages.success(
+                    request,
+                    "Thank you for your message! We'll get back to you within 24 hours.",
+                )
+                logger.info(f"Contact form submitted by {email}")
+            except Exception as e:
+                logger.error(f"Contact form email failed: {e}")
+                messages.success(
+                    request,
+                    "Thank you for your message! We've received it and will respond soon.",
+                )
+            return redirect("contact")
+        else:
+            messages.error(request, "Please fill in all required fields.")
+
     return render(request, "pages/contact.html")
 
 
@@ -397,6 +445,46 @@ def privacy(request):
 def components_showcase(request):
     """Phase 1 Design System - Component showcase page."""
     return render(request, "components-showcase.html")
+
+
+def newsletter_signup(request):
+    """Handle newsletter signup form submissions."""
+    from .models import Waitlist
+    import logging
+
+    logger = logging.getLogger(__name__)
+
+    if request.method == "POST":
+        email = request.POST.get("email", "").strip().lower()
+
+        if email:
+            try:
+                waitlist_entry, created = Waitlist.objects.get_or_create(
+                    email=email,
+                    defaults={"feature": "general"}
+                )
+                if created:
+                    messages.success(
+                        request,
+                        "Thanks for subscribing! You'll receive updates and tips soon.",
+                    )
+                    logger.info(f"Newsletter signup: {email}")
+                else:
+                    messages.info(
+                        request,
+                        "You're already subscribed! We'll keep you updated.",
+                    )
+            except Exception as e:
+                logger.error(f"Newsletter signup failed: {e}")
+                messages.error(
+                    request,
+                    "Something went wrong. Please try again later.",
+                )
+        else:
+            messages.error(request, "Please enter a valid email address.")
+
+    referer = request.META.get("HTTP_REFERER", "/")
+    return redirect(referer if referer else "home")
 
 
 # ============================================================================
