@@ -122,10 +122,10 @@
     
     {% if not debug %}
     <!-- Production: Minified JavaScript -->
-    <script src="{% static 'js/app.min.js' %}"></script>
+    <script src="{% static 'js/app.min.js' %}" defer></script>
     {% else %}
     <!-- Development: Un-minified JavaScript -->
-    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/app.js' %}" defer></script>
     {% endif %}
     {% block scripts %}{% endblock %}
 </body>
