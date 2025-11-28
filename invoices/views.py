@@ -120,7 +120,7 @@ def create_invoice(request):
 
         if invoice:
             messages.success(request, f"Invoice {invoice.invoice_id} created successfully!")
-            return redirect("invoice_detail", invoice_id=invoice.id)
+            return redirect("invoice_detail", invoice_id=invoice.id)  # type: ignore[union-attr]
         else:
             messages.error(request, "Please correct the errors below.")
             return render(request, "invoices/create_invoice.html", {"invoice_form": invoice_form})
@@ -168,7 +168,7 @@ def edit_invoice(request, invoice_id):
 
         if updated_invoice:
             messages.success(request, f"Invoice {updated_invoice.invoice_id} updated successfully!")
-            return redirect("invoice_detail", invoice_id=updated_invoice.id)
+            return redirect("invoice_detail", invoice_id=updated_invoice.id)  # type: ignore[union-attr]
         else:
             messages.error(request, "Please correct the errors below.")
             line_items = list(invoice.line_items.values("description", "quantity", "unit_price"))
@@ -752,7 +752,7 @@ def bulk_export(request):
 
     if export_format == "csv":
         csv_data = InvoiceExport.export_to_csv(invoices)
-        response = HttpResponse(csv_data, content_type="text/csv")
+        response = HttpResponse(csv_data.encode("utf-8"), content_type="text/csv")
         response["Content-Disposition"] = 'attachment; filename="invoices.csv"'
         return response
     elif export_format == "pdf":
@@ -792,7 +792,7 @@ def waitlist_subscribe(request):
             messages.success(request, "✓ You're on the list! We'll notify you soon.")
             return redirect(request.META.get("HTTP_REFERER", "home"))
         else:
-            if "email" in form.errors and "already" in str(form.errors["email"][0]).lower():
+            if form.errors and "email" in form.errors and "already" in str(form.errors["email"][0]).lower():
                 messages.info(request, "This email is already on our waitlist!")
             else:
                 messages.error(request, "Please enter a valid email address.")

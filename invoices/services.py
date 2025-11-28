@@ -2,6 +2,9 @@
 Business logic services for Smart Invoice platform.
 Extracts logic from views into reusable service classes.
 """
+from __future__ import annotations
+
+from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
 
 from django.db import transaction
 from decimal import Decimal
@@ -10,13 +13,18 @@ from weasyprint import HTML
 from weasyprint.text.fonts import FontConfiguration
 from django.template.loader import render_to_string
 
+if TYPE_CHECKING:
+    from .forms import InvoiceForm
+
 
 class InvoiceService:
     """Handles all invoice operations."""
 
     @staticmethod
     @transaction.atomic
-    def create_invoice(user, invoice_data, files_data, line_items_data):
+    def create_invoice(
+        user: Any, invoice_data: Any, files_data: Any, line_items_data: List[Dict[str, Any]]
+    ) -> Tuple[Optional[Invoice], InvoiceForm]:
         """Create invoice with line items in atomic transaction.
 
         Returns: (invoice, form) tuple where invoice is the created Invoice or None,
@@ -33,7 +41,7 @@ class InvoiceService:
         invoice.save()
 
         for item_data in line_items_data:
-            LineItem.objects.create(
+            LineItem.objects.create(  # type: ignore[attr-defined]
                 invoice=invoice,
                 description=item_data["description"],
                 quantity=Decimal(item_data["quantity"]),
@@ -44,7 +52,12 @@ class InvoiceService:
 
     @staticmethod
     @transaction.atomic
-    def update_invoice(invoice, invoice_data, files_data, line_items_data):
+    def update_invoice(
+        invoice: Invoice,
+        invoice_data: Any,
+        files_data: Any,
+        line_items_data: List[Dict[str, Any]],
+    ) -> Tuple[Optional[Invoice], InvoiceForm]:
         """Update invoice with line items in atomic transaction.
 
         Returns: (invoice, form) tuple where invoice is the updated Invoice or None,
@@ -57,10 +70,10 @@ class InvoiceService:
             return None, invoice_form
 
         invoice = invoice_form.save()
-        invoice.line_items.all().delete()
+        invoice.line_items.all().delete()  # type: ignore[attr-defined]
 
         for item_data in line_items_data:
-            LineItem.objects.create(
+            LineItem.objects.create(  # type: ignore[attr-defined]
                 invoice=invoice,
                 description=item_data["description"],
                 quantity=Decimal(item_data["quantity"]),
@@ -74,43 +87,39 @@ class PDFService:
     """Handles PDF generation."""
 
     @staticmethod
-    def generate_pdf_bytes(invoice):
+    def generate_pdf_bytes(invoice: Invoice) -> bytes:
         """Generate PDF bytes for invoice."""
         html_string = render_to_string("invoices/invoice_pdf.html", {"invoice": invoice})
         font_config = FontConfiguration()
         html = HTML(string=html_string)
-        return html.write_pdf(font_config=font_config)
+        result = html.write_pdf(font_config=font_config)
+        if result is None:
+            raise ValueError("Failed to generate PDF")
+        return result
 
 
 class AnalyticsService:
     """Handles analytics calculations with optimized SQL aggregations."""
 
     @staticmethod
-    def get_user_dashboard_stats(user):
+    def get_user_dashboard_stats(user: Any) -> Dict[str, Any]:
         """Calculate dashboard statistics using optimized database queries.
 
         Uses COUNT aggregations for counts and DISTINCT for unique clients.
         Only fetches paid invoices with line_items for revenue calculation.
         """
+        invoices = Invoice.objects.filter(user=user)  # type: ignore[attr-defined]
 
-        # Base queryset
-        invoices = Invoice.objects.filter(user=user)
-
-        # Use database aggregations for counts (no Python loops)
         total_invoices = invoices.count()
         paid_count = invoices.filter(status="paid").count()
         unpaid_count = invoices.filter(status="unpaid").count()
 
-        # Unique clients using database DISTINCT (efficient)
         unique_clients = invoices.values("client_email").distinct().count()
 
-        # Only fetch paid invoices for revenue calculation (not all invoices)
-        # This reduces memory usage significantly for users with many unpaid invoices
         paid_invoices_with_items = list(
             invoices.filter(status="paid").prefetch_related("line_items")
         )
 
-        # Calculate revenue from paid invoices only
         total_revenue = (
             sum(inv.total for inv in paid_invoices_with_items)
             if paid_invoices_with_items
@@ -126,7 +135,7 @@ class AnalyticsService:
         }
 
     @staticmethod
-    def get_user_analytics_stats(user):
+    def get_user_analytics_stats(user: Any) -> Dict[str, Any]:
         """Calculate comprehensive analytics using optimized SQL.
 
         Optimized version: Fetches all invoices once with prefetch_related,
@@ -134,12 +143,12 @@ class AnalyticsService:
         """
         from datetime import datetime
 
-        # Fetch all invoices with line_items in ONE query
         all_invoices_list = list(
-            Invoice.objects.filter(user=user).prefetch_related("line_items").order_by("-created_at")
+            Invoice.objects.filter(user=user)  # type: ignore[attr-defined]
+            .prefetch_related("line_items")
+            .order_by("-created_at")
         )
 
-        # Calculate all metrics from the single fetch
         total_invoices = len(all_invoices_list)
         paid_invoices = [inv for inv in all_invoices_list if inv.status == "paid"]
         unpaid_invoices = [inv for inv in all_invoices_list if inv.status == "unpaid"]
@@ -147,7 +156,6 @@ class AnalyticsService:
         paid_count = len(paid_invoices)
         unpaid_count = len(unpaid_invoices)
 
-        # Calculate totals from prefetched data
         total_revenue = sum(inv.total for inv in paid_invoices) if paid_invoices else Decimal("0")
         outstanding_amount = (
             sum(inv.total for inv in unpaid_invoices) if unpaid_invoices else Decimal("0")
@@ -158,10 +166,8 @@ class AnalyticsService:
             else Decimal("0")
         )
 
-        # Payment rate
         payment_rate = (paid_count / total_invoices * 100) if total_invoices > 0 else 0
 
-        # Current month invoices - filter from prefetched list
         now = datetime.now()
         current_month_invoices = len(
             [
@@ -184,31 +190,31 @@ class AnalyticsService:
         }
 
     @staticmethod
-    def get_top_clients(user, limit=10):
+    def get_top_clients(user: Any, limit: int = 10) -> List[Dict[str, Any]]:
         """Calculate top clients with efficient aggregation.
 
         Groups invoices by client and calculates metrics in Python
         (since total is a property, not aggregatable in SQL).
         """
-        from collections import defaultdict
-
         invoices = (
-            Invoice.objects.filter(user=user).prefetch_related("line_items").order_by("client_name")
+            Invoice.objects.filter(user=user)  # type: ignore[attr-defined]
+            .prefetch_related("line_items")
+            .order_by("client_name")
         )
 
-        client_data = defaultdict(
-            lambda: {
-                "client_name": "",
-                "invoice_count": 0,
-                "paid_count": 0,
-                "total_revenue": Decimal("0"),
-                "invoices": [],
-            }
-        )
+        client_data: Dict[str, Dict[str, Any]] = {}
 
         for invoice in invoices:
+            if invoice.client_name not in client_data:
+                client_data[invoice.client_name] = {
+                    "client_name": invoice.client_name,
+                    "invoice_count": 0,
+                    "paid_count": 0,
+                    "total_revenue": Decimal("0"),
+                    "invoices": [],
+                }
+
             client = client_data[invoice.client_name]
-            client["client_name"] = invoice.client_name
             client["invoice_count"] += 1
             client["invoices"].append(invoice)
             if invoice.status == "paid":
@@ -222,8 +228,11 @@ class AnalyticsService:
                     "invoice_count": data["invoice_count"],
                     "total_revenue": data["total_revenue"],
                     "paid_count": data["paid_count"],
-                    "avg_invoice": sum(inv.total for inv in data["invoices"])
-                    / len(data["invoices"]),
+                    "avg_invoice": (
+                        sum(inv.total for inv in data["invoices"]) / len(data["invoices"])
+                        if data["invoices"]
+                        else Decimal("0")
+                    ),
                     "payment_rate": (
                         (data["paid_count"] / data["invoice_count"] * 100)
                         if data["invoice_count"] > 0

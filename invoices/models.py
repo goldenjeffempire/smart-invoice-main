@@ -1,9 +1,13 @@
+from __future__ import annotations
+
 from decimal import Decimal
+from datetime import date, timedelta
+from typing import Any
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 import secrets
-from datetime import timedelta
 
 
 class Waitlist(models.Model):
@@ -18,18 +22,20 @@ class Waitlist(models.Model):
     email = models.EmailField(unique=True)
     feature = models.CharField(max_length=20, choices=FEATURE_CHOICES, default="general")
     subscribed_at = models.DateTimeField(auto_now_add=True)
-    is_notified = models.BooleanField(default=False)
+    is_notified = models.BooleanField(default=False)  # type: ignore[call-overload]
 
     class Meta:
         ordering = ["-subscribed_at"]
         verbose_name_plural = "Waitlist entries"
 
-    def __str__(self):
-        return f"{self.email} - {self.get_feature_display()}"
+    def __str__(self) -> str:
+        return f"{self.email} - {self.get_feature_display()}"  # type: ignore[attr-defined]
 
 
 class UserProfile(models.Model):
     """Extended user profile with business preferences and settings."""
+
+    objects: Any
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     company_name = models.CharField(max_length=200, blank=True)
@@ -52,24 +58,26 @@ class UserProfile(models.Model):
     default_tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     invoice_prefix = models.CharField(max_length=10, default="INV")
     timezone = models.CharField(max_length=63, default="UTC")
-    
-    notify_invoice_created = models.BooleanField(default=True)
-    notify_payment_received = models.BooleanField(default=True)
-    notify_invoice_viewed = models.BooleanField(default=True)
-    notify_invoice_overdue = models.BooleanField(default=True)
-    notify_weekly_summary = models.BooleanField(default=False)
-    notify_security_alerts = models.BooleanField(default=True)
-    notify_password_changes = models.BooleanField(default=True)
-    
+
+    notify_invoice_created = models.BooleanField(default=True)  # type: ignore[call-overload]
+    notify_payment_received = models.BooleanField(default=True)  # type: ignore[call-overload]
+    notify_invoice_viewed = models.BooleanField(default=True)  # type: ignore[call-overload]
+    notify_invoice_overdue = models.BooleanField(default=True)  # type: ignore[call-overload]
+    notify_weekly_summary = models.BooleanField(default=False)  # type: ignore[call-overload]
+    notify_security_alerts = models.BooleanField(default=True)  # type: ignore[call-overload]
+    notify_password_changes = models.BooleanField(default=True)  # type: ignore[call-overload]
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f"{self.user.username}'s Profile"
+    def __str__(self) -> str:
+        return f"{self.user.username}'s Profile"  # type: ignore[union-attr]
 
 
 class InvoiceTemplate(models.Model):
     """Reusable invoice templates for quick invoice creation."""
+
+    objects: Any
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="invoice_templates")
     name = models.CharField(max_length=200)
@@ -82,18 +90,20 @@ class InvoiceTemplate(models.Model):
     tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     bank_name = models.CharField(max_length=200, blank=True)
     account_name = models.CharField(max_length=200, blank=True)
-    is_default = models.BooleanField(default=False)
+    is_default = models.BooleanField(default=False)  # type: ignore[call-overload]
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ["-created_at"]
 
-    def __str__(self):
-        return f"{self.name} - {self.user.username}"
+    def __str__(self) -> str:
+        return f"{self.name} - {self.user.username}"  # type: ignore[union-attr]
 
 
 class RecurringInvoice(models.Model):
     """Recurring invoice configuration for automated invoicing."""
+
+    objects: Any
 
     FREQUENCY_CHOICES = [
         ("weekly", "Weekly"),
@@ -134,28 +144,31 @@ class RecurringInvoice(models.Model):
     class Meta:
         ordering = ["-created_at"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Recurring - {self.client_name} ({self.frequency})"
 
-    def generate_next_invoice_date(self):
+    def generate_next_invoice_date(self) -> date:
         """Calculate next invoice generation date based on frequency."""
         from dateutil.relativedelta import relativedelta
 
+        current_date: date = self.next_generation  # type: ignore[assignment]
         if self.frequency == "weekly":
-            return self.next_generation + timedelta(weeks=1)
+            return current_date + timedelta(weeks=1)
         elif self.frequency == "biweekly":
-            return self.next_generation + timedelta(weeks=2)
+            return current_date + timedelta(weeks=2)
         elif self.frequency == "monthly":
-            return self.next_generation + relativedelta(months=1)
+            return current_date + relativedelta(months=1)
         elif self.frequency == "quarterly":
-            return self.next_generation + relativedelta(months=3)
+            return current_date + relativedelta(months=3)
         elif self.frequency == "yearly":
-            return self.next_generation + relativedelta(years=1)
-        return self.next_generation
+            return current_date + relativedelta(years=1)
+        return current_date
 
 
 class Invoice(models.Model):
     """Invoice model for storing invoice data and metadata."""
+
+    objects: Any
 
     CURRENCY_CHOICES = [
         ("USD", "US Dollar"),
@@ -217,13 +230,13 @@ class Invoice(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         """Override save to auto-generate invoice_id if not set."""
         if not self.invoice_id:
             self.invoice_id = self.generate_invoice_id()
         super().save(*args, **kwargs)
 
-    def generate_invoice_id(self):
+    def generate_invoice_id(self) -> str:
         """Generate a unique invoice ID with prefix and random hex suffix."""
         prefix = "INV"
         random_part = secrets.token_hex(3).upper()
@@ -236,21 +249,22 @@ class Invoice(models.Model):
         return invoice_id
 
     @property
-    def subtotal(self):
+    def subtotal(self) -> Decimal:
         """Calculate subtotal from all line items."""
-        return sum((item.total for item in self.line_items.all()), Decimal("0"))
+        return sum((item.total for item in self.line_items.all()), Decimal("0"))  # type: ignore[attr-defined]
 
     @property
-    def tax_amount(self):
+    def tax_amount(self) -> Decimal:
         """Calculate tax amount based on subtotal and tax rate."""
-        return (self.subtotal * self.tax_rate) / Decimal("100")
+        tax_rate_decimal = Decimal(str(self.tax_rate))
+        return (self.subtotal * tax_rate_decimal) / Decimal("100")
 
     @property
-    def total(self):
+    def total(self) -> Decimal:
         """Calculate total amount including tax."""
         return self.subtotal + self.tax_amount
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.invoice_id} - {self.client_name}"
 
     class Meta:
@@ -267,15 +281,17 @@ class Invoice(models.Model):
 class LineItem(models.Model):
     """Line item model for invoice line items."""
 
+    objects: Any
+
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="line_items")
     description = models.CharField(max_length=500)
     quantity = models.DecimalField(max_digits=10, decimal_places=2, default=1)
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
 
     @property
-    def total(self):
+    def total(self) -> Decimal:
         """Calculate total for this line item."""
-        return self.quantity * self.unit_price
+        return Decimal(str(self.quantity)) * Decimal(str(self.unit_price))
 
-    def __str__(self):
-        return f"{self.description} - {self.invoice.invoice_id}"
+    def __str__(self) -> str:
+        return f"{self.description} - {self.invoice.invoice_id}"  # type: ignore[union-attr]
