@@ -165,42 +165,75 @@ class UserProfileForm(forms.ModelForm):
         fields = [
             "company_name",
             "company_logo",
+            "business_email",
+            "business_phone",
+            "business_address",
             "default_currency",
             "default_tax_rate",
             "invoice_prefix",
             "timezone",
         ]
         widgets = {
-            "company_name": forms.TextInput(attrs={"class": "input-field"}),
-            "company_logo": forms.FileInput(attrs={"class": "input-field", "accept": "image/*"}),
-            "default_currency": forms.Select(attrs={"class": "input-field"}),
-            "default_tax_rate": forms.NumberInput(attrs={"class": "input-field", "step": "0.01"}),
-            "invoice_prefix": forms.TextInput(attrs={"class": "input-field"}),
-            "timezone": forms.Select(attrs={"class": "input-field"}),
+            "company_name": forms.TextInput(attrs={
+                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                "placeholder": "Your Company Name",
+            }),
+            "company_logo": forms.FileInput(attrs={
+                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                "accept": "image/*",
+            }),
+            "business_email": forms.EmailInput(attrs={
+                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                "placeholder": "business@example.com",
+            }),
+            "business_phone": forms.TextInput(attrs={
+                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                "placeholder": "+1 (555) 123-4567",
+            }),
+            "business_address": forms.Textarea(attrs={
+                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                "rows": 3,
+                "placeholder": "123 Business Street, City, State, ZIP",
+            }),
+            "default_currency": forms.Select(attrs={
+                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+            }),
+            "default_tax_rate": forms.NumberInput(attrs={
+                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                "step": "0.01",
+                "placeholder": "0.00",
+            }),
+            "invoice_prefix": forms.TextInput(attrs={
+                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                "placeholder": "INV-",
+            }),
+            "timezone": forms.Select(attrs={
+                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+            }),
         }
 
 
-class NotificationPreferencesForm(forms.Form):
-    email_on_invoice_created = forms.BooleanField(
-        required=False,
-        label="Email me when an invoice is created",
-        widget=forms.CheckboxInput(attrs={"class": "checkbox-field"}),
-    )
-    email_on_payment_received = forms.BooleanField(
-        required=False,
-        label="Email me when payment is received",
-        widget=forms.CheckboxInput(attrs={"class": "checkbox-field"}),
-    )
-    email_on_invoice_overdue = forms.BooleanField(
-        required=False,
-        label="Email me when an invoice is overdue",
-        widget=forms.CheckboxInput(attrs={"class": "checkbox-field"}),
-    )
-    weekly_summary = forms.BooleanField(
-        required=False,
-        label="Send me a weekly summary",
-        widget=forms.CheckboxInput(attrs={"class": "checkbox-field"}),
-    )
+class NotificationPreferencesForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = [
+            "notify_invoice_created",
+            "notify_payment_received",
+            "notify_invoice_viewed",
+            "notify_invoice_overdue",
+            "notify_weekly_summary",
+            "notify_security_alerts",
+            "notify_password_changes",
+        ]
+        widgets = {
+            "notify_invoice_created": forms.CheckboxInput(attrs={"class": "w-5 h-5 rounded text-purple-600"}),
+            "notify_payment_received": forms.CheckboxInput(attrs={"class": "w-5 h-5 rounded text-purple-600"}),
+            "notify_invoice_viewed": forms.CheckboxInput(attrs={"class": "w-5 h-5 rounded text-purple-600"}),
+            "notify_invoice_overdue": forms.CheckboxInput(attrs={"class": "w-5 h-5 rounded text-purple-600"}),
+            "notify_weekly_summary": forms.CheckboxInput(attrs={"class": "w-5 h-5 rounded text-purple-600"}),
+            "notify_security_alerts": forms.CheckboxInput(attrs={"class": "w-5 h-5 rounded text-purple-600"}),
+            "notify_password_changes": forms.CheckboxInput(attrs={"class": "w-5 h-5 rounded text-purple-600"}),
+        }
 
 
 class PasswordChangeForm(forms.Form):
@@ -390,4 +423,41 @@ class WaitlistForm(forms.ModelForm):
         email = self.cleaned_data.get("email")
         if Waitlist.objects.filter(email=email).exists():
             raise forms.ValidationError("This email is already on our waitlist!")
+        return email
+
+
+class UserDetailsForm(forms.ModelForm):
+    """Form for editing user profile information (first name, last name, email)."""
+
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "email"]
+        widgets = {
+            "first_name": forms.TextInput(
+                attrs={
+                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "placeholder": "First Name",
+                    "autocomplete": "given-name",
+                }
+            ),
+            "last_name": forms.TextInput(
+                attrs={
+                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "placeholder": "Last Name",
+                    "autocomplete": "family-name",
+                }
+            ),
+            "email": forms.EmailInput(
+                attrs={
+                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "placeholder": "Email Address",
+                    "autocomplete": "email",
+                }
+            ),
+        }
+
+    def clean_email(self) -> str:
+        email = self.cleaned_data.get("email")
+        if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError("This email is already in use by another account.")
         return email

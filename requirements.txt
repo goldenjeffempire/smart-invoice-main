@@ -52,3 +52,4 @@ weasyprint
 webencodings
 whitenoise
 zopfli
+psycopg2-binary

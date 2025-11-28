@@ -1,6 +1,20 @@
 {% extends 'pages/settings-main.html' %}
 
 {% block settings_content %}
+<!-- Success/Error Message -->
+{% if message %}
+<div class="mb-6 p-4 rounded-xl {% if message_type == 'success' %}bg-green-50 border-2 border-green-200 text-green-700{% else %}bg-red-50 border-2 border-red-200 text-red-700{% endif %}">
+    <div class="flex items-center gap-3">
+        {% if message_type == 'success' %}
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        {% else %}
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        {% endif %}
+        <p class="font-semibold">{{ message }}</p>
+    </div>
+</div>
+{% endif %}
+
 <!-- Business Settings Card -->
 <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden animate-slide-in-up">
     <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-6">
@@ -11,55 +25,101 @@
         {% csrf_token %}
         <input type="hidden" name="tab" value="business">
 
-        <!-- Company Name -->
-        <div>
-            <label class="block text-sm font-bold text-gray-900 mb-2">Company Name *</label>
-            {{ profile_form.company_name }}
-            {% if profile_form.company_name.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.company_name.errors.0 }}</p>{% endif %}
-        </div>
-
-        <!-- Logo Upload -->
-        <div class="border-t-2 border-gray-200 pt-6">
-            <label class="block text-sm font-bold text-gray-900 mb-3">Company Logo</label>
-            <div class="flex items-start gap-6">
-                <div class="flex-1">
-                    {{ profile_form.company_logo }}
-                    <p class="text-xs text-gray-600 mt-2">PNG, JPG or GIF (Max 5MB)</p>
-                    {% if profile_form.company_logo.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.company_logo.errors.0 }}</p>{% endif %}
+        <!-- Company Information Section -->
+        <div class="pb-6 border-b-2 border-gray-200">
+            <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                Company Information
+            </h3>
+            <div class="space-y-4">
+                <!-- Company Name -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Company Name *</label>
+                    {{ profile_form.company_name }}
+                    {% if profile_form.company_name.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.company_name.errors.0 }}</p>{% endif %}
                 </div>
-                {% if profile.company_logo %}
-                    <div class="w-24 h-24 rounded-lg bg-gray-100 border-2 border-gray-300 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-md">
-                        <img src="{{ profile.company_logo.url }}" alt="Logo" class="w-full h-full object-cover">
+
+                <!-- Logo Upload -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-3">Company Logo</label>
+                    <div class="flex items-start gap-6">
+                        <div class="flex-1">
+                            {{ profile_form.company_logo }}
+                            <p class="text-xs text-gray-600 mt-2">PNG, JPG or GIF (Max 5MB)</p>
+                            {% if profile_form.company_logo.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.company_logo.errors.0 }}</p>{% endif %}
+                        </div>
+                        {% if profile.company_logo %}
+                            <div class="w-24 h-24 rounded-lg bg-gray-100 border-2 border-gray-300 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-md">
+                                <img src="{{ profile.company_logo.url }}" alt="Logo" class="w-full h-full object-cover">
+                            </div>
+                        {% endif %}
                     </div>
-                {% endif %}
+                </div>
             </div>
         </div>
 
-        <!-- Default Settings Grid -->
-        <div class="border-t-2 border-gray-200 pt-6 grid md:grid-cols-3 gap-6">
-            <div>
-                <label class="block text-sm font-bold text-gray-900 mb-2">Default Currency *</label>
-                {{ profile_form.default_currency }}
-                {% if profile_form.default_currency.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.default_currency.errors.0 }}</p>{% endif %}
+        <!-- Business Contact Section -->
+        <div class="pb-6 border-b-2 border-gray-200">
+            <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                Business Contact (Default for Invoices)
+            </h3>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Business Email</label>
+                    {{ profile_form.business_email }}
+                    {% if profile_form.business_email.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.business_email.errors.0 }}</p>{% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Business Phone</label>
+                    {{ profile_form.business_phone }}
+                    {% if profile_form.business_phone.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.business_phone.errors.0 }}</p>{% endif %}
+                </div>
             </div>
-            <div>
-                <label class="block text-sm font-bold text-gray-900 mb-2">Default Tax Rate (%) *</label>
-                {{ profile_form.default_tax_rate }}
-                {% if profile_form.default_tax_rate.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.default_tax_rate.errors.0 }}</p>{% endif %}
-            </div>
-            <div>
-                <label class="block text-sm font-bold text-gray-900 mb-2">Invoice Prefix *</label>
-                {{ profile_form.invoice_prefix }}
-                {% if profile_form.invoice_prefix.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.invoice_prefix.errors.0 }}</p>{% endif %}
-                <p class="text-xs text-gray-600 mt-2">Example: INV-</p>
+            <div class="mt-4">
+                <label class="block text-sm font-bold text-gray-900 mb-2">Business Address</label>
+                {{ profile_form.business_address }}
+                {% if profile_form.business_address.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.business_address.errors.0 }}</p>{% endif %}
             </div>
         </div>
 
-        <!-- Timezone -->
+        <!-- Invoice Defaults Section -->
+        <div class="pb-6 border-b-2 border-gray-200">
+            <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                Invoice Defaults
+            </h3>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Default Currency *</label>
+                    {{ profile_form.default_currency }}
+                    {% if profile_form.default_currency.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.default_currency.errors.0 }}</p>{% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Default Tax Rate (%) *</label>
+                    {{ profile_form.default_tax_rate }}
+                    {% if profile_form.default_tax_rate.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.default_tax_rate.errors.0 }}</p>{% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Invoice Prefix *</label>
+                    {{ profile_form.invoice_prefix }}
+                    {% if profile_form.invoice_prefix.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.invoice_prefix.errors.0 }}</p>{% endif %}
+                    <p class="text-xs text-gray-600 mt-2">Example: INV-</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Regional Settings Section -->
         <div>
-            <label class="block text-sm font-bold text-gray-900 mb-2">Timezone *</label>
-            {{ profile_form.timezone }}
-            {% if profile_form.timezone.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.timezone.errors.0 }}</p>{% endif %}
+            <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Regional Settings
+            </h3>
+            <div>
+                <label class="block text-sm font-bold text-gray-900 mb-2">Timezone *</label>
+                {{ profile_form.timezone }}
+                {% if profile_form.timezone.errors %}<p class="text-red-600 text-sm mt-1">{{ profile_form.timezone.errors.0 }}</p>{% endif %}
+            </div>
         </div>
 
         <!-- Buttons -->

@@ -34,6 +34,9 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     company_name = models.CharField(max_length=200, blank=True)
     company_logo = models.ImageField(upload_to="company_logos/", null=True, blank=True)
+    business_email = models.EmailField(blank=True)
+    business_phone = models.CharField(max_length=50, blank=True)
+    business_address = models.TextField(blank=True)
     default_currency = models.CharField(
         max_length=3,
         choices=[
@@ -49,6 +52,15 @@ class UserProfile(models.Model):
     default_tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     invoice_prefix = models.CharField(max_length=10, default="INV")
     timezone = models.CharField(max_length=63, default="UTC")
+    
+    notify_invoice_created = models.BooleanField(default=True)
+    notify_payment_received = models.BooleanField(default=True)
+    notify_invoice_viewed = models.BooleanField(default=True)
+    notify_invoice_overdue = models.BooleanField(default=True)
+    notify_weekly_summary = models.BooleanField(default=False)
+    notify_security_alerts = models.BooleanField(default=True)
+    notify_password_changes = models.BooleanField(default=True)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

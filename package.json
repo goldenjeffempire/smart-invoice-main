@@ -10,8 +10,7 @@
     "build:css": "tailwindcss -i ./static/css/tailwind.input.css -o ./static/css/tailwind.output.css --minify",
     "watch:css": "tailwindcss -i ./static/css/tailwind.input.css -o ./static/css/tailwind.output.css --watch",
     "minify:js": "terser static/js/app.js -o static/js/app.min.js -c -m --source-map",
-    "minify:css": "cssnano static/css/main.css static/css/main.min.css && cssnano static/css/enterprise-design-system.css static/css/enterprise-design-system.min.css && cssnano static/css/internal-pages.css static/css/internal-pages.min.css",
-    "optimize:images": "imagemin static/images/*.jpg --out-dir=static/images --plugin=webp",
+    "minify:css": "postcss static/css/main.css -o static/css/main.min.css && postcss static/css/enterprise-design-system.css -o static/css/enterprise-design-system.min.css && postcss static/css/internal-pages.css -o static/css/internal-pages.min.css",
     "build:prod": "npm run build:css && npm run minify:js && npm run minify:css",
     "build": "npm run build:prod",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -26,9 +25,7 @@
   },
   "dependencies": {
     "cssnano": "^7.1.2",
-    "cssnano-cli": "^1.0.5",
-    "imagemin-cli": "^3.0.0",
-    "imagemin-webp": "^6.1.0",
+    "postcss-cli": "^11.0.1",
     "terser": "^5.44.1"
   }
 }

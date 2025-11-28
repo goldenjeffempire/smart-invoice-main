@@ -511,8 +511,31 @@ def settings_security(request):
 @login_required
 def settings_notifications(request):
     """Email Notifications settings page."""
+    from .forms import NotificationPreferencesForm
+
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+
+    message = None
+    message_type = None
+
+    if request.method == "POST":
+        notification_form = NotificationPreferencesForm(request.POST, instance=profile)
+
+        if notification_form.is_valid():
+            notification_form.save()
+            message = "Notification preferences updated successfully!"
+            message_type = "success"
+        else:
+            message = "Please fix the errors below."
+            message_type = "error"
+    else:
+        notification_form = NotificationPreferencesForm(instance=profile)
 
     context = {
+        "notification_form": notification_form,
+        "profile": profile,
+        "message": message,
+        "message_type": message_type,
         "active_tab": "notifications",
     }
 

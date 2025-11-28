@@ -1,69 +1,107 @@
 {% extends 'pages/settings-main.html' %}
 
 {% block settings_content %}
-<!-- Notification Settings Card -->
-<div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden animate-slide-in-up">
-    <div class="bg-gradient-to-r from-purple-500 to-purple-600 px-8 py-6">
-        <h2 class="text-2xl font-black text-white">Email Notifications</h2>
-        <p class="text-purple-100 text-sm mt-1">Choose which emails you'd like to receive</p>
-    </div>
-    <div class="p-8 space-y-8">
-        <!-- Invoice Notifications -->
-        <div class="pb-8 border-b-2 border-gray-200">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">Invoice Notifications</h3>
-            <div class="space-y-3">
-                <label class="flex items-center gap-3 p-4 rounded-lg border-2 border-gray-200 hover:bg-gray-50 cursor-pointer transition">
-                    <input type="checkbox" checked class="w-5 h-5 rounded text-purple-600">
-                    <div class="flex-1">
-                        <p class="font-semibold text-gray-900">Invoice Created</p>
-                        <p class="text-sm text-gray-600 mt-0.5">Notify when a new invoice is created</p>
-                    </div>
-                </label>
-                <label class="flex items-center gap-3 p-4 rounded-lg border-2 border-gray-200 hover:bg-gray-50 cursor-pointer transition">
-                    <input type="checkbox" checked class="w-5 h-5 rounded text-purple-600">
-                    <div class="flex-1">
-                        <p class="font-semibold text-gray-900">Payment Received</p>
-                        <p class="text-sm text-gray-600 mt-0.5">Alert when a payment is marked as received</p>
-                    </div>
-                </label>
-                <label class="flex items-center gap-3 p-4 rounded-lg border-2 border-gray-200 hover:bg-gray-50 cursor-pointer transition">
-                    <input type="checkbox" checked class="w-5 h-5 rounded text-purple-600">
-                    <div class="flex-1">
-                        <p class="font-semibold text-gray-900">Invoice Viewed</p>
-                        <p class="text-sm text-gray-600 mt-0.5">Notify when a client views your invoice</p>
-                    </div>
-                </label>
-            </div>
-        </div>
-
-        <!-- Account Notifications -->
-        <div class="pb-8 border-b-2 border-gray-200">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">Account Notifications</h3>
-            <div class="space-y-3">
-                <label class="flex items-center gap-3 p-4 rounded-lg border-2 border-gray-200 hover:bg-gray-50 cursor-pointer transition">
-                    <input type="checkbox" checked class="w-5 h-5 rounded text-purple-600">
-                    <div class="flex-1">
-                        <p class="font-semibold text-gray-900">Security Alerts</p>
-                        <p class="text-sm text-gray-600 mt-0.5">Get alerts for security-related activities</p>
-                    </div>
-                </label>
-                <label class="flex items-center gap-3 p-4 rounded-lg border-2 border-gray-200 hover:bg-gray-50 cursor-pointer transition">
-                    <input type="checkbox" checked class="w-5 h-5 rounded text-purple-600">
-                    <div class="flex-1">
-                        <p class="font-semibold text-gray-900">Password Changes</p>
-                        <p class="text-sm text-gray-600 mt-0.5">Confirm when your password is changed</p>
-                    </div>
-                </label>
-            </div>
-        </div>
-
-        <!-- Save Button -->
-        <div class="flex gap-3 pt-6 border-t-2 border-gray-200">
-            <button class="px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white font-bold rounded-lg hover:shadow-lg transition-all flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                Save Preferences
-            </button>
-        </div>
+<!-- Success/Error Message -->
+{% if message %}
+<div class="mb-6 p-4 rounded-xl {% if message_type == 'success' %}bg-green-50 border-2 border-green-200 text-green-700{% else %}bg-red-50 border-2 border-red-200 text-red-700{% endif %}">
+    <div class="flex items-center gap-3">
+        {% if message_type == 'success' %}
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        {% else %}
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        {% endif %}
+        <p class="font-semibold">{{ message }}</p>
     </div>
 </div>
+{% endif %}
+
+<!-- Notification Settings Card -->
+<form method="POST">
+    {% csrf_token %}
+    <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden animate-slide-in-up">
+        <div class="bg-gradient-to-r from-purple-500 to-purple-600 px-8 py-6">
+            <h2 class="text-2xl font-black text-white">Email Notifications</h2>
+            <p class="text-purple-100 text-sm mt-1">Choose which emails you'd like to receive</p>
+        </div>
+        <div class="p-8 space-y-8">
+            <!-- Invoice Notifications -->
+            <div class="pb-8 border-b-2 border-gray-200">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Invoice Notifications</h3>
+                <div class="space-y-3">
+                    <label class="flex items-center gap-3 p-4 rounded-lg border-2 border-gray-200 hover:bg-gray-50 cursor-pointer transition">
+                        {{ notification_form.notify_invoice_created }}
+                        <div class="flex-1">
+                            <p class="font-semibold text-gray-900">Invoice Created</p>
+                            <p class="text-sm text-gray-600 mt-0.5">Notify when a new invoice is created</p>
+                        </div>
+                    </label>
+                    <label class="flex items-center gap-3 p-4 rounded-lg border-2 border-gray-200 hover:bg-gray-50 cursor-pointer transition">
+                        {{ notification_form.notify_payment_received }}
+                        <div class="flex-1">
+                            <p class="font-semibold text-gray-900">Payment Received</p>
+                            <p class="text-sm text-gray-600 mt-0.5">Alert when a payment is marked as received</p>
+                        </div>
+                    </label>
+                    <label class="flex items-center gap-3 p-4 rounded-lg border-2 border-gray-200 hover:bg-gray-50 cursor-pointer transition">
+                        {{ notification_form.notify_invoice_viewed }}
+                        <div class="flex-1">
+                            <p class="font-semibold text-gray-900">Invoice Viewed</p>
+                            <p class="text-sm text-gray-600 mt-0.5">Notify when a client views your invoice</p>
+                        </div>
+                    </label>
+                    <label class="flex items-center gap-3 p-4 rounded-lg border-2 border-gray-200 hover:bg-gray-50 cursor-pointer transition">
+                        {{ notification_form.notify_invoice_overdue }}
+                        <div class="flex-1">
+                            <p class="font-semibold text-gray-900">Invoice Overdue</p>
+                            <p class="text-sm text-gray-600 mt-0.5">Alert when an invoice becomes overdue</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Summary & Reports -->
+            <div class="pb-8 border-b-2 border-gray-200">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Summary & Reports</h3>
+                <div class="space-y-3">
+                    <label class="flex items-center gap-3 p-4 rounded-lg border-2 border-gray-200 hover:bg-gray-50 cursor-pointer transition">
+                        {{ notification_form.notify_weekly_summary }}
+                        <div class="flex-1">
+                            <p class="font-semibold text-gray-900">Weekly Summary</p>
+                            <p class="text-sm text-gray-600 mt-0.5">Receive a weekly summary of your invoicing activity</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Account Notifications -->
+            <div class="pb-8 border-b-2 border-gray-200">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Account Notifications</h3>
+                <div class="space-y-3">
+                    <label class="flex items-center gap-3 p-4 rounded-lg border-2 border-gray-200 hover:bg-gray-50 cursor-pointer transition">
+                        {{ notification_form.notify_security_alerts }}
+                        <div class="flex-1">
+                            <p class="font-semibold text-gray-900">Security Alerts</p>
+                            <p class="text-sm text-gray-600 mt-0.5">Get alerts for security-related activities</p>
+                        </div>
+                    </label>
+                    <label class="flex items-center gap-3 p-4 rounded-lg border-2 border-gray-200 hover:bg-gray-50 cursor-pointer transition">
+                        {{ notification_form.notify_password_changes }}
+                        <div class="flex-1">
+                            <p class="font-semibold text-gray-900">Password Changes</p>
+                            <p class="text-sm text-gray-600 mt-0.5">Confirm when your password is changed</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <div class="flex gap-3 pt-6 border-t-2 border-gray-200">
+                <button type="submit" class="px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white font-bold rounded-lg hover:shadow-lg transition-all flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Save Preferences
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
 {% endblock %}
