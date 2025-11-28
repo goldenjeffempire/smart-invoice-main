@@ -22,6 +22,16 @@ from .forms import (
 from .search_filters import InvoiceExport
 
 
+def get_client_ip(request):
+    """Extract client IP address from request headers."""
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(",")[0].strip()
+    else:
+        ip = request.META.get("REMOTE_ADDR", "unknown")
+    return ip
+
+
 def home(request):
     """Render the public landing page."""
     return render(request, "home.html")
@@ -360,35 +370,39 @@ def careers(request):
 
 
 def contact(request):
-    """Contact page with contact form - handles form submission."""
+    """Contact page with contact form - handles form submission and stores in database."""
     from django.core.mail import send_mail
     from django.conf import settings
+    from .forms import ContactForm
     import logging
 
     logger = logging.getLogger(__name__)
 
     if request.method == "POST":
-        name = request.POST.get("name", "").strip()
-        email = request.POST.get("email", "").strip()
-        subject = request.POST.get("subject", "").strip()
-        message_text = request.POST.get("message", "").strip()
-        category = request.POST.get("category", "other").strip()
-
-        if name and email and subject and message_text:
+        form = ContactForm(request.POST)
+        if form.is_valid():
             try:
+                submission = form.save(commit=False)
+                submission.ip_address = get_client_ip(request)
+                submission.user_agent = request.META.get("HTTP_USER_AGENT", "")[:500]
+                submission.save()
+
                 full_message = f"""
 New Contact Form Submission
 
-From: {name}
-Email: {email}
-Category: {category}
-Subject: {subject}
+From: {submission.name}
+Email: {submission.email}
+Subject: {submission.get_subject_display()}
 
 Message:
-{message_text}
+{submission.message}
+
+---
+IP: {submission.ip_address}
+Submitted: {submission.submitted_at}
 """
                 send_mail(
-                    subject=f"[Smart Invoice Contact] {subject}",
+                    subject=f"[Smart Invoice Contact] {submission.get_subject_display()}",
                     message=full_message,
                     from_email=settings.DEFAULT_FROM_EMAIL,
                     recipient_list=["support@smartinvoice.com"],
@@ -398,18 +412,25 @@ Message:
                     request,
                     "Thank you for your message! We'll get back to you within 24 hours.",
                 )
-                logger.info(f"Contact form submitted by {email}")
+                logger.info(f"Contact form submitted by {submission.email}")
+                return redirect("contact")
             except Exception as e:
-                logger.error(f"Contact form email failed: {e}")
-                messages.success(
+                logger.error(f"Contact form submission failed: {e}")
+                messages.error(
                     request,
-                    "Thank you for your message! We've received it and will respond soon.",
+                    "Sorry, there was an issue submitting your message. Please try again.",
                 )
-            return redirect("contact")
         else:
-            messages.error(request, "Please fill in all required fields.")
+            for field, errors in form.errors.items():
+                for error in errors:
+                    if field != "__all__":
+                        messages.error(request, f"{field.replace('_', ' ').title()}: {error}")
+                    else:
+                        messages.error(request, error)
+    else:
+        form = ContactForm()
 
-    return render(request, "pages/contact.html")
+    return render(request, "pages/contact.html", {"form": form})
 
 
 def changelog(request):
@@ -934,3 +955,38 @@ def custom_404(request, exception):
 def custom_500(request):
     """Custom 500 error handler."""
     return render(request, "errors/500.html", status=500)
+
+
+def robots_txt(request):
+    """Dynamic robots.txt with proper sitemap URL."""
+    scheme = request.scheme
+    host = request.get_host()
+    base_url = f"{scheme}://{host}"
+    
+    content = f"""User-agent: *
+Allow: /
+Allow: /features/
+Allow: /pricing/
+Allow: /about/
+Allow: /contact/
+Allow: /faq/
+Allow: /terms/
+Allow: /privacy/
+
+Disallow: /admin/
+Disallow: /settings/
+Disallow: /api/
+Disallow: /invoices/
+Disallow: /profile/
+Disallow: /recurring/
+Disallow: /bulk/
+Disallow: /my-templates/
+Disallow: /health/
+Disallow: /static/js/
+Disallow: /static/css/
+
+Sitemap: {base_url}/sitemap.xml
+
+Crawl-delay: 1
+"""
+    return HttpResponse(content, content_type="text/plain")

@@ -33,24 +33,46 @@
                     <form class="space-y-6" method="post" action="">
                         {% csrf_token %}
                         
+                        {{ form.honeypot }}
+                        
                         <div class="group">
-                            <label for="name" class="block text-sm font-bold text-gray-900 mb-3">Your Name</label>
-                            <input type="text" id="name" name="name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all duration-300 hover:border-indigo-400 group-focus-within:border-indigo-600">
+                            <label for="id_name" class="block text-sm font-bold text-gray-900 mb-3">Your Name</label>
+                            <input type="text" id="id_name" name="name" {% if form.name.value %}value="{{ form.name.value }}"{% endif %} required class="w-full px-4 py-3 border-2 {% if form.name.errors %}border-red-500{% else %}border-gray-300{% endif %} rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all duration-300 hover:border-indigo-400 group-focus-within:border-indigo-600">
+                            {% if form.name.errors %}
+                            <p class="text-red-500 text-sm mt-1">{{ form.name.errors.0 }}</p>
+                            {% endif %}
                         </div>
                         
                         <div class="group">
-                            <label for="email" class="block text-sm font-bold text-gray-900 mb-3">Email Address</label>
-                            <input type="email" id="email" name="email" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all duration-300 hover:border-indigo-400">
+                            <label for="id_email" class="block text-sm font-bold text-gray-900 mb-3">Email Address</label>
+                            <input type="email" id="id_email" name="email" {% if form.email.value %}value="{{ form.email.value }}"{% endif %} required class="w-full px-4 py-3 border-2 {% if form.email.errors %}border-red-500{% else %}border-gray-300{% endif %} rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all duration-300 hover:border-indigo-400">
+                            {% if form.email.errors %}
+                            <p class="text-red-500 text-sm mt-1">{{ form.email.errors.0 }}</p>
+                            {% endif %}
                         </div>
                         
                         <div class="group">
-                            <label for="subject" class="block text-sm font-bold text-gray-900 mb-3">Subject</label>
-                            <input type="text" id="subject" name="subject" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all duration-300 hover:border-indigo-400">
+                            <label for="id_subject" class="block text-sm font-bold text-gray-900 mb-3">Subject</label>
+                            <select id="id_subject" name="subject" required class="w-full px-4 py-3 border-2 {% if form.subject.errors %}border-red-500{% else %}border-gray-300{% endif %} rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all duration-300 hover:border-indigo-400">
+                                <option value="">Select a subject...</option>
+                                <option value="general" {% if form.subject.value == 'general' %}selected{% endif %}>General Inquiry</option>
+                                <option value="support" {% if form.subject.value == 'support' %}selected{% endif %}>Technical Support</option>
+                                <option value="sales" {% if form.subject.value == 'sales' %}selected{% endif %}>Sales Inquiry</option>
+                                <option value="billing" {% if form.subject.value == 'billing' %}selected{% endif %}>Billing Question</option>
+                                <option value="feature" {% if form.subject.value == 'feature' %}selected{% endif %}>Feature Request</option>
+                                <option value="bug" {% if form.subject.value == 'bug' %}selected{% endif %}>Bug Report</option>
+                            </select>
+                            {% if form.subject.errors %}
+                            <p class="text-red-500 text-sm mt-1">{{ form.subject.errors.0 }}</p>
+                            {% endif %}
                         </div>
                         
                         <div class="group">
-                            <label for="message" class="block text-sm font-bold text-gray-900 mb-3">Message</label>
-                            <textarea id="message" name="message" rows="5" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all duration-300 hover:border-indigo-400 resize-none"></textarea>
+                            <label for="id_message" class="block text-sm font-bold text-gray-900 mb-3">Message</label>
+                            <textarea id="id_message" name="message" rows="5" required class="w-full px-4 py-3 border-2 {% if form.message.errors %}border-red-500{% else %}border-gray-300{% endif %} rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all duration-300 hover:border-indigo-400 resize-none">{% if form.message.value %}{{ form.message.value }}{% endif %}</textarea>
+                            {% if form.message.errors %}
+                            <p class="text-red-500 text-sm mt-1">{{ form.message.errors.0 }}</p>
+                            {% endif %}
                         </div>
                         
                         <button type="submit" class="btn btn-primary btn-lg w-full hover-lift focus-ring transition-smooth group">

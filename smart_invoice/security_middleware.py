@@ -16,36 +16,29 @@ class SecurityHeadersMiddleware(MiddlewareMixin):
     Headers implemented:
     - X-Content-Type-Options: nosniff (prevent MIME sniffing)
     - X-Frame-Options: DENY (prevent clickjacking)
-    - X-XSS-Protection: 1; mode=block (legacy XSS protection)
     - X-Download-Options: noopen (prevent file execution in IE)
     - Referrer-Policy: strict-origin-when-cross-origin
     - Permissions-Policy: Restrict browser features
     - Strict-Transport-Security: HTTPS enforcement (HSTS)
+    - Cross-Origin-Opener-Policy: same-origin (isolate browsing context)
+    - Cross-Origin-Embedder-Policy: require-corp (require CORP/CORS)
+    
+    Note: X-XSS-Protection is intentionally removed as it is deprecated
+    and can introduce vulnerabilities in modern browsers. CSP provides
+    better XSS protection.
     """
 
     def process_response(self, request, response):
-        # MIME type sniffing protection
         response["X-Content-Type-Options"] = "nosniff"
-
-        # Clickjacking protection
         response["X-Frame-Options"] = "DENY"
-
-        # Legacy XSS protection (for older browsers)
-        response["X-XSS-Protection"] = "1; mode=block"
-
-        # Prevent file execution in IE (legacy)
         response["X-Download-Options"] = "noopen"
-
-        # Referrer policy for privacy
         response["Referrer-Policy"] = "strict-origin-when-cross-origin"
-
-        # Permissions policy (restrict browser features)
         response["Permissions-Policy"] = (
             "geolocation=(), microphone=(), camera=(), payment=(), "
             "usb=(), magnetometer=(), accelerometer=(), gyroscope=()"
         )
+        response["Cross-Origin-Opener-Policy"] = "same-origin"
 
-        # HSTS for HTTPS enforcement (only on secure connections)
         if request.is_secure() and not request.get_host().startswith("localhost"):
             response["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
 
@@ -58,7 +51,6 @@ class SecurityEventLoggingMiddleware(MiddlewareMixin):
     """
 
     def process_request(self, request):
-        # Skip logging for test environment
         if "test" in request.META.get("SERVER_NAME", ""):
             return None
 
@@ -79,7 +71,6 @@ class SecurityEventLoggingMiddleware(MiddlewareMixin):
         return None
 
     def process_response(self, request, response):
-        # Skip logging for test environment
         if "test" in request.META.get("SERVER_NAME", ""):
             return response
 

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Invoice, LineItem, UserProfile, InvoiceTemplate, RecurringInvoice
+from .models import Invoice, LineItem, UserProfile, InvoiceTemplate, RecurringInvoice, Waitlist, ContactSubmission
 
 
 class LineItemInline(admin.TabularInline):
@@ -84,3 +84,45 @@ class RecurringInvoiceAdmin(admin.ModelAdmin):
         ),
         ("Metadata", {"fields": ("notes", "created_at", "last_generated")}),
     )
+
+
+@admin.register(Waitlist)
+class WaitlistAdmin(admin.ModelAdmin):
+    list_display = ("email", "feature", "subscribed_at", "is_notified")
+    list_filter = ("feature", "is_notified", "subscribed_at")
+    search_fields = ("email",)
+    readonly_fields = ("subscribed_at",)
+    actions = ["mark_as_notified"]
+
+    @admin.action(description="Mark selected entries as notified")
+    def mark_as_notified(self, request, queryset):
+        updated = queryset.update(is_notified=True)
+        self.message_user(request, f"{updated} entries marked as notified.")
+
+
+@admin.register(ContactSubmission)
+class ContactSubmissionAdmin(admin.ModelAdmin):
+    list_display = ("name", "email", "subject", "status", "submitted_at")
+    list_filter = ("subject", "status", "submitted_at")
+    search_fields = ("name", "email", "message")
+    readonly_fields = ("submitted_at", "ip_address", "user_agent")
+    ordering = ("-submitted_at",)
+    actions = ["mark_as_resolved", "mark_as_in_progress"]
+
+    fieldsets = (
+        ("Contact Information", {"fields": ("name", "email", "subject")}),
+        ("Message", {"fields": ("message",)}),
+        ("Status", {"fields": ("status", "admin_notes", "resolved_at")}),
+        ("Metadata", {"fields": ("ip_address", "user_agent", "submitted_at")}),
+    )
+
+    @admin.action(description="Mark selected as resolved")
+    def mark_as_resolved(self, request, queryset):
+        from django.utils import timezone
+        updated = queryset.update(status="resolved", resolved_at=timezone.now())
+        self.message_user(request, f"{updated} submissions marked as resolved.")
+
+    @admin.action(description="Mark selected as in progress")
+    def mark_as_in_progress(self, request, queryset):
+        updated = queryset.update(status="in_progress")
+        self.message_user(request, f"{updated} submissions marked as in progress.")

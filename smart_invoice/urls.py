@@ -17,6 +17,8 @@ urlpatterns = [
     path("health/", health_check, name="health_check"),
     path("health/ready/", readiness_check, name="readiness_check"),
     path("health/live/", liveness_check, name="liveness_check"),
+    # Robots.txt (dynamic)
+    path("robots.txt", views.robots_txt, name="robots_txt"),
     # Sitemap for SEO
     path(
         "sitemap.xml",

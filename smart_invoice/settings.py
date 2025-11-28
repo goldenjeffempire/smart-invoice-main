@@ -205,7 +205,6 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="noreply@smartinvoice.com
 # Additional security headers for non-Replit production (settings above handle Replit)
 # These are redundant with our custom middleware but kept for defense in depth
 if not DEBUG and not IS_REPLIT:
-    SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = "DENY"
 

@@ -26,9 +26,16 @@ wheels/
 db.sqlite3
 /media
 /staticfiles
+
+# Environment files - NEVER commit secrets
 .env
 .env.local
 .env.*.local
+.env.production
+.env.development
+
+# Logs directory
+logs/
 
 # IDE
 .vscode/

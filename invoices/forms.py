@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Invoice, UserProfile, InvoiceTemplate, RecurringInvoice, Waitlist
+from .models import Invoice, UserProfile, InvoiceTemplate, RecurringInvoice, Waitlist, ContactSubmission
 from .validators import (
     validate_phone_number,
     validate_tax_rate,
@@ -493,3 +493,63 @@ class UserDetailsForm(forms.ModelForm):
         if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
             raise forms.ValidationError("This email is already in use by another account.")
         return email
+
+
+class ContactForm(forms.ModelForm):
+    """Form for contact page submissions with validation and honeypot."""
+
+    honeypot = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={"style": "display:none", "tabindex": "-1", "autocomplete": "off"}),
+    )
+
+    class Meta:
+        model = ContactSubmission
+        fields = ["name", "email", "subject", "message"]
+        widgets = {
+            "name": forms.TextInput(
+                attrs={
+                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "placeholder": "Your Name",
+                    "autocomplete": "name",
+                    "required": True,
+                }
+            ),
+            "email": forms.EmailInput(
+                attrs={
+                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "placeholder": "your.email@example.com",
+                    "autocomplete": "email",
+                    "required": True,
+                }
+            ),
+            "subject": forms.Select(
+                attrs={
+                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                }
+            ),
+            "message": forms.Textarea(
+                attrs={
+                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "placeholder": "How can we help you?",
+                    "rows": 5,
+                    "required": True,
+                }
+            ),
+        }
+
+    def clean_honeypot(self) -> str:
+        """Reject form if honeypot field is filled (spam bot detection)."""
+        honeypot = self.cleaned_data.get("honeypot", "")
+        if honeypot:
+            raise forms.ValidationError("Spam detected.")
+        return honeypot
+
+    def clean_message(self) -> str:
+        """Validate message length and content."""
+        message = self.cleaned_data.get("message", "")
+        if len(message) < 10:
+            raise forms.ValidationError("Message must be at least 10 characters long.")
+        if len(message) > 5000:
+            raise forms.ValidationError("Message must be less than 5000 characters.")
+        return message
