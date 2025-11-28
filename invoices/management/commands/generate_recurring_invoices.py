@@ -59,10 +59,10 @@ class Command(BaseCommand):
 
             except Exception as e:
                 self.stdout.write(
-                    self.style.ERROR(f"Error generating invoice for {recurring.id}: {str(e)}")
+                    self.style.ERROR(f"Error generating invoice for {recurring.id}: {str(e)}")  # type: ignore[attr-defined]
                 )
 
-        self.stdout.write(self.style.SUCCESS(f"Successfully generated {generated_count} invoices"))
+        self.stdout.write(self.style.SUCCESS(f"Successfully generated {generated_count} invoices"))  # type: ignore[attr-defined]
 
     def send_invoice_email(self, invoice):
         """Send generated invoice to client via email."""
