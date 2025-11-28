@@ -23,10 +23,12 @@ from .search_filters import InvoiceExport
 
 
 def home(request):
+    """Render the public landing page."""
     return render(request, "home.html")
 
 
 def signup(request):
+    """Handle user registration with form validation and auto-login."""
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -40,6 +42,7 @@ def signup(request):
 
 
 def login_view(request):
+    """Authenticate user credentials and establish session."""
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -53,15 +56,16 @@ def login_view(request):
 
 
 def logout_view(request):
+    """End user session and redirect to home page."""
     logout(request)
     return redirect("home")
 
 
 @login_required
 def dashboard(request):
+    """Display user dashboard with invoice statistics and filtered invoice list."""
     from invoices.services import AnalyticsService
 
-    # Base queryset - use database-level filtering for efficiency
     base_queryset = Invoice.objects.filter(user=request.user)  # type: ignore
 
     # Apply status filter at database level (not in Python)
