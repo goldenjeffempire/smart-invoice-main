@@ -1,6 +1,5 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from datetime import datetime
 from invoices.models import RecurringInvoice, Invoice, LineItem
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
@@ -12,21 +11,19 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         today = timezone.now().date()
         recurring_invoices = RecurringInvoice.objects.filter(
-            status='active',
-            next_generation__lte=today
+            status="active", next_generation__lte=today
         )
 
         generated_count = 0
         for recurring in recurring_invoices:
             try:
                 if recurring.end_date and today > recurring.end_date:
-                    recurring.status = 'ended'
+                    recurring.status = "ended"
                     recurring.save()
                     continue
 
                 base_invoice = Invoice.objects.filter(
-                    user=recurring.user,
-                    recurring_invoice=recurring
+                    user=recurring.user, recurring_invoice=recurring
                 ).first()
 
                 if base_invoice:
@@ -65,15 +62,13 @@ class Command(BaseCommand):
                     self.style.ERROR(f"Error generating invoice for {recurring.id}: {str(e)}")
                 )
 
-        self.stdout.write(
-            self.style.SUCCESS(f"Successfully generated {generated_count} invoices")
-        )
+        self.stdout.write(self.style.SUCCESS(f"Successfully generated {generated_count} invoices"))
 
     def send_invoice_email(self, invoice):
         """Send generated invoice to client via email."""
         try:
-            context = {'invoice': invoice}
-            html_message = render_to_string('invoices/invoice_email.html', context)
+            context = {"invoice": invoice}
+            html_message = render_to_string("invoices/invoice_email.html", context)
             email = EmailMessage(
                 f"Invoice {invoice.invoice_id}",
                 html_message,

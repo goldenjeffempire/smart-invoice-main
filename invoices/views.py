@@ -3,23 +3,23 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
-from django.template.loader import render_to_string
 from django.db.models import Count
 from django.db.models.functions import TruncMonth
-from django.views.decorators.http import require_http_methods
 from datetime import datetime
-from typing import Dict, Any, Optional, List
 import calendar
-from weasyprint import HTML
-from weasyprint.text.fonts import FontConfiguration
 import json
 import urllib.parse
 from decimal import Decimal
 
-from .models import Invoice, LineItem, UserProfile, InvoiceTemplate, RecurringInvoice
-from .forms import SignUpForm, InvoiceForm, UserProfileForm, InvoiceTemplateForm, RecurringInvoiceForm, InvoiceSearchForm
-from .search_filters import InvoiceSearch, InvoiceExport
-from .sendgrid_service import SendGridEmailService
+from .models import Invoice, UserProfile, InvoiceTemplate, RecurringInvoice
+from .forms import (
+    SignUpForm,
+    InvoiceForm,
+    UserProfileForm,
+    InvoiceTemplateForm,
+    RecurringInvoiceForm,
+)
+from .search_filters import InvoiceExport
 
 
 def home(request):
@@ -59,12 +59,11 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
-    from django.db.models import Count
     from invoices.services import AnalyticsService
-    
+
     # Base queryset - use database-level filtering for efficiency
     base_queryset = Invoice.objects.filter(user=request.user)  # type: ignore
-    
+
     # Apply status filter at database level (not in Python)
     filter_status = request.GET.get("status", "all")
     if filter_status == "paid":
@@ -73,24 +72,21 @@ def dashboard(request):
         invoices_queryset = base_queryset.filter(status="unpaid")
     else:
         invoices_queryset = base_queryset
-    
+
     # Fetch filtered invoices with prefetched line_items (efficient join)
     # Limit to recent 100 invoices for performance (pagination can be added later)
-    invoices = list(
-        invoices_queryset.prefetch_related('line_items')
-        .order_by('-created_at')[:100]
-    )
-    
+    invoices = list(invoices_queryset.prefetch_related("line_items").order_by("-created_at")[:100])
+
     # Use AnalyticsService for efficient stats calculation
     stats = AnalyticsService.get_user_dashboard_stats(request.user)
-    
+
     context = {
         "invoices": invoices,
-        "total_invoices": stats['total_invoices'],
-        "paid_count": stats['paid_count'],
-        "unpaid_count": stats['unpaid_count'],
-        "total_revenue": stats['total_revenue'],
-        "unique_clients": stats['unique_clients'],
+        "total_invoices": stats["total_invoices"],
+        "paid_count": stats["paid_count"],
+        "unpaid_count": stats["unpaid_count"],
+        "total_revenue": stats["total_revenue"],
+        "unique_clients": stats["unique_clients"],
         "filter_status": filter_status,
     }
     return render(request, "invoices/dashboard.html", context)
@@ -99,41 +95,39 @@ def dashboard(request):
 @login_required
 def create_invoice(request):
     from invoices.services import InvoiceService
-    
+
     if request.method == "POST":
         line_items_data = json.loads(request.POST.get("line_items", "[]"))
-        
+
         if not line_items_data:
             messages.error(request, "Please add at least one line item.")
-            return render(request, "invoices/create_invoice.html", {
-                "invoice_form": InvoiceForm(request.POST, request.FILES)
-            })
-        
+            return render(
+                request,
+                "invoices/create_invoice.html",
+                {"invoice_form": InvoiceForm(request.POST, request.FILES)},
+            )
+
         invoice, invoice_form = InvoiceService.create_invoice(
             user=request.user,
             invoice_data=request.POST,
             files_data=request.FILES,
-            line_items_data=line_items_data
+            line_items_data=line_items_data,
         )
-        
+
         if invoice:
             messages.success(request, f"Invoice {invoice.invoice_id} created successfully!")
             return redirect("invoice_detail", invoice_id=invoice.id)
         else:
             messages.error(request, "Please correct the errors below.")
-            return render(request, "invoices/create_invoice.html", {
-                "invoice_form": invoice_form
-            })
-    
+            return render(request, "invoices/create_invoice.html", {"invoice_form": invoice_form})
+
     return render(request, "invoices/create_invoice.html", {"invoice_form": InvoiceForm()})
 
 
 @login_required
 def invoice_detail(request, invoice_id):
     invoice = get_object_or_404(
-        Invoice.objects.prefetch_related('line_items'),
-        id=invoice_id,
-        user=request.user
+        Invoice.objects.prefetch_related("line_items"), id=invoice_id, user=request.user
     )
     return render(request, "invoices/invoice_detail.html", {"invoice": invoice})
 
@@ -141,42 +135,48 @@ def invoice_detail(request, invoice_id):
 @login_required
 def edit_invoice(request, invoice_id):
     from invoices.services import InvoiceService
-    
+
     invoice = get_object_or_404(
-        Invoice.objects.prefetch_related('line_items'),
-        id=invoice_id,
-        user=request.user
+        Invoice.objects.prefetch_related("line_items"), id=invoice_id, user=request.user
     )
 
     if request.method == "POST":
         line_items_data = json.loads(request.POST.get("line_items", "[]"))
-        
+
         if not line_items_data:
             messages.error(request, "Please add at least one line item.")
-            return render(request, "invoices/edit_invoice.html", {
-                "invoice_form": InvoiceForm(request.POST, request.FILES, instance=invoice),
-                "invoice": invoice,
-                "line_items_json": json.dumps([], default=str),
-            })
-        
+            return render(
+                request,
+                "invoices/edit_invoice.html",
+                {
+                    "invoice_form": InvoiceForm(request.POST, request.FILES, instance=invoice),
+                    "invoice": invoice,
+                    "line_items_json": json.dumps([], default=str),
+                },
+            )
+
         updated_invoice, invoice_form = InvoiceService.update_invoice(
             invoice=invoice,
             invoice_data=request.POST,
             files_data=request.FILES,
-            line_items_data=line_items_data
+            line_items_data=line_items_data,
         )
-        
+
         if updated_invoice:
             messages.success(request, f"Invoice {updated_invoice.invoice_id} updated successfully!")
             return redirect("invoice_detail", invoice_id=updated_invoice.id)
         else:
             messages.error(request, "Please correct the errors below.")
             line_items = list(invoice.line_items.values("description", "quantity", "unit_price"))
-            return render(request, "invoices/edit_invoice.html", {
-                "invoice_form": invoice_form,
-                "invoice": invoice,
-                "line_items_json": json.dumps(line_items, default=str),
-            })
+            return render(
+                request,
+                "invoices/edit_invoice.html",
+                {
+                    "invoice_form": invoice_form,
+                    "invoice": invoice,
+                    "line_items_json": json.dumps(line_items, default=str),
+                },
+            )
 
     line_items = list(invoice.line_items.values("description", "quantity", "unit_price"))
 
@@ -217,11 +217,9 @@ def update_invoice_status(request, invoice_id):
 @login_required
 def generate_pdf(request, invoice_id):
     from .services import PDFService
-    
+
     invoice = get_object_or_404(
-        Invoice.objects.prefetch_related('line_items'),
-        id=invoice_id,
-        user=request.user
+        Invoice.objects.prefetch_related("line_items"), id=invoice_id, user=request.user
     )
 
     pdf = PDFService.generate_pdf_bytes(invoice)
@@ -235,18 +233,18 @@ def generate_pdf(request, invoice_id):
 @login_required
 def send_invoice_email(request, invoice_id: int):
     from .email_service import EmailService
-    
+
     invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)
 
     if request.method == "POST":
         recipient_email = request.POST.get("email", invoice.client_email)
-        
+
         EmailService.send_invoice_email_async(invoice.id, recipient_email)
-        
+
         messages.success(
-            request, 
+            request,
             f"Invoice #{invoice.invoice_id} is being sent to {recipient_email}. "
-            "You'll be notified once delivered."
+            "You'll be notified once delivered.",
         )
         return redirect("invoice_detail", invoice_id=invoice.id)
 
@@ -260,15 +258,15 @@ def whatsapp_share(request, invoice_id):
     # Enhanced WhatsApp message with emojis and better formatting
     phone_line = f"📞 {invoice.business_phone}" if invoice.business_phone else ""
     due_line = f"⏰ Due: {invoice.due_date.strftime('%B %d, %Y')}" if invoice.due_date else ""
-    
+
     payment_details = ""
     if invoice.bank_name:
         payment_details = f"\n\n🏦 *Payment Details:*\nBank: {invoice.bank_name}\nAccount: {invoice.account_name}\nAccount #: {invoice.account_number}"
-    
+
     notes_line = ""
     if invoice.notes:
         notes_line = f"\n\n📝 Notes: {invoice.notes}"
-    
+
     message = f"""📄 *Invoice #{invoice.invoice_id}*
 
 👔 From: *{invoice.business_name}*
@@ -288,7 +286,13 @@ Thank you for your business! 🙏
     """.strip()
 
     # Clean phone number for WhatsApp
-    phone = invoice.client_phone.replace("+", "").replace(" ", "").replace("-", "").replace("(", "").replace(")", "")
+    phone = (
+        invoice.client_phone.replace("+", "")
+        .replace(" ", "")
+        .replace("-", "")
+        .replace("(", "")
+        .replace(")", "")
+    )
 
     whatsapp_url = f"https://wa.me/{phone}?text={urllib.parse.quote(message)}"
 
@@ -306,6 +310,7 @@ Thank you for your business! 🙏
 # ============================================================================
 # FOOTER PAGE VIEWS - Professional Public Pages
 # ============================================================================
+
 
 def features(request):
     """Features page showcasing platform capabilities."""
@@ -381,26 +386,26 @@ def components_showcase(request):
 # SETTINGS PAGES
 # ============================================================================
 
+
 @login_required
 def settings_view(request):
     """Redirect to profile settings page."""
-    return redirect('settings_profile')
+    return redirect("settings_profile")
 
 
 @login_required
 def settings_profile(request):
     """Profile Information settings page."""
-    from .forms import UserDetailsForm, UserProfileForm
-    from django.contrib.auth.hashers import check_password
-    
+    from .forms import UserDetailsForm
+
     profile, created = UserProfile.objects.get_or_create(user=request.user)
-    
+
     message = None
     message_type = None
-    
-    if request.method == 'POST':
+
+    if request.method == "POST":
         user_form = UserDetailsForm(request.POST, instance=request.user)
-        
+
         if user_form.is_valid():
             user_form.save()
             message = "Profile information updated successfully!"
@@ -410,15 +415,15 @@ def settings_profile(request):
             message_type = "error"
     else:
         user_form = UserDetailsForm(instance=request.user)
-    
+
     context = {
-        'user_form': user_form,
-        'profile': profile,
-        'message': message,
-        'message_type': message_type,
-        'active_tab': 'profile',
+        "user_form": user_form,
+        "profile": profile,
+        "message": message,
+        "message_type": message_type,
+        "active_tab": "profile",
     }
-    
+
     return render(request, "pages/settings-profile.html", context)
 
 
@@ -426,15 +431,15 @@ def settings_profile(request):
 def settings_business(request):
     """Business Settings page."""
     from .forms import UserProfileForm
-    
+
     profile, created = UserProfile.objects.get_or_create(user=request.user)
-    
+
     message = None
     message_type = None
-    
-    if request.method == 'POST':
+
+    if request.method == "POST":
         profile_form = UserProfileForm(request.POST, request.FILES, instance=profile)
-        
+
         if profile_form.is_valid():
             profile_form.save()
             message = "Business settings updated successfully!"
@@ -444,15 +449,15 @@ def settings_business(request):
             message_type = "error"
     else:
         profile_form = UserProfileForm(instance=profile)
-    
+
     context = {
-        'profile_form': profile_form,
-        'profile': profile,
-        'message': message,
-        'message_type': message_type,
-        'active_tab': 'business',
+        "profile_form": profile_form,
+        "profile": profile,
+        "message": message,
+        "message_type": message_type,
+        "active_tab": "business",
     }
-    
+
     return render(request, "pages/settings-business.html", context)
 
 
@@ -462,16 +467,16 @@ def settings_security(request):
     from .forms import PasswordChangeForm
     from django.contrib.auth.hashers import check_password
     from django.contrib.auth import update_session_auth_hash
-    
+
     message = None
     message_type = None
-    
-    if request.method == 'POST':
+
+    if request.method == "POST":
         password_form = PasswordChangeForm(request.POST)
         if password_form.is_valid():
-            current = password_form.cleaned_data.get('current_password')
-            new = password_form.cleaned_data.get('new_password')
-            
+            current = password_form.cleaned_data.get("current_password")
+            new = password_form.cleaned_data.get("new_password")
+
             if not check_password(current, request.user.password):
                 message = "Current password is incorrect."
                 message_type = "error"
@@ -488,66 +493,63 @@ def settings_security(request):
             message_type = "error"
     else:
         password_form = PasswordChangeForm()
-    
+
     context = {
-        'password_form': password_form,
-        'message': message,
-        'message_type': message_type,
-        'active_tab': 'security',
+        "password_form": password_form,
+        "message": message,
+        "message_type": message_type,
+        "active_tab": "security",
     }
-    
+
     return render(request, "pages/settings-security.html", context)
 
 
 @login_required
 def settings_notifications(request):
     """Email Notifications settings page."""
-    
+
     context = {
-        'active_tab': 'notifications',
+        "active_tab": "notifications",
     }
-    
+
     return render(request, "pages/settings-notifications.html", context)
 
 
 @login_required
 def settings_billing(request):
     """Billing & Account settings page."""
-    from django.db.models import Count, Q
-    
+
     # Get invoice statistics for user
     invoices = Invoice.objects.filter(user=request.user)  # type: ignore
     invoice_count = invoices.filter(invoice_date__month=datetime.now().month).count()
-    paid_invoices = invoices.filter(status='paid').count()
-    
+    paid_invoices = invoices.filter(status="paid").count()
+
     # Calculate pending amount
-    unpaid_invoices = list(invoices.filter(status='unpaid'))
-    pending_amount = sum(inv.total for inv in unpaid_invoices) if unpaid_invoices else Decimal('0')
-    
+    unpaid_invoices = list(invoices.filter(status="unpaid"))
+    pending_amount = sum(inv.total for inv in unpaid_invoices) if unpaid_invoices else Decimal("0")
+
     context = {
-        'active_tab': 'billing',
-        'invoice_count': invoice_count,
-        'paid_invoices': paid_invoices,
-        'pending_amount': f"${pending_amount:,.2f}" if pending_amount > 0 else "$0.00",
+        "active_tab": "billing",
+        "invoice_count": invoice_count,
+        "paid_invoices": paid_invoices,
+        "pending_amount": f"${pending_amount:,.2f}" if pending_amount > 0 else "$0.00",
     }
-    
+
     return render(request, "pages/settings-billing.html", context)
-
-
 
 
 @login_required
 def analytics(request):
     from invoices.services import AnalyticsService
-    
+
     # Get optimized analytics stats
     stats = AnalyticsService.get_user_analytics_stats(request.user)
     top_clients = AnalyticsService.get_top_clients(request.user, limit=10)
-    
+
     # Get monthly trend data
     invoices = Invoice.objects.filter(user=request.user)
     now = datetime.now()
-    
+
     monthly_data_raw = (
         invoices.annotate(month=TruncMonth("invoice_date"))
         .values("month")
@@ -578,7 +580,7 @@ def analytics(request):
         count = data_by_month.get((year, month), 0)
         monthly_data.append(count)
 
-    recent_invoices = invoices.prefetch_related('line_items').order_by("-created_at")[:10]
+    recent_invoices = invoices.prefetch_related("line_items").order_by("-created_at")[:10]
 
     context = {
         "total_invoices": stats["total_invoices"],
@@ -602,17 +604,20 @@ def analytics(request):
 def admin_dashboard(request):
     if not request.user.is_superuser:
         return redirect("home")
-    
+
     from django.contrib.auth.models import User
+
     total_users = User.objects.count()
     total_invoices = Invoice.objects.count()
-    
+
     # Optimize query with prefetch_related to avoid N+1
-    paid_invoices_qs = Invoice.objects.filter(status="paid").prefetch_related('line_items')  # type: ignore
-    total_revenue = sum(inv.total for inv in paid_invoices_qs) if paid_invoices_qs.exists() else Decimal("0")
+    paid_invoices_qs = Invoice.objects.filter(status="paid").prefetch_related("line_items")  # type: ignore
+    total_revenue = (
+        sum(inv.total for inv in paid_invoices_qs) if paid_invoices_qs.exists() else Decimal("0")
+    )
     paid_invoices = paid_invoices_qs.count()
     paid_rate = (paid_invoices / total_invoices * 100) if total_invoices > 0 else 0
-    
+
     context = {
         "total_users": total_users,
         "total_invoices": total_invoices,
@@ -644,7 +649,7 @@ def admin_settings(request):
 def profile(request):
     """User profile management view."""
     profile, _ = UserProfile.objects.get_or_create(user=request.user)
-    
+
     if request.method == "POST":
         form = UserProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
@@ -653,7 +658,7 @@ def profile(request):
             return redirect("profile")
     else:
         form = UserProfileForm(instance=profile)
-    
+
     return render(request, "invoices/profile.html", {"form": form, "profile": profile})
 
 
@@ -661,7 +666,7 @@ def profile(request):
 def invoice_templates(request):
     """Manage invoice templates."""
     templates = InvoiceTemplate.objects.filter(user=request.user)  # type: ignore
-    
+
     if request.method == "POST":
         form = InvoiceTemplateForm(request.POST)
         if form.is_valid():
@@ -672,11 +677,8 @@ def invoice_templates(request):
             return redirect("invoice_templates")
     else:
         form = InvoiceTemplateForm()
-    
-    return render(request, "invoices/templates.html", {
-        "templates": templates,
-        "form": form
-    })
+
+    return render(request, "invoices/templates.html", {"templates": templates, "form": form})
 
 
 @login_required
@@ -692,7 +694,7 @@ def delete_template(request, template_id):
 def recurring_invoices(request):
     """Manage recurring invoices."""
     recurring = RecurringInvoice.objects.filter(user=request.user)  # type: ignore
-    
+
     if request.method == "POST":
         form = RecurringInvoiceForm(request.POST)
         if form.is_valid():
@@ -703,40 +705,39 @@ def recurring_invoices(request):
             return redirect("recurring_invoices")
     else:
         form = RecurringInvoiceForm()
-    
-    return render(request, "invoices/recurring.html", {
-        "recurring_invoices": recurring,
-        "form": form
-    })
+
+    return render(
+        request, "invoices/recurring.html", {"recurring_invoices": recurring, "form": form}
+    )
 
 
 @login_required
 def bulk_export(request):
     """Export multiple invoices at once."""
-    invoice_ids = request.POST.getlist('invoice_ids')
-    export_format = request.POST.get('format', 'csv')
-    
+    invoice_ids = request.POST.getlist("invoice_ids")
+    export_format = request.POST.get("format", "csv")
+
     if not invoice_ids:
         messages.error(request, "Please select at least one invoice.")
         return redirect("dashboard")
-    
-    invoices = Invoice.objects.filter(id__in=invoice_ids, user=request.user).prefetch_related('line_items')  # type: ignore
-    
-    if export_format == 'csv':
+
+    invoices = Invoice.objects.filter(id__in=invoice_ids, user=request.user).prefetch_related("line_items")  # type: ignore
+
+    if export_format == "csv":
         csv_data = InvoiceExport.export_to_csv(invoices)
-        response = HttpResponse(csv_data, content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="invoices.csv"'
+        response = HttpResponse(csv_data, content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="invoices.csv"'
         return response
-    elif export_format == 'pdf':
+    elif export_format == "pdf":
         pdfs = InvoiceExport.bulk_export_pdfs(invoices)
         if len(pdfs) == 1:
-            response = HttpResponse(pdfs[0][1], content_type='application/pdf')
-            response['Content-Disposition'] = f'attachment; filename="{pdfs[0][0]}.pdf"'
+            response = HttpResponse(pdfs[0][1], content_type="application/pdf")
+            response["Content-Disposition"] = f'attachment; filename="{pdfs[0][0]}.pdf"'
             return response
         else:
             messages.info(request, f"Exported {len(pdfs)} invoices.")
             return redirect("dashboard")
-    
+
     messages.error(request, "Invalid export format.")
     return redirect("dashboard")
 
@@ -745,7 +746,7 @@ def bulk_export(request):
 def bulk_delete(request):
     """Delete multiple invoices at once."""
     if request.method == "POST":
-        invoice_ids = request.POST.getlist('invoice_ids')
+        invoice_ids = request.POST.getlist("invoice_ids")
         if invoice_ids:
             deleted_count, _ = Invoice.objects.filter(id__in=invoice_ids, user=request.user).delete()  # type: ignore
             messages.success(request, f"Deleted {deleted_count} invoice(s).")
@@ -756,19 +757,18 @@ def bulk_delete(request):
 def waitlist_subscribe(request):
     """Handle email capture from Coming Soon pages and landing page."""
     from .forms import WaitlistForm
-    from .models import Waitlist
-    
+
     if request.method == "POST":
         form = WaitlistForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "✓ You're on the list! We'll notify you soon.")
-            return redirect(request.META.get('HTTP_REFERER', 'home'))
+            return redirect(request.META.get("HTTP_REFERER", "home"))
         else:
-            if 'email' in form.errors and 'already' in str(form.errors['email'][0]).lower():
+            if "email" in form.errors and "already" in str(form.errors["email"][0]).lower():
                 messages.info(request, "This email is already on our waitlist!")
             else:
                 messages.error(request, "Please enter a valid email address.")
-            return redirect(request.META.get('HTTP_REFERER', 'home'))
-    
-    return redirect('home')
+            return redirect(request.META.get("HTTP_REFERER", "home"))
+
+    return redirect("home")

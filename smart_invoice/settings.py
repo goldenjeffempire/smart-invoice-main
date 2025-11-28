@@ -33,16 +33,16 @@ if not DEBUG and not IS_REPLIT:
     if SECRET_KEY.startswith("django-insecure-"):
         raise ValueError(
             "PRODUCTION ERROR: You must set a secure SECRET_KEY environment variable! "
-            "Generate one with: python -c \"from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())\""
+            'Generate one with: python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"'
         )
-    
+
     # Enforce secure ENCRYPTION_SALT in production
     if ENCRYPTION_SALT == "dev-salt-only-for-local-testing":
         raise ValueError(
             "PRODUCTION ERROR: You must set a secure ENCRYPTION_SALT environment variable! "
-            "Generate one with: python -c \"import secrets; print(secrets.token_hex(32))\""
+            'Generate one with: python -c "import secrets; print(secrets.token_hex(32))"'
         )
-    
+
     # Enforce ALLOWED_HOSTS in production
     allowed_hosts = env.list("ALLOWED_HOSTS", default=[])  # type: ignore
     if not allowed_hosts:
@@ -51,7 +51,7 @@ if not DEBUG and not IS_REPLIT:
             "Example: ALLOWED_HOSTS=your-domain.com,www.your-domain.com"
         )
     ALLOWED_HOSTS = allowed_hosts
-    
+
     # Production security hardening
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
@@ -69,9 +69,9 @@ else:
 # Django 4.0+ requires CSRF_TRUSTED_ORIGINS to be a list of origins with schemes
 _default_csrf = [
     "https://*.replit.dev",
-    "https://*.repl.co", 
+    "https://*.repl.co",
     "https://*.onrender.com",
-    "https://*.render.com"
+    "https://*.render.com",
 ]
 # Parse from env if set, or use defaults
 _csrf_env = os.environ.get("CSRF_TRUSTED_ORIGINS", "")
@@ -270,18 +270,18 @@ LOGGING = {
 # Content Security Policy (CSP) settings for security - django-csp 4.0 format
 # Using 'unsafe-inline' for scripts/styles for performance and flexibility
 CONTENT_SECURITY_POLICY = {
-    'DIRECTIVES': {
-        'default-src': ("'self'",),
-        'script-src': ("'self'", "'unsafe-inline'", "https://fonts.googleapis.com"),
-        'style-src': ("'self'", "'unsafe-inline'", "https://fonts.googleapis.com"),
-        'img-src': ("'self'", "data:", "https:", "https://ui-avatars.com"),
-        'font-src': ("'self'", "https://fonts.gstatic.com", "data:"),
-        'connect-src': ("'self'",),
-        'frame-ancestors': ("'none'",),
-        'base-uri': ("'self'",),
-        'form-action': ("'self'",),
-        'upgrade-insecure-requests': True,
-        'block-all-mixed-content': True,
+    "DIRECTIVES": {
+        "default-src": ("'self'",),
+        "script-src": ("'self'", "'unsafe-inline'", "https://fonts.googleapis.com"),
+        "style-src": ("'self'", "'unsafe-inline'", "https://fonts.googleapis.com"),
+        "img-src": ("'self'", "data:", "https:", "https://ui-avatars.com"),
+        "font-src": ("'self'", "https://fonts.gstatic.com", "data:"),
+        "connect-src": ("'self'",),
+        "frame-ancestors": ("'none'",),
+        "base-uri": ("'self'",),
+        "form-action": ("'self'",),
+        "upgrade-insecure-requests": True,
+        "block-all-mixed-content": True,
     }
 }
 
@@ -295,9 +295,7 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "LOCATION": "smart-invoice-cache",
-        "OPTIONS": {
-            "MAX_ENTRIES": 10000
-        }
+        "OPTIONS": {"MAX_ENTRIES": 10000},
     }
 }
 
@@ -320,7 +318,7 @@ SENTRY_DSN = env("SENTRY_DSN", default="")  # type: ignore
 if SENTRY_DSN and not DEBUG:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
-    
+
     sentry_sdk.init(
         dsn=SENTRY_DSN,
         integrations=[DjangoIntegration()],

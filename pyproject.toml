@@ -1,3 +1,16 @@
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+exclude = ["migrations", ".venv", "build", "dist"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"smart_invoice/settings_production.py" = ["E402"]
+"smart_invoice/settings.py" = ["E402"]
+
 [tool.black]
 line-length = 100
 target-version = ['py311']

@@ -1,6 +1,6 @@
 """Management command to guide SendGrid email verification setup."""
+
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User
 from invoices.models import Invoice
 
 
@@ -19,20 +19,21 @@ class Command(BaseCommand):
             return
 
         business_email = invoice.business_email
-        
+
         self.stdout.write(self.style.WARNING(f"Your business email: {business_email}\n"))
-        
+
         self.stdout.write(self.style.SUCCESS("WHAT YOU NEED TO DO:"))
-        self.stdout.write("""
+        self.stdout.write(
+            """
 1. Go to SendGrid Dashboard
    https://app.sendgrid.com/settings/sender_authentication
 
 2. Click "Create New" or "Create Sender"
 
 3. Enter these details:
-   • From Email: {} 
+   • From Email: {}
    • From Name: {}
-   
+
 4. Click "Create"
 
 5. Check your email ({})
@@ -72,7 +73,10 @@ Can't find verification email?
   → Request new verification link
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        """.format(business_email, invoice.business_name, business_email))
+        """.format(
+                business_email, invoice.business_name, business_email
+            )
+        )
 
         self.stdout.write(self.style.SUCCESS("=" * 80))
         self.stdout.write(self.style.SUCCESS("Run this command anytime to see these instructions."))

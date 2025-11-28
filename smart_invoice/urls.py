@@ -14,10 +14,13 @@ urlpatterns = [
     path("health/", health_check, name="health_check"),
     path("health/ready/", readiness_check, name="readiness_check"),
     path("health/live/", liveness_check, name="liveness_check"),
-    
     # Sitemap for SEO
-    path("sitemap.xml", sitemap_view, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap"),
-    
+    path(
+        "sitemap.xml",
+        sitemap_view,
+        {"sitemaps": sitemaps},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
     # Admin
     path("admin/", admin.site.urls),
     path("", views.home, name="home"),
@@ -33,7 +36,6 @@ urlpatterns = [
     path("settings/billing/", views.settings_billing, name="settings_billing"),
     # Design System (Phase 1)
     path("components-showcase/", views.components_showcase, name="components_showcase"),
-    
     # Footer pages
     path("features/", views.features, name="features"),
     path("pricing/", views.pricing, name="pricing"),

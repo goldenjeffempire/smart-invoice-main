@@ -1,8 +1,8 @@
 """
 Search and filter utilities for invoice dashboard.
 """
+
 from django.db.models import Q
-from datetime import datetime, timedelta
 
 
 class InvoiceSearch:
@@ -13,12 +13,12 @@ class InvoiceSearch:
         """Search invoices by invoice ID, client name, or business name."""
         if not query:
             return invoices
-        
+
         return invoices.filter(
-            Q(invoice_id__icontains=query) |
-            Q(client_name__icontains=query) |
-            Q(business_name__icontains=query) |
-            Q(client_email__icontains=query)
+            Q(invoice_id__icontains=query)
+            | Q(client_name__icontains=query)
+            | Q(business_name__icontains=query)
+            | Q(client_email__icontains=query)
         )
 
     @staticmethod
@@ -65,22 +65,26 @@ class InvoiceExport:
         """Export invoices to CSV format."""
         import csv
         from io import StringIO
-        
+
         output = StringIO()
         writer = csv.writer(output)
-        writer.writerow(['Invoice ID', 'Client', 'Business', 'Amount', 'Currency', 'Status', 'Date'])
-        
+        writer.writerow(
+            ["Invoice ID", "Client", "Business", "Amount", "Currency", "Status", "Date"]
+        )
+
         for invoice in invoices:
-            writer.writerow([
-                invoice.invoice_id,
-                invoice.client_name,
-                invoice.business_name,
-                invoice.total,
-                invoice.currency,
-                invoice.status,
-                invoice.invoice_date,
-            ])
-        
+            writer.writerow(
+                [
+                    invoice.invoice_id,
+                    invoice.client_name,
+                    invoice.business_name,
+                    invoice.total,
+                    invoice.currency,
+                    invoice.status,
+                    invoice.invoice_date,
+                ]
+            )
+
         return output.getvalue()
 
     @staticmethod
@@ -90,7 +94,7 @@ class InvoiceExport:
         from django.template.loader import render_to_string
         from weasyprint.text.fonts import FontConfiguration
         import logging
-        
+
         logger = logging.getLogger(__name__)
         pdfs = []
         for invoice in invoices:
@@ -102,5 +106,5 @@ class InvoiceExport:
                 pdfs.append((invoice.invoice_id, pdf))
             except Exception as e:
                 logger.error(f"Error generating PDF for invoice {invoice.invoice_id}: {str(e)}")
-        
+
         return pdfs

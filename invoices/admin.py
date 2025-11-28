@@ -70,8 +70,17 @@ class RecurringInvoiceAdmin(admin.ModelAdmin):
     search_fields = ("client_name", "user__username", "client_email")
     readonly_fields = ("created_at", "last_generated")
     fieldsets = (
-        ("Client Information", {"fields": ("user", "client_name", "client_email", "client_phone", "client_address")}),
-        ("Business Information", {"fields": ("business_name", "business_email", "currency", "tax_rate")}),
-        ("Schedule", {"fields": ("frequency", "start_date", "end_date", "next_generation", "status")}),
+        (
+            "Client Information",
+            {"fields": ("user", "client_name", "client_email", "client_phone", "client_address")},
+        ),
+        (
+            "Business Information",
+            {"fields": ("business_name", "business_email", "currency", "tax_rate")},
+        ),
+        (
+            "Schedule",
+            {"fields": ("frequency", "start_date", "end_date", "next_generation", "status")},
+        ),
         ("Metadata", {"fields": ("notes", "created_at", "last_generated")}),
     )
