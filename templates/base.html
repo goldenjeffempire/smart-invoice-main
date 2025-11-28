@@ -50,39 +50,45 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="white">
     
-    <!-- Structured Data for SEO -->
+    <!-- Structured Data for SEO (Consolidated with @id linkage) -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Smart Invoice",
-        "url": "{{ request.scheme }}://{{ request.get_host }}",
-        "logo": "{{ request.scheme }}://{{ request.get_host }}{% static 'favicon.svg' %}",
-        "description": "Professional invoice generator for modern businesses. Create, send, and track invoices in real-time.",
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "contactType": "Customer Support",
-            "email": "support@smartinvoice.com"
-        },
-        "sameAs": []
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "Smart Invoice",
-        "applicationCategory": "BusinessApplication",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        },
-        "operatingSystem": "Web",
-        "description": "Create professional invoices in 60 seconds. Free invoice generator with email and WhatsApp sending, payment tracking, and real-time analytics."
+        "@graph": [
+            {
+                "@type": "Organization",
+                "@id": "{{ request.scheme }}://{{ request.get_host }}/#organization",
+                "name": "Smart Invoice",
+                "url": "{{ request.scheme }}://{{ request.get_host }}",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "{{ request.scheme }}://{{ request.get_host }}{% static 'favicon.svg' %}"
+                },
+                "description": "Professional invoice generator for modern businesses. Create, send, and track invoices in real-time.",
+                "contactPoint": {
+                    "@type": "ContactPoint",
+                    "contactType": "Customer Support",
+                    "email": "support@smartinvoice.com"
+                }
+            },
+            {
+                "@type": "SoftwareApplication",
+                "@id": "{{ request.scheme }}://{{ request.get_host }}/#software",
+                "name": "Smart Invoice",
+                "applicationCategory": "BusinessApplication",
+                "provider": {
+                    "@id": "{{ request.scheme }}://{{ request.get_host }}/#organization"
+                },
+                "offers": {
+                    "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "USD"
+                },
+                "operatingSystem": "Web",
+                "description": "Create professional invoices in 60 seconds. Free invoice generator with email and WhatsApp sending, payment tracking, and real-time analytics."
+            }
+        ]
     }
     </script>
     {% block structured_data %}{% endblock %}

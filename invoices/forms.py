@@ -1,6 +1,8 @@
+from typing import Any, Dict, Optional
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from .models import Invoice, UserProfile, InvoiceTemplate, RecurringInvoice, Waitlist
 from .validators import (
     validate_phone_number,
@@ -9,6 +11,13 @@ from .validators import (
     validate_email_domain,
     InvoiceBusinessRules,
 )
+
+try:
+    import pytz
+    TIMEZONE_CHOICES = [(tz, tz) for tz in pytz.common_timezones]
+except ImportError:
+    from zoneinfo import available_timezones
+    TIMEZONE_CHOICES = [(tz, tz) for tz in sorted(available_timezones())]
 
 
 class SignUpForm(UserCreationForm):
@@ -67,7 +76,9 @@ class SignUpForm(UserCreationForm):
         return user
 
     def clean_email(self) -> str:
-        email = self.cleaned_data.get("email")
+        email: Optional[str] = self.cleaned_data.get("email")
+        if email is None:
+            raise forms.ValidationError("Email is required.")
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("This email is already registered.")
         return email
@@ -160,6 +171,13 @@ class InvoiceForm(forms.ModelForm):
 
 
 class UserProfileForm(forms.ModelForm):
+    timezone = forms.ChoiceField(
+        choices=TIMEZONE_CHOICES,
+        widget=forms.Select(attrs={
+            "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+        }),
+    )
+
     class Meta:
         model = UserProfile
         fields = [
@@ -207,9 +225,6 @@ class UserProfileForm(forms.ModelForm):
                 "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
                 "placeholder": "INV-",
             }),
-            "timezone": forms.Select(attrs={
-                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
-            }),
         }
 
 
@@ -247,13 +262,15 @@ class PasswordChangeForm(forms.Form):
         )
     )
     new_password = forms.CharField(
+        min_length=8,
         widget=forms.PasswordInput(
             attrs={
                 "class": "input-field",
-                "placeholder": "New Password",
+                "placeholder": "New Password (min 8 characters)",
                 "autocomplete": "new-password",
             }
-        )
+        ),
+        help_text="Password must be at least 8 characters and include a mix of letters and numbers.",
     )
     confirm_password = forms.CharField(
         widget=forms.PasswordInput(
@@ -265,7 +282,18 @@ class PasswordChangeForm(forms.Form):
         )
     )
 
-    def clean(self) -> dict:
+    def clean_new_password(self) -> str:
+        password = self.cleaned_data.get("new_password")
+        if password:
+            if len(password) < 8:
+                raise forms.ValidationError("Password must be at least 8 characters long.")
+            if password.isalpha():
+                raise forms.ValidationError("Password must contain at least one number.")
+            if password.isdigit():
+                raise forms.ValidationError("Password must contain at least one letter.")
+        return password or ""
+
+    def clean(self) -> Dict[str, Any]:
         cleaned_data = super().clean()
         if cleaned_data.get("new_password") != cleaned_data.get("confirm_password"):
             raise forms.ValidationError("Passwords do not match.")
@@ -420,8 +448,10 @@ class WaitlistForm(forms.ModelForm):
         }
 
     def clean_email(self) -> str:
-        email = self.cleaned_data.get("email")
-        if Waitlist.objects.filter(email=email).exists():
+        email: Optional[str] = self.cleaned_data.get("email")
+        if email is None:
+            raise forms.ValidationError("Email is required.")
+        if Waitlist.objects.filter(email=email).exists():  # type: ignore[attr-defined]
             raise forms.ValidationError("This email is already on our waitlist!")
         return email
 
@@ -457,7 +487,9 @@ class UserDetailsForm(forms.ModelForm):
         }
 
     def clean_email(self) -> str:
-        email = self.cleaned_data.get("email")
+        email: Optional[str] = self.cleaned_data.get("email")
+        if email is None:
+            raise forms.ValidationError("Email is required.")
         if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
             raise forms.ValidationError("This email is already in use by another account.")
         return email

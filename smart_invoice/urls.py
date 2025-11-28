@@ -9,6 +9,9 @@ from invoices import views
 from invoices.health import health_check, readiness_check, liveness_check
 from invoices.sitemap import sitemaps
 
+handler404 = "invoices.views.custom_404"
+handler500 = "invoices.views.custom_500"
+
 urlpatterns = [
     # Health checks
     path("health/", health_check, name="health_check"),

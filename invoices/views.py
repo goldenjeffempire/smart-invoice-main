@@ -42,15 +42,28 @@ def signup(request):
 
 
 def login_view(request):
-    """Authenticate user credentials and establish session."""
+    """Authenticate user credentials and establish session with rate limiting."""
+    from django.core.cache import cache
+    from .middleware import RequestResponseLoggingMiddleware
+
     if request.method == "POST":
+        client_ip = RequestResponseLoggingMiddleware.get_client_ip(request)
+        cache_key = f"login_attempt:{client_ip}"
+        attempt_count = cache.get(cache_key, 0)
+
+        if attempt_count >= 5:
+            messages.error(request, "Too many login attempts. Please try again in 15 minutes.")
+            return render(request, "registration/login.html")
+
         username = request.POST.get("username")
         password = request.POST.get("password")
         user = authenticate(request, username=username, password=password)
         if user is not None:
+            cache.delete(cache_key)
             login(request, user)
             return redirect("dashboard")
         else:
+            cache.set(cache_key, attempt_count + 1, 900)
             messages.error(request, "Invalid username or password.")
     return render(request, "registration/login.html")
 
@@ -467,34 +480,47 @@ def settings_business(request):
 
 @login_required
 def settings_security(request):
-    """Security & Password settings page."""
+    """Security & Password settings page with rate limiting on password changes."""
     from .forms import PasswordChangeForm
     from django.contrib.auth.hashers import check_password
     from django.contrib.auth import update_session_auth_hash
+    from django.core.cache import cache
+    from .middleware import RequestResponseLoggingMiddleware
 
     message = None
     message_type = None
 
     if request.method == "POST":
-        password_form = PasswordChangeForm(request.POST)
-        if password_form.is_valid():
-            current = password_form.cleaned_data.get("current_password")
-            new = password_form.cleaned_data.get("new_password")
+        client_ip = RequestResponseLoggingMiddleware.get_client_ip(request)
+        cache_key = f"password_change_attempt:{client_ip}:{request.user.id}"
+        attempt_count = cache.get(cache_key, 0)
 
-            if not check_password(current, request.user.password):
-                message = "Current password is incorrect."
-                message_type = "error"
-                password_form = PasswordChangeForm()
-            else:
-                request.user.set_password(new)
-                request.user.save()
-                update_session_auth_hash(request, request.user)
-                message = "Password updated successfully!"
-                message_type = "success"
-                password_form = PasswordChangeForm()
-        else:
-            message = "Please fix the errors below."
+        if attempt_count >= 5:
+            message = "Too many password change attempts. Please try again in 1 hour."
             message_type = "error"
+            password_form = PasswordChangeForm()
+        else:
+            password_form = PasswordChangeForm(request.POST)
+            if password_form.is_valid():
+                current = password_form.cleaned_data.get("current_password")
+                new = password_form.cleaned_data.get("new_password")
+
+                if not check_password(current, request.user.password):
+                    cache.set(cache_key, attempt_count + 1, 3600)
+                    message = "Current password is incorrect."
+                    message_type = "error"
+                    password_form = PasswordChangeForm()
+                else:
+                    cache.delete(cache_key)
+                    request.user.set_password(new)
+                    request.user.save()
+                    update_session_auth_hash(request, request.user)
+                    message = "Password updated successfully!"
+                    message_type = "success"
+                    password_form = PasswordChangeForm()
+            else:
+                message = "Please fix the errors below."
+                message_type = "error"
     else:
         password_form = PasswordChangeForm()
 
@@ -628,10 +654,24 @@ def analytics(request):
 
 
 # Admin Views (Production-ready admin dashboard for platform management)
-def admin_dashboard(request):
-    if not request.user.is_superuser:
-        return redirect("home")
+from functools import wraps
 
+def staff_member_required(view_func):
+    """Decorator requiring user to be logged in and have staff access (is_active and is_staff)."""
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, "Please log in to access this page.")
+            return redirect("login")
+        if not (request.user.is_active and request.user.is_staff):
+            messages.error(request, "You do not have permission to access this page.")
+            return redirect("home")
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+
+@staff_member_required
+def admin_dashboard(request):
     from django.contrib.auth.models import User
 
     total_users = User.objects.count()
@@ -654,21 +694,18 @@ def admin_dashboard(request):
     return render(request, "admin/dashboard.html", context)
 
 
+@staff_member_required
 def admin_users(request):
-    if not request.user.is_superuser:
-        return redirect("home")
     return render(request, "admin/users.html")
 
 
+@staff_member_required
 def admin_content(request):
-    if not request.user.is_superuser:
-        return redirect("home")
     return render(request, "admin/content.html")
 
 
+@staff_member_required
 def admin_settings(request):
-    if not request.user.is_superuser:
-        return redirect("home")
     return render(request, "admin/settings.html")
 
 
@@ -789,7 +826,7 @@ def waitlist_subscribe(request):
         form = WaitlistForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "✓ You're on the list! We'll notify you soon.")
+            messages.success(request, "You're on the list! We'll notify you soon.")
             return redirect(request.META.get("HTTP_REFERER", "home"))
         else:
             if form.errors and "email" in form.errors and "already" in str(form.errors["email"][0]).lower():
@@ -799,3 +836,13 @@ def waitlist_subscribe(request):
             return redirect(request.META.get("HTTP_REFERER", "home"))
 
     return redirect("home")
+
+
+def custom_404(request, exception):
+    """Custom 404 error handler."""
+    return render(request, "errors/404.html", status=404)
+
+
+def custom_500(request):
+    """Custom 500 error handler."""
+    return render(request, "errors/500.html", status=500)
