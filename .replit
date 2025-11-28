@@ -1,4 +1,4 @@
-modules = ["web", "nodejs-20", "bash", "python-3.11", "postgresql-16"]
+modules = ["web", "nodejs-20", "bash", "python-3.11"]
 [nix]
 channel = "stable-25_05"
 packages = ["awsebcli", "cairo", "cargo", "fontconfig", "freetype", "gdk-pixbuf", "ghostscript", "glib", "harfbuzz", "lcms2", "libffi", "libiconv", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "libyaml", "openjpeg", "openssl", "pango", "pgadmin4", "pkg-config", "postgresql", "rustc", "shared-mime-info", "tcl", "tk", "unzip", "zlib"]
@@ -57,6 +57,10 @@ externalPort = 6800
 [[ports]]
 localPort = 42013
 externalPort = 3003
+
+[[ports]]
+localPort = 42117
+externalPort = 8080
 
 [[ports]]
 localPort = 42193
