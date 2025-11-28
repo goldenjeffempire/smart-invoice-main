@@ -205,7 +205,7 @@ class SendGridEmailService:
         }
 
         return self._send_email(
-            from_email=self.PLATFORM_FROM_EMAIL,
+            user_business_email=None,
             from_name="Smart Invoice",
             to_email=user.email,
             template_id=template_id,
@@ -228,7 +228,7 @@ class SendGridEmailService:
         }
 
         return self._send_email(
-            from_email=self.PLATFORM_FROM_EMAIL,
+            user_business_email=None,
             from_name="Smart Invoice",
             to_email=user.email,
             template_id=template_id,
@@ -253,7 +253,7 @@ class SendGridEmailService:
         }
 
         return self._send_email(
-            from_email=self.PLATFORM_FROM_EMAIL,
+            user_business_email=None,
             from_name="Smart Invoice Admin",
             to_email=admin_email,
             template_id=template_id,
