@@ -105,7 +105,7 @@
     {% include 'includes/navbar.html' %}
     
     {% if messages %}
-        <div class="container mx-auto px-4 py-4" role="region" aria-label="Notifications" aria-live="polite">
+        <div class="container mx-auto px-4 py-4 pt-20 lg:pt-24" role="region" aria-label="Notifications" aria-live="polite">
             {% for message in messages %}
                 <div class="alert alert-{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %} animate-slide-down" role="alert" aria-atomic="true">
                     <span class="block sm:inline">{{ message }}</span>
@@ -114,7 +114,7 @@
         </div>
     {% endif %}
     
-    <main id="main-content" role="main">
+    <main id="main-content" role="main" class="{% block main_class %}pt-16 lg:pt-[72px]{% endblock %}">
         {% block content %}{% endblock %}
     </main>
     
