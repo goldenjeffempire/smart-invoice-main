@@ -1,220 +1,239 @@
-<!-- MODERN NAVBAR - Enhanced with Micro-interactions & Advanced Features -->
+<!-- PREMIUM NAVBAR - 2025 Enterprise Design System -->
 <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" role="navigation" aria-label="Main navigation">
-    <!-- Navbar Background with Blur Effect -->
-    <div class="absolute inset-0 bg-white/80 backdrop-blur-xl border-b border-gray-200/50 transition-all duration-300" id="navbar-bg"></div>
+    <!-- Glass Background with Premium Blur -->
+    <div class="absolute inset-0 bg-white/70 backdrop-blur-2xl border-b border-gray-100/50 transition-all duration-300" id="navbar-bg"></div>
     
-    <div class="container relative z-10 mx-auto px-4 md:px-6">
-        <div class="flex justify-between items-center h-20">
+    <div class="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16 lg:h-[72px]">
             <!-- Logo & Brand -->
-            <div class="flex items-center gap-8">
-                <a href="{% url 'home' %}" class="flex items-center gap-3 group focus-ring rounded-xl" aria-label="Smart Invoice - Home">
-                    <div class="relative w-12 h-12 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg group-hover:shadow-2xl">
-                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
-                        <div class="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white animate-pulse" aria-hidden="true"></div>
+            <div class="flex items-center gap-6 lg:gap-10">
+                <a href="{% url 'home' %}" class="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded-xl" aria-label="Smart Invoice - Home">
+                    <!-- Premium Logo Icon -->
+                    <div class="relative w-10 h-10 lg:w-11 lg:h-11">
+                        <div class="absolute inset-0 bg-gradient-to-br from-primary-600 via-violet-600 to-fuchsia-500 rounded-xl rotate-0 group-hover:rotate-6 transition-all duration-500 shadow-lg shadow-primary-500/25 group-hover:shadow-xl group-hover:shadow-primary-500/30"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
                     </div>
-                    <div class="hidden sm:block">
-                        <div class="text-2xl font-black bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent">Smart Invoice</div>
-                        <div class="text-xs font-bold text-gray-500 -mt-1">Professional Invoicing</div>
+                    <!-- Brand Name -->
+                    <div class="hidden sm:flex flex-col">
+                        <span class="text-lg lg:text-xl font-bold tracking-tight bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">Smart Invoice</span>
+                        <span class="text-[10px] lg:text-xs font-medium text-gray-400 -mt-0.5 tracking-wide">Professional Invoicing</span>
                     </div>
                 </a>
                 
                 {% if not user.is_authenticated %}
-                <!-- Desktop Navigation Links (Public) -->
-                <div class="hidden lg:flex items-center gap-1" role="menubar">
-                    <a href="/#features" class="nav-link group relative px-4 py-2 text-gray-700 hover:text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-all" role="menuitem">
-                        <span>Features</span>
-                        <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 group-hover:w-3/4 transition-all duration-300"></span>
+                <!-- Desktop Navigation - Clean Minimal -->
+                <div class="hidden lg:flex items-center" role="menubar">
+                    <a href="/#features" class="nav-link relative px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200" role="menuitem">
+                        Features
                     </a>
-                    <a href="{% url 'about' %}" class="nav-link group relative px-4 py-2 text-gray-700 hover:text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-all" role="menuitem">
-                        <span>About</span>
-                        <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 group-hover:w-3/4 transition-all duration-300"></span>
+                    <a href="{% url 'pricing' %}" class="nav-link relative px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200" role="menuitem">
+                        Pricing
                     </a>
-                    <a href="{% url 'contact' %}" class="nav-link group relative px-4 py-2 text-gray-700 hover:text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-all" role="menuitem">
-                        <span>Contact</span>
-                        <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 group-hover:w-3/4 transition-all duration-300"></span>
+                    <a href="{% url 'about' %}" class="nav-link relative px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200" role="menuitem">
+                        About
+                    </a>
+                    <a href="{% url 'contact' %}" class="nav-link relative px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200" role="menuitem">
+                        Contact
                     </a>
                 </div>
                 {% endif %}
             </div>
             
             <!-- Right Side Actions -->
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 lg:gap-3">
                 {% if user.is_authenticated %}
                     <!-- Authenticated User Menu -->
-                    <div class="hidden md:flex items-center gap-2">
-                        <!-- Quick Create Button -->
-                        <a href="{% url 'create_invoice' %}" class="group relative px-4 py-2.5 flex items-center gap-2 text-gray-700 hover:text-blue-600 font-semibold rounded-xl hover:bg-blue-50 transition-all" aria-label="Create new invoice" data-track="nav_create_click">
-                            <svg class="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <div class="hidden md:flex items-center gap-1">
+                        <!-- Create Invoice - Primary Action -->
+                        <a href="{% url 'create_invoice' %}" class="group inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-primary-600 to-violet-600 rounded-xl shadow-md shadow-primary-500/20 hover:shadow-lg hover:shadow-primary-500/30 hover:-translate-y-0.5 transition-all duration-200" aria-label="Create new invoice">
+                            <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
                             </svg>
-                            <span class="hidden xl:inline">New Invoice</span>
+                            <span>New Invoice</span>
                         </a>
                         
-                        <!-- Dashboard Link -->
-                        <a href="{% url 'dashboard' %}" class="relative px-4 py-2.5 flex items-center gap-2 text-gray-700 hover:text-blue-600 font-semibold rounded-xl hover:bg-gray-100 transition-all" aria-label="Dashboard">
+                        <!-- Dashboard -->
+                        <a href="{% url 'dashboard' %}" class="p-2.5 text-gray-500 hover:text-gray-900 hover:bg-gray-100/80 rounded-xl transition-all duration-200" aria-label="Dashboard">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/>
                             </svg>
-                            <span class="hidden xl:inline">Dashboard</span>
                         </a>
                         
-                        <!-- Analytics Link -->
-                        <a href="{% url 'analytics' %}" class="relative px-4 py-2.5 flex items-center gap-2 text-gray-700 hover:text-blue-600 font-semibold rounded-xl hover:bg-gray-100 transition-all" aria-label="Analytics">
+                        <!-- Analytics -->
+                        <a href="{% url 'analytics' %}" class="p-2.5 text-gray-500 hover:text-gray-900 hover:bg-gray-100/80 rounded-xl transition-all duration-200" aria-label="Analytics">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                             </svg>
-                            <span class="hidden xl:inline">Analytics</span>
                         </a>
                         
-                        <!-- Notifications Button -->
-                        <button class="relative p-2.5 text-gray-700 hover:text-blue-600 hover:bg-gray-100 rounded-xl transition-all" aria-label="Notifications" aria-haspopup="true">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                        <!-- Divider -->
+                        <div class="w-px h-6 bg-gray-200 mx-1"></div>
+                        
+                        <!-- Notifications -->
+                        <button class="relative p-2.5 text-gray-500 hover:text-gray-900 hover:bg-gray-100/80 rounded-xl transition-all duration-200" aria-label="Notifications" aria-haspopup="true">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
                             </svg>
-                            <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white" aria-hidden="true"></span>
+                            <span class="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white" aria-hidden="true"></span>
                         </button>
                         
                         <!-- User Profile Dropdown -->
-                        <div class="relative" id="user-menu-container">
-                            <button id="user-menu-button" class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 rounded-xl transition-all" aria-label="User menu" aria-haspopup="true" aria-expanded="false">
-                                <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
+                        <div class="relative ml-1" id="user-menu-container">
+                            <button id="user-menu-button" class="flex items-center gap-2 p-1.5 hover:bg-gray-100/80 rounded-xl transition-all duration-200" aria-label="User menu" aria-haspopup="true" aria-expanded="false">
+                                <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-violet-600 rounded-lg flex items-center justify-center text-white text-sm font-semibold shadow-sm">
                                     {{ user.email.0|upper }}
                                 </div>
-                                <svg class="w-4 h-4 text-gray-600 transition-transform duration-200" id="user-menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+                                <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" id="user-menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
                             
                             <!-- Dropdown Menu -->
-                            <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-200 py-2 transform opacity-0 scale-95 transition-all duration-200" role="menu">
+                            <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 py-1.5 transform opacity-0 scale-95 transition-all duration-200 origin-top-right" role="menu">
                                 <div class="px-4 py-3 border-b border-gray-100">
-                                    <p class="text-sm font-bold text-gray-900">{{ user.get_full_name|default:user.email }}</p>
-                                    <p class="text-xs text-gray-500 truncate">{{ user.email }}</p>
+                                    <p class="text-sm font-semibold text-gray-900 truncate">{{ user.get_full_name|default:user.email }}</p>
+                                    <p class="text-xs text-gray-500 truncate mt-0.5">{{ user.email }}</p>
                                 </div>
-                                <div class="py-2">
-                                    <a href="{% url 'settings' %}" class="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-gray-50 transition-all" role="menuitem">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <div class="py-1.5">
+                                    <a href="{% url 'settings' %}" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors" role="menuitem">
+                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                         </svg>
-                                        <span>Account Settings</span>
+                                        Account Settings
                                     </a>
-                                    <a href="{% url 'settings_notifications' %}" class="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-gray-50 transition-all" role="menuitem">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+                                    <a href="{% url 'settings_notifications' %}" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors" role="menuitem">
+                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
                                         </svg>
-                                        <span>Preferences</span>
+                                        Notifications
                                     </a>
-                                    <a href="{% url 'support' %}" class="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-gray-50 transition-all" role="menuitem">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    <a href="{% url 'support' %}" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors" role="menuitem">
+                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
-                                        <span>Help & Support</span>
+                                        Help & Support
                                     </a>
                                 </div>
-                                <div class="border-t border-gray-100 pt-2">
-                                    <a href="{% url 'logout' %}" class="flex items-center gap-3 px-4 py-2.5 text-red-600 hover:bg-red-50 transition-all" role="menuitem">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                <div class="border-t border-gray-100 pt-1.5">
+                                    <a href="{% url 'logout' %}" class="flex items-center gap-3 px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 transition-colors" role="menuitem">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                                         </svg>
-                                        <span class="font-semibold">Sign Out</span>
+                                        Sign Out
                                     </a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 {% else %}
-                    <!-- Public CTA Buttons -->
-                    <div class="hidden md:flex items-center gap-3">
-                        <a href="{% url 'login' %}" class="px-6 py-2.5 text-gray-700 hover:text-blue-600 font-bold rounded-xl hover:bg-gray-100 transition-all" aria-label="Login to your account" data-track="nav_login_click">
-                            Login
+                    <!-- Public CTA Buttons - Premium Style -->
+                    <div class="hidden md:flex items-center gap-2">
+                        <a href="{% url 'login' %}" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200" aria-label="Login to your account">
+                            Log in
                         </a>
-                        <a href="{% url 'signup' %}" class="group relative px-6 py-2.5 text-white font-bold rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all" aria-label="Sign up for free" data-track="nav_signup_click">
-                            <span class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 group-hover:scale-105 transition-transform"></span>
-                            <span class="relative flex items-center gap-2">
-                                <span>Get Started Free</span>
-                                <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                                </svg>
-                            </span>
+                        <a href="{% url 'signup' %}" class="group inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-gray-900 hover:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-200" aria-label="Sign up for free">
+                            <span>Get Started</span>
+                            <svg class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                            </svg>
                         </a>
                     </div>
                 {% endif %}
                 
                 <!-- Mobile Menu Button -->
-                <button id="mobile-menu-button" class="md:hidden p-2.5 rounded-xl hover:bg-gray-100 transition-all" aria-label="Toggle mobile menu" aria-expanded="false" aria-controls="mobile-menu">
-                    <svg id="menu-icon" class="w-6 h-6 text-gray-700 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/>
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-xl hover:bg-gray-100/80 transition-colors" aria-label="Toggle mobile menu" aria-expanded="false" aria-controls="mobile-menu">
+                    <svg id="menu-icon" class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
                     <svg id="close-icon" class="w-6 h-6 text-gray-700 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
             </div>
         </div>
     </div>
     
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200 shadow-2xl" role="menu" aria-label="Mobile navigation">
-        <div class="container mx-auto px-4 py-6 space-y-2">
-            {% if user.is_authenticated %}
-                <!-- Authenticated Mobile Menu -->
-                <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all font-semibold" role="menuitem">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                    </svg>
-                    <span>Dashboard</span>
-                </a>
-                <a href="{% url 'create_invoice' %}" class="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl transition-all font-bold shadow-lg" role="menuitem">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
-                    </svg>
-                    <span>Create New Invoice</span>
-                </a>
-                <a href="{% url 'analytics' %}" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all font-semibold" role="menuitem">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                    </svg>
-                    <span>Analytics</span>
-                </a>
-                <a href="{% url 'settings' %}" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all font-semibold" role="menuitem">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    </svg>
-                    <span>Settings</span>
-                </a>
-                <div class="pt-4 mt-4 border-t border-gray-200">
-                    <a href="{% url 'logout' %}" class="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-all font-bold" role="menuitem">
+    <!-- Mobile Menu - Premium Slide Panel -->
+    <div id="mobile-menu" class="hidden md:hidden" role="menu" aria-label="Mobile navigation">
+        <div class="absolute inset-x-0 top-full bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-xl">
+            <div class="container mx-auto px-4 py-4 space-y-1">
+                {% if user.is_authenticated %}
+                    <!-- User Info -->
+                    <div class="flex items-center gap-3 px-3 py-3 mb-3 bg-gray-50 rounded-xl">
+                        <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-violet-600 rounded-lg flex items-center justify-center text-white font-semibold">
+                            {{ user.email.0|upper }}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-semibold text-gray-900 truncate">{{ user.get_full_name|default:user.email }}</p>
+                            <p class="text-xs text-gray-500 truncate">{{ user.email }}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Create Invoice CTA -->
+                    <a href="{% url 'create_invoice' %}" class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-primary-600 to-violet-600 text-white rounded-xl font-semibold shadow-md" role="menuitem">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
-                        <span>Sign Out</span>
+                        Create New Invoice
                     </a>
-                </div>
-            {% else %}
-                <!-- Public Mobile Menu -->
-                <a href="/#features" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all font-semibold" role="menuitem">Features</a>
-                <a href="{% url 'about' %}" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all font-semibold" role="menuitem">About</a>
-                <a href="{% url 'contact' %}" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all font-semibold" role="menuitem">Contact</a>
-                <div class="pt-4 mt-4 border-t border-gray-200 space-y-3">
-                    <a href="{% url 'login' %}" class="block px-4 py-3 text-center text-gray-700 hover:bg-gray-100 rounded-xl transition-all font-bold border-2 border-gray-300" role="menuitem">
-                        Login
+                    
+                    <!-- Nav Links -->
+                    <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-xl transition-colors" role="menuitem">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/>
+                        </svg>
+                        Dashboard
                     </a>
-                    <a href="{% url 'signup' %}" class="block px-4 py-3 text-center text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl transition-all font-bold shadow-lg" role="menuitem">
-                        Get Started Free →
+                    <a href="{% url 'analytics' %}" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-xl transition-colors" role="menuitem">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                        Analytics
                     </a>
-                </div>
-            {% endif %}
+                    <a href="{% url 'settings' %}" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-xl transition-colors" role="menuitem">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        Settings
+                    </a>
+                    
+                    <div class="pt-3 mt-3 border-t border-gray-100">
+                        <a href="{% url 'logout' %}" class="flex items-center gap-3 px-3 py-2.5 text-rose-600 hover:bg-rose-50 rounded-xl transition-colors" role="menuitem">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                            </svg>
+                            Sign Out
+                        </a>
+                    </div>
+                {% else %}
+                    <!-- Public Menu -->
+                    <a href="/#features" class="block px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-xl transition-colors font-medium" role="menuitem">Features</a>
+                    <a href="{% url 'pricing' %}" class="block px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-xl transition-colors font-medium" role="menuitem">Pricing</a>
+                    <a href="{% url 'about' %}" class="block px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-xl transition-colors font-medium" role="menuitem">About</a>
+                    <a href="{% url 'contact' %}" class="block px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-xl transition-colors font-medium" role="menuitem">Contact</a>
+                    
+                    <div class="pt-4 mt-4 border-t border-gray-100 space-y-2">
+                        <a href="{% url 'login' %}" class="block px-4 py-2.5 text-center text-gray-700 hover:bg-gray-100 rounded-xl transition-colors font-medium border border-gray-200" role="menuitem">
+                            Log in
+                        </a>
+                        <a href="{% url 'signup' %}" class="block px-4 py-2.5 text-center text-white bg-gray-900 hover:bg-gray-800 rounded-xl transition-colors font-semibold shadow-sm" role="menuitem">
+                            Get Started Free
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 </nav>
 
-<!-- Navbar Spacer to prevent content jump -->
-<div class="h-20" aria-hidden="true"></div>
+<!-- Navbar Spacer -->
+<div class="h-16 lg:h-[72px]" aria-hidden="true"></div>
 
 <script>
-// Enhanced Navbar JavaScript with Micro-interactions
 document.addEventListener('DOMContentLoaded', function() {
     const navbar = document.getElementById('navbar');
     const navbarBg = document.getElementById('navbar-bg');
@@ -226,31 +245,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const userDropdown = document.getElementById('user-dropdown');
     const userMenuIcon = document.getElementById('user-menu-icon');
     
-    let lastScrollTop = 0;
-    const scrollThreshold = 50;
-    
     // Mobile Menu Toggle
     if (mobileMenuButton) {
         mobileMenuButton.addEventListener('click', function() {
             const isHidden = mobileMenu.classList.contains('hidden');
-            
-            if (isHidden) {
-                mobileMenu.classList.remove('hidden');
-                menuIcon.classList.add('hidden');
-                closeIcon.classList.remove('hidden');
-                mobileMenuButton.setAttribute('aria-expanded', 'true');
-                document.body.style.overflow = 'hidden';
-            } else {
-                mobileMenu.classList.add('hidden');
-                menuIcon.classList.remove('hidden');
-                closeIcon.classList.add('hidden');
-                mobileMenuButton.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
-            }
+            mobileMenu.classList.toggle('hidden');
+            menuIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+            mobileMenuButton.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
         });
     }
     
-    // User Menu Dropdown Toggle
+    // User Menu Dropdown
     if (userMenuButton && userDropdown) {
         userMenuButton.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -258,58 +264,46 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (isHidden) {
                 userDropdown.classList.remove('hidden');
-                setTimeout(() => {
+                requestAnimationFrame(() => {
                     userDropdown.classList.remove('opacity-0', 'scale-95');
                     userDropdown.classList.add('opacity-100', 'scale-100');
-                }, 10);
-                userMenuIcon.style.transform = 'rotate(180deg)';
-                userMenuButton.setAttribute('aria-expanded', 'true');
+                });
+                if (userMenuIcon) userMenuIcon.style.transform = 'rotate(180deg)';
             } else {
                 userDropdown.classList.add('opacity-0', 'scale-95');
                 userDropdown.classList.remove('opacity-100', 'scale-100');
-                setTimeout(() => {
-                    userDropdown.classList.add('hidden');
-                }, 200);
-                userMenuIcon.style.transform = 'rotate(0deg)';
-                userMenuButton.setAttribute('aria-expanded', 'false');
+                setTimeout(() => userDropdown.classList.add('hidden'), 150);
+                if (userMenuIcon) userMenuIcon.style.transform = '';
             }
+            userMenuButton.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
         });
         
-        // Close dropdown when clicking outside
         document.addEventListener('click', function(e) {
             if (!userDropdown.classList.contains('hidden') && !userMenuButton.contains(e.target)) {
                 userDropdown.classList.add('opacity-0', 'scale-95');
                 userDropdown.classList.remove('opacity-100', 'scale-100');
-                setTimeout(() => {
-                    userDropdown.classList.add('hidden');
-                }, 200);
-                userMenuIcon.style.transform = 'rotate(0deg)';
+                setTimeout(() => userDropdown.classList.add('hidden'), 150);
+                if (userMenuIcon) userMenuIcon.style.transform = '';
                 userMenuButton.setAttribute('aria-expanded', 'false');
             }
         });
     }
     
-    // Scroll Effects
+    // Scroll Effect - Subtle shadow on scroll
+    let ticking = false;
     window.addEventListener('scroll', function() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        if (scrollTop > scrollThreshold) {
-            navbarBg.classList.add('shadow-xl');
-            navbarBg.style.background = 'rgba(255, 255, 255, 0.95)';
-        } else {
-            navbarBg.classList.remove('shadow-xl');
-            navbarBg.style.background = 'rgba(255, 255, 255, 0.8)';
-        }
-        
-        lastScrollTop = scrollTop;
-    });
-    
-    // Active Link Highlighting
-    const navLinks = document.querySelectorAll('.nav-link');
-    const currentPath = window.location.pathname;
-    navLinks.forEach(link => {
-        if (link.getAttribute('href') === currentPath) {
-            link.classList.add('text-blue-600', 'font-bold');
+        if (!ticking) {
+            requestAnimationFrame(function() {
+                if (window.scrollY > 10) {
+                    navbarBg.classList.add('shadow-sm', 'border-gray-200/80');
+                    navbarBg.classList.remove('border-gray-100/50');
+                } else {
+                    navbarBg.classList.remove('shadow-sm', 'border-gray-200/80');
+                    navbarBg.classList.add('border-gray-100/50');
+                }
+                ticking = false;
+            });
+            ticking = true;
         }
     });
 });
