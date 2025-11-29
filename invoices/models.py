@@ -16,6 +16,8 @@ if TYPE_CHECKING:
 class Waitlist(models.Model):
     """Email waitlist for upcoming features (Templates, API, etc)."""
 
+    objects: models.Manager["Waitlist"]
+
     FEATURE_CHOICES = [
         ("templates", "Invoice Templates"),
         ("api", "API Access"),
@@ -37,6 +39,8 @@ class Waitlist(models.Model):
 
 class ContactSubmission(models.Model):
     """Store contact form submissions for follow-up and audit."""
+
+    objects: models.Manager["ContactSubmission"]
 
     SUBJECT_CHOICES = [
         ("sales", "Sales Inquiry"),

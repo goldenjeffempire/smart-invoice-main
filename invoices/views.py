@@ -421,12 +421,13 @@ Submitted: {submission.submitted_at}
                     "Sorry, there was an issue submitting your message. Please try again.",
                 )
         else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    if field != "__all__":
-                        messages.error(request, f"{field.replace('_', ' ').title()}: {error}")
-                    else:
-                        messages.error(request, error)
+            if form.errors:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        if field != "__all__":
+                            messages.error(request, f"{field.replace('_', ' ').title()}: {error}")
+                        else:
+                            messages.error(request, error)
     else:
         form = ContactForm()
 
@@ -989,4 +990,4 @@ Sitemap: {base_url}/sitemap.xml
 
 Crawl-delay: 1
 """
-    return HttpResponse(content, content_type="text/plain")
+    return HttpResponse(content.encode("utf-8"), content_type="text/plain; charset=utf-8")
