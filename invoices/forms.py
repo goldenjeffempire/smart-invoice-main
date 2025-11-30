@@ -404,26 +404,46 @@ class InvoiceSearchForm(forms.Form):
     )
     min_amount = forms.DecimalField(
         required=False,
+        min_value=0,
         widget=forms.NumberInput(
             attrs={
                 "class": "input-field",
                 "placeholder": "Min Amount",
                 "step": "0.01",
+                "min": "0",
                 "aria-label": "Minimum amount",
             }
         ),
     )
     max_amount = forms.DecimalField(
         required=False,
+        min_value=0,
         widget=forms.NumberInput(
             attrs={
                 "class": "input-field",
                 "placeholder": "Max Amount",
                 "step": "0.01",
+                "min": "0",
                 "aria-label": "Maximum amount",
             }
         ),
     )
+
+    def clean(self) -> Dict[str, Any]:
+        """Validate date range and amount range."""
+        cleaned_data = super().clean()
+        date_from = cleaned_data.get("date_from")
+        date_to = cleaned_data.get("date_to")
+        min_amount = cleaned_data.get("min_amount")
+        max_amount = cleaned_data.get("max_amount")
+
+        if date_from and date_to and date_from > date_to:
+            raise forms.ValidationError("Start date must be before or equal to end date.")
+
+        if min_amount is not None and max_amount is not None and min_amount > max_amount:
+            raise forms.ValidationError("Minimum amount must be less than or equal to maximum amount.")
+
+        return cleaned_data
 
 
 class WaitlistForm(forms.ModelForm):

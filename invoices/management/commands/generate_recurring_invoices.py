@@ -1,8 +1,10 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from invoices.models import RecurringInvoice, Invoice, LineItem
-from django.template.loader import render_to_string
-from django.core.mail import EmailMessage
+from invoices.sendgrid_service import SendGridEmailService
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -15,11 +17,16 @@ class Command(BaseCommand):
         )
 
         generated_count = 0
+        email_sent_count = 0
+
         for recurring in recurring_invoices:
             try:
                 if recurring.end_date and today > recurring.end_date:
                     recurring.status = "ended"
                     recurring.save()
+                    self.stdout.write(
+                        self.style.WARNING(f"Recurring invoice {recurring.id} has ended")
+                    )
                     continue
 
                 base_invoice = Invoice.objects.filter(
@@ -54,28 +61,57 @@ class Command(BaseCommand):
                     recurring.next_generation = recurring.generate_next_invoice_date()
                     recurring.save()
 
-                    self.send_invoice_email(invoice)
+                    if self.send_invoice_email(invoice):
+                        email_sent_count += 1
                     generated_count += 1
 
+                    self.stdout.write(
+                        self.style.SUCCESS(f"Generated invoice {invoice.invoice_id} for {recurring.client_name}")
+                    )
+
             except Exception as e:
+                logger.exception(f"Error generating invoice for recurring {recurring.id}")
                 self.stdout.write(
-                    self.style.ERROR(f"Error generating invoice for {recurring.id}: {str(e)}")  # type: ignore[attr-defined]
+                    self.style.ERROR(f"Error generating invoice for {recurring.id}: {str(e)}")
                 )
 
-        self.stdout.write(self.style.SUCCESS(f"Successfully generated {generated_count} invoices"))  # type: ignore[attr-defined]
+        self.stdout.write(
+            self.style.SUCCESS(
+                f"Successfully generated {generated_count} invoices, sent {email_sent_count} emails"
+            )
+        )
 
     def send_invoice_email(self, invoice):
-        """Send generated invoice to client via email."""
+        """Send generated invoice to client via email using SendGrid service."""
         try:
-            context = {"invoice": invoice}
-            html_message = render_to_string("invoices/invoice_email.html", context)
-            email = EmailMessage(
-                f"Invoice {invoice.invoice_id}",
-                html_message,
-                from_email=invoice.business_email,
-                to=[invoice.client_email],
-            )
-            email.content_subtype = "html"
-            email.send()
+            service = SendGridEmailService()
+
+            if not service.is_configured:
+                logger.warning(
+                    f"SendGrid not configured. Skipping email for invoice {invoice.invoice_id}"
+                )
+                self.stdout.write(
+                    self.style.WARNING(f"Email skipped for {invoice.invoice_id} - SendGrid not configured")
+                )
+                return False
+
+            result = service.send_invoice_ready(invoice, invoice.client_email)
+
+            if result.get("status") == "sent":
+                logger.info(f"Email sent for recurring invoice {invoice.invoice_id}")
+                return True
+            else:
+                logger.error(
+                    f"Failed to send email for invoice {invoice.invoice_id}: {result.get('message')}"
+                )
+                self.stdout.write(
+                    self.style.ERROR(f"Email failed for {invoice.invoice_id}: {result.get('message')}")
+                )
+                return False
+
         except Exception as e:
-            print(f"Failed to send email: {str(e)}")
+            logger.exception(f"Error sending email for invoice {invoice.invoice_id}")
+            self.stdout.write(
+                self.style.ERROR(f"Email error for {invoice.invoice_id}: {str(e)}")
+            )
+            return False
