@@ -1,6 +1,6 @@
 # SendGrid Email Templates
 
-This directory contains 6 production-ready HTML email templates for Smart Invoice. These templates are designed to be copy-pasted into SendGrid's Dynamic Template editor.
+This directory contains 6 production-ready HTML email templates for InvoiceFlow. These templates are designed to be copy-pasted into SendGrid's Dynamic Template editor.
 
 ## Templates
 
@@ -40,7 +40,7 @@ This directory contains 6 production-ready HTML email templates for Smart Invoic
   - `{{invoice_url}}` - Link to pay the invoice
 
 ### 4. **new_user_welcome.html** - Welcome Email for New Users
-- **Purpose**: Onboard new users to Smart Invoice
+- **Purpose**: Onboard new users to InvoiceFlow
 - **Template Variables**:
   - `{{first_name}}` - User's first name
   - `{{username}}` - User's username
@@ -81,7 +81,7 @@ For each template:
 
 1. Go to **Email API** → **Dynamic Templates**
 2. Click **Create a Dynamic Template**
-3. Name it appropriately (e.g., "Smart Invoice - Invoice Ready")
+3. Name it appropriately (e.g., "InvoiceFlow - Invoice Ready")
 4. Click **Add Version**
 5. Choose **Code Editor**
 6. Copy the entire content from the corresponding `.html` file
@@ -124,7 +124,7 @@ Or test individual templates in SendGrid:
 ## Template Features
 
 ✅ **Fully Responsive** - Mobile-optimized layouts
-✅ **Brand Consistent** - Matches Smart Invoice design system
+✅ **Brand Consistent** - Matches InvoiceFlow design system
 ✅ **Professional Design** - Clean, modern aesthetics
 ✅ **High Deliverability** - Optimized for email clients
 ✅ **Dark Mode Ready** - Looks great in dark mode email clients
@@ -157,7 +157,7 @@ The `SendGridEmailService` in `invoices/sendgrid_service.py` automatically maps 
 For questions or issues:
 - Review SendGrid documentation: https://docs.sendgrid.com
 - Check the `invoices/sendgrid_service.py` implementation
-- Contact Smart Invoice support
+- Contact InvoiceFlow support
 
 ---
 

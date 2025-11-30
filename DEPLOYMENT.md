@@ -1,4 +1,4 @@
-# Smart Invoice - Production Deployment Guide
+# InvoiceFlow - Production Deployment Guide
 
 ## 🚀 Quick Start
 
@@ -61,7 +61,7 @@ python -c "import secrets; print(secrets.token_hex(32))"
 #### Option B: Manual Setup
 1. Create new Web Service on Render
 2. Build Command: `./build.sh`
-3. Start Command: `gunicorn smart_invoice.wsgi:application --bind 0.0.0.0:$PORT --workers 2`
+3. Start Command: `gunicorn invoiceflow.wsgi:application --bind 0.0.0.0:$PORT --workers 2`
 4. Environment: Python 3.11+
 5. Add PostgreSQL database
 6. Set environment variables
@@ -145,8 +145,8 @@ python manage.py createsuperuser
 - `.env.example` - Environment variable template
 
 ### Django
-- `smart_invoice/settings.py` - Production-ready settings
-- `smart_invoice/wsgi.py` - WSGI application entry
+- `invoiceflow/settings.py` - Production-ready settings
+- `invoiceflow/wsgi.py` - WSGI application entry
 
 ## 🛠️ Troubleshooting
 

@@ -1,5 +1,5 @@
 """
-Security tests for Smart Invoice application.
+Security tests for InvoiceFlow application.
 Tests CSRF, XSS, SQL injection, authentication, and authorization.
 """
 

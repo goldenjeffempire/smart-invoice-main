@@ -6,25 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- Primary Meta Tags -->
-    <meta name="title" content="{% block meta_title %}Smart Invoice - Create Professional Invoices in 60 Seconds{% endblock %}">
+    <meta name="title" content="{% block meta_title %}InvoiceFlow - Create Professional Invoices in 60 Seconds{% endblock %}">
     <meta name="description" content="{% block meta_description %}Free professional invoice generator. Create, send via email/WhatsApp, and track payments in real-time. No credit card required. Trusted by 10,000+ businesses worldwide.{% endblock %}">
     <meta name="keywords" content="invoice generator, free invoice, professional invoices, invoice maker, online invoicing, small business invoicing, freelance invoicing, invoice tracking">
-    <meta name="author" content="Smart Invoice">
+    <meta name="author" content="InvoiceFlow">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="{% block canonical %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endblock %}">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{% block og_url %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endblock %}">
-    <meta property="og:title" content="{% block og_title %}Smart Invoice - Create Professional Invoices in 60 Seconds{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}InvoiceFlow - Create Professional Invoices in 60 Seconds{% endblock %}">
     <meta property="og:description" content="{% block og_description %}Free professional invoice generator. Create, send, and track invoices in real-time. Trusted by 10,000+ businesses.{% endblock %}">
     <meta property="og:image" content="{% block og_image %}{% static 'images/professional_busines_232186d2.jpg' %}{% endblock %}">
-    <meta property="og:site_name" content="Smart Invoice">
+    <meta property="og:site_name" content="InvoiceFlow">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{% block twitter_url %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endblock %}">
-    <meta property="twitter:title" content="{% block twitter_title %}Smart Invoice - Create Professional Invoices in 60 Seconds{% endblock %}">
+    <meta property="twitter:title" content="{% block twitter_title %}InvoiceFlow - Create Professional Invoices in 60 Seconds{% endblock %}">
     <meta property="twitter:description" content="{% block twitter_description %}Free professional invoice generator. Create, send, and track invoices in real-time.{% endblock %}">
     <meta property="twitter:image" content="{% block twitter_image %}{% static 'images/professional_busines_232186d2.jpg' %}{% endblock %}">
     
@@ -36,8 +36,8 @@
     
     <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
     <link rel="apple-touch-icon" href="{% static 'favicon.svg' %}">
-    <title>{% block title %}Smart Invoice - Professional Invoicing Made Simple{% endblock %}</title>
-    <!-- Smart Invoice Design System v4.0 - Unified & Optimized -->
+    <title>{% block title %}InvoiceFlow - Professional Invoicing Made Simple{% endblock %}</title>
+    <!-- InvoiceFlow Design System v4.0 - Unified & Optimized -->
     {% if not debug %}
     <!-- Production: Minified Assets -->
     <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
@@ -59,7 +59,7 @@
             {
                 "@type": "Organization",
                 "@id": "{{ request.scheme }}://{{ request.get_host }}/#organization",
-                "name": "Smart Invoice",
+                "name": "InvoiceFlow",
                 "url": "{{ request.scheme }}://{{ request.get_host }}",
                 "logo": {
                     "@type": "ImageObject",
@@ -69,13 +69,13 @@
                 "contactPoint": {
                     "@type": "ContactPoint",
                     "contactType": "Customer Support",
-                    "email": "support@smartinvoice.com"
+                    "email": "support@invoiceflow.com"
                 }
             },
             {
                 "@type": "SoftwareApplication",
                 "@id": "{{ request.scheme }}://{{ request.get_host }}/#software",
-                "name": "Smart Invoice",
+                "name": "InvoiceFlow",
                 "applicationCategory": "BusinessApplication",
                 "provider": {
                     "@id": "{{ request.scheme }}://{{ request.get_host }}/#organization"

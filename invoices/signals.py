@@ -1,4 +1,4 @@
-"""Signal handlers for Smart Invoice emails."""
+"""Signal handlers for InvoiceFlow emails."""
 
 import logging
 from django.db.models.signals import post_save

@@ -1,5 +1,5 @@
 """
-Business logic services for Smart Invoice platform.
+Business logic services for InvoiceFlow platform.
 Extracts logic from views into reusable service classes.
 """
 from __future__ import annotations

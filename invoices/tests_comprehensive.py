@@ -1,5 +1,5 @@
 """
-Comprehensive test suite for Smart Invoice platform.
+Comprehensive test suite for InvoiceFlow platform.
 Tests: Unit, Integration, and End-to-End workflows
 """
 

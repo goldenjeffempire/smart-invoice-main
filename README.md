@@ -1,4 +1,4 @@
-# Smart Invoice - Professional Invoicing SaaS Platform
+# InvoiceFlow - Professional Invoicing SaaS Platform
 
 > Create stunning, professional invoices in seconds. Send via email or WhatsApp. Get paid faster.
 
@@ -83,8 +83,8 @@
 ### Installation (2 minutes)
 
 ```bash
-git clone https://github.com/yourusername/smart-invoice.git
-cd smart-invoice
+git clone https://github.com/yourusername/invoiceflow.git
+cd invoiceflow
 
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
@@ -134,7 +134,7 @@ Generate invoices automatically with configurable frequency:
 python manage.py generate_recurring_invoices
 
 # Schedule with cron (daily at 2 AM)
-0 2 * * * cd /path/to/smart-invoice && python manage.py generate_recurring_invoices
+0 2 * * * cd /path/to/invoiceflow && python manage.py generate_recurring_invoices
 ```
 
 ---
@@ -171,7 +171,7 @@ pip install -r requirements.txt && npm install && npm run build:css && python ma
 
 4. Start command:
 ```bash
-gunicorn smart_invoice.wsgi -b 0.0.0.0:5000 --workers 2
+gunicorn invoiceflow.wsgi -b 0.0.0.0:5000 --workers 2
 ```
 
 ### Heroku
@@ -250,4 +250,4 @@ MIT License - Free for personal and commercial use
 
 **Production-Ready. Fully Tested. Secure. 🎉**
 
-For support: contact@smartinvoice.com
+For support: contact@invoiceflow.com

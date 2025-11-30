@@ -77,7 +77,7 @@ class RateLimitingMiddleware(MiddlewareMixin):
         return None
 
 
-# Security headers are now handled by smart_invoice.security_middleware.SecurityHeadersMiddleware
+# Security headers are now handled by invoiceflow.security_middleware.SecurityHeadersMiddleware
 # This duplicate middleware class has been removed to clean up codebase
 
 

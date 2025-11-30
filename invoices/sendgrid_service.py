@@ -45,9 +45,9 @@ class SendGridEmailService:
     def __init__(self):
         # Try to get credentials from Replit integration first, fall back to environment variables
         self.api_key = None
-        self.from_email = os.environ.get("SENDGRID_FROM_EMAIL", "noreply@smartinvoice.com")
+        self.from_email = os.environ.get("SENDGRID_FROM_EMAIL", "noreply@invoiceflow.com")
         self.PLATFORM_FROM_EMAIL = self.from_email  # Alias for backward compatibility
-        self.platform_from_name = "Smart Invoice"
+        self.platform_from_name = "InvoiceFlow"
 
         # Try Replit integration if available
         if self._try_replit_integration():
@@ -206,11 +206,11 @@ class SendGridEmailService:
 
         return self._send_email(
             user_business_email=None,
-            from_name="Smart Invoice",
+            from_name="InvoiceFlow",
             to_email=user.email,
             template_id=template_id,
             template_data=template_data,
-            subject="Welcome to Smart Invoice!",
+            subject="Welcome to InvoiceFlow!",
         )
 
     def send_password_reset_email(self, user, reset_token, template_id=None):
@@ -224,12 +224,12 @@ class SendGridEmailService:
             "username": user.username,
             "reset_url": reset_url,
             "expires_in": "24 hours",
-            "support_email": "support@smartinvoice.com",
+            "support_email": "support@invoiceflow.com",
         }
 
         return self._send_email(
             user_business_email=None,
-            from_name="Smart Invoice",
+            from_name="InvoiceFlow",
             to_email=user.email,
             template_id=template_id,
             template_data=template_data,
@@ -254,7 +254,7 @@ class SendGridEmailService:
 
         return self._send_email(
             user_business_email=None,
-            from_name="Smart Invoice Admin",
+            from_name="InvoiceFlow Admin",
             to_email=admin_email,
             template_id=template_id,
             template_data=template_data,
@@ -451,19 +451,19 @@ class SendGridEmailService:
     def _get_invoice_view_url(self, invoice):
         """Get invoice view URL for email links."""
         # This would be the absolute URL - adjust based on your domain
-        return f"https://smartinvoice.example.com/invoices/invoice/{invoice.id}/"
+        return f"https://invoiceflow.example.com/invoices/invoice/{invoice.id}/"
 
     def _get_dashboard_url(self):
         """Get dashboard URL."""
-        return "https://smartinvoice.example.com/invoices/dashboard/"
+        return "https://invoiceflow.example.com/invoices/dashboard/"
 
     def _get_help_url(self):
         """Get help/documentation URL."""
-        return "https://smartinvoice.example.com/faq/"
+        return "https://invoiceflow.example.com/faq/"
 
     def _get_password_reset_url(self, token):
         """Get password reset URL."""
-        return f"https://smartinvoice.example.com/password-reset-confirm/{token}/"
+        return f"https://invoiceflow.example.com/password-reset-confirm/{token}/"
 
     def send_test_email(self, recipient_email):
         """Send a test email to verify SendGrid configuration.
@@ -485,7 +485,7 @@ class SendGridEmailService:
             message = Mail()
             message.from_email = From(self.from_email, self.platform_from_name)
             message.to = To(recipient_email)
-            message.subject = "Smart Invoice - Email Test"
+            message.subject = "InvoiceFlow - Email Test"
             message.content = [
                 Content(
                     "text/plain",

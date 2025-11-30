@@ -1,4 +1,4 @@
-"""Unit tests for the Smart Invoice application."""
+"""Unit tests for the InvoiceFlow application."""
 
 from decimal import Decimal
 from django.test import TestCase, Client

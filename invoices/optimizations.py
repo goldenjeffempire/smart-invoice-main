@@ -1,5 +1,5 @@
 """
-Database and query optimizations for Smart Invoice.
+Database and query optimizations for InvoiceFlow.
 Reduces N+1 queries and improves performance.
 """
 

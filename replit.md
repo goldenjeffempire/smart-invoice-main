@@ -1,4 +1,4 @@
-# Smart Invoice - Production-Grade Full-Stack Platform
+# InvoiceFlow - Production-Grade Full-Stack Platform
 
 **Last Updated:** November 29, 2025  
 **Current Phase:** 2025 Enterprise UI/UX Modernization - IN PROGRESS
@@ -63,7 +63,7 @@ Production-grade professional invoicing platform with:
 ### 2025 Enterprise UI/UX Modernization
 
 1. **Design System Foundation**:
-   - Created premium "Smart Invoice Platinum" design tokens
+   - Created premium "InvoiceFlow Platinum" design tokens
    - Deep indigo (#4f46e5) primary color with gradient accents
    - Glassmorphism tokens (glass-bg, glass-blur, backdrop-blur utilities)
    - Enhanced shadow system with colored shadows and elevated cards
@@ -174,8 +174,8 @@ Production-grade professional invoicing platform with:
 
 ### Configuration
 - `gunicorn.conf.py` - Production Gunicorn configuration
-- `smart_invoice/settings.py` - Django settings
-- `smart_invoice/security_middleware.py` - Custom security headers
+- `invoiceflow/settings.py` - Django settings
+- `invoiceflow/security_middleware.py` - Custom security headers
 
 ### Documentation
 - `ARCHITECTURE_BASELINE.md` - System design decisions
@@ -185,7 +185,7 @@ Production-grade professional invoicing platform with:
 ## Workflow Configuration
 
 - **Gunicorn Production Server**: Running on port 5000
-  - Command: `gunicorn smart_invoice.wsgi:application --config gunicorn.conf.py`
+  - Command: `gunicorn invoiceflow.wsgi:application --config gunicorn.conf.py`
   - Status: ✅ Running with multiple workers
 
 ## Health Endpoints

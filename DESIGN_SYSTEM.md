@@ -1,4 +1,4 @@
-# Smart Invoice Design System
+# InvoiceFlow Design System
 **Version:** 1.0.0  
 **Date:** November 23, 2025
 
@@ -279,7 +279,7 @@
 ```html
 <section class="hero-section">
   <div class="container">
-    <h1 class="hero-title">Welcome to Smart Invoice</h1>
+    <h1 class="hero-title">Welcome to InvoiceFlow</h1>
     <p class="hero-subtitle">Professional invoicing made simple</p>
     <div class="hero-actions">
       <button class="btn btn-primary btn-lg">Get Started</button>
@@ -343,5 +343,5 @@
 - Follow the design system consistently
 
 ---
-*Design System created for Smart Invoice Platform*
+*Design System created for InvoiceFlow Platform*
 *Ensures consistency, accessibility, and scalability*

@@ -42,7 +42,7 @@ def ping_health():
 
     try:
         req = urllib.request.Request(health_url, method="GET")
-        req.add_header("User-Agent", "SmartInvoice-KeepAlive/1.0")
+        req.add_header("User-Agent", "InvoiceFlow-KeepAlive/1.0")
 
         with urllib.request.urlopen(req, timeout=30) as response:
             status = response.getcode()

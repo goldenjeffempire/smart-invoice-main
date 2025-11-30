@@ -1,5 +1,5 @@
 """
-Performance tests for Smart Invoice application.
+Performance tests for InvoiceFlow application.
 Tests database query optimization, caching, and response times.
 """
 

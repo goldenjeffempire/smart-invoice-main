@@ -8,13 +8,13 @@ from datetime import date, timedelta
 
 
 class Command(BaseCommand):
-    help = "Create demo data for Smart Invoice testing"
+    help = "Create demo data for InvoiceFlow testing"
 
     def handle(self, *args, **options):
         # Create demo user
         user, created = User.objects.get_or_create(
             username="demo_user",
-            defaults={"email": "demo@smartinvoice.com", "first_name": "Demo", "last_name": "User"},
+            defaults={"email": "demo@invoiceflow.com", "first_name": "Demo", "last_name": "User"},
         )
 
         if created:
@@ -33,8 +33,8 @@ class Command(BaseCommand):
                 user=user,
                 invoice_id=f"INV-DEMO-{i+1:03d}",
                 defaults={
-                    "business_name": "Smart Solutions LLC",
-                    "business_email": "hello@smartinvoice.com",
+                    "business_name": "InvoiceFlow Solutions LLC",
+                    "business_email": "hello@invoiceflow.com",
                     "business_phone": "+1 (555) 123-4567",
                     "business_address": "123 Business St, City, State 12345",
                     "client_name": f"Client {i+1}",

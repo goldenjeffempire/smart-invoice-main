@@ -1,5 +1,5 @@
 /**
- * SMART INVOICE - Unified Application JavaScript v3.0
+ * INVOICEFLOW - Unified Application JavaScript v3.0
  * Modern, performant, accessible interactions with zero duplication
  * All features consolidated from app.js + ui-enhancements.js
  */
@@ -761,7 +761,7 @@
         document.body.classList.remove('no-js');
         document.body.classList.add('js-enabled');
 
-        console.log('Smart Invoice v3.0 initialized successfully');
+        console.log('InvoiceFlow v3.0 initialized successfully');
     }
 
     if (document.readyState === 'loading') {

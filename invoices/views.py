@@ -402,10 +402,10 @@ IP: {submission.ip_address}
 Submitted: {submission.submitted_at}
 """
                 send_mail(
-                    subject=f"[Smart Invoice Contact] {submission.get_subject_display()}",
+                    subject=f"[InvoiceFlow Contact] {submission.get_subject_display()}",
                     message=full_message,
                     from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=["support@smartinvoice.com"],
+                    recipient_list=["support@invoiceflow.com"],
                     fail_silently=True,
                 )
                 messages.success(
