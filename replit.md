@@ -61,27 +61,46 @@ Production-grade professional invoicing platform with:
 
 ## Recent Changes (November 30, 2025)
 
-### Enterprise Footer Enhancement & Light Theme Finalization
+### Cinematic Storytelling Landing Page Enhancement
 
-1. **Professional Enterprise Footer**:
-   - Premium dark gradient (slate-900 → slate-950 → black) with ambient glow effects
-   - Animated gradient logo with hover rotation effect
-   - Four-column navigation structure (Product, Company, Support, Legal)
-   - Newsletter signup with email icon and subscriber count messaging
-   - Trust badges section: SSL Secured, GDPR Compliant, 99.9% Uptime, 4.9/5 Rating
-   - Social links: X/Twitter, LinkedIn, GitHub, YouTube with brand-colored hovers
-   - "Hiring" badge on Careers link, live status indicator for System Status
-   - Semantic HTML with role="contentinfo" and comprehensive ARIA labels
-   - Crafted in Nigeria tagline with gradient text treatment
+1. **Cinematic Welcome Sequence (3-Slide Hero)**:
+   - Slide 1: "The Future of Professional Invoicing" with immersive dark theme
+   - Slide 2: Problem/Solution narrative with visual storytelling
+   - Slide 3: Promise section with "Create. Send. Get Paid." tagline
+   - Parallax background effects with animated gradient overlays
+   - Staggered reveal animations for dramatic entrance effects
 
-2. **Hero Section Light Theme Conversion**:
-   - Transformed from dark gradient to professional light theme
-   - White/indigo gradient background (from-white via-indigo-50/30 to-white)
-   - Dark text for optimal readability (gray-900, gray-600)
-   - Added trust badge with pulsing indicator
-   - Professional gradient accent on "60 Seconds" headline
-   - Refined CTA buttons with solid indigo styling
-   - Subtle dot pattern background for visual interest
+2. **Immersive Dark Hero Section**:
+   - Deep slate-900/indigo-950 gradient background
+   - Floating gradient blur orbs with pulse-slow animation
+   - Trust badge with pulsing green indicator
+   - Gradient text effects on headline (blue/indigo/purple)
+   - Background image with parallax scrolling (data-speed attributes)
+
+3. **Interactive Feature Cards**:
+   - Full color transition on hover (white text on colored backgrounds)
+   - 3D perspective rotation on mouse movement
+   - Scale and rotate micro-interactions on icons
+   - Staggered animation delays for visual flow
+
+4. **Parallax Effects & Smooth Transitions**:
+   - Parallax background images with configurable scroll speeds
+   - Floating parallax elements in dark sections
+   - Smooth scroll behavior for anchor links
+   - Request animation frame throttling for 60fps performance
+
+5. **Enhanced Animations**:
+   - `animate-reveal` for staggered text entrance
+   - `animate-slide-down` for badge animations
+   - `animate-pulse-slow` for ambient glow effects
+   - `animate-blob` for organic floating shapes
+   - Intersection Observer for scroll-triggered animations
+
+6. **Gunicorn Configuration Rebuild**:
+   - Clean production-ready configuration
+   - Dynamic worker count based on CPU cores
+   - gthread worker class with 4 threads per worker
+   - Production domain set to invoiceflow.com.ng
 
 3. **Analytics Service Database Optimization**:
    - Replaced Python-side calculations with database-level aggregations
