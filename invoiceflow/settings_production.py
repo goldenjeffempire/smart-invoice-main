@@ -1,4 +1,4 @@
-"""Production settings for Smart Invoice on Render."""
+"""Production settings for InvoiceFlow on Render."""
 
 import os
 from pathlib import Path

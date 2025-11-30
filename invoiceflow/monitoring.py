@@ -1,5 +1,5 @@
 """
-Monitoring and performance tracking for Smart Invoice.
+Monitoring and performance tracking for InvoiceFlow.
 """
 
 import time

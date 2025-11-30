@@ -1,5 +1,5 @@
 """
-Smart Invoice - Feature Flags System
+InvoiceFlow - Feature Flags System
 Enables gradual rollout, A/B testing, and feature toggles
 """
 

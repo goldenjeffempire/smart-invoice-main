@@ -1,5 +1,5 @@
 """
-Custom security middleware for Smart Invoice.
+Custom security middleware for InvoiceFlow.
 Implements additional security headers and logging.
 """
 

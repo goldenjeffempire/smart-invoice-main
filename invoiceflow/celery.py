@@ -1,4 +1,4 @@
-"""Celery configuration for Smart Invoice.
+"""Celery configuration for InvoiceFlow.
 
 Optional async task queue for email sending, PDF generation, and background jobs.
 Currently using ThreadPoolExecutor but can upgrade to Celery + Redis for production.
@@ -7,9 +7,9 @@ Currently using ThreadPoolExecutor but can upgrade to Celery + Redis for product
 import os
 from celery import Celery  # type: ignore
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "smart_invoice.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "invoiceflow.settings")
 
-app = Celery("smart_invoice")  # type: ignore
+app = Celery("invoiceflow")  # type: ignore
 app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()
 

@@ -1,5 +1,5 @@
 """
-Gunicorn configuration file for Smart Invoice production deployment.
+Gunicorn configuration file for InvoiceFlow production deployment.
 This configuration is optimized for Render and Replit environments.
 """
 
@@ -43,7 +43,7 @@ loglevel = os.getenv("GUNICORN_LOG_LEVEL", "info")
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" %(D)s'
 
 # Process naming
-proc_name = "smart_invoice"
+proc_name = "invoiceflow"
 
 # Forwarded headers
 forwarded_allow_ips = "*"

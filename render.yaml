@@ -1,12 +1,12 @@
 services:
   - type: web
-    name: smart-invoice
+    name: invoiceflow
     env: python
     plan: free
     region: oregon
     buildCommand: ./build.sh
     startCommand: >
-      gunicorn smart_invoice.wsgi:application
+      gunicorn invoiceflow.wsgi:application
       --bind 0.0.0.0:$PORT
       --workers 2
       --worker-class sync
@@ -20,7 +20,7 @@ services:
     healthCheckPath: /health/
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: smart_invoice.settings
+        value: invoiceflow.settings
       - key: PYTHON_VERSION
         value: 3.11.13
       - key: DEBUG
@@ -30,7 +30,7 @@ services:
       - key: RENDER
         value: true
       - key: RENDER_SERVICE_NAME
-        value: smart-invoice
+        value: invoiceflow
       # Required: Set these in Render dashboard
       - key: SECRET_KEY
         sync: false
@@ -57,15 +57,15 @@ services:
         sync: false
       # CSRF configuration (production)
       - key: CSRF_TRUSTED_ORIGINS
-        value: "https://smart-invoice.onrender.com,https://*.onrender.com"
+        value: "https://invoiceflow.onrender.com,https://*.onrender.com"
       # Optional: Error tracking
       - key: SENTRY_DSN
         sync: false
 
 databases:
   - name: postgres-db
-    databaseName: smartinvoice
-    user: smartinvoice
+    databaseName: invoiceflow
+    user: invoiceflow
     plan: free
     region: oregon
     ipAllowList: []

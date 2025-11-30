@@ -1,7 +1,7 @@
 {
-  "name": "workspace",
+  "name": "invoiceflow",
   "version": "1.0.0",
-  "description": "Smart, Simple Invoicing for modern businesses. Create professional invoices in minutes, send via email or WhatsApp, and get paid faster.",
+  "description": "InvoiceFlow - Smart, Simple Invoicing for modern businesses. Create professional invoices in minutes, send via email or WhatsApp, and get paid faster.",
   "main": "index.js",
   "directories": {
     "test": "tests"

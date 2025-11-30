@@ -95,11 +95,11 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    "smart_invoice.cache_middleware.CacheControlMiddleware",
-    "smart_invoice.monitoring.PerformanceMiddleware",
+    "invoiceflow.cache_middleware.CacheControlMiddleware",
+    "invoiceflow.monitoring.PerformanceMiddleware",
     "csp.middleware.CSPMiddleware",
-    "smart_invoice.security_middleware.SecurityHeadersMiddleware",
-    "smart_invoice.security_middleware.SecurityEventLoggingMiddleware",
+    "invoiceflow.security_middleware.SecurityHeadersMiddleware",
+    "invoiceflow.security_middleware.SecurityEventLoggingMiddleware",
     "invoices.middleware.RequestResponseLoggingMiddleware",
     "invoices.middleware.RateLimitingMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -110,7 +110,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "smart_invoice.urls"
+ROOT_URLCONF = "invoiceflow.urls"
 
 TEMPLATES = [
     {
@@ -134,7 +134,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "smart_invoice.wsgi.application"
+WSGI_APPLICATION = "invoiceflow.wsgi.application"
 
 if env("DATABASE_URL", default=None):  # type: ignore
     DATABASES = {"default": env.db()}
@@ -200,7 +200,7 @@ EMAIL_PORT = env.int("EMAIL_PORT", default=587)  # type: ignore
 EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)  # type: ignore
 EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")  # type: ignore
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")  # type: ignore
-DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="noreply@smartinvoice.com")  # type: ignore
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="noreply@invoiceflow.com")  # type: ignore
 
 # Additional security headers for non-Replit production (settings above handle Replit)
 # These are redundant with our custom middleware but kept for defense in depth
@@ -293,7 +293,7 @@ RATELIMIT_VIEW = "django_ratelimit.decorators.ratelimit"
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "smart-invoice-cache",
+        "LOCATION": "invoiceflow-cache",
         "OPTIONS": {"MAX_ENTRIES": 10000},
     }
 }
