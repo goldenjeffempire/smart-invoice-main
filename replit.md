@@ -61,9 +61,25 @@ Production-grade professional invoicing platform with:
 
 ## Recent Changes (November 30, 2025)
 
-### Cinematic Storytelling Landing Page Enhancement
+### Complete Landing Page Rebuild (v2.0)
 
-1. **Cinematic Welcome Sequence (3-Slide Hero)**:
+1. **Gunicorn Configuration Rebuild**:
+   - Production-ready configuration with dynamic worker scaling
+   - 9 workers with gthread worker class and 4 threads per worker
+   - Optimized timeouts (120s main, 30s graceful, 5s keepalive)
+   - Comprehensive server hooks for logging and monitoring
+   - Max 1000 requests per worker with jitter for graceful cycling
+
+2. **Enterprise Animation System (landing-animations.css v2.0)**:
+   - Cinematic reveal animations (heroReveal, slideReveal, fadeSlideUp)
+   - Floating ambient animations with configurable speeds
+   - Glow/pulse effects for visual appeal
+   - Gradient flow animations for dynamic backgrounds
+   - Scroll-triggered animations with Intersection Observer
+   - Parallax effects for depth perception
+   - **Accessibility**: prefers-reduced-motion support for all animations
+
+3. **Cinematic Welcome Sequence (3-Slide Hero)**:
    - Slide 1: "The Future of Professional Invoicing" with immersive dark theme
    - Slide 2: Problem/Solution narrative with visual storytelling
    - Slide 3: Promise section with "Create. Send. Get Paid." tagline

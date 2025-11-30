@@ -24,8 +24,8 @@
     },
     "aggregateRating": {
         "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "2450"
+        "ratingValue": "4.9",
+        "ratingCount": "3250"
     },
     "author": {
         "@type": "Organization",
@@ -36,53 +36,78 @@
 </script>
 {% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/landing-animations.css' %}">
+{% endblock %}
+
 {% block main_class %}{% endblock %}
 
 {% block content %}
 
-<!-- CINEMATIC WELCOME SEQUENCE - SLIDE 1: The Vision -->
-<section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900" id="hero-slide-1">
+<!-- IMMERSIVE HERO SECTION - SLIDE 1: The Vision -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900" id="hero-slide-1">
     <div class="absolute inset-0 overflow-hidden">
         <div class="parallax-bg absolute inset-0 scale-110" data-speed="0.3">
-            <img src="{% static 'images/landing/modern_office_profes_57bbacad.jpg' %}" alt="" class="w-full h-full object-cover opacity-30" loading="eager">
+            <img src="{% static 'images/landing/modern_office_profes_57bbacad.jpg' %}" alt="Professional business environment" class="w-full h-full object-cover opacity-20" loading="eager">
         </div>
-        <div class="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-indigo-950/60 to-slate-900/90"></div>
-        <div class="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-indigo-500/20 rounded-full filter blur-[120px] animate-pulse-slow"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/20 rounded-full filter blur-[100px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-indigo-950/50 to-slate-900/80"></div>
+        <div class="absolute top-1/4 left-1/4 w-[700px] h-[700px] bg-indigo-500/15 rounded-full filter blur-[150px] animate-pulse-slow"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-purple-500/15 rounded-full filter blur-[120px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/10 rounded-full filter blur-[180px] animate-pulse-slow" style="animation-delay: 4s;"></div>
+        
+        <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0); background-size: 40px 40px;"></div>
     </div>
     
     <div class="container relative z-10 px-6 py-20 text-center">
-        <div class="max-w-5xl mx-auto space-y-8" data-animate="fade-up">
-            <div class="inline-flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-lg rounded-full border border-white/20 text-white/90 font-medium animate-slide-down">
+        <div class="max-w-5xl mx-auto space-y-10">
+            <div class="inline-flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 text-white/90 font-medium animate-slide-reveal" style="animation-delay: 0.2s;">
                 <span class="relative flex h-3 w-3">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                 </span>
-                Trusted by 10,000+ businesses worldwide
+                <span>Trusted by 10,000+ businesses worldwide</span>
+                <div class="flex -space-x-2 ml-2">
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-white/30"></div>
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 border-2 border-white/30"></div>
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 border-2 border-white/30"></div>
+                </div>
             </div>
             
             <h1 class="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[1.05] tracking-tight">
-                <span class="block opacity-0 animate-reveal" style="animation-delay: 0.2s;">The Future of</span>
-                <span class="block bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent opacity-0 animate-reveal" style="animation-delay: 0.4s;">Professional Invoicing</span>
-                <span class="block text-3xl md:text-4xl lg:text-5xl font-bold text-white/70 mt-4 opacity-0 animate-reveal" style="animation-delay: 0.6s;">Starts Here</span>
+                <span class="block animate-slide-reveal" style="animation-delay: 0.4s;">The Future of</span>
+                <span class="block bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent animate-slide-reveal" style="animation-delay: 0.6s;">Professional Invoicing</span>
             </h1>
             
-            <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed opacity-0 animate-reveal" style="animation-delay: 0.8s;">
+            <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed animate-slide-reveal" style="animation-delay: 0.8s;">
                 Transform how you manage invoices. Create stunning, professional invoices in seconds, automate your entire workflow, and get paid faster than ever before.
             </p>
             
-            <div class="flex flex-col sm:flex-row gap-4 justify-center pt-6 opacity-0 animate-reveal" style="animation-delay: 1s;">
-                <a href="{% url 'signup' %}" class="group relative px-10 py-5 text-lg font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-2xl shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:-translate-y-1 transition-all duration-300 overflow-hidden">
-                    <span class="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center pt-6 animate-slide-reveal" style="animation-delay: 1s;">
+                <a href="{% url 'signup' %}" class="group relative px-10 py-5 text-lg font-bold text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-size-200 rounded-2xl shadow-2xl shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:-translate-y-1 transition-all duration-300 overflow-hidden btn-shine">
                     <span class="relative flex items-center justify-center gap-2">
                         <span>Start Your Journey</span>
                         <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
                     </span>
                 </a>
-                <a href="#story-section" class="px-10 py-5 text-lg font-semibold text-white border-2 border-white/30 rounded-2xl hover:border-white/60 hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-2 backdrop-blur-sm">
+                <a href="#story-section" class="group px-10 py-5 text-lg font-semibold text-white border-2 border-white/30 rounded-2xl hover:border-white/60 hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-2 backdrop-blur-sm">
                     <span>Discover More</span>
                     <svg class="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
                 </a>
+            </div>
+            
+            <div class="flex flex-wrap justify-center gap-8 pt-8 animate-slide-reveal" style="animation-delay: 1.2s;">
+                <div class="flex items-center gap-2 text-white/70">
+                    <svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                    <span>No credit card required</span>
+                </div>
+                <div class="flex items-center gap-2 text-white/70">
+                    <svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                    <span>Free forever plan</span>
+                </div>
+                <div class="flex items-center gap-2 text-white/70">
+                    <svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                    <span>14-day Pro trial</span>
+                </div>
             </div>
         </div>
     </div>
@@ -92,7 +117,7 @@
     </div>
 </section>
 
-<!-- CINEMATIC WELCOME SEQUENCE - SLIDE 2: The Problem & Solution -->
+<!-- SLIDE 2: The Problem & Solution -->
 <section class="relative py-32 bg-white overflow-hidden" id="story-section">
     <div class="absolute inset-0 pointer-events-none">
         <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-slate-900 to-transparent"></div>
@@ -100,7 +125,7 @@
     
     <div class="container px-6 relative z-10">
         <div class="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
-            <div class="space-y-8" data-animate="fade-right">
+            <div class="space-y-8 animate-on-scroll">
                 <div class="inline-flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-full font-bold text-sm">
                     <span class="w-2 h-2 bg-red-600 rounded-full"></span>
                     The Problem
@@ -111,28 +136,28 @@
                 </h2>
                 
                 <div class="space-y-4 text-lg text-gray-600">
-                    <p class="flex items-start gap-3">
-                        <span class="text-red-500 text-2xl">✗</span>
+                    <p class="flex items-start gap-3 hover:translate-x-2 transition-transform cursor-default">
+                        <span class="text-red-500 text-2xl">&#x2717;</span>
                         <span>Hours wasted on manual data entry and formatting</span>
                     </p>
-                    <p class="flex items-start gap-3">
-                        <span class="text-red-500 text-2xl">✗</span>
+                    <p class="flex items-start gap-3 hover:translate-x-2 transition-transform cursor-default">
+                        <span class="text-red-500 text-2xl">&#x2717;</span>
                         <span>Chasing late payments with endless email follow-ups</span>
                     </p>
-                    <p class="flex items-start gap-3">
-                        <span class="text-red-500 text-2xl">✗</span>
+                    <p class="flex items-start gap-3 hover:translate-x-2 transition-transform cursor-default">
+                        <span class="text-red-500 text-2xl">&#x2717;</span>
                         <span>Scattered payment methods confusing your clients</span>
                     </p>
-                    <p class="flex items-start gap-3">
-                        <span class="text-red-500 text-2xl">✗</span>
+                    <p class="flex items-start gap-3 hover:translate-x-2 transition-transform cursor-default">
+                        <span class="text-red-500 text-2xl">&#x2717;</span>
                         <span>No visibility into your cash flow or payment status</span>
                     </p>
                 </div>
             </div>
             
-            <div class="relative" data-animate="fade-left">
-                <div class="relative rounded-3xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
-                    <img src="{% static 'images/landing/modern_dashboard_int_2f99194d.jpg' %}" alt="InvoiceFlow Dashboard" class="w-full h-auto" loading="lazy">
+            <div class="relative animate-on-scroll-right">
+                <div class="relative rounded-3xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500 hover-lift">
+                    <img src="{% static 'images/landing/modern_dashboard_int_2f99194d.jpg' %}" alt="InvoiceFlow Dashboard showing professional invoice management" class="w-full h-auto" loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-indigo-900/80 via-transparent to-transparent"></div>
                     <div class="absolute bottom-0 left-0 right-0 p-8">
                         <div class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-full font-bold text-sm mb-4">
@@ -144,7 +169,7 @@
                     </div>
                 </div>
                 
-                <div class="absolute -top-6 -right-6 bg-white rounded-2xl shadow-xl p-5 border border-gray-100 animate-float hidden lg:block">
+                <div class="absolute -top-6 -right-6 bg-white rounded-2xl shadow-xl p-5 border border-gray-100 animate-gentle-float hidden lg:block">
                     <div class="flex items-center gap-3">
                         <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center text-white text-lg font-bold">60s</div>
                         <div>
@@ -158,7 +183,7 @@
     </div>
 </section>
 
-<!-- CINEMATIC WELCOME SEQUENCE - SLIDE 3: The Promise -->
+<!-- SLIDE 3: The Promise -->
 <section class="relative py-32 bg-gradient-to-br from-indigo-50 via-white to-purple-50 overflow-hidden">
     <div class="absolute inset-0 pointer-events-none">
         <div class="absolute top-1/4 -left-20 w-96 h-96 bg-indigo-200/50 rounded-full filter blur-3xl animate-blob"></div>
@@ -166,7 +191,7 @@
     </div>
     
     <div class="container px-6 relative z-10">
-        <div class="text-center max-w-4xl mx-auto mb-20" data-animate="fade-up">
+        <div class="text-center max-w-4xl mx-auto mb-20 animate-on-scroll">
             <div class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 text-indigo-700 rounded-full font-bold text-sm mb-6">
                 <span class="w-2 h-2 bg-indigo-600 rounded-full animate-pulse"></span>
                 Our Promise to You
@@ -180,41 +205,41 @@
         </div>
         
         <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <div class="group relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-indigo-200 overflow-hidden" data-animate="fade-up">
+            <div class="group relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-indigo-200 overflow-hidden hover-lift animate-on-scroll" style="animation-delay: 0.1s;">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100 to-transparent rounded-bl-full opacity-50 group-hover:opacity-100 transition-opacity"></div>
                 <div class="relative">
-                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-lg shadow-blue-500/30">⚡</div>
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-lg shadow-blue-500/30">&#9889;</div>
                     <h3 class="text-2xl font-black text-gray-900 mb-4">60-Second Creation</h3>
                     <p class="text-gray-600 leading-relaxed mb-6">AI-powered templates learn your style. Create professional invoices faster than making coffee.</p>
-                    <div class="flex items-center gap-2 text-blue-600 font-semibold group-hover:gap-3 transition-all">
+                    <div class="flex items-center gap-2 text-blue-600 font-semibold group-hover:gap-3 transition-all cursor-pointer">
                         <span>Learn more</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                 </div>
             </div>
             
-            <div class="group relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-purple-200 overflow-hidden md:-translate-y-4" data-animate="fade-up" style="animation-delay: 0.1s;">
+            <div class="group relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-purple-200 overflow-hidden md:-translate-y-4 hover-lift animate-on-scroll" style="animation-delay: 0.2s;">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-100 to-transparent rounded-bl-full opacity-50 group-hover:opacity-100 transition-opacity"></div>
                 <div class="relative">
-                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-lg shadow-purple-500/30">🤖</div>
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-lg shadow-purple-500/30">&#129302;</div>
                     <h3 class="text-2xl font-black text-gray-900 mb-4">Smart Automation</h3>
                     <p class="text-gray-600 leading-relaxed mb-6">Set it and forget it. Recurring invoices, payment reminders, and follow-ups happen automatically.</p>
-                    <div class="flex items-center gap-2 text-purple-600 font-semibold group-hover:gap-3 transition-all">
+                    <div class="flex items-center gap-2 text-purple-600 font-semibold group-hover:gap-3 transition-all cursor-pointer">
                         <span>Learn more</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                 </div>
             </div>
             
-            <div class="group relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-emerald-200 overflow-hidden" data-animate="fade-up" style="animation-delay: 0.2s;">
+            <div class="group relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-emerald-200 overflow-hidden hover-lift animate-on-scroll" style="animation-delay: 0.3s;">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-100 to-transparent rounded-bl-full opacity-50 group-hover:opacity-100 transition-opacity"></div>
                 <div class="relative">
-                    <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-lg shadow-emerald-500/30">💰</div>
+                    <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-lg shadow-emerald-500/30">&#128176;</div>
                     <h3 class="text-2xl font-black text-gray-900 mb-4">Faster Payments</h3>
                     <p class="text-gray-600 leading-relaxed mb-6">Multiple payment options mean clients pay how they want. Bank transfers, cards, and more.</p>
-                    <div class="flex items-center gap-2 text-emerald-600 font-semibold group-hover:gap-3 transition-all">
+                    <div class="flex items-center gap-2 text-emerald-600 font-semibold group-hover:gap-3 transition-all cursor-pointer">
                         <span>Learn more</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                 </div>
             </div>
@@ -222,7 +247,7 @@
     </div>
 </section>
 
-<!-- INTERACTIVE HERO SECTION - Main Value Proposition -->
+<!-- INTERACTIVE LIVE DEMO SECTION -->
 <section class="relative overflow-hidden py-24 lg:py-32 bg-white" id="features">
     <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
         <div class="absolute -top-40 -right-40 w-96 h-96 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
@@ -231,7 +256,7 @@
     
     <div class="container relative z-10 px-6">
         <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center max-w-7xl mx-auto">
-            <div class="space-y-8" data-animate="fade-right">
+            <div class="space-y-8 animate-on-scroll">
                 <div class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 text-indigo-700 rounded-full text-sm font-semibold">
                     <span class="w-2 h-2 bg-indigo-600 rounded-full animate-pulse"></span>
                     Live Invoice Preview
@@ -240,34 +265,34 @@
                 <h2 class="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] text-gray-900">
                     Create Professional
                     <span class="block mt-2">Invoices in</span>
-                    <span class="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">60 Seconds</span>
+                    <span class="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent animate-gradient-flow bg-size-200">60 Seconds</span>
                 </h2>
                 
                 <p class="text-xl text-gray-600 leading-relaxed max-w-xl">
-                    Automate invoicing workflows, accept bank transfers, track payments in real-time, and manage team roles—all in one beautiful platform.
+                    Automate invoicing workflows, accept bank transfers, track payments in real-time, and manage team roles - all in one beautiful platform.
                 </p>
                 
                 <ul class="space-y-4 text-gray-700">
                     <li class="flex items-center gap-4 group cursor-pointer hover:translate-x-2 transition-transform">
-                        <span class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-sm font-bold group-hover:bg-emerald-500 group-hover:text-white transition-colors">✓</span>
+                        <span class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-sm font-bold group-hover:bg-emerald-500 group-hover:text-white transition-colors">&#10003;</span>
                         <span class="font-medium">AI-powered automation & smart templates</span>
                     </li>
                     <li class="flex items-center gap-4 group cursor-pointer hover:translate-x-2 transition-transform">
-                        <span class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-sm font-bold group-hover:bg-emerald-500 group-hover:text-white transition-colors">✓</span>
+                        <span class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-sm font-bold group-hover:bg-emerald-500 group-hover:text-white transition-colors">&#10003;</span>
                         <span class="font-medium">Bank transfer support + payment tracking</span>
                     </li>
                     <li class="flex items-center gap-4 group cursor-pointer hover:translate-x-2 transition-transform">
-                        <span class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-sm font-bold group-hover:bg-emerald-500 group-hover:text-white transition-colors">✓</span>
+                        <span class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-sm font-bold group-hover:bg-emerald-500 group-hover:text-white transition-colors">&#10003;</span>
                         <span class="font-medium">Advanced analytics & detailed reporting</span>
                     </li>
                     <li class="flex items-center gap-4 group cursor-pointer hover:translate-x-2 transition-transform">
-                        <span class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-sm font-bold group-hover:bg-emerald-500 group-hover:text-white transition-colors">✓</span>
+                        <span class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-sm font-bold group-hover:bg-emerald-500 group-hover:text-white transition-colors">&#10003;</span>
                         <span class="font-medium">Team roles, permissions & collaboration</span>
                     </li>
                 </ul>
                 
                 <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                    <a href="{% url 'signup' %}" class="group relative px-8 py-4 text-lg font-bold text-white bg-indigo-600 rounded-xl shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/30 hover:bg-indigo-700 hover:-translate-y-0.5 transition-all duration-300 overflow-hidden">
+                    <a href="{% url 'signup' %}" class="group relative px-8 py-4 text-lg font-bold text-white bg-indigo-600 rounded-xl shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/30 hover:bg-indigo-700 hover:-translate-y-0.5 transition-all duration-300 overflow-hidden btn-shine">
                         <span class="relative flex items-center justify-center gap-2">
                             <span>Start Free Today</span>
                             <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
@@ -278,17 +303,11 @@
                         <span>Watch Demo</span>
                     </a>
                 </div>
-                
-                <div class="flex flex-wrap items-center gap-4 pt-4 text-sm text-gray-500">
-                    <div class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg><span>No credit card required</span></div>
-                    <div class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg><span>Free forever plan</span></div>
-                    <div class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg><span>14-day Pro trial</span></div>
-                </div>
             </div>
             
-            <div class="relative" data-animate="fade-left" style="animation-delay: 0.3s;">
+            <div class="relative animate-on-scroll-right">
                 <div class="relative mx-auto max-w-lg">
-                    <div class="invoice-card relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200 transform hover:scale-[1.02] transition-all duration-500">
+                    <div class="invoice-card relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200 transform hover:scale-[1.02] transition-all duration-500 card-3d">
                         <div class="bg-gradient-to-br from-indigo-50 to-blue-50 p-8">
                             <div class="space-y-6">
                                 <div class="flex items-start justify-between">
@@ -300,29 +319,21 @@
                                 </div>
                                 
                                 <div class="border-t border-gray-200 pt-6 space-y-4">
-                                    <div class="flex justify-between text-sm hover:bg-white/50 p-2 -mx-2 rounded-lg transition-colors">
+                                    <div class="flex justify-between text-sm hover:bg-white/50 p-2 -mx-2 rounded-lg transition-colors cursor-default">
                                         <span class="text-gray-600">Web Design Services</span>
                                         <span class="font-bold text-gray-900">$5,000.00</span>
                                     </div>
-                                    <div class="flex justify-between text-sm hover:bg-white/50 p-2 -mx-2 rounded-lg transition-colors">
+                                    <div class="flex justify-between text-sm hover:bg-white/50 p-2 -mx-2 rounded-lg transition-colors cursor-default">
                                         <span class="text-gray-600">UI/UX Design</span>
                                         <span class="font-bold text-gray-900">$3,500.00</span>
                                     </div>
-                                    <div class="flex justify-between text-sm hover:bg-white/50 p-2 -mx-2 rounded-lg transition-colors">
+                                    <div class="flex justify-between text-sm hover:bg-white/50 p-2 -mx-2 rounded-lg transition-colors cursor-default">
                                         <span class="text-gray-600">Consulting Hours (10h)</span>
                                         <span class="font-bold text-gray-900">$1,500.00</span>
                                     </div>
                                 </div>
                                 
                                 <div class="border-t border-gray-200 pt-4">
-                                    <div class="flex justify-between items-center mb-4">
-                                        <span class="text-sm text-gray-600">Subtotal</span>
-                                        <span class="font-semibold text-gray-900">$10,000.00</span>
-                                    </div>
-                                    <div class="flex justify-between items-center mb-4">
-                                        <span class="text-sm text-gray-600">Tax (15%)</span>
-                                        <span class="font-semibold text-gray-900">$1,500.00</span>
-                                    </div>
                                     <div class="flex justify-between items-center bg-indigo-100 p-4 rounded-xl">
                                         <span class="text-lg font-bold text-gray-900">Total Due</span>
                                         <span class="text-3xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">$11,500.00</span>
@@ -332,9 +343,9 @@
                         </div>
                     </div>
                     
-                    <div class="absolute -right-6 top-1/3 bg-white rounded-2xl shadow-xl p-5 border border-gray-200 animate-float backdrop-blur-xl hidden lg:block" style="animation-delay: 1s;">
+                    <div class="absolute -right-6 top-1/3 bg-white rounded-2xl shadow-xl p-5 border border-gray-200 animate-gentle-float backdrop-blur-xl hidden lg:block">
                         <div class="flex items-center gap-3 whitespace-nowrap">
-                            <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center text-white text-lg font-bold">✓</div>
+                            <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center text-white text-lg font-bold">&#10003;</div>
                             <div>
                                 <p class="text-xs text-gray-500 font-semibold">Paid in</p>
                                 <p class="text-lg font-black text-gray-900">2 days</p>
@@ -342,9 +353,9 @@
                         </div>
                     </div>
                     
-                    <div class="absolute -left-6 bottom-1/4 bg-white rounded-2xl shadow-xl p-5 border border-gray-200 animate-float backdrop-blur-xl hidden lg:block" style="animation-delay: 2s;">
+                    <div class="absolute -left-6 bottom-1/4 bg-white rounded-2xl shadow-xl p-5 border border-gray-200 animate-gentle-float backdrop-blur-xl hidden lg:block" style="animation-delay: 1s;">
                         <div class="flex items-center gap-3 whitespace-nowrap">
-                            <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-white text-lg">📧</div>
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-white text-lg">&#128231;</div>
                             <div>
                                 <p class="text-xs text-gray-500 font-semibold">Sent via</p>
                                 <p class="text-lg font-black text-gray-900">Email</p>
@@ -357,95 +368,95 @@
     </div>
 </section>
 
-<!-- FEATURES SECTION - Interactive Cards with Reveal Effects -->
+<!-- FEATURES GRID SECTION -->
 <section class="py-32 bg-gradient-to-b from-white to-gray-50" id="all-features">
     <div class="container px-6">
-        <div class="text-center max-w-3xl mx-auto mb-20">
-            <h2 class="text-5xl md:text-6xl font-black text-gray-900 mb-6" data-animate="fade-up">Everything You Need to Get Paid Faster</h2>
+        <div class="text-center max-w-3xl mx-auto mb-20 animate-on-scroll">
+            <h2 class="text-5xl md:text-6xl font-black text-gray-900 mb-6">Everything You Need to Get Paid Faster</h2>
             <p class="text-xl text-gray-600">Professional invoicing tools designed for modern businesses, freelancers, and teams</p>
         </div>
         
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <div class="feature-card group relative bg-gradient-to-br from-blue-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-blue-200 hover:border-blue-400 cursor-pointer overflow-hidden" data-animate="fade-up">
+            <div class="feature-card group relative bg-gradient-to-br from-blue-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-blue-200 hover:border-blue-400 cursor-pointer overflow-hidden animate-on-scroll">
                 <div class="absolute inset-0 bg-gradient-to-br from-blue-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div class="relative z-10">
-                    <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 group-hover:from-white group-hover:to-white rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 group-hover:text-blue-600">⚡</div>
+                    <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 group-hover:from-white group-hover:to-white rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 group-hover:text-blue-600">&#9889;</div>
                     <h3 class="text-2xl font-black text-gray-900 group-hover:text-white mb-4 transition-colors">60-Second Invoice Creation</h3>
                     <p class="text-gray-700 group-hover:text-white/90 leading-relaxed mb-4 transition-colors">AI-powered auto-fill learns your details. Select client, add items, set payment terms, and send in seconds.</p>
                     <ul class="text-sm text-gray-600 group-hover:text-white/80 space-y-2 transition-colors">
-                        <li>✓ Smart templates</li>
-                        <li>✓ Auto-fill from history</li>
-                        <li>✓ Instant PDF export</li>
+                        <li>&#10003; Smart templates</li>
+                        <li>&#10003; Auto-fill from history</li>
+                        <li>&#10003; Instant PDF export</li>
                     </ul>
                 </div>
             </div>
             
-            <div class="feature-card group relative bg-gradient-to-br from-purple-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-purple-200 hover:border-purple-400 cursor-pointer overflow-hidden" data-animate="fade-up" style="animation-delay: 0.1s;">
+            <div class="feature-card group relative bg-gradient-to-br from-purple-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-purple-200 hover:border-purple-400 cursor-pointer overflow-hidden animate-on-scroll" style="animation-delay: 0.1s;">
                 <div class="absolute inset-0 bg-gradient-to-br from-purple-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div class="relative z-10">
-                    <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 group-hover:from-white group-hover:to-white rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 group-hover:text-purple-600">🤖</div>
+                    <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 group-hover:from-white group-hover:to-white rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 group-hover:text-purple-600">&#129302;</div>
                     <h3 class="text-2xl font-black text-gray-900 group-hover:text-white mb-4 transition-colors">Full Automation</h3>
                     <p class="text-gray-700 group-hover:text-white/90 leading-relaxed mb-4 transition-colors">Recurring invoices, automatic reminders, and workflow automation that works while you sleep.</p>
                     <ul class="text-sm text-gray-600 group-hover:text-white/80 space-y-2 transition-colors">
-                        <li>✓ Recurring billing</li>
-                        <li>✓ Auto reminders</li>
-                        <li>✓ Workflow builder</li>
+                        <li>&#10003; Recurring billing</li>
+                        <li>&#10003; Auto reminders</li>
+                        <li>&#10003; Workflow builder</li>
                     </ul>
                 </div>
             </div>
             
-            <div class="feature-card group relative bg-gradient-to-br from-emerald-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-emerald-200 hover:border-emerald-400 cursor-pointer overflow-hidden" data-animate="fade-up" style="animation-delay: 0.2s;">
+            <div class="feature-card group relative bg-gradient-to-br from-emerald-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-emerald-200 hover:border-emerald-400 cursor-pointer overflow-hidden animate-on-scroll" style="animation-delay: 0.2s;">
                 <div class="absolute inset-0 bg-gradient-to-br from-emerald-500 to-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div class="relative z-10">
-                    <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-600 group-hover:from-white group-hover:to-white rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 group-hover:text-emerald-600">🏦</div>
+                    <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-600 group-hover:from-white group-hover:to-white rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 group-hover:text-emerald-600">&#127974;</div>
                     <h3 class="text-2xl font-black text-gray-900 group-hover:text-white mb-4 transition-colors">Bank Transfer Support</h3>
                     <p class="text-gray-700 group-hover:text-white/90 leading-relaxed mb-4 transition-colors">Accept payments via bank transfers, credit cards through Stripe, PayPal, or custom payment methods.</p>
                     <ul class="text-sm text-gray-600 group-hover:text-white/80 space-y-2 transition-colors">
-                        <li>✓ Multiple payment methods</li>
-                        <li>✓ Payment tracking</li>
-                        <li>✓ Settlement reports</li>
+                        <li>&#10003; Multiple payment methods</li>
+                        <li>&#10003; Payment tracking</li>
+                        <li>&#10003; Settlement reports</li>
                     </ul>
                 </div>
             </div>
             
-            <div class="feature-card group relative bg-gradient-to-br from-indigo-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-indigo-200 hover:border-indigo-400 cursor-pointer overflow-hidden" data-animate="fade-up" style="animation-delay: 0.3s;">
+            <div class="feature-card group relative bg-gradient-to-br from-indigo-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-indigo-200 hover:border-indigo-400 cursor-pointer overflow-hidden animate-on-scroll" style="animation-delay: 0.3s;">
                 <div class="absolute inset-0 bg-gradient-to-br from-indigo-500 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div class="relative z-10">
-                    <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-indigo-600 group-hover:from-white group-hover:to-white rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 group-hover:text-indigo-600">📊</div>
+                    <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-indigo-600 group-hover:from-white group-hover:to-white rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 group-hover:text-indigo-600">&#128202;</div>
                     <h3 class="text-2xl font-black text-gray-900 group-hover:text-white mb-4 transition-colors">Advanced Analytics</h3>
                     <p class="text-gray-700 group-hover:text-white/90 leading-relaxed mb-4 transition-colors">Real-time dashboards, cash flow tracking, and detailed reports for tax and accounting purposes.</p>
                     <ul class="text-sm text-gray-600 group-hover:text-white/80 space-y-2 transition-colors">
-                        <li>✓ Real-time dashboards</li>
-                        <li>✓ Cash flow reports</li>
-                        <li>✓ Tax compliance</li>
+                        <li>&#10003; Real-time dashboards</li>
+                        <li>&#10003; Cash flow reports</li>
+                        <li>&#10003; Tax compliance</li>
                     </ul>
                 </div>
             </div>
             
-            <div class="feature-card group relative bg-gradient-to-br from-orange-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-orange-200 hover:border-orange-400 cursor-pointer overflow-hidden" data-animate="fade-up" style="animation-delay: 0.4s;">
+            <div class="feature-card group relative bg-gradient-to-br from-orange-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-orange-200 hover:border-orange-400 cursor-pointer overflow-hidden animate-on-scroll" style="animation-delay: 0.4s;">
                 <div class="absolute inset-0 bg-gradient-to-br from-orange-500 to-orange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div class="relative z-10">
-                    <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 group-hover:from-white group-hover:to-white rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 group-hover:text-orange-600">👥</div>
+                    <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 group-hover:from-white group-hover:to-white rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 group-hover:text-orange-600">&#128101;</div>
                     <h3 class="text-2xl font-black text-gray-900 group-hover:text-white mb-4 transition-colors">Team Roles & Permissions</h3>
                     <p class="text-gray-700 group-hover:text-white/90 leading-relaxed mb-4 transition-colors">Manage team members with granular permissions, approval workflows, and activity logs.</p>
                     <ul class="text-sm text-gray-600 group-hover:text-white/80 space-y-2 transition-colors">
-                        <li>✓ Role-based access</li>
-                        <li>✓ Approval workflows</li>
-                        <li>✓ Audit logs</li>
+                        <li>&#10003; Role-based access</li>
+                        <li>&#10003; Approval workflows</li>
+                        <li>&#10003; Audit logs</li>
                     </ul>
                 </div>
             </div>
             
-            <div class="feature-card group relative bg-gradient-to-br from-red-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-red-200 hover:border-red-400 cursor-pointer overflow-hidden" data-animate="fade-up" style="animation-delay: 0.5s;">
+            <div class="feature-card group relative bg-gradient-to-br from-red-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-red-200 hover:border-red-400 cursor-pointer overflow-hidden animate-on-scroll" style="animation-delay: 0.5s;">
                 <div class="absolute inset-0 bg-gradient-to-br from-red-500 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div class="relative z-10">
-                    <div class="w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 group-hover:from-white group-hover:to-white rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 group-hover:text-red-600">🔐</div>
+                    <div class="w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 group-hover:from-white group-hover:to-white rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 group-hover:text-red-600">&#128274;</div>
                     <h3 class="text-2xl font-black text-gray-900 group-hover:text-white mb-4 transition-colors">Enterprise Security</h3>
                     <p class="text-gray-700 group-hover:text-white/90 leading-relaxed mb-4 transition-colors">Bank-level encryption, daily backups, SOC 2 compliance, and GDPR-ready data protection.</p>
                     <ul class="text-sm text-gray-600 group-hover:text-white/80 space-y-2 transition-colors">
-                        <li>✓ 256-bit SSL encryption</li>
-                        <li>✓ SOC 2 compliant</li>
-                        <li>✓ GDPR ready</li>
+                        <li>&#10003; 256-bit SSL encryption</li>
+                        <li>&#10003; SOC 2 compliant</li>
+                        <li>&#10003; GDPR ready</li>
                     </ul>
                 </div>
             </div>
@@ -453,635 +464,227 @@
     </div>
 </section>
 
-<!-- VISUAL SHOWCASE - Parallax Image Section -->
-<section class="py-32 bg-white relative overflow-hidden">
-    <div class="container px-6">
-        <div class="text-center max-w-3xl mx-auto mb-20">
-            <h2 class="text-5xl md:text-6xl font-black text-gray-900 mb-6" data-animate="fade-up">Powerful Features. Beautiful Design.</h2>
-            <p class="text-xl text-gray-600">Every feature you need to manage invoicing professionally</p>
-        </div>
-        
-        <div class="grid lg:grid-cols-2 gap-16 items-center mb-24 max-w-6xl mx-auto" data-animate="fade-up">
-            <div class="relative group">
-                <div class="rounded-3xl overflow-hidden shadow-2xl transform group-hover:scale-[1.02] transition-transform duration-500">
-                    <img src="{% static 'images/landing/mobile_phone_app_int_19b6fc14.jpg' %}" alt="Mobile invoicing app" class="w-full h-auto object-cover" loading="lazy">
-                </div>
-                <div class="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-xl p-4 border border-gray-200 hidden lg:block">
-                    <div class="flex items-center gap-2">
-                        <div class="flex -space-x-2">
-                            <div class="w-8 h-8 bg-blue-500 rounded-full border-2 border-white"></div>
-                            <div class="w-8 h-8 bg-purple-500 rounded-full border-2 border-white"></div>
-                            <div class="w-8 h-8 bg-emerald-500 rounded-full border-2 border-white"></div>
-                        </div>
-                        <span class="text-sm font-semibold text-gray-700">+10K users</span>
-                    </div>
-                </div>
-            </div>
-            <div class="space-y-6">
-                <div class="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full font-bold text-sm">
-                    <span class="w-2 h-2 bg-blue-700 rounded-full"></span>
-                    Mobile-First Design
-                </div>
-                <h3 class="text-4xl font-black text-gray-900">Create Invoices On The Go</h3>
-                <p class="text-lg text-gray-600">Full-featured mobile app lets you create, send, and track invoices from anywhere. Never miss a payment opportunity.</p>
-                <ul class="space-y-4">
-                    <li class="flex items-center gap-4 group/item hover:translate-x-2 transition-transform">
-                        <span class="text-2xl">📱</span>
-                        <span class="text-gray-700 font-medium">Fully responsive mobile app</span>
-                    </li>
-                    <li class="flex items-center gap-4 group/item hover:translate-x-2 transition-transform">
-                        <span class="text-2xl">⚡</span>
-                        <span class="text-gray-700 font-medium">Instant sync across devices</span>
-                    </li>
-                    <li class="flex items-center gap-4 group/item hover:translate-x-2 transition-transform">
-                        <span class="text-2xl">🔔</span>
-                        <span class="text-gray-700 font-medium">Real-time notifications</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="grid lg:grid-cols-2 gap-16 items-center mb-24 max-w-6xl mx-auto" data-animate="fade-up" style="animation-delay: 0.1s;">
-            <div class="space-y-6 order-last lg:order-first">
-                <div class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full font-bold text-sm">
-                    <span class="w-2 h-2 bg-emerald-700 rounded-full"></span>
-                    Multiple Payment Methods
-                </div>
-                <h3 class="text-4xl font-black text-gray-900">Get Paid Instantly</h3>
-                <p class="text-lg text-gray-600">Accept payments through bank transfers, credit cards, PayPal, and more. All in one place with automatic reconciliation.</p>
-                <ul class="space-y-4">
-                    <li class="flex items-center gap-4 hover:translate-x-2 transition-transform">
-                        <span class="text-2xl">💳</span>
-                        <span class="text-gray-700 font-medium">Stripe integration for card payments</span>
-                    </li>
-                    <li class="flex items-center gap-4 hover:translate-x-2 transition-transform">
-                        <span class="text-2xl">🏦</span>
-                        <span class="text-gray-700 font-medium">Bank transfer support</span>
-                    </li>
-                    <li class="flex items-center gap-4 hover:translate-x-2 transition-transform">
-                        <span class="text-2xl">✓</span>
-                        <span class="text-gray-700 font-medium">Automatic payment tracking</span>
-                    </li>
-                </ul>
-            </div>
-            <div class="relative group">
-                <div class="rounded-3xl overflow-hidden shadow-2xl transform group-hover:scale-[1.02] transition-transform duration-500">
-                    <img src="{% static 'images/landing/payment_processing_c_b3b40b77.jpg' %}" alt="Payment processing" class="w-full h-auto object-cover" loading="lazy">
-                </div>
-            </div>
-        </div>
-
-        <div class="grid lg:grid-cols-2 gap-16 items-center mb-24 max-w-6xl mx-auto" data-animate="fade-up" style="animation-delay: 0.2s;">
-            <div class="relative group">
-                <div class="rounded-3xl overflow-hidden shadow-2xl transform group-hover:scale-[1.02] transition-transform duration-500">
-                    <img src="{% static 'images/landing/automation_workflow__cbc8121a.jpg' %}" alt="Automation workflows" class="w-full h-auto object-cover" loading="lazy">
-                </div>
-            </div>
-            <div class="space-y-6">
-                <div class="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 text-purple-700 rounded-full font-bold text-sm">
-                    <span class="w-2 h-2 bg-purple-700 rounded-full"></span>
-                    Smart Automation
-                </div>
-                <h3 class="text-4xl font-black text-gray-900">Automate Everything</h3>
-                <p class="text-lg text-gray-600">Set up workflows that handle recurring invoices, payment reminders, and notifications automatically. Save hours every week.</p>
-                <ul class="space-y-4">
-                    <li class="flex items-center gap-4 hover:translate-x-2 transition-transform">
-                        <span class="text-2xl">🔄</span>
-                        <span class="text-gray-700 font-medium">Recurring invoice scheduling</span>
-                    </li>
-                    <li class="flex items-center gap-4 hover:translate-x-2 transition-transform">
-                        <span class="text-2xl">📧</span>
-                        <span class="text-gray-700 font-medium">Automated payment reminders</span>
-                    </li>
-                    <li class="flex items-center gap-4 hover:translate-x-2 transition-transform">
-                        <span class="text-2xl">⚙️</span>
-                        <span class="text-gray-700 font-medium">Custom workflow builder</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="grid lg:grid-cols-2 gap-16 items-center max-w-6xl mx-auto" data-animate="fade-up" style="animation-delay: 0.3s;">
-            <div class="space-y-6 order-last lg:order-first">
-                <div class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 text-indigo-700 rounded-full font-bold text-sm">
-                    <span class="w-2 h-2 bg-indigo-700 rounded-full"></span>
-                    Real-Time Insights
-                </div>
-                <h3 class="text-4xl font-black text-gray-900">Advanced Analytics</h3>
-                <p class="text-lg text-gray-600">Visual dashboards show your cash flow, revenue trends, and payment status at a glance. Make smarter business decisions.</p>
-                <ul class="space-y-4">
-                    <li class="flex items-center gap-4 hover:translate-x-2 transition-transform">
-                        <span class="text-2xl">📊</span>
-                        <span class="text-gray-700 font-medium">Real-time dashboards & reports</span>
-                    </li>
-                    <li class="flex items-center gap-4 hover:translate-x-2 transition-transform">
-                        <span class="text-2xl">💰</span>
-                        <span class="text-gray-700 font-medium">Cash flow forecasting</span>
-                    </li>
-                    <li class="flex items-center gap-4 hover:translate-x-2 transition-transform">
-                        <span class="text-2xl">📈</span>
-                        <span class="text-gray-700 font-medium">Revenue analytics</span>
-                    </li>
-                </ul>
-            </div>
-            <div class="relative group">
-                <div class="rounded-3xl overflow-hidden shadow-2xl transform group-hover:scale-[1.02] transition-transform duration-500">
-                    <img src="{% static 'images/landing/analytics_data_dashb_d011ea81.jpg' %}" alt="Analytics dashboard" class="w-full h-auto object-cover" loading="lazy">
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- IMMERSIVE DARK SECTION - See It In Action -->
-<section class="py-32 bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 relative overflow-hidden">
-    <div class="absolute inset-0 opacity-20" aria-hidden="true">
-        <div class="parallax-element absolute top-0 right-0 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl" data-speed="0.2"></div>
-        <div class="parallax-element absolute bottom-0 left-0 w-96 h-96 bg-purple-500 rounded-full filter blur-3xl" data-speed="0.3"></div>
-    </div>
+<!-- TESTIMONIALS & SOCIAL PROOF -->
+<section class="py-32 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 relative overflow-hidden" id="testimonials">
+    <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 0); background-size: 40px 40px;"></div>
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/20 rounded-full filter blur-[100px] animate-pulse-slow"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full filter blur-[100px] animate-pulse-slow" style="animation-delay: 2s;"></div>
     
     <div class="container px-6 relative z-10">
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-5xl md:text-6xl font-black text-white mb-6" data-animate="fade-up">See It In Action</h2>
-            <p class="text-xl text-gray-300">Real businesses trust InvoiceFlow to manage their invoicing and get paid faster</p>
+        <div class="text-center max-w-3xl mx-auto mb-16 animate-on-scroll">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-xl rounded-full text-white/80 font-medium mb-6">
+                <span class="flex gap-1">
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                </span>
+                <span>4.9/5 from 3,250+ reviews</span>
+            </div>
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6">
+                Loved by <span class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">10,000+</span> Businesses
+            </h2>
+            <p class="text-xl text-white/70">See what our customers have to say about their experience</p>
         </div>
         
-        <div class="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
-            <div class="relative" data-animate="fade-right">
-                <div class="rounded-2xl overflow-hidden shadow-2xl border border-white/10 transform hover:scale-[1.02] transition-transform duration-500">
-                    <img src="{% static 'images/landing/modern_office_desk_w_7f9f40ef.jpg' %}" alt="InvoiceFlow Dashboard" class="w-full h-auto object-cover" loading="lazy">
+        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto" id="testimonial-grid">
+            <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all hover-lift animate-on-scroll">
+                <div class="flex items-center gap-1 text-yellow-400 mb-6">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                 </div>
-                <div class="absolute -bottom-6 -right-6 bg-gradient-to-br from-blue-600 to-indigo-600 text-white rounded-2xl p-6 shadow-xl hidden lg:block">
-                    <p class="text-3xl font-black">4.9★</p>
-                    <p class="text-sm opacity-90">User Rating</p>
-                </div>
-            </div>
-            
-            <div class="space-y-8" data-animate="fade-left">
-                <div class="flex gap-5 items-start group hover:translate-x-2 transition-transform cursor-pointer">
-                    <div class="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform">✓</div>
-                    <div>
-                        <h3 class="text-2xl font-black text-white mb-2">Intuitive Dashboard</h3>
-                        <p class="text-gray-300">See all your invoices, payments, and analytics at a glance. No training required.</p>
-                    </div>
-                </div>
-                
-                <div class="flex gap-5 items-start group hover:translate-x-2 transition-transform cursor-pointer">
-                    <div class="w-14 h-14 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform">📱</div>
-                    <div>
-                        <h3 class="text-2xl font-black text-white mb-2">Works Everywhere</h3>
-                        <p class="text-gray-300">Create and send invoices from any device - desktop, tablet, or mobile.</p>
-                    </div>
-                </div>
-                
-                <div class="flex gap-5 items-start group hover:translate-x-2 transition-transform cursor-pointer">
-                    <div class="w-14 h-14 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform">⚡</div>
-                    <div>
-                        <h3 class="text-2xl font-black text-white mb-2">Lightning Fast</h3>
-                        <p class="text-gray-300">Average invoice creation time is under 60 seconds. Get paid faster.</p>
-                    </div>
-                </div>
-                
-                <a href="{% url 'signup' %}" class="inline-flex items-center gap-3 px-8 py-4 bg-white text-indigo-600 font-bold rounded-xl hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 mt-4">
-                    Try It Free
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- TESTIMONIALS SECTION with Slide Reveal -->
-<section class="py-32 bg-white overflow-hidden">
-    <div class="container px-6">
-        <div class="text-center max-w-3xl mx-auto mb-20">
-            <h2 class="text-5xl md:text-6xl font-black text-gray-900 mb-6" data-animate="fade-up">Loved by Users</h2>
-            <p class="text-xl text-gray-600">Real feedback from real business owners who use InvoiceFlow every day</p>
-        </div>
-        
-        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <div class="testimonial-card bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 hover:border-blue-400 transition-all duration-500 hover:shadow-xl hover:-translate-y-2" data-animate="fade-up">
-                <div class="flex gap-1 mb-6">
-                    <span class="text-2xl text-yellow-400">★★★★★</span>
-                </div>
-                <p class="text-lg text-gray-700 leading-relaxed mb-6 font-semibold">"InvoiceFlow cut our invoicing time from 30 minutes to 2 minutes. We can now focus on client work instead of admin tasks."</p>
+                <p class="text-white/90 text-lg leading-relaxed mb-6">"InvoiceFlow transformed our billing process. We went from spending hours on invoices to minutes. The automation features alone have saved us 20+ hours per month."</p>
                 <div class="flex items-center gap-4">
-                    <img src="{% static 'images/landing/happy_small_business_055c3869.jpg' %}" alt="Sarah Johnson" class="w-14 h-14 rounded-full object-cover border-2 border-blue-200" loading="lazy">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold">SA</div>
                     <div>
-                        <p class="font-bold text-gray-900">Sarah Johnson</p>
-                        <p class="text-sm text-gray-600">Freelance Web Designer</p>
+                        <p class="text-white font-semibold">Sarah Anderson</p>
+                        <p class="text-white/60 text-sm">Founder, DesignStudio Pro</p>
                     </div>
                 </div>
             </div>
             
-            <div class="testimonial-card bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 border border-purple-200 hover:border-purple-400 transition-all duration-500 hover:shadow-xl hover:-translate-y-2 md:-translate-y-4" data-animate="fade-up" style="animation-delay: 0.1s;">
-                <div class="flex gap-1 mb-6">
-                    <span class="text-2xl text-yellow-400">★★★★★</span>
+            <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all hover-lift animate-on-scroll" style="animation-delay: 0.1s;">
+                <div class="flex items-center gap-1 text-yellow-400 mb-6">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                 </div>
-                <p class="text-lg text-gray-700 leading-relaxed mb-6 font-semibold">"The bank transfer support is a game-changer. Our international clients love having this option. Payment tracking is excellent too."</p>
+                <p class="text-white/90 text-lg leading-relaxed mb-6">"The recurring invoice feature is a game-changer. I set it up once for retainer clients and forget about it. Payments come in like clockwork now."</p>
                 <div class="flex items-center gap-4">
-                    <img src="{% static 'images/landing/happy_small_business_b2185033.jpg' %}" alt="Mike Chen" class="w-14 h-14 rounded-full object-cover border-2 border-purple-200" loading="lazy">
+                    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold">MK</div>
                     <div>
-                        <p class="font-bold text-gray-900">Mike Chen</p>
-                        <p class="text-sm text-gray-600">Digital Agency Owner</p>
+                        <p class="text-white font-semibold">Michael Kim</p>
+                        <p class="text-white/60 text-sm">CEO, TechVentures</p>
                     </div>
                 </div>
             </div>
             
-            <div class="testimonial-card bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-8 border border-emerald-200 hover:border-emerald-400 transition-all duration-500 hover:shadow-xl hover:-translate-y-2" data-animate="fade-up" style="animation-delay: 0.2s;">
-                <div class="flex gap-1 mb-6">
-                    <span class="text-2xl text-yellow-400">★★★★★</span>
+            <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all hover-lift animate-on-scroll" style="animation-delay: 0.2s;">
+                <div class="flex items-center gap-1 text-yellow-400 mb-6">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                 </div>
-                <p class="text-lg text-gray-700 leading-relaxed mb-6 font-semibold">"Team permissions are perfect for our growing agency. Our junior designers can create invoices, but they need approval before sending."</p>
+                <p class="text-white/90 text-lg leading-relaxed mb-6">"As a freelancer, InvoiceFlow has been invaluable. Professional invoices, automatic reminders, and the analytics help me understand my business better."</p>
                 <div class="flex items-center gap-4">
-                    <img src="{% static 'images/landing/happy_small_business_c3950d96.jpg' %}" alt="Emma Parker" class="w-14 h-14 rounded-full object-cover border-2 border-emerald-200" loading="lazy">
+                    <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold">ER</div>
                     <div>
-                        <p class="font-bold text-gray-900">Emma Parker</p>
-                        <p class="text-sm text-gray-600">Design Studio Manager</p>
+                        <p class="text-white font-semibold">Emily Rodriguez</p>
+                        <p class="text-white/60 text-sm">Freelance Developer</p>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- BUILT FOR PROFESSIONALS - Interactive Image Grid -->
-<section class="py-24 bg-gray-50">
-    <div class="container px-6">
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-4xl md:text-5xl font-black text-gray-900 mb-4" data-animate="fade-up">Built for Modern Professionals</h2>
-            <p class="text-xl text-gray-600">From freelancers to enterprise teams, InvoiceFlow adapts to your workflow</p>
-        </div>
-        
-        <div class="grid md:grid-cols-4 gap-4 max-w-6xl mx-auto">
-            <div class="relative group overflow-hidden rounded-2xl aspect-square cursor-pointer" data-animate="fade-up">
-                <img src="{% static 'images/landing/professional_busines_36b7e94f.jpg' %}" alt="Professional using InvoiceFlow" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6 opacity-100 group-hover:opacity-100 transition-opacity">
-                    <div>
-                        <p class="text-white font-bold text-xl">Freelancers</p>
-                        <p class="text-white/70 text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Solo professionals who value speed</p>
-                    </div>
-                </div>
-            </div>
-            <div class="relative group overflow-hidden rounded-2xl aspect-square cursor-pointer" data-animate="fade-up" style="animation-delay: 0.1s;">
-                <img src="{% static 'images/landing/team_collaboration_m_d088a2c9.jpg' %}" alt="Team collaboration" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
-                    <div>
-                        <p class="text-white font-bold text-xl">Teams & Agencies</p>
-                        <p class="text-white/70 text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Collaborative invoicing with permissions</p>
-                    </div>
-                </div>
-            </div>
-            <div class="relative group overflow-hidden rounded-2xl aspect-square cursor-pointer" data-animate="fade-up" style="animation-delay: 0.2s;">
-                <img src="{% static 'images/landing/professional_busines_244381e9.jpg' %}" alt="Small business owner" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
-                    <div>
-                        <p class="text-white font-bold text-xl">Small Business</p>
-                        <p class="text-white/70 text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Growth-focused entrepreneurs</p>
-                    </div>
-                </div>
-            </div>
-            <div class="relative group overflow-hidden rounded-2xl aspect-square cursor-pointer" data-animate="fade-up" style="animation-delay: 0.3s;">
-                <img src="{% static 'images/landing/business_analytics_d_aeaf1b35.jpg' %}" alt="Enterprise analytics" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
-                    <div>
-                        <p class="text-white font-bold text-xl">Enterprise</p>
-                        <p class="text-white/70 text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Scale with advanced analytics</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- HOW IT WORKS - Animated Steps -->
-<section class="py-32 bg-gradient-to-b from-white to-gray-50">
-    <div class="container px-6">
-        <div class="text-center max-w-3xl mx-auto mb-20">
-            <h2 class="text-5xl md:text-6xl font-black text-gray-900 mb-6" data-animate="fade-up">How It Works</h2>
-            <p class="text-xl text-gray-600">Get started in three simple steps. No technical skills required.</p>
-        </div>
-        
-        <div class="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto relative">
-            <div class="hidden md:block absolute top-24 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-blue-200 via-purple-200 to-emerald-200"></div>
-            
-            <div class="text-center relative" data-animate="fade-up">
-                <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-blue-500/30 hover:scale-110 transition-transform cursor-pointer">
-                    <span class="text-4xl font-black text-white">1</span>
-                </div>
-                <h3 class="text-2xl font-black text-gray-900 mb-4">Create Your Account</h3>
-                <p class="text-gray-600 leading-relaxed">Sign up in seconds. No credit card needed. Customize your profile and add your business details.</p>
-                <div class="mt-6 flex justify-center">
-                    <svg class="w-16 h-16 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                    </svg>
-                </div>
-            </div>
-            
-            <div class="text-center relative" data-animate="fade-up" style="animation-delay: 0.1s;">
-                <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-purple-500/30 hover:scale-110 transition-transform cursor-pointer">
-                    <span class="text-4xl font-black text-white">2</span>
-                </div>
-                <h3 class="text-2xl font-black text-gray-900 mb-4">Create & Send</h3>
-                <p class="text-gray-600 leading-relaxed">Use our smart templates to create beautiful invoices. Add items, set terms, and send via email or WhatsApp.</p>
-                <div class="mt-6 flex justify-center">
-                    <svg class="w-16 h-16 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                </div>
-            </div>
-            
-            <div class="text-center relative" data-animate="fade-up" style="animation-delay: 0.2s;">
-                <div class="w-20 h-20 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-emerald-500/30 hover:scale-110 transition-transform cursor-pointer">
-                    <span class="text-4xl font-black text-white">3</span>
-                </div>
-                <h3 class="text-2xl font-black text-gray-900 mb-4">Get Paid Faster</h3>
-                <p class="text-gray-600 leading-relaxed">Track payments in real-time, send automatic reminders, and accept bank transfers seamlessly.</p>
-                <div class="mt-6 flex justify-center">
-                    <svg class="w-16 h-16 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
                 </div>
             </div>
         </div>
         
-        <div class="text-center mt-16" data-animate="fade-up">
-            <a href="{% url 'signup' %}" class="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-xl hover:shadow-2xl hover:scale-105 hover:-translate-y-1">
-                Start Creating Invoices
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
-            </a>
+        <div class="mt-16 text-center animate-on-scroll">
+            <div class="inline-flex flex-wrap justify-center items-center gap-8 opacity-60">
+                <img src="{% static 'images/landing/professional_busines_36b7e94f.jpg' %}" alt="Client logo" class="h-10 w-auto grayscale hover:grayscale-0 transition-all rounded" loading="lazy">
+                <img src="{% static 'images/landing/team_collaboration_m_d088a2c9.jpg' %}" alt="Client logo" class="h-10 w-auto grayscale hover:grayscale-0 transition-all rounded" loading="lazy">
+                <img src="{% static 'images/landing/business_analytics_d_aeaf1b35.jpg' %}" alt="Client logo" class="h-10 w-auto grayscale hover:grayscale-0 transition-all rounded" loading="lazy">
+            </div>
         </div>
     </div>
 </section>
 
-<!-- FAQ SECTION -->
-<section class="py-32 bg-white">
+<!-- STATS SECTION -->
+<section class="py-24 bg-white relative overflow-hidden">
     <div class="container px-6">
-        <div class="max-w-3xl mx-auto">
-            <div class="text-center mb-20">
-                <h2 class="text-5xl md:text-6xl font-black text-gray-900 mb-6" data-animate="fade-up">Frequently Asked Questions</h2>
-                <p class="text-xl text-gray-600">Everything you need to know about InvoiceFlow</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
+            <div class="text-center animate-on-scroll">
+                <div class="text-5xl md:text-6xl font-black text-indigo-600 mb-2 counter-value" data-target="10000">0</div>
+                <p class="text-gray-600 font-medium">Active Users</p>
             </div>
-            
-            <div class="space-y-4">
-                <details class="group bg-gradient-to-br from-blue-50 to-white rounded-2xl p-8 shadow-md hover:shadow-lg transition-all border border-blue-100 cursor-pointer" data-animate="fade-up">
-                    <summary class="flex items-center justify-between font-black text-lg text-gray-900">
-                        <span>How does the 60-second invoice creation work?</span>
-                        <svg class="w-6 h-6 transform group-open:rotate-180 transition-transform text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </summary>
-                    <p class="mt-6 text-gray-700 leading-relaxed">InvoiceFlow uses AI-powered auto-fill that learns your business details and client information. Simply select a client, add line items, set payment terms, and send. Taxes and totals calculate automatically. Most users create their first invoice in under 60 seconds!</p>
-                </details>
-                
-                <details class="group bg-gradient-to-br from-purple-50 to-white rounded-2xl p-8 shadow-md hover:shadow-lg transition-all border border-purple-100 cursor-pointer" data-animate="fade-up" style="animation-delay: 0.1s;">
-                    <summary class="flex items-center justify-between font-black text-lg text-gray-900">
-                        <span>Can I customize invoices with my brand?</span>
-                        <svg class="w-6 h-6 transform group-open:rotate-180 transition-transform text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </summary>
-                    <p class="mt-6 text-gray-700 leading-relaxed">Absolutely! Upload your logo, choose brand colors, customize fonts and layouts, and set custom payment instructions. Every invoice will look professionally designed and perfectly on-brand. You can also create multiple templates for different purposes.</p>
-                </details>
-                
-                <details class="group bg-gradient-to-br from-emerald-50 to-white rounded-2xl p-8 shadow-md hover:shadow-lg transition-all border border-emerald-100 cursor-pointer" data-animate="fade-up" style="animation-delay: 0.2s;">
-                    <summary class="flex items-center justify-between font-black text-lg text-gray-900">
-                        <span>What payment methods can I accept?</span>
-                        <svg class="w-6 h-6 transform group-open:rotate-180 transition-transform text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </summary>
-                    <p class="mt-6 text-gray-700 leading-relaxed">InvoiceFlow supports bank transfers, credit/debit cards via Stripe, PayPal, and custom payment instructions for checks or wire transfers. Each payment method can be enabled/disabled per invoice or globally.</p>
-                </details>
-                
-                <details class="group bg-gradient-to-br from-indigo-50 to-white rounded-2xl p-8 shadow-md hover:shadow-lg transition-all border border-indigo-100 cursor-pointer" data-animate="fade-up" style="animation-delay: 0.3s;">
-                    <summary class="flex items-center justify-between font-black text-lg text-gray-900">
-                        <span>Is my data secure?</span>
-                        <svg class="w-6 h-6 transform group-open:rotate-180 transition-transform text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </summary>
-                    <p class="mt-6 text-gray-700 leading-relaxed">Yes! We use bank-level encryption (256-bit SSL), secure cloud storage, and regular security audits. Your data is backed up daily and never sold. We're GDPR and SOC 2 compliant with enterprise-grade security infrastructure.</p>
-                </details>
+            <div class="text-center animate-on-scroll" style="animation-delay: 0.1s;">
+                <div class="text-5xl md:text-6xl font-black text-purple-600 mb-2 counter-value" data-target="50000">0</div>
+                <p class="text-gray-600 font-medium">Invoices Created</p>
             </div>
-        </div>
-    </div>
-</section>
-
-<!-- NEWSLETTER SECTION -->
-<section class="py-32 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 relative overflow-hidden">
-    <div class="absolute inset-0 opacity-20" aria-hidden="true">
-        <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full filter blur-3xl animate-blob"></div>
-        <div class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full filter blur-3xl animate-blob" style="animation-delay: 2s;"></div>
-    </div>
-    
-    <div class="container px-6 relative z-10">
-        <div class="max-w-2xl mx-auto text-center" data-animate="fade-up">
-            <div class="space-y-6 mb-12">
-                <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
-                    <span class="text-2xl">📬</span>
-                    <span class="text-white font-bold">Join 15,000+ Subscribers</span>
-                </div>
-                <h2 class="text-5xl md:text-6xl font-black text-white leading-tight">Weekly Invoicing Tips & Updates</h2>
-                <p class="text-xl text-white/90">Learn how successful businesses manage cash flow, automate payments, and scale operations. No spam, just value.</p>
+            <div class="text-center animate-on-scroll" style="animation-delay: 0.2s;">
+                <div class="text-5xl md:text-6xl font-black text-emerald-600 mb-2">$<span class="counter-value" data-target="25">0</span>M+</div>
+                <p class="text-gray-600 font-medium">Processed</p>
             </div>
-            
-            <form method="post" action="{% url 'newsletter_signup' %}" class="max-w-md mx-auto space-y-4" id="newsletter-form">
-                {% csrf_token %}
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <label for="newsletter-email" class="sr-only">Email address</label>
-                    <input 
-                        type="email" 
-                        id="newsletter-email"
-                        name="email" 
-                        required 
-                        placeholder="Enter your email" 
-                        class="flex-1 px-6 py-4 rounded-xl border-2 border-white/30 bg-white/10 backdrop-blur-lg text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 transition-all font-medium"
-                        aria-label="Email address for newsletter"
-                    >
-                    <button 
-                        type="submit" 
-                        class="px-8 py-4 font-bold bg-white text-indigo-600 rounded-xl hover:bg-gray-100 hover:scale-105 transition-all shadow-2xl whitespace-nowrap"
-                    >
-                        Subscribe Free
-                    </button>
-                </div>
-                <p class="text-white/70 text-sm">Weekly tips | Unsubscribe anytime | No spam ever</p>
-            </form>
+            <div class="text-center animate-on-scroll" style="animation-delay: 0.3s;">
+                <div class="text-5xl md:text-6xl font-black text-blue-600 mb-2 counter-value" data-target="99">0</div>
+                <p class="text-gray-600 font-medium">% Uptime</p>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- FINAL CTA SECTION -->
-<section class="py-32 bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white relative overflow-hidden">
-    <div class="absolute inset-0 opacity-30" aria-hidden="true">
-        <div class="parallax-element absolute top-0 left-0 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl" data-speed="0.2"></div>
-        <div class="parallax-element absolute bottom-0 right-0 w-96 h-96 bg-purple-500 rounded-full filter blur-3xl" data-speed="0.3"></div>
-    </div>
+<section class="py-32 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.2) 1px, transparent 0); background-size: 30px 30px;"></div>
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-white/10 rounded-full filter blur-3xl"></div>
+    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-white/10 rounded-full filter blur-3xl"></div>
     
     <div class="container px-6 relative z-10">
-        <div class="max-w-4xl mx-auto text-center space-y-10" data-animate="fade-up">
-            <h2 class="text-6xl md:text-7xl font-black leading-tight">Ready to Get Paid Faster?</h2>
-            <p class="text-2xl text-white/80">Join 10,000+ businesses creating professional invoices in seconds. Start free today—no credit card required.</p>
+        <div class="max-w-4xl mx-auto text-center animate-on-scroll">
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-8">
+                Ready to Transform Your Invoicing?
+            </h2>
+            <p class="text-xl text-white/80 mb-12 max-w-2xl mx-auto">
+                Join 10,000+ businesses already using InvoiceFlow to create professional invoices, automate workflows, and get paid faster.
+            </p>
             
-            <div class="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-                <a href="{% url 'signup' %}" class="group relative px-12 py-7 text-lg font-bold text-white bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl shadow-2xl hover:shadow-3xl hover:scale-105 transition-all duration-300 overflow-hidden border border-white/20">
-                    <span class="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                    <span class="relative flex items-center justify-center gap-2">
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{% url 'signup' %}" class="group px-10 py-5 text-lg font-bold text-indigo-600 bg-white rounded-2xl shadow-2xl hover:shadow-white/30 hover:-translate-y-1 transition-all duration-300 btn-shine">
+                    <span class="flex items-center justify-center gap-2">
                         <span>Start Free Today</span>
                         <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
                     </span>
                 </a>
-                <a href="#demo" class="px-12 py-7 text-lg font-bold text-white border-2 border-white/40 rounded-xl hover:border-white hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-2">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
-                    <span>Watch Demo</span>
+                <a href="{% url 'pricing' %}" class="px-10 py-5 text-lg font-semibold text-white border-2 border-white/30 rounded-2xl hover:border-white/60 hover:bg-white/10 transition-all duration-300">
+                    View Pricing
                 </a>
             </div>
             
-            <div class="pt-8 border-t border-white/20 flex flex-wrap gap-6 justify-center text-white/70 font-medium">
-                <div class="flex items-center gap-2"><svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span>No credit card required</span></div>
-                <div class="flex items-center gap-2"><svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span>Free forever</span></div>
-                <div class="flex items-center gap-2"><svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span>Setup in 60 seconds</span></div>
-            </div>
+            <p class="mt-8 text-white/60 text-sm">
+                No credit card required. Free forever plan available.
+            </p>
         </div>
     </div>
 </section>
 
-<!-- ENHANCED ANIMATIONS & EFFECTS -->
-<style>
-@keyframes blob {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(30px, -50px) scale(1.1); }
-    66% { transform: translate(-20px, 20px) scale(0.9); }
-}
+{% endblock %}
 
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-}
-
-@keyframes reveal {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slide-down {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse-slow {
-    0%, 100% { opacity: 0.4; transform: scale(1); }
-    50% { opacity: 0.6; transform: scale(1.05); }
-}
-
-@keyframes fade-up {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fade-left {
-    from { opacity: 0; transform: translateX(30px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes fade-right {
-    from { opacity: 0; transform: translateX(-30px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-.animate-blob { animation: blob 7s ease-in-out infinite; }
-.animate-float { animation: float 3s ease-in-out infinite; }
-.animate-reveal { animation: reveal 0.8s ease-out forwards; }
-.animate-slide-down { animation: slide-down 0.6s ease-out forwards; }
-.animate-pulse-slow { animation: pulse-slow 4s ease-in-out infinite; }
-
-[data-animate] { opacity: 0; }
-[data-animate="fade-up"] { animation: fade-up 0.8s ease-out forwards; }
-[data-animate="fade-left"] { animation: fade-left 0.8s ease-out forwards; }
-[data-animate="fade-right"] { animation: fade-right 0.8s ease-out forwards; }
-
-.feature-card { perspective: 1000px; }
-.testimonial-card { perspective: 1000px; }
-
-.parallax-bg { will-change: transform; }
-.parallax-element { will-change: transform; }
-
-.invoice-card {
-    transform-style: preserve-3d;
-    transition: transform 0.5s ease;
-}
-
-.invoice-card:hover {
-    transform: rotateY(-2deg) rotateX(2deg);
-}
-</style>
-
-<!-- ENHANCED JAVASCRIPT FOR INTERACTIONS -->
+{% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
     };
-    
-    const observer = new IntersectionObserver(function(entries) {
+
+    const animationObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                const element = entry.target;
-                const animationType = element.getAttribute('data-animate') || 'fade-up';
-                const delay = element.style.animationDelay || '0s';
-                element.style.animationDelay = delay;
-                element.style.animation = animationType + ' 0.8s ease-out forwards';
-                observer.unobserve(element);
+                entry.target.classList.add('is-visible');
+                animationObserver.unobserve(entry.target);
             }
         });
     }, observerOptions);
-    
-    document.querySelectorAll('[data-animate]').forEach(el => {
-        el.style.opacity = '0';
-        observer.observe(el);
+
+    document.querySelectorAll('.animate-on-scroll, .animate-on-scroll-left, .animate-on-scroll-right, .animate-on-scroll-scale').forEach(el => {
+        animationObserver.observe(el);
+    });
+
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counter = entry.target;
+                const target = parseInt(counter.getAttribute('data-target')) || 0;
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current).toLocaleString();
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target.toLocaleString();
+                    }
+                };
+
+                updateCounter();
+                counterObserver.unobserve(counter);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.counter-value').forEach(counter => {
+        counterObserver.observe(counter);
     });
 
     let ticking = false;
-    window.addEventListener('scroll', function() {
+    const parallaxElements = document.querySelectorAll('.parallax-bg');
+    
+    window.addEventListener('scroll', () => {
         if (!ticking) {
-            window.requestAnimationFrame(function() {
+            requestAnimationFrame(() => {
                 const scrolled = window.pageYOffset;
-                
-                document.querySelectorAll('.parallax-bg').forEach(function(element) {
-                    const speed = parseFloat(element.getAttribute('data-speed')) || 0.5;
-                    element.style.transform = 'scale(1.1) translateY(' + (scrolled * speed) + 'px)';
+                parallaxElements.forEach(el => {
+                    const speed = parseFloat(el.getAttribute('data-speed')) || 0.3;
+                    el.style.transform = `translateY(${scrolled * speed}px) scale(1.1)`;
                 });
-                
-                document.querySelectorAll('.parallax-element').forEach(function(element) {
-                    const speed = parseFloat(element.getAttribute('data-speed')) || 0.3;
-                    const rect = element.getBoundingClientRect();
-                    if (rect.top < window.innerHeight && rect.bottom > 0) {
-                        element.style.transform = 'translateY(' + (scrolled * speed * 0.5) + 'px)';
-                    }
-                });
-                
                 ticking = false;
             });
             ticking = true;
         }
-    });
-
-    document.querySelectorAll('.feature-card').forEach(function(card) {
-        card.addEventListener('mousemove', function(e) {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = (y - centerY) / 20;
-            const rotateY = (centerX - x) / 20;
-            
-            card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-8px)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
-        });
-    });
+    }, { passive: true });
 
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
-            if (href !== '#' && href !== '') {
+            if (href !== '#' && href.length > 1) {
                 const target = document.querySelector(href);
                 if (target) {
                     e.preventDefault();
@@ -1097,5 +700,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-
 {% endblock %}
