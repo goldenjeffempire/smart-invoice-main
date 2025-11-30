@@ -7,6 +7,8 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
 
 from django.db import transaction
+from django.db.models import Count, Sum, F, DecimalField, Value, Q
+from django.db.models.functions import Coalesce
 from decimal import Decimal
 from .models import Invoice, LineItem
 from weasyprint import HTML
@@ -99,82 +101,115 @@ class PDFService:
 
 
 class AnalyticsService:
-    """Handles analytics calculations with optimized SQL aggregations."""
+    """Handles analytics calculations with optimized database-level SQL aggregations.
+    
+    Performance Optimizations:
+    - Uses Django's annotate() for database-level aggregations
+    - Calculates invoice totals using SUM(quantity * unit_price) at DB level
+    - Reduces N+1 queries by aggregating in single queries
+    - Target: Sub-250ms dashboard load time
+    """
+
+    @staticmethod
+    def _get_invoice_total_annotation():
+        """Returns annotation for calculating invoice total at database level."""
+        return Coalesce(
+            Sum(F('line_items__quantity') * F('line_items__unit_price')),
+            Value(Decimal('0')),
+            output_field=DecimalField(max_digits=15, decimal_places=2)
+        )
 
     @staticmethod
     def get_user_dashboard_stats(user: Any) -> Dict[str, Any]:
-        """Calculate dashboard statistics using optimized database queries.
+        """Calculate dashboard statistics using optimized database-level aggregations.
 
-        Uses COUNT aggregations for counts and DISTINCT for unique clients.
-        Only fetches paid invoices with line_items for revenue calculation.
+        Performance: Single query for counts, single query for revenue aggregation.
+        Target response time: <100ms
         """
-        invoices = Invoice.objects.filter(user=user)  # type: ignore[attr-defined]
+        invoices = Invoice.objects.filter(user=user)
 
-        total_invoices = invoices.count()
-        paid_count = invoices.filter(status="paid").count()
-        unpaid_count = invoices.filter(status="unpaid").count()
-
-        unique_clients = invoices.values("client_email").distinct().count()
-
-        paid_invoices_with_items = list(
-            invoices.filter(status="paid").prefetch_related("line_items")
+        stats = invoices.aggregate(
+            total_invoices=Count('id'),
+            paid_count=Count('id', filter=Q(status='paid')),
+            unpaid_count=Count('id', filter=Q(status='unpaid')),
+            unique_clients=Count('client_email', distinct=True),
         )
 
-        total_revenue = (
-            sum(inv.total for inv in paid_invoices_with_items)
-            if paid_invoices_with_items
-            else Decimal("0")
-        )
+        total_revenue = LineItem.objects.filter(
+            invoice__user=user,
+            invoice__status='paid'
+        ).aggregate(
+            total=Coalesce(
+                Sum(F('quantity') * F('unit_price')),
+                Value(Decimal('0')),
+                output_field=DecimalField(max_digits=15, decimal_places=2)
+            )
+        )['total']
 
         return {
-            "total_invoices": total_invoices,
-            "paid_count": paid_count,
-            "unpaid_count": unpaid_count,
-            "total_revenue": total_revenue,
-            "unique_clients": unique_clients,
+            "total_invoices": stats['total_invoices'] or 0,
+            "paid_count": stats['paid_count'] or 0,
+            "unpaid_count": stats['unpaid_count'] or 0,
+            "total_revenue": total_revenue or Decimal('0'),
+            "unique_clients": stats['unique_clients'] or 0,
         }
 
     @staticmethod
     def get_user_analytics_stats(user: Any) -> Dict[str, Any]:
-        """Calculate comprehensive analytics using optimized SQL.
+        """Calculate comprehensive analytics using database-level aggregations.
 
-        Optimized version: Fetches all invoices once with prefetch_related,
-        then performs calculations in Python to avoid multiple database queries.
+        Performance: Uses aggregate() for all metrics, single query for invoice list.
+        Target response time: <200ms
         """
         from datetime import datetime
 
-        all_invoices_list = list(
-            Invoice.objects.filter(user=user)  # type: ignore[attr-defined]
-            .prefetch_related("line_items")
-            .order_by("-created_at")
+        invoices = Invoice.objects.filter(user=user)
+
+        stats = invoices.aggregate(
+            total_invoices=Count('id'),
+            paid_count=Count('id', filter=Q(status='paid')),
+            unpaid_count=Count('id', filter=Q(status='unpaid')),
         )
 
-        total_invoices = len(all_invoices_list)
-        paid_invoices = [inv for inv in all_invoices_list if inv.status == "paid"]
-        unpaid_invoices = [inv for inv in all_invoices_list if inv.status == "unpaid"]
+        total_invoices = stats['total_invoices'] or 0
+        paid_count = stats['paid_count'] or 0
+        unpaid_count = stats['unpaid_count'] or 0
 
-        paid_count = len(paid_invoices)
-        unpaid_count = len(unpaid_invoices)
-
-        total_revenue = sum(inv.total for inv in paid_invoices) if paid_invoices else Decimal("0")
-        outstanding_amount = (
-            sum(inv.total for inv in unpaid_invoices) if unpaid_invoices else Decimal("0")
+        revenue_stats = LineItem.objects.filter(
+            invoice__user=user
+        ).aggregate(
+            total_revenue=Coalesce(
+                Sum(F('quantity') * F('unit_price'), filter=Q(invoice__status='paid')),
+                Value(Decimal('0')),
+                output_field=DecimalField(max_digits=15, decimal_places=2)
+            ),
+            outstanding_amount=Coalesce(
+                Sum(F('quantity') * F('unit_price'), filter=Q(invoice__status='unpaid')),
+                Value(Decimal('0')),
+                output_field=DecimalField(max_digits=15, decimal_places=2)
+            ),
+            total_all=Coalesce(
+                Sum(F('quantity') * F('unit_price')),
+                Value(Decimal('0')),
+                output_field=DecimalField(max_digits=15, decimal_places=2)
+            ),
         )
-        average_invoice = (
-            (sum(inv.total for inv in all_invoices_list) / total_invoices)
-            if total_invoices > 0
-            else Decimal("0")
-        )
 
+        total_revenue = revenue_stats['total_revenue'] or Decimal('0')
+        outstanding_amount = revenue_stats['outstanding_amount'] or Decimal('0')
+        total_all = revenue_stats['total_all'] or Decimal('0')
+
+        average_invoice = (total_all / total_invoices) if total_invoices > 0 else Decimal('0')
         payment_rate = (paid_count / total_invoices * 100) if total_invoices > 0 else 0
 
         now = datetime.now()
-        current_month_invoices = len(
-            [
-                inv
-                for inv in all_invoices_list
-                if inv.invoice_date.year == now.year and inv.invoice_date.month == now.month
-            ]
+        current_month_invoices = invoices.filter(
+            invoice_date__year=now.year,
+            invoice_date__month=now.month
+        ).count()
+
+        all_invoices_list = list(
+            invoices.prefetch_related('line_items').order_by('-created_at')
         )
 
         return {
@@ -191,58 +226,71 @@ class AnalyticsService:
 
     @staticmethod
     def get_top_clients(user: Any, limit: int = 10) -> List[Dict[str, Any]]:
-        """Calculate top clients with efficient aggregation.
+        """Calculate top clients with database-level aggregations.
 
-        Groups invoices by client and calculates metrics in Python
-        (since total is a property, not aggregatable in SQL).
+        Performance: Uses annotate() and aggregate() at database level.
+        Groups by client_name with revenue and count calculations in SQL.
         """
-        invoices = (
-            Invoice.objects.filter(user=user)  # type: ignore[attr-defined]
-            .prefetch_related("line_items")
-            .order_by("client_name")
-        )
+        from django.db.models import Avg
+
+        clients = Invoice.objects.filter(user=user).values('client_name').annotate(
+            invoice_count=Count('id'),
+            paid_count=Count('id', filter=Q(status='paid')),
+        ).order_by('client_name')
 
         client_data: Dict[str, Dict[str, Any]] = {}
+        for c in clients:
+            client_data[c['client_name']] = {
+                'client_name': c['client_name'],
+                'invoice_count': c['invoice_count'],
+                'paid_count': c['paid_count'],
+                'total_revenue': Decimal('0'),
+                'total_all': Decimal('0'),
+            }
 
-        for invoice in invoices:
-            if invoice.client_name not in client_data:
-                client_data[invoice.client_name] = {
-                    "client_name": invoice.client_name,
-                    "invoice_count": 0,
-                    "paid_count": 0,
-                    "total_revenue": Decimal("0"),
-                    "invoices": [],
-                }
+        revenue_by_client = LineItem.objects.filter(
+            invoice__user=user
+        ).values('invoice__client_name').annotate(
+            paid_revenue=Coalesce(
+                Sum(F('quantity') * F('unit_price'), filter=Q(invoice__status='paid')),
+                Value(Decimal('0')),
+                output_field=DecimalField(max_digits=15, decimal_places=2)
+            ),
+            total_revenue=Coalesce(
+                Sum(F('quantity') * F('unit_price')),
+                Value(Decimal('0')),
+                output_field=DecimalField(max_digits=15, decimal_places=2)
+            ),
+        )
 
-            client = client_data[invoice.client_name]
-            client["invoice_count"] += 1
-            client["invoices"].append(invoice)
-            if invoice.status == "paid":
-                client["paid_count"] += 1
-                client["total_revenue"] += invoice.total
+        for r in revenue_by_client:
+            client_name = r['invoice__client_name']
+            if client_name in client_data:
+                client_data[client_name]['total_revenue'] = r['paid_revenue']
+                client_data[client_name]['total_all'] = r['total_revenue']
 
         top_clients = sorted(
             [
                 {
-                    "client_name": data["client_name"],
-                    "invoice_count": data["invoice_count"],
-                    "total_revenue": data["total_revenue"],
-                    "paid_count": data["paid_count"],
-                    "avg_invoice": (
-                        sum(inv.total for inv in data["invoices"]) / len(data["invoices"])
-                        if data["invoices"]
-                        else Decimal("0")
+                    'client_name': data['client_name'],
+                    'invoice_count': data['invoice_count'],
+                    'total_revenue': data['total_revenue'],
+                    'paid_count': data['paid_count'],
+                    'avg_invoice': (
+                        data['total_all'] / data['invoice_count']
+                        if data['invoice_count'] > 0
+                        else Decimal('0')
                     ),
-                    "payment_rate": (
-                        (data["paid_count"] / data["invoice_count"] * 100)
-                        if data["invoice_count"] > 0
+                    'payment_rate': (
+                        (data['paid_count'] / data['invoice_count'] * 100)
+                        if data['invoice_count'] > 0
                         else 0
                     ),
                 }
                 for data in client_data.values()
             ],
-            key=lambda x: x["total_revenue"],
-            reverse=True,
+            key=lambda x: x['total_revenue'],
+            reverse=True
         )[:limit]
 
         return top_clients

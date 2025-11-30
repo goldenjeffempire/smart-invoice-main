@@ -20,7 +20,7 @@
   /* Accent Gradient */
   --gradient-primary: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #a855f7 100%);
   --gradient-primary-subtle: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
-  --gradient-hero: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+  --gradient-hero: linear-gradient(180deg, #ffffff 0%, #eef2ff 50%, #ffffff 100%);
   --gradient-mesh: radial-gradient(at 40% 20%, rgba(79, 70, 229, 0.3) 0px, transparent 50%),
                    radial-gradient(at 80% 0%, rgba(124, 58, 237, 0.2) 0px, transparent 50%),
                    radial-gradient(at 0% 50%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),

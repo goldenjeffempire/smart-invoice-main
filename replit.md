@@ -59,7 +59,31 @@ Production-grade professional invoicing platform with:
 - Invoice/due date logic
 - Line item validation
 
-## Recent Changes (November 29, 2025)
+## Recent Changes (November 30, 2025)
+
+### Light Theme UI/UX Transformation & Performance Optimization
+
+1. **Hero Section Light Theme Conversion**:
+   - Transformed from dark gradient to professional light theme
+   - White/indigo gradient background (from-white via-indigo-50/30 to-white)
+   - Dark text for optimal readability (gray-900, gray-600)
+   - Added trust badge with pulsing indicator
+   - Professional gradient accent on "60 Seconds" headline
+   - Refined CTA buttons with solid indigo styling
+   - Subtle dot pattern background for visual interest
+
+2. **Analytics Service Database Optimization**:
+   - Replaced Python-side calculations with database-level aggregations
+   - Uses Django's `aggregate()` and `Count()` for stats
+   - Revenue calculated via `Sum(F('quantity') * F('unit_price'))` at DB level
+   - Target: Sub-100ms dashboard load, sub-200ms analytics page
+   - Eliminated N+1 query patterns with `prefetch_related()`
+
+3. **Design Tokens Update**:
+   - Updated `--gradient-hero` to light theme variant
+   - Maintains dark footer for professional contrast
+
+## Previous Changes (November 29, 2025)
 
 ### 2025 Enterprise UI/UX Modernization
 
