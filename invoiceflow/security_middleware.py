@@ -39,7 +39,7 @@ class SecurityHeadersMiddleware(MiddlewareMixin):
         )
         response["Cross-Origin-Opener-Policy"] = "same-origin"
 
-        if request.is_secure() and not request.get_host().startswith("localhost"):
+        if request.is_secure():
             response["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
 
         return response

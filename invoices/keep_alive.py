@@ -14,21 +14,23 @@ import logging
 logger = logging.getLogger(__name__)
 
 PING_INTERVAL = 14 * 60  # 14 minutes in seconds
+PRODUCTION_DOMAIN = "invoiceflow.com.ng"
+PRODUCTION_URL = f"https://{PRODUCTION_DOMAIN}"
 
 
 def get_app_url():
-    """Get the application URL from environment or construct from Render."""
-    # Check for explicit URL first
+    """Get the application URL from environment or construct from production domain."""
     app_url = os.environ.get("RENDER_EXTERNAL_URL")
     if app_url:
         return app_url
 
-    # Check for Render service name
     render_service = os.environ.get("RENDER_SERVICE_NAME")
     if render_service:
-        return f"https://{render_service}.onrender.com"
+        return PRODUCTION_URL
 
-    # Fallback for local development
+    if os.environ.get("RENDER") or os.environ.get("PRODUCTION") == "true":
+        return PRODUCTION_URL
+
     return None
 
 
