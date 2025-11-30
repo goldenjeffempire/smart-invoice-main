@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /api/
+Disallow: /accounts/
+Disallow: /dashboard/
+Disallow: /invoices/
+Disallow: /settings/
+Disallow: /static/admin/
+
+Sitemap: https://invoiceflow.com.ng/sitemap.xml
+
+Host: invoiceflow.com.ng

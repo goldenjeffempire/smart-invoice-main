@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.db.models.functions import TruncMonth
 from datetime import datetime
 import calendar
@@ -11,7 +11,7 @@ import json
 import urllib.parse
 from decimal import Decimal
 
-from .models import Invoice, UserProfile, InvoiceTemplate, RecurringInvoice
+from .models import Invoice, UserProfile, InvoiceTemplate, RecurringInvoice, LineItem
 from .forms import (
     SignUpForm,
     InvoiceForm,
@@ -680,21 +680,33 @@ def settings_notifications(request):
 
 @login_required
 def settings_billing(request):
-    """Billing & Account settings page."""
+    """Billing & Account settings page with optimized database queries."""
+    from django.db.models import Sum, F, DecimalField, Value
+    from django.db.models.functions import Coalesce
 
-    # Get invoice statistics for user
-    invoices = Invoice.objects.filter(user=request.user)  # type: ignore
-    invoice_count = invoices.filter(invoice_date__month=datetime.now().month).count()
-    paid_invoices = invoices.filter(status="paid").count()
+    now = datetime.now()
+    invoices = Invoice.objects.filter(user=request.user)
 
-    # Calculate pending amount
-    unpaid_invoices = list(invoices.filter(status="unpaid"))
-    pending_amount = sum(inv.total for inv in unpaid_invoices) if unpaid_invoices else Decimal("0")
+    stats = invoices.aggregate(
+        invoice_count=Count('id', filter=Q(invoice_date__month=now.month, invoice_date__year=now.year)),
+        paid_invoices=Count('id', filter=Q(status='paid')),
+    )
+
+    pending_amount = LineItem.objects.filter(
+        invoice__user=request.user,
+        invoice__status='unpaid'
+    ).aggregate(
+        total=Coalesce(
+            Sum(F('quantity') * F('unit_price')),
+            Value(Decimal('0')),
+            output_field=DecimalField(max_digits=15, decimal_places=2)
+        )
+    )['total'] or Decimal('0')
 
     context = {
         "active_tab": "billing",
-        "invoice_count": invoice_count,
-        "paid_invoices": paid_invoices,
+        "invoice_count": stats['invoice_count'] or 0,
+        "paid_invoices": stats['paid_invoices'] or 0,
         "pending_amount": f"${pending_amount:,.2f}" if pending_amount > 0 else "$0.00",
     }
 
