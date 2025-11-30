@@ -1,106 +1,148 @@
 """
-Gunicorn configuration file for InvoiceFlow production deployment.
-This configuration is optimized for Render and Replit environments.
+InvoiceFlow Production Gunicorn Configuration
+Optimized for https://invoiceflow.com.ng deployment on Render/Replit
+Rebuilt from scratch for maximum performance and reliability
 """
 
 import multiprocessing
 import os
 
-# Bind
+# =============================================================================
+# SERVER SOCKET
+# =============================================================================
 bind = os.getenv("GUNICORN_BIND", "0.0.0.0:5000")
+backlog = 2048
 
-# Worker processes
-workers = int(os.getenv("WEB_CONCURRENCY", multiprocessing.cpu_count() * 2 + 1))
-worker_class = "sync"
+# =============================================================================
+# WORKER PROCESSES
+# =============================================================================
+workers = int(os.getenv("WEB_CONCURRENCY", min(multiprocessing.cpu_count() * 2 + 1, 17)))
+worker_class = os.getenv("GUNICORN_WORKER_CLASS", "gthread")
+threads = int(os.getenv("GUNICORN_THREADS", 4))
 worker_connections = 1000
-threads = 2
 
-# Timeouts
-timeout = 30
-graceful_timeout = 30
-keepalive = 5
-
-# Request handling
+# =============================================================================
+# WORKER LIFECYCLE
+# =============================================================================
 max_requests = 1000
-max_requests_jitter = 50
+max_requests_jitter = 100
+timeout = 60
+graceful_timeout = 30
+keepalive = 15
 
-# Server mechanics
+# =============================================================================
+# PROCESS NAMING
+# =============================================================================
+proc_name = "invoiceflow"
+
+# =============================================================================
+# SERVER MECHANICS
+# =============================================================================
 daemon = False
 pidfile = None
 user = None
 group = None
 tmp_upload_dir = None
+umask = 0
+preload_app = True
+reload = os.getenv("GUNICORN_RELOAD", "false").lower() == "true"
 
-# Security
+# =============================================================================
+# SECURITY LIMITS
+# =============================================================================
 limit_request_line = 4094
 limit_request_fields = 100
 limit_request_field_size = 8190
 
-# Logging
+# =============================================================================
+# LOGGING
+# =============================================================================
 accesslog = "-"
 errorlog = "-"
 loglevel = os.getenv("GUNICORN_LOG_LEVEL", "info")
-access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" %(D)s'
+capture_output = True
+enable_stdio_inheritance = True
 
-# Process naming
-proc_name = "invoiceflow"
+access_log_format = (
+    '{"remote_ip": "%(h)s", "request_id": "%(r)s", '
+    '"response_code": %(s)s, "request_method": "%(m)s", '
+    '"request_path": "%(U)s", "request_querystring": "%(q)s", '
+    '"request_time_ms": %(D)s, "response_length": %(B)s, '
+    '"user_agent": "%(a)s"}'
+)
 
-# Forwarded headers
+# =============================================================================
+# PROXY HEADERS (Render/Cloudflare/Nginx)
+# =============================================================================
 forwarded_allow_ips = "*"
-secure_scheme_headers = {"X-FORWARDED-PROTO": "https"}
+proxy_allow_ips = "*"
+proxy_protocol = False
+secure_scheme_headers = {
+    "X-FORWARDED-PROTO": "https",
+    "X-FORWARDED-SSL": "on",
+}
 
-# Preload app for faster worker startup
-preload_app = True
+# =============================================================================
+# SERVER HOOKS
+# =============================================================================
 
-# Server hooks
 def on_starting(server):
     """Called just before the master process is initialized."""
-    pass
+    import logging
+    logger = logging.getLogger("gunicorn.error")
+    logger.info("InvoiceFlow Gunicorn server starting...")
+    logger.info(f"Production domain: invoiceflow.com.ng")
+    logger.info(f"Workers: {workers}, Threads: {threads}")
 
-def on_reload(server):
-    """Called to recycle workers during a reload via SIGHUP."""
-    pass
 
 def when_ready(server):
     """Called just after the server is started."""
-    pass
+    import logging
+    logger = logging.getLogger("gunicorn.error")
+    logger.info(f"InvoiceFlow server ready at {bind}")
+    logger.info("All workers initialized and accepting connections")
+
 
 def pre_fork(server, worker):
     """Called just before a worker is forked."""
     pass
 
+
 def post_fork(server, worker):
     """Called just after a worker has been forked."""
-    pass
+    import logging
+    logger = logging.getLogger("gunicorn.error")
+    logger.debug(f"Worker {worker.pid} spawned")
+
 
 def post_worker_init(worker):
     """Called just after a worker has initialized the application."""
     pass
 
+
 def worker_int(worker):
     """Called just after a worker exited on SIGINT or SIGQUIT."""
-    pass
+    import logging
+    logger = logging.getLogger("gunicorn.error")
+    logger.info(f"Worker {worker.pid} received INT or QUIT signal")
+
 
 def worker_abort(worker):
     """Called when a worker received the SIGABRT signal."""
-    pass
+    import logging
+    logger = logging.getLogger("gunicorn.error")
+    logger.warning(f"Worker {worker.pid} aborted")
 
-def pre_exec(server):
-    """Called just before a new master process is forked."""
-    pass
 
 def child_exit(server, worker):
     """Called in the master process after a worker exits."""
-    pass
+    import logging
+    logger = logging.getLogger("gunicorn.error")
+    logger.info(f"Worker {worker.pid} exited")
 
-def worker_exit(server, worker):
-    """Called in the worker process just after a worker exits."""
-    pass
-
-def nworkers_changed(server, new_value, old_value):
-    """Called whenever the number of workers is changed."""
-    pass
 
 def on_exit(server):
     """Called just before exiting Gunicorn."""
-    pass
+    import logging
+    logger = logging.getLogger("gunicorn.error")
+    logger.info("InvoiceFlow Gunicorn server shutting down...")

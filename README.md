@@ -103,7 +103,7 @@ npm run build:prod
 python manage.py runserver 0.0.0.0:5000
 ```
 
-Visit `http://localhost:5000`
+Visit `http://localhost:5000` (development) or `https://invoiceflow.com.ng` (production)
 
 **📖 Full setup guide:** See [BUILD_GUIDE.md](BUILD_GUIDE.md)
 
@@ -250,4 +250,6 @@ MIT License - Free for personal and commercial use
 
 **Production-Ready. Fully Tested. Secure. 🎉**
 
-For support: contact@invoiceflow.com
+**Production URL:** https://invoiceflow.com.ng
+
+For support: support@invoiceflow.com.ng

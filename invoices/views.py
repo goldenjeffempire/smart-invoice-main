@@ -405,7 +405,7 @@ Submitted: {submission.submitted_at}
                     subject=f"[InvoiceFlow Contact] {submission.get_subject_display()}",
                     message=full_message,
                     from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=["support@invoiceflow.com"],
+                    recipient_list=["support@invoiceflow.com.ng"],
                     fail_silently=True,
                 )
                 messages.success(

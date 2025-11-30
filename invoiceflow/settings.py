@@ -1,3 +1,8 @@
+"""
+InvoiceFlow Django Settings
+Production-ready configuration for https://invoiceflow.com.ng
+"""
+
 import os
 import environ
 from pathlib import Path
@@ -8,10 +13,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
-# SECURITY: Safe defaults for production
-# In Replit/development: Set DEBUG=True in Secrets
-# In production deployment: Set DEBUG=False, SECRET_KEY, ALLOWED_HOSTS
+# =============================================================================
+# PRODUCTION DOMAIN CONFIGURATION
+# =============================================================================
+PRODUCTION_DOMAIN = "invoiceflow.com.ng"
+PRODUCTION_URL = f"https://{PRODUCTION_DOMAIN}"
+
+# =============================================================================
+# ENVIRONMENT DETECTION
+# =============================================================================
 IS_REPLIT = os.environ.get("REPL_ID") is not None or os.environ.get("REPLIT") is not None
+IS_RENDER = os.environ.get("RENDER") is not None
 
 # Default to True in Replit for development, False otherwise
 if IS_REPLIT:
@@ -19,67 +31,88 @@ if IS_REPLIT:
 else:
     DEBUG = env.bool("DEBUG", default=False)  # type: ignore
 
-# Get SECRET_KEY or generate a random one for Replit development
+# Production detection (after DEBUG is defined)
+IS_PRODUCTION = os.environ.get("PRODUCTION") == "true" or (not IS_REPLIT and not DEBUG)
+
+# =============================================================================
+# SECURITY CONFIGURATION
+# =============================================================================
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-dev-key-CHANGE-IN-PRODUCTION")  # type: ignore
 
 # Encryption salt for field-level encryption (bank account numbers, etc.)
-# CRITICAL: Must be set in production for data security
 ENCRYPTION_SALT = env("ENCRYPTION_SALT", default="dev-salt-only-for-local-testing")  # type: ignore
 
 # PRODUCTION SAFETY GUARDS
-# Only enforce strict validation in non-Replit production environments
 if not DEBUG and not IS_REPLIT:
-    # Enforce secure SECRET_KEY in production
     if SECRET_KEY.startswith("django-insecure-"):
         raise ValueError(
             "PRODUCTION ERROR: You must set a secure SECRET_KEY environment variable! "
             'Generate one with: python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"'
         )
 
-    # Enforce secure ENCRYPTION_SALT in production
     if ENCRYPTION_SALT == "dev-salt-only-for-local-testing":
         raise ValueError(
             "PRODUCTION ERROR: You must set a secure ENCRYPTION_SALT environment variable! "
             'Generate one with: python -c "import secrets; print(secrets.token_hex(32))"'
         )
 
-    # Enforce ALLOWED_HOSTS in production
-    allowed_hosts = env.list("ALLOWED_HOSTS", default=[])  # type: ignore
-    if not allowed_hosts:
-        raise ValueError(
-            "PRODUCTION ERROR: You must set specific ALLOWED_HOSTS (comma-separated domains) in production! "
-            "Example: ALLOWED_HOSTS=your-domain.com,www.your-domain.com"
-        )
+# =============================================================================
+# ALLOWED HOSTS & CSRF CONFIGURATION
+# =============================================================================
+if not DEBUG and not IS_REPLIT:
+    # Production: strict allowed hosts
+    allowed_hosts = env.list("ALLOWED_HOSTS", default=[PRODUCTION_DOMAIN, f".{PRODUCTION_DOMAIN}", "www." + PRODUCTION_DOMAIN])  # type: ignore
     ALLOWED_HOSTS = allowed_hosts
+else:
+    # Development or Replit: allow configured hosts or wildcard
+    ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])  # type: ignore
 
+# CSRF Trusted Origins - Production domain first
+CSRF_TRUSTED_ORIGINS = [
+    f"https://{PRODUCTION_DOMAIN}",
+    f"https://www.{PRODUCTION_DOMAIN}",
+]
+
+# Add development origins if in dev mode
+if DEBUG or IS_REPLIT:
+    CSRF_TRUSTED_ORIGINS.extend([
+        "https://*.replit.dev",
+        "https://*.repl.co",
+    ])
+
+if IS_RENDER:
+    CSRF_TRUSTED_ORIGINS.extend([
+        "https://*.onrender.com",
+        "https://*.render.com",
+    ])
+
+# Override from environment if provided
+_csrf_env = os.environ.get("CSRF_TRUSTED_ORIGINS", "")
+if _csrf_env:
+    CSRF_TRUSTED_ORIGINS = [x.strip() for x in _csrf_env.split(",") if x.strip()]
+
+# =============================================================================
+# SSL & SECURITY HEADERS
+# =============================================================================
+if not DEBUG and not IS_REPLIT:
     # Production security hardening
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    X_FRAME_OPTIONS = "DENY"
 else:
-    # Development or Replit: allow configured hosts or wildcard
-    ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])  # type: ignore
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
 
-# Django 4.0+ requires CSRF_TRUSTED_ORIGINS to be a list of origins with schemes
-_default_csrf = [
-    "https://*.replit.dev",
-    "https://*.repl.co",
-    "https://*.onrender.com",
-    "https://*.render.com",
-]
-# Parse from env if set, or use defaults
-_csrf_env = os.environ.get("CSRF_TRUSTED_ORIGINS", "")
-if _csrf_env:
-    CSRF_TRUSTED_ORIGINS = [x.strip() for x in _csrf_env.split(",") if x.strip()]
-else:
-    CSRF_TRUSTED_ORIGINS = _default_csrf
-
+# =============================================================================
+# INSTALLED APPS
+# =============================================================================
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -92,6 +125,9 @@ INSTALLED_APPS = [
     "invoices",
 ]
 
+# =============================================================================
+# MIDDLEWARE
+# =============================================================================
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -112,6 +148,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "invoiceflow.urls"
 
+# =============================================================================
+# TEMPLATES
+# =============================================================================
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -136,14 +175,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "invoiceflow.wsgi.application"
 
+# =============================================================================
+# DATABASE
+# =============================================================================
 if env("DATABASE_URL", default=None):  # type: ignore
     DATABASES = {"default": env.db()}
-    # Add connection pooling for production performance
-    DATABASES["default"]["CONN_MAX_AGE"] = 600  # Keep connections alive for 10 minutes
-    DATABASES["default"]["CONN_HEALTH_CHECKS"] = True  # Django 4.1+ health checks
+    DATABASES["default"]["CONN_MAX_AGE"] = 600
+    DATABASES["default"]["CONN_HEALTH_CHECKS"] = True
     DATABASES["default"]["OPTIONS"] = {
         "connect_timeout": 10,
-        "options": "-c statement_timeout=30000",  # 30 second query timeout
+        "options": "-c statement_timeout=30000",
     }
 else:
     DATABASES = {
@@ -153,61 +194,62 @@ else:
         }
     }
 
+# =============================================================================
+# PASSWORD VALIDATION
+# =============================================================================
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
+# =============================================================================
+# INTERNATIONALIZATION
+# =============================================================================
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_TZ = True
 
+# =============================================================================
+# STATIC FILES
+# =============================================================================
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
-
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-# Use minified assets in production
 USE_MINIFIED_ASSETS = not DEBUG
 
+# =============================================================================
+# MEDIA FILES
+# =============================================================================
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# =============================================================================
+# AUTHENTICATION
+# =============================================================================
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "dashboard"
 LOGOUT_REDIRECT_URL = "home"
 
+# =============================================================================
+# EMAIL CONFIGURATION
+# =============================================================================
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = env("EMAIL_HOST", default="smtp.gmail.com")  # type: ignore
 EMAIL_PORT = env.int("EMAIL_PORT", default=587)  # type: ignore
 EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)  # type: ignore
 EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")  # type: ignore
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")  # type: ignore
-DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="noreply@invoiceflow.com")  # type: ignore
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default=f"noreply@{PRODUCTION_DOMAIN}")  # type: ignore
 
-# Additional security headers for non-Replit production (settings above handle Replit)
-# These are redundant with our custom middleware but kept for defense in depth
-if not DEBUG and not IS_REPLIT:
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    X_FRAME_OPTIONS = "DENY"
-
+# =============================================================================
+# LOGGING
+# =============================================================================
 os.makedirs(BASE_DIR / "logs", exist_ok=True)
 
 LOGGING = {
@@ -222,17 +264,20 @@ LOGGING = {
             "format": "{levelname} {asctime} {message}",
             "style": "{",
         },
+        "json": {
+            "format": '{"level": "%(levelname)s", "time": "%(asctime)s", "module": "%(module)s", "message": "%(message)s"}',
+        },
     },
     "filters": {
-        "require_debug_false": {
-            "()": "django.utils.log.RequireDebugFalse",
-        },
-        "require_debug_true": {
-            "()": "django.utils.log.RequireDebugTrue",
-        },
+        "require_debug_false": {"()": "django.utils.log.RequireDebugFalse"},
+        "require_debug_true": {"()": "django.utils.log.RequireDebugTrue"},
     },
     "handlers": {
-        "console": {"level": "INFO", "class": "logging.StreamHandler", "formatter": "verbose"},
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "json" if not DEBUG else "verbose",
+        },
         "file": {
             "level": "WARNING",
             "class": "logging.handlers.RotatingFileHandler",
@@ -263,11 +308,17 @@ LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
+        "gunicorn": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
     },
 }
 
-# Content Security Policy (CSP) settings for security - django-csp 4.0 format
-# Using 'unsafe-inline' for scripts/styles for performance and flexibility
+# =============================================================================
+# CONTENT SECURITY POLICY
+# =============================================================================
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
         "default-src": ("'self'",),
@@ -275,7 +326,7 @@ CONTENT_SECURITY_POLICY = {
         "style-src": ("'self'", "'unsafe-inline'", "https://fonts.googleapis.com"),
         "img-src": ("'self'", "data:", "https:", "https://ui-avatars.com"),
         "font-src": ("'self'", "https://fonts.gstatic.com", "data:"),
-        "connect-src": ("'self'",),
+        "connect-src": ("'self'", PRODUCTION_URL),
         "frame-ancestors": ("'none'",),
         "base-uri": ("'self'",),
         "form-action": ("'self'",),
@@ -284,12 +335,16 @@ CONTENT_SECURITY_POLICY = {
     }
 }
 
-# Rate limiting configuration
+# =============================================================================
+# RATE LIMITING
+# =============================================================================
 RATELIMIT_ENABLE = not DEBUG
 RATELIMIT_USE_CACHE = "default"
 RATELIMIT_VIEW = "django_ratelimit.decorators.ratelimit"
 
-# Cache configuration - enhanced for performance
+# =============================================================================
+# CACHE CONFIGURATION
+# =============================================================================
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
@@ -298,21 +353,23 @@ CACHES = {
     }
 }
 
-# Template caching for performance (disabled when APP_DIRS=True)
-# Note: APP_DIRS=True handles template discovery automatically
-# Conditional loaders would cause ImproperlyConfigured error
-
-# Session security
+# =============================================================================
+# SESSION SECURITY
+# =============================================================================
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_AGE = 1209600  # 2 weeks
 
-# CSRF security
+# =============================================================================
+# CSRF SECURITY
+# =============================================================================
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = "Lax"
 CSRF_USE_SESSIONS = False
 
-# Sentry Error Tracking Configuration
+# =============================================================================
+# SENTRY ERROR TRACKING
+# =============================================================================
 SENTRY_DSN = env("SENTRY_DSN", default="")  # type: ignore
 if SENTRY_DSN and not DEBUG:
     import sentry_sdk
@@ -323,5 +380,11 @@ if SENTRY_DSN and not DEBUG:
         integrations=[DjangoIntegration()],
         traces_sample_rate=0.1,
         send_default_pii=False,
-        environment="production" if not IS_REPLIT else "development",
+        environment="production" if IS_PRODUCTION else "development",
     )
+
+# =============================================================================
+# WEBHOOK & API CONFIGURATION
+# =============================================================================
+WEBHOOK_BASE_URL = env("WEBHOOK_BASE_URL", default=PRODUCTION_URL)  # type: ignore
+API_BASE_URL = env("API_BASE_URL", default=PRODUCTION_URL)  # type: ignore

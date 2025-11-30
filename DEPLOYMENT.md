@@ -212,22 +212,96 @@ python manage.py collectstatic --noinput
 - Update dependencies regularly
 - Review security headers periodically
 
-## 🌐 Domain Configuration
+## 🌐 Domain Configuration (invoiceflow.com.ng)
+
+### Production Domain
+**Primary Domain:** `invoiceflow.com.ng`
+**WWW Redirect:** `www.invoiceflow.com.ng` → `invoiceflow.com.ng`
 
 ### Custom Domain Setup (Render)
 1. Go to Render Dashboard → Settings
-2. Add custom domain
-3. Update DNS records (A or CNAME)
-4. Wait for SSL certificate provisioning
-5. Update ALLOWED_HOSTS and CSRF_TRUSTED_ORIGINS
+2. Add custom domains: `invoiceflow.com.ng` and `www.invoiceflow.com.ng`
+3. Update DNS records (see below)
+4. Wait for SSL certificate provisioning (automatic)
+5. Verify ALLOWED_HOSTS and CSRF_TRUSTED_ORIGINS are configured
 
-### DNS Configuration
+### DNS Configuration (DomainKing)
+
+**A Record (Root Domain):**
+```
+Type: A
+Name: @
+Value: [Render IP - from Render Dashboard]
+TTL: 3600
+```
+
+**CNAME Record (WWW):**
 ```
 Type: CNAME
 Name: www
-Value: yourapp.onrender.com
+Value: invoiceflow.onrender.com
 TTL: 3600
 ```
+
+**TXT Record (Domain Verification):**
+```
+Type: TXT
+Name: @
+Value: [Verification string from Render]
+TTL: 3600
+```
+
+### Email DNS Records (MX, SPF, DKIM, DMARC)
+
+**MX Records (if using email):**
+```
+Type: MX
+Name: @
+Value: [Your email provider MX server]
+Priority: 10
+TTL: 3600
+```
+
+**SPF Record:**
+```
+Type: TXT
+Name: @
+Value: v=spf1 include:sendgrid.net ~all
+TTL: 3600
+```
+
+**DKIM Record (SendGrid):**
+```
+Type: CNAME
+Name: s1._domainkey
+Value: s1.domainkey.uXXXXX.wlXXX.sendgrid.net
+TTL: 3600
+```
+
+**DMARC Record:**
+```
+Type: TXT
+Name: _dmarc
+Value: v=DMARC1; p=quarantine; rua=mailto:dmarc@invoiceflow.com.ng
+TTL: 3600
+```
+
+### Webhook URLs
+
+**Paystack Webhook:**
+```
+https://invoiceflow.com.ng/webhooks/paystack/
+```
+
+**Twilio Webhook:**
+```
+https://invoiceflow.com.ng/webhooks/twilio/
+```
+
+### SSL Configuration
+- SSL certificates are automatically provisioned by Render
+- All HTTP traffic is automatically redirected to HTTPS
+- HSTS headers are configured for 1 year
 
 ## 📞 Support
 

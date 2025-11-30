@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
-# Build script for production deployment
+# =============================================================================
+# InvoiceFlow Production Build Script
+# Domain: https://invoiceflow.com.ng
+# =============================================================================
 set -o errexit
 
 echo "=== InvoiceFlow Production Build Script ==="
+echo "Target Domain: https://invoiceflow.com.ng"
+
+# Export production domain for any scripts that need it
+export PRODUCTION_DOMAIN="invoiceflow.com.ng"
+export PRODUCTION_URL="https://invoiceflow.com.ng"
 
 # Install Python dependencies
 echo "Installing Python dependencies..."
@@ -27,8 +35,9 @@ python manage.py migrate --noinput
 echo "Collecting static files..."
 python manage.py collectstatic --noinput --clear
 
-# Create superuser if needed (optional, for first deployment)
-# echo "Creating superuser..."
-# python manage.py createsuperuser --noinput --email admin@example.com || true
+# Run Django system checks
+echo "Running Django system checks..."
+python manage.py check --deploy || echo "Warning: Some deployment checks failed (may be expected in build environment)"
 
-echo "Build complete!"
+echo "=== Build Complete ==="
+echo "InvoiceFlow is ready for production at https://invoiceflow.com.ng"

@@ -5,40 +5,44 @@ services:
     plan: free
     region: oregon
     buildCommand: ./build.sh
-    startCommand: >
-      gunicorn invoiceflow.wsgi:application
-      --bind 0.0.0.0:$PORT
-      --workers 2
-      --worker-class sync
-      --timeout 60
-      --keep-alive 5
-      --max-requests 1000
-      --max-requests-jitter 100
-      --access-logfile -
-      --error-logfile -
-      --log-level info
+    startCommand: gunicorn invoiceflow.wsgi:application --config gunicorn.conf.py
     healthCheckPath: /health/
+    domains:
+      - invoiceflow.com.ng
+      - www.invoiceflow.com.ng
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: invoiceflow.settings
       - key: PYTHON_VERSION
         value: 3.11.13
       - key: DEBUG
-        value: false
+        value: "false"
+      - key: PRODUCTION
+        value: "true"
       - key: WEB_CONCURRENCY
-        value: 4
+        value: "4"
+      - key: GUNICORN_THREADS
+        value: "4"
+      - key: GUNICORN_WORKER_CLASS
+        value: gthread
+      - key: GUNICORN_LOG_LEVEL
+        value: info
       - key: RENDER
-        value: true
+        value: "true"
       - key: RENDER_SERVICE_NAME
         value: invoiceflow
-      # Required: Set these in Render dashboard
+      - key: ALLOWED_HOSTS
+        value: "invoiceflow.com.ng,.invoiceflow.com.ng,www.invoiceflow.com.ng"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://invoiceflow.com.ng,https://www.invoiceflow.com.ng"
+      - key: WEBHOOK_BASE_URL
+        value: "https://invoiceflow.com.ng"
+      - key: API_BASE_URL
+        value: "https://invoiceflow.com.ng"
       - key: SECRET_KEY
         sync: false
       - key: ENCRYPTION_SALT
         sync: false
-      - key: ALLOWED_HOSTS
-        sync: false
-      # Optional: Email configuration
       - key: SENDGRID_API_KEY
         sync: false
       - key: SENDGRID_FROM_EMAIL
@@ -55,11 +59,13 @@ services:
         sync: false
       - key: SENDGRID_ADMIN_ALERT_TEMPLATE_ID
         sync: false
-      # CSRF configuration (production)
-      - key: CSRF_TRUSTED_ORIGINS
-        value: "https://invoiceflow.onrender.com,https://*.onrender.com"
-      # Optional: Error tracking
       - key: SENTRY_DSN
+        sync: false
+      - key: PAYSTACK_SECRET_KEY
+        sync: false
+      - key: PAYSTACK_PUBLIC_KEY
+        sync: false
+      - key: PAYSTACK_WEBHOOK_SECRET
         sync: false
 
 databases:

@@ -45,7 +45,7 @@ class SendGridEmailService:
     def __init__(self):
         # Try to get credentials from Replit integration first, fall back to environment variables
         self.api_key = None
-        self.from_email = os.environ.get("SENDGRID_FROM_EMAIL", "noreply@invoiceflow.com")
+        self.from_email = os.environ.get("SENDGRID_FROM_EMAIL", "noreply@invoiceflow.com.ng")
         self.PLATFORM_FROM_EMAIL = self.from_email  # Alias for backward compatibility
         self.platform_from_name = "InvoiceFlow"
 
@@ -224,7 +224,7 @@ class SendGridEmailService:
             "username": user.username,
             "reset_url": reset_url,
             "expires_in": "24 hours",
-            "support_email": "support@invoiceflow.com",
+            "support_email": "support@invoiceflow.com.ng",
         }
 
         return self._send_email(

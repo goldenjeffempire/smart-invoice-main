@@ -14,7 +14,7 @@ class Command(BaseCommand):
         # Create demo user
         user, created = User.objects.get_or_create(
             username="demo_user",
-            defaults={"email": "demo@invoiceflow.com", "first_name": "Demo", "last_name": "User"},
+            defaults={"email": "demo@invoiceflow.com.ng", "first_name": "Demo", "last_name": "User"},
         )
 
         if created:
@@ -34,7 +34,7 @@ class Command(BaseCommand):
                 invoice_id=f"INV-DEMO-{i+1:03d}",
                 defaults={
                     "business_name": "InvoiceFlow Solutions LLC",
-                    "business_email": "hello@invoiceflow.com",
+                    "business_email": "hello@invoiceflow.com.ng",
                     "business_phone": "+1 (555) 123-4567",
                     "business_address": "123 Business St, City, State 12345",
                     "client_name": f"Client {i+1}",
