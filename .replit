@@ -101,5 +101,5 @@ SENDGRID_FROM_EMAIL = "team@smartinvoice.com"
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["gunicorn", "invoiceflow.wsgi:application", "--config", "gunicorn.conf.py"]
+run = ["bash", "start_production.sh"]
 build = ["bash", "-c", "pip install --upgrade pip && pip install -r requirements.txt && npm install && npm run build:prod && python manage.py migrate --noinput && python manage.py collectstatic --noinput --clear"]

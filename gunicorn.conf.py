@@ -22,6 +22,11 @@ import sys
 
 bind = "0.0.0.0:5000"
 
+# HTTPS support - can be overridden with --certfile and --keyfile flags
+certfile = os.getenv("SSL_CERTFILE", None)
+keyfile = os.getenv("SSL_KEYFILE", None)
+ssl_version = os.getenv("SSL_VERSION", "TLSv1_2")
+
 # =============================================================================
 # WORKER CONFIGURATION
 # =============================================================================

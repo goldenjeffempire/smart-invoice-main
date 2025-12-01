@@ -94,6 +94,12 @@ if _csrf_env:
 # =============================================================================
 # SSL & SECURITY HEADERS
 # =============================================================================
+# Check for SSL certificate files
+HAS_SSL_CERTS = (
+    os.path.exists("/tmp/invoiceflow-certs/certificate.pem") and
+    os.path.exists("/tmp/invoiceflow-certs/private-key-rsa.pem")
+)
+
 if not DEBUG and not IS_REPLIT:
     # Production security hardening
     SECURE_SSL_REDIRECT = True
@@ -105,7 +111,16 @@ if not DEBUG and not IS_REPLIT:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     X_FRAME_OPTIONS = "DENY"
+elif HAS_SSL_CERTS:
+    # SSL certs available - enable secure settings
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 else:
+    # Development mode - no SSL enforcement
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
