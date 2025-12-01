@@ -1,0 +1,95 @@
+{% extends "base/layout.html" %}
+
+{% block title %}FAQ - InvoiceFlow{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-b from-slate-900 to-indigo-950">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">Frequently Asked Questions</h1>
+            <p class="text-xl text-gray-300">Find answers to common questions about InvoiceFlow.</p>
+        </div>
+
+        <div class="space-y-4">
+            <details class="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 group" open>
+                <summary class="flex items-center justify-between p-6 cursor-pointer">
+                    <h3 class="text-lg font-medium text-white">How do I create my first invoice?</h3>
+                    <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </summary>
+                <div class="px-6 pb-6 text-gray-300">
+                    <p>After signing up, go to your dashboard and click "Create Invoice". Fill in your business details, add your client information, and include line items for your services or products. You can preview the invoice before sending it to your client.</p>
+                </div>
+            </details>
+
+            <details class="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 group">
+                <summary class="flex items-center justify-between p-6 cursor-pointer">
+                    <h3 class="text-lg font-medium text-white">Can I customize my invoice design?</h3>
+                    <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </summary>
+                <div class="px-6 pb-6 text-gray-300">
+                    <p>Yes! You can add your company logo, customize colors, and save templates for future use. Go to Settings > Business to add your branding, or use our template system to create reusable invoice designs.</p>
+                </div>
+            </details>
+
+            <details class="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 group">
+                <summary class="flex items-center justify-between p-6 cursor-pointer">
+                    <h3 class="text-lg font-medium text-white">How do recurring invoices work?</h3>
+                    <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </summary>
+                <div class="px-6 pb-6 text-gray-300">
+                    <p>Recurring invoices automatically generate on a schedule you set (weekly, monthly, quarterly, or yearly). Set up a recurring invoice once, and InvoiceFlow will create and optionally send new invoices to your client automatically.</p>
+                </div>
+            </details>
+
+            <details class="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 group">
+                <summary class="flex items-center justify-between p-6 cursor-pointer">
+                    <h3 class="text-lg font-medium text-white">What payment methods are supported?</h3>
+                    <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </summary>
+                <div class="px-6 pb-6 text-gray-300">
+                    <p>You can add your bank account details to invoices for direct transfers. We're also working on integrating with payment processors like Stripe and PayPal for online payments.</p>
+                </div>
+            </details>
+
+            <details class="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 group">
+                <summary class="flex items-center justify-between p-6 cursor-pointer">
+                    <h3 class="text-lg font-medium text-white">Is my data secure?</h3>
+                    <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </summary>
+                <div class="px-6 pb-6 text-gray-300">
+                    <p>Absolutely. We use industry-standard encryption, secure sessions, and follow security best practices. Your data is stored in secure databases with regular backups. We also implement rate limiting and CSRF protection to prevent attacks.</p>
+                </div>
+            </details>
+
+            <details class="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 group">
+                <summary class="flex items-center justify-between p-6 cursor-pointer">
+                    <h3 class="text-lg font-medium text-white">Can I export my invoices?</h3>
+                    <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </summary>
+                <div class="px-6 pb-6 text-gray-300">
+                    <p>Yes! You can download individual invoices as PDF files, or export multiple invoices to CSV for accounting and record-keeping purposes.</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="mt-16 text-center">
+            <p class="text-gray-400 mb-6">Still have questions?</p>
+            <a href="{% url 'contact' %}" class="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
+                Contact Support
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

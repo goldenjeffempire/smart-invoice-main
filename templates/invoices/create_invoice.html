@@ -1,0 +1,113 @@
+{% extends "base/layout.html" %}
+
+{% block title %}Create Invoice - InvoiceFlow{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Create New Invoice</h1>
+            <p class="mt-2 text-gray-600">Fill in the details below to create a professional invoice.</p>
+        </div>
+
+        <form method="post" class="bg-white shadow-lg rounded-2xl p-8">
+            {% csrf_token %}
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <h2 class="text-xl font-semibold text-gray-900 border-b pb-2">Your Business</h2>
+                    
+                    <div>
+                        <label for="id_business_name" class="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
+                        {{ invoice_form.business_name }}
+                        {% if invoice_form.business_name.errors %}
+                            <p class="text-red-500 text-sm mt-1">{{ invoice_form.business_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="id_business_email" class="block text-sm font-medium text-gray-700 mb-1">Business Email</label>
+                        {{ invoice_form.business_email }}
+                    </div>
+                    
+                    <div>
+                        <label for="id_business_phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        {{ invoice_form.business_phone }}
+                    </div>
+                    
+                    <div>
+                        <label for="id_business_address" class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                        {{ invoice_form.business_address }}
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <h2 class="text-xl font-semibold text-gray-900 border-b pb-2">Client Details</h2>
+                    
+                    <div>
+                        <label for="id_client_name" class="block text-sm font-medium text-gray-700 mb-1">Client Name</label>
+                        {{ invoice_form.client_name }}
+                    </div>
+                    
+                    <div>
+                        <label for="id_client_email" class="block text-sm font-medium text-gray-700 mb-1">Client Email</label>
+                        {{ invoice_form.client_email }}
+                    </div>
+                    
+                    <div>
+                        <label for="id_client_phone" class="block text-sm font-medium text-gray-700 mb-1">Client Phone</label>
+                        {{ invoice_form.client_phone }}
+                    </div>
+                    
+                    <div>
+                        <label for="id_client_address" class="block text-sm font-medium text-gray-700 mb-1">Client Address</label>
+                        {{ invoice_form.client_address }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 space-y-6">
+                <h2 class="text-xl font-semibold text-gray-900 border-b pb-2">Invoice Details</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label for="id_invoice_date" class="block text-sm font-medium text-gray-700 mb-1">Invoice Date</label>
+                        {{ invoice_form.invoice_date }}
+                    </div>
+                    
+                    <div>
+                        <label for="id_due_date" class="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+                        {{ invoice_form.due_date }}
+                    </div>
+                    
+                    <div>
+                        <label for="id_currency" class="block text-sm font-medium text-gray-700 mb-1">Currency</label>
+                        {{ invoice_form.currency }}
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="id_tax_rate" class="block text-sm font-medium text-gray-700 mb-1">Tax Rate (%)</label>
+                        {{ invoice_form.tax_rate }}
+                    </div>
+                    
+                    <div>
+                        <label for="id_notes" class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                        {{ invoice_form.notes }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 flex justify-end space-x-4">
+                <a href="{% url 'dashboard' %}" class="px-6 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors">
+                    Cancel
+                </a>
+                <button type="submit" class="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors">
+                    Create Invoice
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

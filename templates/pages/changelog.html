@@ -1,0 +1,84 @@
+{% extends "base/layout.html" %}
+
+{% block title %}Changelog - InvoiceFlow{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-b from-slate-900 to-indigo-950">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">Changelog</h1>
+            <p class="text-xl text-gray-300">Stay up to date with the latest improvements and features.</p>
+        </div>
+
+        <div class="space-y-12">
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="inline-block px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm font-medium">Latest</span>
+                    <span class="text-gray-400">December 1, 2025</span>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-4">Version 4.0 - Complete Redesign</h3>
+                <ul class="space-y-2 text-gray-300">
+                    <li class="flex items-start">
+                        <span class="text-green-400 mr-2">+</span>
+                        Enterprise-grade UI with modern design system
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-green-400 mr-2">+</span>
+                        New animated landing page with immersive visuals
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-green-400 mr-2">+</span>
+                        Improved dashboard with better analytics
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-blue-400 mr-2">~</span>
+                        Performance optimizations across all pages
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-white/5 rounded-2xl p-8 border border-white/10">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-gray-400">November 28, 2025</span>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-4">Version 3.5 - Security Update</h3>
+                <ul class="space-y-2 text-gray-300">
+                    <li class="flex items-start">
+                        <span class="text-green-400 mr-2">+</span>
+                        Enhanced CSRF protection
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-green-400 mr-2">+</span>
+                        Rate limiting on all endpoints
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-blue-400 mr-2">~</span>
+                        Improved session security
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-white/5 rounded-2xl p-8 border border-white/10">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-gray-400">November 15, 2025</span>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-4">Version 3.0 - Major Features</h3>
+                <ul class="space-y-2 text-gray-300">
+                    <li class="flex items-start">
+                        <span class="text-green-400 mr-2">+</span>
+                        Recurring invoices automation
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-green-400 mr-2">+</span>
+                        Custom invoice templates
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-green-400 mr-2">+</span>
+                        WhatsApp invoice sharing
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

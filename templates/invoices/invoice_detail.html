@@ -1,0 +1,118 @@
+{% extends "base/layout.html" %}
+
+{% block title %}Invoice #{{ invoice.invoice_number }} - InvoiceFlow{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Invoice #{{ invoice.invoice_number }}</h1>
+                <p class="mt-2 text-gray-600">Created on {{ invoice.created_at|date:"F d, Y" }}</p>
+            </div>
+            <div class="flex space-x-4">
+                <a href="{% url 'edit_invoice' invoice.id %}" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                    Edit
+                </a>
+                <a href="{% url 'download_invoice' invoice.id %}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                    Download PDF
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-white shadow-lg rounded-2xl overflow-hidden">
+            <div class="p-8">
+                <div class="flex justify-between mb-8">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {% if invoice.status == 'paid' %}bg-green-100 text-green-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                        {{ invoice.get_status_display }}
+                    </span>
+                    <div class="text-right">
+                        <p class="text-sm text-gray-500">Due Date</p>
+                        <p class="text-lg font-semibold text-gray-900">{{ invoice.due_date|date:"F d, Y" }}</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500 uppercase mb-2">From</h3>
+                        <p class="text-lg font-semibold text-gray-900">{{ invoice.business_name }}</p>
+                        <p class="text-gray-600">{{ invoice.business_email }}</p>
+                        <p class="text-gray-600">{{ invoice.business_phone }}</p>
+                        <p class="text-gray-600 whitespace-pre-line">{{ invoice.business_address }}</p>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500 uppercase mb-2">To</h3>
+                        <p class="text-lg font-semibold text-gray-900">{{ invoice.client_name }}</p>
+                        <p class="text-gray-600">{{ invoice.client_email }}</p>
+                        <p class="text-gray-600">{{ invoice.client_phone }}</p>
+                        <p class="text-gray-600 whitespace-pre-line">{{ invoice.client_address }}</p>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-200 pt-8">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Line Items</h3>
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="text-left py-3 text-sm font-medium text-gray-500">Description</th>
+                                <th class="text-right py-3 text-sm font-medium text-gray-500">Qty</th>
+                                <th class="text-right py-3 text-sm font-medium text-gray-500">Price</th>
+                                <th class="text-right py-3 text-sm font-medium text-gray-500">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in invoice.line_items.all %}
+                            <tr class="border-b border-gray-100">
+                                <td class="py-3 text-gray-900">{{ item.description }}</td>
+                                <td class="py-3 text-right text-gray-600">{{ item.quantity }}</td>
+                                <td class="py-3 text-right text-gray-600">{{ invoice.currency }} {{ item.unit_price }}</td>
+                                <td class="py-3 text-right text-gray-900 font-medium">{{ invoice.currency }} {{ item.total }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="py-4 text-center text-gray-500">No line items</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-8 border-t border-gray-200 pt-8">
+                    <div class="flex justify-end">
+                        <div class="w-64 space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Subtotal</span>
+                                <span class="text-gray-900">{{ invoice.currency }} {{ invoice.subtotal }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Tax ({{ invoice.tax_rate }}%)</span>
+                                <span class="text-gray-900">{{ invoice.currency }} {{ invoice.tax_amount }}</span>
+                            </div>
+                            <div class="flex justify-between text-lg font-bold border-t pt-2">
+                                <span>Total</span>
+                                <span>{{ invoice.currency }} {{ invoice.total_amount }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if invoice.notes %}
+                <div class="mt-8 border-t border-gray-200 pt-8">
+                    <h3 class="text-sm font-medium text-gray-500 uppercase mb-2">Notes</h3>
+                    <p class="text-gray-600 whitespace-pre-line">{{ invoice.notes }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="mt-6 flex justify-between">
+            <a href="{% url 'dashboard' %}" class="text-indigo-600 hover:text-indigo-800">
+                Back to Dashboard
+            </a>
+            <a href="{% url 'delete_invoice' invoice.id %}" class="text-red-600 hover:text-red-800">
+                Delete Invoice
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
