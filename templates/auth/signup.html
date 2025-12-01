@@ -1,0 +1,328 @@
+{% extends "base/layout.html" %}
+
+{% block title %}Create Your Account{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+
+{% block nav %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-bg"></div>
+    <div class="auth-glow"></div>
+    
+    <div class="auth-card glass-card">
+        <div class="auth-header">
+            <a href="{% url 'home' %}" class="auth-logo">
+                <div class="nav-logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                </div>
+                <span class="nav-logo-text">InvoiceFlow</span>
+            </a>
+            <h1 class="auth-title">Start your journey</h1>
+            <p class="auth-subtitle">Create your free account in seconds</p>
+        </div>
+        
+        <form method="post" class="auth-form" novalidate>
+            {% csrf_token %}
+            
+            {% if form.errors %}
+            <div class="auth-error">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <span>
+                    {% for field in form %}
+                        {% for error in field.errors %}{{ error }}{% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                </span>
+            </div>
+            {% endif %}
+            
+            <div class="form-group">
+                <label for="id_username" class="form-label">Full name</label>
+                <input type="text" 
+                       name="username" 
+                       id="id_username" 
+                       class="form-input" 
+                       placeholder="John Doe"
+                       value="{{ form.username.value|default:'' }}"
+                       required 
+                       autocomplete="name">
+            </div>
+            
+            <div class="form-group">
+                <label for="id_email" class="form-label">Email address</label>
+                <input type="email" 
+                       name="email" 
+                       id="id_email" 
+                       class="form-input" 
+                       placeholder="you@example.com"
+                       value="{{ form.email.value|default:'' }}"
+                       required 
+                       autocomplete="email">
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password1" class="form-label">Password</label>
+                <input type="password" 
+                       name="password1" 
+                       id="id_password1" 
+                       class="form-input" 
+                       placeholder="Create a strong password"
+                       required 
+                       autocomplete="new-password">
+                <p class="form-hint">Must be at least 8 characters</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password2" class="form-label">Confirm password</label>
+                <input type="password" 
+                       name="password2" 
+                       id="id_password2" 
+                       class="form-input" 
+                       placeholder="Confirm your password"
+                       required 
+                       autocomplete="new-password">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-checkbox">
+                    <input type="checkbox" name="terms" required>
+                    <span class="checkbox-mark"></span>
+                    <span class="checkbox-label">I agree to the <a href="{% url 'terms' %}" class="form-link">Terms of Service</a> and <a href="{% url 'privacy' %}" class="form-link">Privacy Policy</a></span>
+                </label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-lg btn-full">
+                Create Account
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                </svg>
+            </button>
+        </form>
+        
+        <div class="auth-footer">
+            <p>Already have an account? <a href="{% url 'login' %}" class="auth-link">Log in</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-8);
+}
+
+.auth-container {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+}
+
+.auth-bg {
+    position: fixed;
+    inset: 0;
+    background: var(--gradient-hero);
+    z-index: -2;
+}
+
+.auth-glow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    background: var(--gradient-glow);
+    border-radius: 50%;
+    filter: blur(100px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+.auth-card {
+    padding: var(--spacing-10);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: var(--spacing-8);
+}
+
+.auth-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-6);
+}
+
+.auth-title {
+    font-size: var(--font-size-2xl);
+    color: var(--color-neutral-0);
+    margin-bottom: var(--spacing-2);
+}
+
+.auth-subtitle {
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-400);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
+}
+
+.auth-error {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+    padding: var(--spacing-4);
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: var(--radius-xl);
+    color: #f87171;
+    font-size: var(--font-size-sm);
+}
+
+.auth-error svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.form-label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-neutral-300);
+}
+
+.form-hint {
+    font-size: var(--font-size-xs);
+    color: var(--color-neutral-500);
+}
+
+.form-link {
+    color: var(--color-primary-400);
+    transition: color var(--transition-fast);
+}
+
+.form-link:hover {
+    color: var(--color-primary-300);
+}
+
+.form-input {
+    width: 100%;
+    padding: var(--spacing-3) var(--spacing-4);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-xl);
+    color: var(--color-neutral-0);
+    font-size: var(--font-size-base);
+    font-family: inherit;
+    transition: all var(--transition-fast);
+}
+
+.form-input::placeholder {
+    color: var(--color-neutral-500);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.form-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+    cursor: pointer;
+}
+
+.form-checkbox input {
+    display: none;
+}
+
+.checkbox-mark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.form-checkbox input:checked + .checkbox-mark {
+    background: var(--color-primary-500);
+    border-color: var(--color-primary-500);
+}
+
+.form-checkbox input:checked + .checkbox-mark::after {
+    content: '';
+    width: 6px;
+    height: 10px;
+    border: 2px solid white;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg) translate(-1px, -1px);
+}
+
+.checkbox-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-neutral-400);
+    line-height: 1.5;
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: var(--spacing-6);
+    padding-top: var(--spacing-6);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.auth-footer p {
+    font-size: var(--font-size-sm);
+    color: var(--color-neutral-400);
+}
+
+.auth-link {
+    color: var(--color-primary-400);
+    font-weight: var(--font-weight-medium);
+    transition: color var(--transition-fast);
+}
+
+.auth-link:hover {
+    color: var(--color-primary-300);
+}
+</style>
+{% endblock %}

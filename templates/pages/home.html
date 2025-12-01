@@ -1,0 +1,438 @@
+{% extends "base/layout.html" %}
+
+{% block title %}Professional Invoicing Made Simple{% endblock %}
+{% block meta_description %}Create stunning invoices in 60 seconds. InvoiceFlow is the modern invoicing platform that helps you automate billing and get paid 3x faster.{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-glow hero-glow-1"></div>
+    <div class="hero-glow hero-glow-2"></div>
+    <div class="hero-grid"></div>
+    
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge">
+                    <span class="badge-dot"></span>
+                    Welcome to the Future of Invoicing
+                </span>
+            </div>
+            
+            <h1 class="hero-title text-gradient">
+                Invoicing<br>Reimagined
+            </h1>
+            
+            <p class="hero-subtitle">
+                Say goodbye to spreadsheets. Create stunning invoices in 60 seconds, 
+                automate your workflow, and get paid 3x faster.
+            </p>
+            
+            <div class="hero-actions">
+                <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">
+                    Start Free Now
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                </a>
+                <a href="#features" class="btn btn-secondary btn-lg">
+                    <svg class="btn-icon" style="transform: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                    See It In Action
+                </a>
+            </div>
+        </div>
+        
+        <div class="hero-visual" data-animate="scale-in" data-delay="400">
+            <div class="hero-image-wrapper">
+                <img src="/static/images/landing/dashboard-preview.jpg" 
+                     alt="InvoiceFlow Dashboard Preview" 
+                     class="hero-image"
+                     loading="eager">
+                
+                <div class="floating-card floating-card-1">
+                    <div class="floating-card-icon success">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>
+                    <div class="floating-card-content">
+                        <div class="floating-card-label">Invoice Sent</div>
+                        <div class="floating-card-value">INV-2025-0142</div>
+                    </div>
+                </div>
+                
+                <div class="floating-card floating-card-2">
+                    <div class="floating-card-icon primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="1" x2="12" y2="23"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                    </div>
+                    <div class="floating-card-content">
+                        <div class="floating-card-label">Payment Received</div>
+                        <div class="floating-card-value">$4,250.00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="hero-scroll-indicator">
+        <span>Scroll to explore</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"/>
+        </svg>
+    </div>
+</section>
+
+<section id="features" class="section">
+    <div class="container">
+        <div class="section-header" data-animate="slide-up">
+            <span class="badge section-badge">
+                <span class="badge-dot"></span>
+                Why Choose InvoiceFlow
+            </span>
+            <h2 class="section-title text-gradient">
+                Built for Modern Business
+            </h2>
+            <p class="section-subtitle">
+                Everything you need to create professional invoices, manage clients, 
+                and grow your business with confidence.
+            </p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="glass-card feature-card" data-animate="slide-up" data-delay="100">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">60-Second Invoices</h3>
+                <p class="feature-description">
+                    Create beautiful, professional invoices in under a minute. 
+                    Our smart templates handle the formatting for you.
+                </p>
+            </div>
+            
+            <div class="glass-card feature-card" data-animate="slide-up" data-delay="200">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Bank-Grade Security</h3>
+                <p class="feature-description">
+                    Your data is protected with 256-bit encryption, 
+                    the same security used by leading financial institutions.
+                </p>
+            </div>
+            
+            <div class="glass-card feature-card" data-animate="slide-up" data-delay="300">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                        <line x1="8" y1="21" x2="16" y2="21"/>
+                        <line x1="12" y1="17" x2="12" y2="21"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Multi-Device Access</h3>
+                <p class="feature-description">
+                    Access your invoices from anywhere. Desktop, tablet, or 
+                    mobile - your business travels with you.
+                </p>
+            </div>
+            
+            <div class="glass-card feature-card" data-animate="slide-up" data-delay="400">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Real-Time Analytics</h3>
+                <p class="feature-description">
+                    Track payments, monitor cash flow, and gain insights 
+                    with powerful analytics and reporting tools.
+                </p>
+            </div>
+            
+            <div class="glass-card feature-card" data-animate="slide-up" data-delay="500">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Client Portal</h3>
+                <p class="feature-description">
+                    Give clients their own portal to view invoices, 
+                    make payments, and access their history.
+                </p>
+            </div>
+            
+            <div class="glass-card feature-card" data-animate="slide-up" data-delay="600">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Multi-Currency</h3>
+                <p class="feature-description">
+                    Invoice clients worldwide with support for 100+ currencies 
+                    and automatic exchange rate updates.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="showcase" data-animate="fade-in">
+            <div class="showcase-visual">
+                <div class="showcase-image">
+                    <img src="/static/images/landing/create-invoice.jpg" 
+                         alt="Invoice Creation Interface" 
+                         loading="lazy">
+                </div>
+            </div>
+            <div class="showcase-content">
+                <span class="badge section-badge">
+                    <span class="badge-dot"></span>
+                    Effortless Creation
+                </span>
+                <h2 class="showcase-title text-gradient">
+                    Create Invoices That<br>Get You Paid
+                </h2>
+                <p class="showcase-description">
+                    Our intuitive invoice builder lets you create stunning, professional 
+                    invoices in minutes. Customize every detail or use our smart templates 
+                    to get started instantly.
+                </p>
+                <div class="showcase-features">
+                    <div class="showcase-feature">
+                        <div class="showcase-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <span>Professional templates for every industry</span>
+                    </div>
+                    <div class="showcase-feature">
+                        <div class="showcase-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <span>Custom branding with your logo and colors</span>
+                    </div>
+                    <div class="showcase-feature">
+                        <div class="showcase-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <span>Automatic calculations and tax handling</span>
+                    </div>
+                    <div class="showcase-feature">
+                        <div class="showcase-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <span>PDF export and direct email sending</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="showcase reverse" data-animate="fade-in">
+            <div class="showcase-visual">
+                <div class="showcase-image">
+                    <img src="/static/images/landing/analytics-dashboard.jpg" 
+                         alt="Analytics Dashboard" 
+                         loading="lazy">
+                </div>
+            </div>
+            <div class="showcase-content">
+                <span class="badge section-badge">
+                    <span class="badge-dot"></span>
+                    Business Intelligence
+                </span>
+                <h2 class="showcase-title text-gradient">
+                    Insights That Drive<br>Growth
+                </h2>
+                <p class="showcase-description">
+                    Transform your financial data into actionable insights. Our powerful 
+                    analytics dashboard helps you understand your business performance 
+                    and make smarter decisions.
+                </p>
+                <div class="showcase-features">
+                    <div class="showcase-feature">
+                        <div class="showcase-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <span>Real-time revenue tracking and forecasts</span>
+                    </div>
+                    <div class="showcase-feature">
+                        <div class="showcase-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <span>Payment trends and client analytics</span>
+                    </div>
+                    <div class="showcase-feature">
+                        <div class="showcase-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <span>Automated reports delivered to your inbox</span>
+                    </div>
+                    <div class="showcase-feature">
+                        <div class="showcase-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <span>Export data for accounting integrations</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="showcase" data-animate="fade-in">
+            <div class="showcase-visual">
+                <div class="showcase-image">
+                    <img src="/static/images/landing/automation.jpg" 
+                         alt="Workflow Automation" 
+                         loading="lazy">
+                </div>
+            </div>
+            <div class="showcase-content">
+                <span class="badge section-badge">
+                    <span class="badge-dot"></span>
+                    Automation
+                </span>
+                <h2 class="showcase-title text-gradient">
+                    Set It &amp; Forget It<br>Automation
+                </h2>
+                <p class="showcase-description">
+                    Automate repetitive tasks and focus on what matters. Set up recurring 
+                    invoices, automatic reminders, and smart workflows that work for you 
+                    around the clock.
+                </p>
+                <div class="showcase-features">
+                    <div class="showcase-feature">
+                        <div class="showcase-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <span>Recurring invoices on your schedule</span>
+                    </div>
+                    <div class="showcase-feature">
+                        <div class="showcase-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <span>Smart payment reminders that actually work</span>
+                    </div>
+                    <div class="showcase-feature">
+                        <div class="showcase-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <span>Automatic late fee calculations</span>
+                    </div>
+                    <div class="showcase-feature">
+                        <div class="showcase-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <span>Email notifications for every milestone</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="cta-section" data-animate="scale-in">
+            <div class="cta-content">
+                <h2 class="cta-title">
+                    Ready to Transform Your Invoicing?
+                </h2>
+                <p class="cta-description">
+                    Join thousands of businesses already using InvoiceFlow to create 
+                    professional invoices and get paid faster.
+                </p>
+                <div class="cta-actions">
+                    <a href="{% url 'signup' %}" class="btn btn-white btn-lg">
+                        Get Started Free
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                    </a>
+                    <a href="{% url 'contact' %}" class="btn btn-ghost btn-lg">
+                        Talk to Sales
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.hero-scroll-indicator {
+    position: absolute;
+    bottom: var(--spacing-8);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-2);
+    color: var(--color-neutral-500);
+    font-size: var(--font-size-sm);
+    animation: fade-in 1s ease-out 1.5s forwards;
+    opacity: 0;
+}
+
+.hero-scroll-indicator svg {
+    width: 24px;
+    height: 24px;
+    animation: float 2s ease-in-out infinite;
+}
+
+@media (max-width: 768px) {
+    .hero-scroll-indicator {
+        display: none;
+    }
+}
+</style>
+{% endblock %}

@@ -1,195 +1,110 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends "base/layout.html" %}
+
+{% block title %}Terms of Service{% endblock %}
+{% block meta_description %}Read InvoiceFlow's Terms of Service. Understand your rights and responsibilities when using our invoicing platform.{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white py-24 md:py-32">
-    <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div class="absolute top-20 left-20 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div class="absolute bottom-20 right-20 w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-    </div>
-    
-    <div class="container mx-auto px-6 text-center relative z-10 fade-up">
-        <span class="badge badge-info mb-6 inline-block">Legal</span>
-        <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">Terms of Service</h1>
-        <p class="text-xl md:text-2xl opacity-95 max-w-3xl mx-auto leading-relaxed">
-            Please read these terms carefully before using InvoiceFlow
-        </p>
-    </div>
-</section>
-
-<!-- Content Section -->
-<section class="section-lg bg-gradient-to-b from-white to-gray-50">
+<section class="page-hero legal-hero">
+    <div class="hero-bg"></div>
     <div class="container">
-        <div class="max-w-4xl mx-auto">
-            <!-- Table of Contents -->
-            <div class="card bg-gradient-to-r from-indigo-50 to-purple-50 border-2 border-indigo-200 mb-16 fade-up">
-                <h2 class="text-2xl font-black mb-6 text-gray-900">Table of Contents</h2>
-                <div class="grid md:grid-cols-2 gap-4">
-                    <a href="#acceptance" class="flex items-center gap-3 p-3 rounded-lg hover:bg-white transition-colors group">
-                        <span class="text-2xl">1️⃣</span>
-                        <span class="font-bold text-gray-900 group-hover:text-indigo-600">Acceptance of Terms</span>
-                    </a>
-                    <a href="#use-license" class="flex items-center gap-3 p-3 rounded-lg hover:bg-white transition-colors group">
-                        <span class="text-2xl">2️⃣</span>
-                        <span class="font-bold text-gray-900 group-hover:text-indigo-600">Use License</span>
-                    </a>
-                    <a href="#responsibility" class="flex items-center gap-3 p-3 rounded-lg hover:bg-white transition-colors group">
-                        <span class="text-2xl">3️⃣</span>
-                        <span class="font-bold text-gray-900 group-hover:text-indigo-600">User Responsibility</span>
-                    </a>
-                    <a href="#liability" class="flex items-center gap-3 p-3 rounded-lg hover:bg-white transition-colors group">
-                        <span class="text-2xl">4️⃣</span>
-                        <span class="font-bold text-gray-900 group-hover:text-indigo-600">Limitation of Liability</span>
-                    </a>
-                    <a href="#modifications" class="flex items-center gap-3 p-3 rounded-lg hover:bg-white transition-colors group">
-                        <span class="text-2xl">5️⃣</span>
-                        <span class="font-bold text-gray-900 group-hover:text-indigo-600">Modifications</span>
-                    </a>
-                    <a href="#contact" class="flex items-center gap-3 p-3 rounded-lg hover:bg-white transition-colors group">
-                        <span class="text-2xl">6️⃣</span>
-                        <span class="font-bold text-gray-900 group-hover:text-indigo-600">Contact Us</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Terms Content -->
-            <div class="space-y-8">
-                <!-- Section 1 -->
-                <div id="acceptance" class="card hover-lift fade-up">
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <span class="text-2xl">✓</span>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-2xl font-black mb-4 text-gray-900">1. Acceptance of Terms</h3>
-                            <p class="text-gray-600 leading-relaxed mb-3">
-                                By accessing and using InvoiceFlow, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 2 -->
-                <div id="use-license" class="card hover-lift fade-up">
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <span class="text-2xl">📋</span>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-2xl font-black mb-4 text-gray-900">2. Use License</h3>
-                            <p class="text-gray-600 leading-relaxed mb-4">
-                                Permission is granted to you to use InvoiceFlow for personal or commercial invoicing purposes. Under this license, you may not:
-                            </p>
-                            <ul class="space-y-2 ml-4">
-                                <li class="flex items-start gap-3">
-                                    <span class="text-red-500 font-bold mt-1">•</span>
-                                    <span class="text-gray-600">Use the service in any way that violates any applicable law or regulation</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-red-500 font-bold mt-1">•</span>
-                                    <span class="text-gray-600">Attempt to interfere with the system's integrity or security</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-red-500 font-bold mt-1">•</span>
-                                    <span class="text-gray-600">Reverse engineer, decompile, or disassemble the service</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-red-500 font-bold mt-1">•</span>
-                                    <span class="text-gray-600">Remove any copyright or proprietary notices</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 3 -->
-                <div id="responsibility" class="card hover-lift fade-up">
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <span class="text-2xl">🔐</span>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-2xl font-black mb-4 text-gray-900">3. User Responsibility</h3>
-                            <p class="text-gray-600 leading-relaxed">
-                                You are responsible for maintaining the confidentiality of your account credentials and password. You agree to accept responsibility for all activities that occur under your account. InvoiceFlow will not be liable for any loss or damage arising from unauthorized use of your account.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 4 -->
-                <div id="liability" class="card hover-lift fade-up">
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <span class="text-2xl">⚖️</span>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-2xl font-black mb-4 text-gray-900">4. Limitation of Liability</h3>
-                            <p class="text-gray-600 leading-relaxed">
-                                InvoiceFlow is provided on an "as is" basis without warranties of any kind, either expressed or implied. We are not liable for any direct, indirect, incidental, special, consequential, or punitive damages resulting from your use of or inability to use the service, even if we have been advised of the possibility of such damages.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 5 -->
-                <div id="modifications" class="card hover-lift fade-up">
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <span class="text-2xl">✏️</span>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-2xl font-black mb-4 text-gray-900">5. Modifications to Terms</h3>
-                            <p class="text-gray-600 leading-relaxed">
-                                InvoiceFlow may revise these terms of service at any time without notice. By using this service, you are agreeing to be bound by the current version of these terms of service. If you do not agree with any changes, please stop using the service.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 6 -->
-                <div id="contact" class="card hover-lift fade-up">
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <span class="text-2xl">💬</span>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-2xl font-black mb-4 text-gray-900">6. Contact Information</h3>
-                            <p class="text-gray-600 leading-relaxed mb-4">
-                                If you have questions about these terms of service, please contact us at:
-                            </p>
-                            <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-indigo-600">
-                                <p class="text-gray-900 font-bold mb-2">📧 Email</p>
-                                <p class="text-gray-600"><a href="mailto:legal@invoiceflow.com.ng" class="text-indigo-600 hover:underline">legal@invoiceflow.com.ng</a></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Last Updated -->
-            <div class="card bg-blue-50 border-2 border-blue-200 text-center mt-16 fade-up">
-                <p class="text-gray-600 mb-2">Last Updated</p>
-                <p class="text-xl font-bold text-gray-900">November 23, 2025</p>
-            </div>
+        <div class="page-hero-content">
+            <h1 class="page-hero-title text-gradient">Terms of Service</h1>
+            <p class="page-hero-subtitle">Last updated: {% now "F j, Y" %}</p>
         </div>
     </div>
 </section>
 
+<section class="section legal-section">
+    <div class="container">
+        <div class="legal-content glass-card">
+            <div class="legal-block">
+                <h2>1. Acceptance of Terms</h2>
+                <p>By accessing or using InvoiceFlow, you agree to be bound by these Terms of Service. If you disagree with any part of the terms, you may not access the service.</p>
+            </div>
+            
+            <div class="legal-block">
+                <h2>2. Description of Service</h2>
+                <p>InvoiceFlow provides an online invoicing platform that allows users to create, send, and manage invoices. We reserve the right to modify, suspend, or discontinue the service at any time.</p>
+            </div>
+            
+            <div class="legal-block">
+                <h2>3. User Accounts</h2>
+                <p>You are responsible for maintaining the confidentiality of your account and password. You agree to accept responsibility for all activities that occur under your account.</p>
+            </div>
+            
+            <div class="legal-block">
+                <h2>4. Acceptable Use</h2>
+                <p>You agree not to use the service for any unlawful purpose or in violation of any local, state, national, or international law. You may not use the service to distribute malware or engage in any activity that could harm the service or other users.</p>
+            </div>
+            
+            <div class="legal-block">
+                <h2>5. Intellectual Property</h2>
+                <p>The service and its original content, features, and functionality are owned by InvoiceFlow and are protected by international copyright, trademark, and other intellectual property laws.</p>
+            </div>
+            
+            <div class="legal-block">
+                <h2>6. Termination</h2>
+                <p>We may terminate or suspend your account and access to the service immediately, without prior notice, for conduct that we believe violates these Terms of Service or is harmful to other users or us.</p>
+            </div>
+            
+            <div class="legal-block">
+                <h2>7. Limitation of Liability</h2>
+                <p>In no event shall InvoiceFlow be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of the service.</p>
+            </div>
+            
+            <div class="legal-block">
+                <h2>8. Contact Us</h2>
+                <p>If you have any questions about these Terms, please contact us at legal@invoiceflow.com</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
 <style>
-@keyframes blob {
-    0%, 100% { transform: translate(0px, 0px) scale(1); }
-    33% { transform: translate(30px, -50px) scale(1.1); }
-    66% { transform: translate(-20px, 20px) scale(0.9); }
+.legal-hero {
+    padding: var(--spacing-32) 0 var(--spacing-12);
+    text-align: center;
 }
 
-.animate-blob {
-    animation: blob 7s infinite;
+.legal-hero .page-hero-title {
+    font-size: var(--font-size-4xl);
 }
 
-.animation-delay-2000 {
-    animation-delay: 2s;
+.legal-hero .page-hero-subtitle {
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-500);
+}
+
+.legal-section {
+    padding-top: 0;
+}
+
+.legal-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--spacing-10);
+}
+
+.legal-block {
+    margin-bottom: var(--spacing-8);
+}
+
+.legal-block:last-child {
+    margin-bottom: 0;
+}
+
+.legal-block h2 {
+    font-size: var(--font-size-xl);
+    color: var(--color-neutral-0);
+    margin-bottom: var(--spacing-4);
+}
+
+.legal-block p {
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-400);
+    line-height: var(--line-height-relaxed);
 }
 </style>
 {% endblock %}

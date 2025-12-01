@@ -34,7 +34,7 @@ def get_client_ip(request):
 
 def home(request):
     """Render the public landing page."""
-    return render(request, "home.html")
+    return render(request, "pages/home.html")
 
 
 def signup(request):
@@ -48,7 +48,7 @@ def signup(request):
             return redirect("dashboard")
     else:
         form = SignUpForm()
-    return render(request, "registration/signup.html", {"form": form})
+    return render(request, "auth/signup.html", {"form": form})
 
 
 def login_view(request):
@@ -63,7 +63,7 @@ def login_view(request):
 
         if attempt_count >= 5:
             messages.error(request, "Too many login attempts. Please try again in 15 minutes.")
-            return render(request, "registration/login.html")
+            return render(request, "auth/login.html")
 
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -75,7 +75,7 @@ def login_view(request):
         else:
             cache.set(cache_key, attempt_count + 1, 900)
             messages.error(request, "Invalid username or password.")
-    return render(request, "registration/login.html")
+    return render(request, "auth/login.html")
 
 
 def logout_view(request):
@@ -116,7 +116,11 @@ def dashboard(request):
         "unique_clients": stats["unique_clients"],
         "filter_status": filter_status,
     }
-    return render(request, "invoices/dashboard.html", context)
+    context["recent_invoices"] = invoices[:5]
+    context["total_revenue"] = stats["total_revenue"]
+    context["pending_invoices"] = stats["unpaid_count"]
+    context["paid_invoices"] = stats["paid_count"]
+    return render(request, "dashboard/main.html", context)
 
 
 @login_required

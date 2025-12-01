@@ -1,195 +1,216 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends "base/layout.html" %}
+
+{% block title %}About Us{% endblock %}
+{% block meta_description %}Learn about InvoiceFlow's mission to simplify invoicing for businesses worldwide. Our story, values, and commitment to your success.{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white py-24 md:py-32">
-    <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div class="absolute top-20 left-20 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div class="absolute bottom-20 right-20 w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-    </div>
-    
-    <div class="container mx-auto px-6 text-center relative z-10 fade-up">
-        <span class="badge badge-primary mb-6 inline-block">Our Story</span>
-        <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">About InvoiceFlow</h1>
-        <p class="text-xl md:text-2xl opacity-95 max-w-3xl mx-auto leading-relaxed">
-            Simplifying invoicing for businesses worldwide
-        </p>
-    </div>
-</section>
-
-<!-- Mission Section -->
-<section class="section-lg bg-gradient-to-b from-white to-gray-50">
+<section class="page-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-glow hero-glow-1"></div>
     <div class="container">
-        <div class="max-w-5xl mx-auto">
-            <div class="card mb-16 fade-up">
-                <div class="text-center mb-8">
-                    <span class="badge badge-success mb-4 inline-block">Our Mission</span>
-                    <h2 class="text-4xl md:text-5xl font-black mb-6 gradient-text">Empowering Business Growth</h2>
-                </div>
-                <p class="text-xl text-gray-700 leading-relaxed mb-6">
-                    InvoiceFlow was founded on a simple belief: creating and sending professional invoices should be simple, fast, and accessible to everyone. We saw businesses struggling with complicated software, expensive subscriptions, and clunky interfaces.
-                </p>
-                <p class="text-xl text-gray-700 leading-relaxed">
-                    Today, we're proud to help businesses worldwide—from freelancers to growing enterprises—streamline their invoicing process, save time, and get paid faster. Our platform makes professional invoicing accessible to everyone, regardless of business size or technical expertise.
-                </p>
-            </div>
-
-            <!-- Values Grid -->
-            <div class="grid md:grid-cols-3 gap-8 mb-16">
-                <div class="card hover-lift fade-up text-center group">
-                    <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center text-4xl shadow-lg group-hover:scale-110 transition-transform">🎯</div>
-                    <h3 class="text-2xl font-bold mb-4 text-gray-900">Simplicity First</h3>
-                    <p class="text-gray-600 leading-relaxed">
-                        Powerful yet intuitive. We believe great software should be easy to use without sacrificing features.
-                    </p>
-                </div>
-                
-                <div class="card hover-lift fade-up text-center group">
-                    <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl mx-auto mb-6 flex items-center justify-center text-4xl shadow-lg group-hover:scale-110 transition-transform">🚀</div>
-                    <h3 class="text-2xl font-bold mb-4 text-gray-900">Continuous Innovation</h3>
-                    <p class="text-gray-600 leading-relaxed">
-                        Always improving with features that matter. We listen to our users and build what they need.
-                    </p>
-                </div>
-                
-                <div class="card hover-lift fade-up text-center group">
-                    <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl mx-auto mb-6 flex items-center justify-center text-4xl shadow-lg group-hover:scale-110 transition-transform">❤️</div>
-                    <h3 class="text-2xl font-bold mb-4 text-gray-900">Customer Success</h3>
-                    <p class="text-gray-600 leading-relaxed">
-                        Your success is our success. We're committed to helping you grow your business.
-                    </p>
-                </div>
-            </div>
+        <div class="page-hero-content">
+            <span class="badge">
+                <span class="badge-dot"></span>
+                About Us
+            </span>
+            <h1 class="page-hero-title text-gradient">
+                Simplifying Invoicing<br>for Modern Business
+            </h1>
+            <p class="page-hero-subtitle">
+                We're on a mission to help businesses get paid faster with 
+                beautiful, professional invoices.
+            </p>
         </div>
     </div>
 </section>
 
-<!-- Features Section -->
-<section class="section-lg bg-white">
+<section class="section">
     <div class="container">
-        <div class="text-center mb-16 fade-up">
-            <span class="badge badge-info mb-4">Why Choose Us</span>
-            <h2 class="text-4xl md:text-5xl font-black mb-6 gradient-text">Built for Your Success</h2>
-        </div>
-        
-        <div class="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            <div class="text-center fade-up">
-                <div class="w-24 h-24 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-xl">
-                    <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path></svg>
-                </div>
-                <h3 class="text-2xl font-black text-gray-900 mb-3">User-Friendly</h3>
-                <p class="text-gray-600">Intuitive interface designed for professionals at all skill levels</p>
+        <div class="about-content">
+            <div class="about-story glass-card" data-animate="slide-up">
+                <h2 class="about-heading text-gradient">Our Story</h2>
+                <p>
+                    InvoiceFlow was born from a simple frustration: why is invoicing so 
+                    complicated? As freelancers and small business owners ourselves, we 
+                    spent countless hours wrestling with spreadsheets and clunky software.
+                </p>
+                <p>
+                    We believed there had to be a better way. So we built InvoiceFlow - 
+                    a modern invoicing platform that's as beautiful as it is powerful. 
+                    Today, thousands of businesses trust us to handle their invoicing needs.
+                </p>
             </div>
             
-            <div class="text-center fade-up">
-                <div class="w-24 h-24 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-xl">
-                    <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"></path><path d="M3 8a2 2 0 012-2v10h8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"></path></svg>
+            <div class="about-values" data-animate="slide-up" data-delay="200">
+                <h2 class="section-title text-gradient">Our Values</h2>
+                
+                <div class="values-grid">
+                    <div class="value-card glass-card">
+                        <div class="value-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <h3>Speed</h3>
+                        <p>We believe your invoicing should take minutes, not hours.</p>
+                    </div>
+                    
+                    <div class="value-card glass-card">
+                        <div class="value-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                        </div>
+                        <h3>Trust</h3>
+                        <p>Your data security is our top priority. Always.</p>
+                    </div>
+                    
+                    <div class="value-card glass-card">
+                        <div class="value-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <h3>Support</h3>
+                        <p>Real humans, ready to help when you need us.</p>
+                    </div>
                 </div>
-                <h3 class="text-2xl font-black text-gray-900 mb-3">Powerful Tools</h3>
-                <p class="text-gray-600">Everything you need to create, send, and track professional invoices</p>
-            </div>
-            
-            <div class="text-center fade-up">
-                <div class="w-24 h-24 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-xl">
-                    <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
-                </div>
-                <h3 class="text-2xl font-black text-gray-900 mb-3">Time Saving</h3>
-                <p class="text-gray-600">Create invoices in 60 seconds instead of 30 minutes</p>
-            </div>
-            
-            <div class="text-center fade-up">
-                <div class="w-24 h-24 bg-gradient-to-br from-pink-500 to-red-600 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-xl">
-                    <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
-                </div>
-                <h3 class="text-2xl font-black text-gray-900 mb-3">Reliable Support</h3>
-                <p class="text-gray-600">Dedicated customer support when you need it most</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- CTA Section -->
-<section class="relative overflow-hidden bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white section-lg">
-    <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div class="absolute top-0 left-0 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div class="absolute bottom-0 right-0 w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-    </div>
-    
-    <div class="container text-center relative z-10 fade-up">
-        <h2 class="text-4xl md:text-6xl font-black mb-6">Start Your Journey Today</h2>
-        <p class="text-xl md:text-2xl opacity-95 mb-10 max-w-3xl mx-auto leading-relaxed">
-            Create professional invoices in 60 seconds and transform how you manage your business
-        </p>
-        <a href="{% url 'signup' %}" class="btn btn-lg inline-flex items-center gap-3 bg-white text-indigo-600 hover:bg-gray-100 font-bold shadow-2xl hover-lift px-10">
-            Get Started Free
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
-        </a>
+<section class="section">
+    <div class="container">
+        <div class="cta-section" data-animate="scale-in">
+            <div class="cta-content">
+                <h2 class="cta-title">Join Our Mission</h2>
+                <p class="cta-description">
+                    Be part of the thousands of businesses transforming their invoicing.
+                </p>
+                <div class="cta-actions">
+                    <a href="{% url 'signup' %}" class="btn btn-white btn-lg">
+                        Get Started Free
+                    </a>
+                    <a href="{% url 'contact' %}" class="btn btn-ghost btn-lg">
+                        Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
+{% endblock %}
 
+{% block extra_css %}
 <style>
-@keyframes blob {
-    0%, 100% { transform: translate(0px, 0px) scale(1); }
-    33% { transform: translate(30px, -50px) scale(1.1); }
-    66% { transform: translate(-20px, 20px) scale(0.9); }
+.page-hero {
+    padding: var(--spacing-40) 0 var(--spacing-20);
+    text-align: center;
+    position: relative;
 }
 
-.animate-blob {
-    animation: blob 7s infinite;
+.page-hero-content {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-.animation-delay-2000 {
-    animation-delay: 2s;
+.page-hero-title {
+    font-size: var(--font-size-5xl);
+    margin-bottom: var(--spacing-6);
+}
+
+@media (min-width: 768px) {
+    .page-hero-title {
+        font-size: var(--font-size-6xl);
+    }
+}
+
+.page-hero-subtitle {
+    font-size: var(--font-size-xl);
+    color: var(--color-neutral-400);
+}
+
+.about-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.about-story {
+    padding: var(--spacing-10);
+    margin-bottom: var(--spacing-12);
+}
+
+.about-heading {
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--spacing-6);
+}
+
+.about-story p {
+    font-size: var(--font-size-lg);
+    color: var(--color-neutral-300);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--spacing-4);
+}
+
+.about-story p:last-child {
+    margin-bottom: 0;
+}
+
+.about-values {
+    text-align: center;
+}
+
+.about-values .section-title {
+    margin-bottom: var(--spacing-8);
+}
+
+.values-grid {
+    display: grid;
+    gap: var(--spacing-6);
+}
+
+@media (min-width: 768px) {
+    .values-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.value-card {
+    padding: var(--spacing-8);
+    text-align: center;
+}
+
+.value-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: var(--radius-2xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-4);
+    color: var(--color-primary-400);
+}
+
+.value-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.value-card h3 {
+    font-size: var(--font-size-xl);
+    color: var(--color-neutral-0);
+    margin-bottom: var(--spacing-3);
+}
+
+.value-card p {
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-400);
 }
 </style>
 {% endblock %}
-
-<!-- Team Section -->
-<section class="section-lg bg-gradient-to-b from-gray-50 to-white">
-    <div class="container">
-        <div class="text-center mb-16 fade-up">
-            <span class="badge badge-primary mb-4">Our Team</span>
-            <h2 class="text-4xl md:text-5xl font-black mb-6 gradient-text">Meet the Team Behind InvoiceFlow</h2>
-            <p class="text-gray-600 text-xl max-w-2xl mx-auto">Passionate experts committed to simplifying business operations worldwide</p>
-        </div>
-        
-        <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <!-- Founder & CEO -->
-            <div class="card hover-lift fade-up text-center group overflow-hidden">
-                <div class="w-40 h-40 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full mx-auto mb-6 flex items-center justify-center text-6xl shadow-lg group-hover:scale-110 transition-transform">👨‍💼</div>
-                <h3 class="text-2xl font-bold mb-2 text-gray-900">Sarah Chen</h3>
-                <p class="text-indigo-600 font-semibold mb-3">CEO & Founder</p>
-                <p class="text-gray-600 mb-4">Former fintech executive with 10+ years building payment systems. Vision: Making professional invoicing accessible to everyone.</p>
-                <div class="flex justify-center gap-3">
-                    <a href="#" class="text-gray-400 hover:text-indigo-600 transition">LinkedIn</a>
-                    <a href="#" class="text-gray-400 hover:text-indigo-600 transition">Twitter</a>
-                </div>
-            </div>
-            
-            <!-- CTO -->
-            <div class="card hover-lift fade-up text-center group overflow-hidden">
-                <div class="w-40 h-40 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full mx-auto mb-6 flex items-center justify-center text-6xl shadow-lg group-hover:scale-110 transition-transform">👨‍💻</div>
-                <h3 class="text-2xl font-bold mb-2 text-gray-900">James Park</h3>
-                <p class="text-blue-600 font-semibold mb-3">CTO & Co-founder</p>
-                <p class="text-gray-600 mb-4">Full-stack engineer passionate about scalable systems. Built InvoiceFlow's architecture to handle millions of transactions.</p>
-                <div class="flex justify-center gap-3">
-                    <a href="#" class="text-gray-400 hover:text-blue-600 transition">LinkedIn</a>
-                    <a href="#" class="text-gray-400 hover:text-blue-600 transition">GitHub</a>
-                </div>
-            </div>
-            
-            <!-- Product Lead -->
-            <div class="card hover-lift fade-up text-center group overflow-hidden">
-                <div class="w-40 h-40 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full mx-auto mb-6 flex items-center justify-center text-6xl shadow-lg group-hover:scale-110 transition-transform">👩‍🎨</div>
-                <h3 class="text-2xl font-bold mb-2 text-gray-900">Emma Rodriguez</h3>
-                <p class="text-green-600 font-semibold mb-3">Product & Design Lead</p>
-                <p class="text-gray-600 mb-4">UX/UI specialist focused on simplicity. Leads product vision and ensures every feature is intuitive and delightful.</p>
-                <div class="flex justify-center gap-3">
-                    <a href="#" class="text-gray-400 hover:text-green-600 transition">LinkedIn</a>
-                    <a href="#" class="text-gray-400 hover:text-green-600 transition">Portfolio</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>

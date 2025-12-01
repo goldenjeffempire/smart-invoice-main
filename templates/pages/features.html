@@ -1,141 +1,236 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends "base/layout.html" %}
+
+{% block title %}Features{% endblock %}
+{% block meta_description %}Discover all the powerful features that make InvoiceFlow the best choice for professional invoicing. From smart templates to automation.{% endblock %}
 
 {% block content %}
-<!-- Hero Section with Enhanced Visuals -->
-<section class="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white min-h-screen flex items-center">
-    <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div class="absolute top-10 left-10 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob-morph"></div>
-        <div class="absolute bottom-10 right-10 w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob-morph animation-delay-2000"></div>
-    </div>
-    
-    <div class="container mx-auto px-6 py-32 relative z-10">
-        <div class="text-center space-y-8 fade-up">
-            <span class="badge badge-info mb-6 inline-block animate-pulse">Platform Features</span>
-            <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">Powerful Features, Zero Complexity</h1>
-            <p class="text-xl md:text-2xl opacity-95 max-w-3xl mx-auto leading-relaxed">
-                Everything you need to create, send, and track professional invoices. Built for modern businesses.
+<section class="page-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-glow hero-glow-1"></div>
+    <div class="container">
+        <div class="page-hero-content">
+            <span class="badge">
+                <span class="badge-dot"></span>
+                Product Features
+            </span>
+            <h1 class="page-hero-title text-gradient">
+                Everything You Need<br>to Get Paid Faster
+            </h1>
+            <p class="page-hero-subtitle">
+                Powerful tools designed to streamline your invoicing workflow, 
+                from creation to payment collection.
             </p>
         </div>
     </div>
 </section>
 
-<!-- Feature Cards Grid with Advanced Animations -->
-<section class="section-lg bg-gradient-to-b from-white to-gray-50">
+<section class="section">
     <div class="container">
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="card hover-lift fade-up group transition-all duration-300 hover:shadow-2xl overflow-hidden">
-                <div class="relative h-48 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mb-6 overflow-hidden">
-                    <div class="absolute inset-0 flex items-center justify-center text-6xl group-hover:scale-125 transition-transform duration-300">📄</div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/0 to-white/10 group-hover:to-white/20 transition-all"></div>
+        <div class="features-grid features-grid-large">
+            <div class="glass-card feature-card-large" data-animate="slide-up" data-delay="100">
+                <div class="feature-icon-large">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
                 </div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 group-hover:text-indigo-600 transition-colors">Professional PDFs</h3>
-                <p class="text-gray-600 group-hover:text-gray-700 transition-colors mb-4">Stunning PDF invoices with custom branding, logos, and beautiful layouts that impress clients.</p>
-                <ul class="space-y-2 text-sm text-gray-600">
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Premium Templates</li>
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Custom Fonts & Colors</li>
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Instant Generation</li>
+                <h3 class="feature-title-large">Professional Invoice Builder</h3>
+                <p class="feature-description-large">
+                    Create beautiful, branded invoices in minutes with our intuitive drag-and-drop builder. 
+                    Customize layouts, add your logo, and choose from stunning templates.
+                </p>
+                <ul class="feature-list">
+                    <li>Drag-and-drop line items</li>
+                    <li>Custom branding and colors</li>
+                    <li>Professional templates</li>
+                    <li>Automatic calculations</li>
                 </ul>
             </div>
 
-            <div class="card hover-lift fade-up group transition-all duration-300 hover:shadow-2xl overflow-hidden" style="animation-delay: 0.1s">
-                <div class="relative h-48 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl mb-6 overflow-hidden">
-                    <div class="absolute inset-0 flex items-center justify-center text-6xl group-hover:scale-125 transition-transform duration-300">🎨</div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/0 to-white/10 group-hover:to-white/20 transition-all"></div>
+            <div class="glass-card feature-card-large" data-animate="slide-up" data-delay="200">
+                <div class="feature-icon-large">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
                 </div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 group-hover:text-green-600 transition-colors">Custom Branding</h3>
-                <p class="text-gray-600 group-hover:text-gray-700 transition-colors mb-4">Upload logos, set brand colors, add company details. Every invoice reinforces your professional image.</p>
-                <ul class="space-y-2 text-sm text-gray-600">
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Logo Upload</li>
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Color Management</li>
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Template Customization</li>
+                <h3 class="feature-title-large">Real-Time Analytics</h3>
+                <p class="feature-description-large">
+                    Gain insights into your business with powerful analytics. Track revenue, 
+                    monitor payment trends, and make data-driven decisions.
+                </p>
+                <ul class="feature-list">
+                    <li>Revenue dashboards</li>
+                    <li>Payment tracking</li>
+                    <li>Client analytics</li>
+                    <li>Export reports</li>
                 </ul>
             </div>
 
-            <div class="card hover-lift fade-up group transition-all duration-300 hover:shadow-2xl overflow-hidden" style="animation-delay: 0.2s">
-                <div class="relative h-48 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl mb-6 overflow-hidden">
-                    <div class="absolute inset-0 flex items-center justify-center text-6xl group-hover:scale-125 transition-transform duration-300">📧</div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/0 to-white/10 group-hover:to-white/20 transition-all"></div>
+            <div class="glass-card feature-card-large" data-animate="slide-up" data-delay="300">
+                <div class="feature-icon-large">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
                 </div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 group-hover:text-pink-600 transition-colors">Multi-Channel Sending</h3>
-                <p class="text-gray-600 group-hover:text-gray-700 transition-colors mb-4">Send via email with tracking or share instantly via WhatsApp. Reach clients wherever they are.</p>
-                <ul class="space-y-2 text-sm text-gray-600">
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Email Integration</li>
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> WhatsApp Sharing</li>
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Delivery Tracking</li>
+                <h3 class="feature-title-large">Automation</h3>
+                <p class="feature-description-large">
+                    Set up recurring invoices, automatic reminders, and smart workflows 
+                    that save you hours every week.
+                </p>
+                <ul class="feature-list">
+                    <li>Recurring invoices</li>
+                    <li>Payment reminders</li>
+                    <li>Auto late fees</li>
+                    <li>Email notifications</li>
                 </ul>
             </div>
 
-            <div class="card hover-lift fade-up group transition-all duration-300 hover:shadow-2xl overflow-hidden" style="animation-delay: 0.3s">
-                <div class="relative h-48 bg-gradient-to-br from-red-500 to-pink-500 rounded-2xl mb-6 overflow-hidden">
-                    <div class="absolute inset-0 flex items-center justify-center text-6xl group-hover:scale-125 transition-transform duration-300">📊</div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/0 to-white/10 group-hover:to-white/20 transition-all"></div>
+            <div class="glass-card feature-card-large" data-animate="slide-up" data-delay="400">
+                <div class="feature-icon-large">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
                 </div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 group-hover:text-red-600 transition-colors">Smart Analytics</h3>
-                <p class="text-gray-600 group-hover:text-gray-700 transition-colors mb-4">Track revenue, payment status, and client statistics in real-time. Get insights instantly.</p>
-                <ul class="space-y-2 text-sm text-gray-600">
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Revenue Tracking</li>
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Payment Status</li>
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Client Insights</li>
-                </ul>
-            </div>
-
-            <div class="card hover-lift fade-up group transition-all duration-300 hover:shadow-2xl overflow-hidden" style="animation-delay: 0.4s">
-                <div class="relative h-48 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl mb-6 overflow-hidden">
-                    <div class="absolute inset-0 flex items-center justify-center text-6xl group-hover:scale-125 transition-transform duration-300">💰</div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/0 to-white/10 group-hover:to-white/20 transition-all"></div>
-                </div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 group-hover:text-orange-600 transition-colors">Multi-Currency</h3>
-                <p class="text-gray-600 group-hover:text-gray-700 transition-colors mb-4">Support for USD, EUR, GBP, NGN, CAD, AUD with proper formatting and symbols.</p>
-                <ul class="space-y-2 text-sm text-gray-600">
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> 6 Currencies</li>
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Auto Formatting</li>
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Global Ready</li>
-                </ul>
-            </div>
-
-            <div class="card hover-lift fade-up group transition-all duration-300 hover:shadow-2xl overflow-hidden" style="animation-delay: 0.5s">
-                <div class="relative h-48 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl mb-6 overflow-hidden">
-                    <div class="absolute inset-0 flex items-center justify-center text-6xl group-hover:scale-125 transition-transform duration-300">☁️</div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/0 to-white/10 group-hover:to-white/20 transition-all"></div>
-                </div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 group-hover:text-cyan-600 transition-colors">Cloud Storage</h3>
-                <p class="text-gray-600 group-hover:text-gray-700 transition-colors mb-4">Secure backup and access your invoices from anywhere with an internet connection.</p>
-                <ul class="space-y-2 text-sm text-gray-600">
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Encrypted Storage</li>
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Access Anywhere</li>
-                    <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Auto Backup</li>
+                <h3 class="feature-title-large">Bank-Grade Security</h3>
+                <p class="feature-description-large">
+                    Your data is protected with enterprise-level security measures, 
+                    including 256-bit encryption and secure payment processing.
+                </p>
+                <ul class="feature-list">
+                    <li>256-bit encryption</li>
+                    <li>Secure backups</li>
+                    <li>GDPR compliant</li>
+                    <li>Two-factor auth</li>
                 </ul>
             </div>
         </div>
     </div>
 </section>
 
-<!-- CTA Section -->
-<section class="section-lg bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white">
-    <div class="container text-center fade-up">
-        <h2 class="text-4xl md:text-5xl font-black mb-6">Ready to Get Started?</h2>
-        <p class="text-xl opacity-95 mb-8 max-w-2xl mx-auto">Experience all these powerful features free forever. No credit card required.</p>
-        <a href="{% url 'signup' %}" class="btn btn-primary btn-lg hover-lift focus-ring shadow-2xl inline-flex items-center gap-2">
-            <span>Start Free Today</span>
-            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
-        </a>
+<section class="section">
+    <div class="container">
+        <div class="cta-section" data-animate="scale-in">
+            <div class="cta-content">
+                <h2 class="cta-title">
+                    Ready to Experience These Features?
+                </h2>
+                <p class="cta-description">
+                    Start your free trial today and discover how InvoiceFlow 
+                    can transform your invoicing workflow.
+                </p>
+                <div class="cta-actions">
+                    <a href="{% url 'signup' %}" class="btn btn-white btn-lg">
+                        Get Started Free
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
+{% endblock %}
 
+{% block extra_css %}
 <style>
-@keyframes blob {
-    0%, 100% { transform: translate(0px, 0px) scale(1); }
-    33% { transform: translate(30px, -50px) scale(1.1); }
-    66% { transform: translate(-20px, 20px) scale(0.9); }
+.page-hero {
+    padding: var(--spacing-40) 0 var(--spacing-20);
+    text-align: center;
+    position: relative;
 }
 
-.animate-blob-morph {
-    animation: blob 7s infinite;
+.page-hero-content {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-.animation-delay-2000 {
-    animation-delay: 2s;
+.page-hero-title {
+    font-size: var(--font-size-5xl);
+    margin-bottom: var(--spacing-6);
+}
+
+@media (min-width: 768px) {
+    .page-hero-title {
+        font-size: var(--font-size-6xl);
+    }
+}
+
+.page-hero-subtitle {
+    font-size: var(--font-size-xl);
+    color: var(--color-neutral-400);
+}
+
+.features-grid-large {
+    display: grid;
+    gap: var(--spacing-8);
+}
+
+@media (min-width: 768px) {
+    .features-grid-large {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.feature-card-large {
+    padding: var(--spacing-10);
+}
+
+.feature-icon-large {
+    width: 72px;
+    height: 72px;
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: var(--radius-2xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-6);
+    color: var(--color-primary-400);
+}
+
+.feature-icon-large svg {
+    width: 36px;
+    height: 36px;
+}
+
+.feature-title-large {
+    font-size: var(--font-size-2xl);
+    color: var(--color-neutral-0);
+    margin-bottom: var(--spacing-4);
+}
+
+.feature-description-large {
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-400);
+    margin-bottom: var(--spacing-6);
+    line-height: var(--line-height-relaxed);
+}
+
+.feature-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-3);
+}
+
+.feature-list li {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: var(--font-size-sm);
+    color: var(--color-neutral-300);
+}
+
+.feature-list li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--color-accent-500);
+    border-radius: 50%;
 }
 </style>
 {% endblock %}
