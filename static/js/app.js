@@ -4,11 +4,14 @@
   const InvoiceFlow = {
     init() {
       this.initNavigation();
+      this.initMobileMenu();
       this.initScrollAnimations();
       this.initParallax();
       this.initMicroInteractions();
       this.initSmoothScroll();
-      console.log('InvoiceFlow v4.0 initialized');
+      this.initLazyLoading();
+      this.initAccessibility();
+      console.log('InvoiceFlow v6.0 - Enterprise Edition initialized');
     },
 
     initNavigation() {
@@ -37,16 +40,44 @@
       };
 
       window.addEventListener('scroll', this.throttle(handleScroll, 16), { passive: true });
+    },
 
-      const mobileToggle = document.querySelector('.nav-mobile-toggle');
-      const mobileMenu = document.querySelector('.nav-mobile-menu');
+    initMobileMenu() {
+      const toggle = document.querySelector('.nav-mobile-toggle');
+      const menu = document.querySelector('.nav-mobile-menu');
+      const nav = document.querySelector('.nav');
       
-      if (mobileToggle && mobileMenu) {
-        mobileToggle.addEventListener('click', () => {
-          mobileMenu.classList.toggle('active');
-          mobileToggle.classList.toggle('active');
+      if (!toggle || !menu) return;
+
+      toggle.addEventListener('click', () => {
+        const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', !isExpanded);
+        menu.setAttribute('aria-hidden', isExpanded);
+        toggle.classList.toggle('active');
+        menu.classList.toggle('active');
+        document.body.classList.toggle('menu-open');
+      });
+
+      menu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          toggle.setAttribute('aria-expanded', 'false');
+          menu.setAttribute('aria-hidden', 'true');
+          toggle.classList.remove('active');
+          menu.classList.remove('active');
+          document.body.classList.remove('menu-open');
         });
-      }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && menu.classList.contains('active')) {
+          toggle.setAttribute('aria-expanded', 'false');
+          menu.setAttribute('aria-hidden', 'true');
+          toggle.classList.remove('active');
+          menu.classList.remove('active');
+          document.body.classList.remove('menu-open');
+          toggle.focus();
+        }
+      });
     },
 
     initScrollAnimations() {
@@ -82,6 +113,8 @@
       const parallaxElements = document.querySelectorAll('[data-parallax]');
       if (!parallaxElements.length) return;
 
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
       const handleParallax = () => {
         const scrollY = window.pageYOffset;
 
@@ -113,7 +146,9 @@
         });
       });
 
-      document.querySelectorAll('.glass-card').forEach(card => {
+      document.querySelectorAll('.glass-card, .bento-card').forEach(card => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
         card.addEventListener('mousemove', (e) => {
           const rect = card.getBoundingClientRect();
           const x = e.clientX - rect.left;
@@ -122,8 +157,8 @@
           const centerX = rect.width / 2;
           const centerY = rect.height / 2;
           
-          const rotateX = (y - centerY) / 20;
-          const rotateY = (centerX - x) / 20;
+          const rotateX = (y - centerY) / 30;
+          const rotateY = (centerX - x) / 30;
           
           card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
         });
@@ -163,6 +198,57 @@
             top: offsetPosition,
             behavior: 'smooth'
           });
+
+          target.focus({ preventScroll: true });
+        });
+      });
+    },
+
+    initLazyLoading() {
+      if ('loading' in HTMLImageElement.prototype) {
+        const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+        lazyImages.forEach(img => {
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+          }
+        });
+      } else {
+        const lazyImageObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              if (img.dataset.src) {
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+              }
+              lazyImageObserver.unobserve(img);
+            }
+          });
+        });
+
+        document.querySelectorAll('img[data-src]').forEach(img => {
+          lazyImageObserver.observe(img);
+        });
+      }
+    },
+
+    initAccessibility() {
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
+          document.body.classList.add('keyboard-navigation');
+        }
+      });
+
+      document.addEventListener('mousedown', () => {
+        document.body.classList.remove('keyboard-navigation');
+      });
+
+      document.querySelectorAll('[role="button"]').forEach(el => {
+        el.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            el.click();
+          }
         });
       });
     },

@@ -1,685 +1,117 @@
 {% extends "base/layout.html" %}
 
-{% block title %}Professional Invoicing Made Simple{% endblock %}
-{% block meta_description %}Create stunning invoices in 60 seconds. InvoiceFlow is the modern invoicing platform that helps you automate billing and get paid 3x faster.{% endblock %}
-
-{% block content %}
-<section class="hero-ultra">
-    <div class="hero-particles" id="particles"></div>
-    <div class="hero-gradient-orbs">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
-    <div class="hero-grid-pattern"></div>
-    
-    <div class="container">
-        <div class="hero-ultra-content">
-            <div class="hero-announcement animate-fade-down">
-                <span class="announcement-badge">
-                    <span class="pulse-dot"></span>
-                    <span class="announcement-text">New: AI-Powered Invoice Generation</span>
-                    <svg class="announcement-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                </span>
-            </div>
-            
-            <h1 class="hero-ultra-title animate-fade-up">
-                <span class="title-line">The Future of</span>
-                <span class="title-gradient">Professional Invoicing</span>
-            </h1>
-            
-            <p class="hero-ultra-subtitle animate-fade-up delay-100">
-                Create beautiful invoices in seconds, automate your entire billing workflow, 
-                and get paid 3x faster with the platform trusted by 50,000+ businesses worldwide.
-            </p>
-            
-            <div class="hero-ultra-actions animate-fade-up delay-200">
-                <a href="{% url 'signup' %}" class="btn-ultra btn-ultra-primary">
-                    <span>Start Free Today</span>
-                    <div class="btn-shine"></div>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                </a>
-                <a href="#demo" class="btn-ultra btn-ultra-glass">
-                    <div class="btn-icon-wrapper">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <polygon points="5 3 19 12 5 21 5 3"/>
-                        </svg>
-                    </div>
-                    <span>Watch Demo</span>
-                </a>
-            </div>
-            
-            <div class="hero-trust-badges animate-fade-up delay-300">
-                <div class="trust-badge">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    </svg>
-                    <span>Bank-grade security</span>
-                </div>
-                <div class="trust-divider"></div>
-                <div class="trust-badge">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                    <span>60-second setup</span>
-                </div>
-                <div class="trust-divider"></div>
-                <div class="trust-badge">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                        <polyline points="22 4 12 14.01 9 11.01"/>
-                    </svg>
-                    <span>No credit card required</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="hero-ultra-visual animate-scale-in delay-400">
-            <div class="dashboard-mockup">
-                <div class="mockup-header">
-                    <div class="mockup-dots">
-                        <span></span><span></span><span></span>
-                    </div>
-                    <div class="mockup-url">app.invoiceflow.com/dashboard</div>
-                </div>
-                <div class="mockup-content">
-                    <img src="/static/images/landing/dashboard-preview.jpg" alt="InvoiceFlow Dashboard" loading="eager">
-                </div>
-                
-                <div class="floating-notification notif-1">
-                    <div class="notif-icon success">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                    </div>
-                    <div class="notif-content">
-                        <span class="notif-title">Payment Received</span>
-                        <span class="notif-amount">+$4,250.00</span>
-                    </div>
-                </div>
-                
-                <div class="floating-notification notif-2">
-                    <div class="notif-icon info">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
-                        </svg>
-                    </div>
-                    <div class="notif-content">
-                        <span class="notif-title">Invoice Sent</span>
-                        <span class="notif-subtitle">INV-2025-0847</span>
-                    </div>
-                </div>
-                
-                <div class="floating-notification notif-3">
-                    <div class="notif-icon warning">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M18 20V10M12 20V4M6 20v-6"/>
-                        </svg>
-                    </div>
-                    <div class="notif-content">
-                        <span class="notif-title">Revenue Up</span>
-                        <span class="notif-subtitle">+32% this month</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="scroll-indicator">
-        <span>Explore</span>
-        <div class="scroll-line">
-            <div class="scroll-dot"></div>
-        </div>
-    </div>
-</section>
-
-<section class="stats-section">
-    <div class="container">
-        <div class="stats-grid">
-            <div class="stat-card" data-count="50000">
-                <div class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                        <circle cx="9" cy="7" r="4"/>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-                    </svg>
-                </div>
-                <div class="stat-number"><span class="counter">50,000</span>+</div>
-                <div class="stat-label">Active Users</div>
-            </div>
-            
-            <div class="stat-card" data-count="2500000">
-                <div class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                        <line x1="16" y1="13" x2="8" y2="13"/>
-                        <line x1="16" y1="17" x2="8" y2="17"/>
-                    </svg>
-                </div>
-                <div class="stat-number">$<span class="counter">2.5</span>B+</div>
-                <div class="stat-label">Invoices Processed</div>
-            </div>
-            
-            <div class="stat-card" data-count="99">
-                <div class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                        <polyline points="22 4 12 14.01 9 11.01"/>
-                    </svg>
-                </div>
-                <div class="stat-number"><span class="counter">99.9</span>%</div>
-                <div class="stat-label">Uptime Guaranteed</div>
-            </div>
-            
-            <div class="stat-card" data-count="150">
-                <div class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <line x1="2" y1="12" x2="22" y2="12"/>
-                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                    </svg>
-                </div>
-                <div class="stat-number"><span class="counter">150</span>+</div>
-                <div class="stat-label">Countries Supported</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="bento-section" id="features">
-    <div class="container">
-        <div class="section-header-ultra">
-            <span class="section-eyebrow">
-                <span class="eyebrow-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                    </svg>
-                </span>
-                Powerful Features
-            </span>
-            <h2 class="section-title-ultra">
-                Everything You Need to <span class="text-gradient-animated">Get Paid Faster</span>
-            </h2>
-            <p class="section-subtitle-ultra">
-                A complete invoicing toolkit designed for modern businesses
-            </p>
-        </div>
-        
-        <div class="bento-grid">
-            <div class="bento-card bento-large bento-gradient-1">
-                <div class="bento-content">
-                    <div class="bento-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="3" y1="9" x2="21" y2="9"/>
-                            <line x1="9" y1="21" x2="9" y2="9"/>
-                        </svg>
-                    </div>
-                    <h3 class="bento-title">Smart Dashboard</h3>
-                    <p class="bento-description">Get a bird's-eye view of your entire business. Track revenue, monitor outstanding invoices, and spot trends at a glance.</p>
-                    <div class="bento-visual">
-                        <img src="/static/images/landing/analytics-dashboard.jpg" alt="Analytics Dashboard" loading="lazy">
-                    </div>
-                </div>
-                <div class="bento-glow"></div>
-            </div>
-            
-            <div class="bento-card bento-gradient-2">
-                <div class="bento-content">
-                    <div class="bento-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <polyline points="12 6 12 12 16 14"/>
-                        </svg>
-                    </div>
-                    <h3 class="bento-title">60-Second Invoices</h3>
-                    <p class="bento-description">Create professional invoices faster than ever with our intelligent templates.</p>
-                </div>
-                <div class="bento-glow"></div>
-            </div>
-            
-            <div class="bento-card bento-gradient-3">
-                <div class="bento-content">
-                    <div class="bento-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        </svg>
-                    </div>
-                    <h3 class="bento-title">Bank-Grade Security</h3>
-                    <p class="bento-description">256-bit encryption protects your data like the world's leading banks.</p>
-                </div>
-                <div class="bento-glow"></div>
-            </div>
-            
-            <div class="bento-card bento-gradient-4">
-                <div class="bento-content">
-                    <div class="bento-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="17 1 21 5 17 9"/>
-                            <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
-                            <polyline points="7 23 3 19 7 15"/>
-                            <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
-                        </svg>
-                    </div>
-                    <h3 class="bento-title">Recurring Billing</h3>
-                    <p class="bento-description">Set up automatic invoicing for retainer clients and subscriptions.</p>
-                </div>
-                <div class="bento-glow"></div>
-            </div>
-            
-            <div class="bento-card bento-large bento-gradient-5">
-                <div class="bento-content">
-                    <div class="bento-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                        </svg>
-                    </div>
-                    <h3 class="bento-title">Automated Reminders</h3>
-                    <p class="bento-description">Never chase payments again. Our smart reminder system sends polite follow-ups at the perfect time to maximize your collection rate.</p>
-                    <div class="bento-visual">
-                        <img src="/static/images/landing/automation.jpg" alt="Automation" loading="lazy">
-                    </div>
-                </div>
-                <div class="bento-glow"></div>
-            </div>
-            
-            <div class="bento-card bento-gradient-6">
-                <div class="bento-content">
-                    <div class="bento-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="2" y1="12" x2="22" y2="12"/>
-                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                        </svg>
-                    </div>
-                    <h3 class="bento-title">Multi-Currency</h3>
-                    <p class="bento-description">Invoice in 100+ currencies with real-time exchange rates.</p>
-                </div>
-                <div class="bento-glow"></div>
-            </div>
-            
-            <div class="bento-card bento-gradient-7">
-                <div class="bento-content">
-                    <div class="bento-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                        </svg>
-                    </div>
-                    <h3 class="bento-title">Real-Time Analytics</h3>
-                    <p class="bento-description">Make data-driven decisions with powerful reporting tools.</p>
-                </div>
-                <div class="bento-glow"></div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="workflow-section" id="demo">
-    <div class="container">
-        <div class="section-header-ultra">
-            <span class="section-eyebrow">
-                <span class="eyebrow-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polygon points="10 8 16 12 10 16 10 8"/>
-                    </svg>
-                </span>
-                How It Works
-            </span>
-            <h2 class="section-title-ultra">
-                From Invoice to <span class="text-gradient-animated">Payment in Minutes</span>
-            </h2>
-        </div>
-        
-        <div class="workflow-steps">
-            <div class="workflow-step">
-                <div class="step-number">01</div>
-                <div class="step-content">
-                    <div class="step-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                        </svg>
-                    </div>
-                    <h3>Create Your Invoice</h3>
-                    <p>Use our intuitive builder or smart templates to create professional invoices in under 60 seconds.</p>
-                </div>
-                <div class="step-connector">
-                    <svg viewBox="0 0 100 20" preserveAspectRatio="none">
-                        <path d="M0 10 H100" stroke="currentColor" stroke-width="2" stroke-dasharray="5,5" fill="none"/>
-                        <polygon points="95,5 100,10 95,15" fill="currentColor"/>
-                    </svg>
-                </div>
-            </div>
-            
-            <div class="workflow-step">
-                <div class="step-number">02</div>
-                <div class="step-content">
-                    <div class="step-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
-                        </svg>
-                    </div>
-                    <h3>Send Instantly</h3>
-                    <p>Deliver invoices via email, WhatsApp, or shareable link. Clients receive them immediately.</p>
-                </div>
-                <div class="step-connector">
-                    <svg viewBox="0 0 100 20" preserveAspectRatio="none">
-                        <path d="M0 10 H100" stroke="currentColor" stroke-width="2" stroke-dasharray="5,5" fill="none"/>
-                        <polygon points="95,5 100,10 95,15" fill="currentColor"/>
-                    </svg>
-                </div>
-            </div>
-            
-            <div class="workflow-step">
-                <div class="step-number">03</div>
-                <div class="step-content">
-                    <div class="step-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="1" x2="12" y2="23"/>
-                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                        </svg>
-                    </div>
-                    <h3>Get Paid Faster</h3>
-                    <p>Clients pay with one click. Funds arrive in your account up to 3x faster than traditional methods.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="showcase-ultra">
-    <div class="container">
-        <div class="showcase-wrapper">
-            <div class="showcase-content-side">
-                <span class="section-eyebrow light">
-                    <span class="eyebrow-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                        </svg>
-                    </span>
-                    Invoice Creation
-                </span>
-                <h2 class="showcase-title-ultra">
-                    Beautifully Crafted Invoices That <span class="text-gradient-light">Impress Clients</span>
-                </h2>
-                <p class="showcase-description-ultra">
-                    Your invoices are a reflection of your brand. Create stunning, professional documents 
-                    that make clients want to pay immediately.
-                </p>
-                
-                <div class="feature-checklist">
-                    <div class="checklist-item">
-                        <div class="check-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                <polyline points="20 6 9 17 4 12"/>
-                            </svg>
-                        </div>
-                        <span>Professional templates for every industry</span>
-                    </div>
-                    <div class="checklist-item">
-                        <div class="check-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                <polyline points="20 6 9 17 4 12"/>
-                            </svg>
-                        </div>
-                        <span>Custom branding with your logo and colors</span>
-                    </div>
-                    <div class="checklist-item">
-                        <div class="check-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                <polyline points="20 6 9 17 4 12"/>
-                            </svg>
-                        </div>
-                        <span>Automatic tax calculations and line items</span>
-                    </div>
-                    <div class="checklist-item">
-                        <div class="check-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                <polyline points="20 6 9 17 4 12"/>
-                            </svg>
-                        </div>
-                        <span>One-click PDF export and email delivery</span>
-                    </div>
-                </div>
-                
-                <a href="{% url 'signup' %}" class="btn-ultra btn-ultra-white">
-                    <span>Start Creating</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                </a>
-            </div>
-            
-            <div class="showcase-visual-side">
-                <div class="showcase-image-wrapper">
-                    <img src="/static/images/landing/create-invoice.jpg" alt="Create Invoice Interface" loading="lazy">
-                    <div class="image-glow"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="integrations-section">
-    <div class="container">
-        <div class="section-header-ultra">
-            <span class="section-eyebrow">
-                <span class="eyebrow-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="3"/>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                    </svg>
-                </span>
-                Integrations
-            </span>
-            <h2 class="section-title-ultra">
-                Works With Your <span class="text-gradient-animated">Favorite Tools</span>
-            </h2>
-            <p class="section-subtitle-ultra">
-                Seamlessly connect with the apps you already use
-            </p>
-        </div>
-        
-        <div class="integrations-grid">
-            <div class="integration-card">
-                <div class="integration-icon">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-                    </svg>
-                </div>
-                <span>QuickBooks</span>
-            </div>
-            <div class="integration-card">
-                <div class="integration-icon">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
-                    </svg>
-                </div>
-                <span>Gmail</span>
-            </div>
-            <div class="integration-card">
-                <div class="integration-icon">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-                    </svg>
-                </div>
-                <span>Google Sheets</span>
-            </div>
-            <div class="integration-card">
-                <div class="integration-icon">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 14H5c-.55 0-1-.45-1-1V8l8 5 8-5v9c0 .55-.45 1-1 1zm-7-7L4 6h16l-8 5z"/>
-                    </svg>
-                </div>
-                <span>Outlook</span>
-            </div>
-            <div class="integration-card">
-                <div class="integration-icon stripe">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z"/>
-                    </svg>
-                </div>
-                <span>Stripe</span>
-            </div>
-            <div class="integration-card">
-                <div class="integration-icon paypal">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.59 3.025-2.566 6.082-8.558 6.082H9.826c-1.05 0-1.937.765-2.101 1.805L6.6 21.467a.72.72 0 0 0 .71.832h4.212c.923 0 1.71-.67 1.856-1.58l.765-4.863c.077-.462.503-.79.969-.79h.612c3.944 0 7.034-1.603 7.94-6.237.418-2.14.135-3.91-1.442-4.912z"/>
-                    </svg>
-                </div>
-                <span>PayPal</span>
-            </div>
-            <div class="integration-card">
-                <div class="integration-icon slack">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/>
-                    </svg>
-                </div>
-                <span>Slack</span>
-            </div>
-            <div class="integration-card">
-                <div class="integration-icon zapier">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M15.678 12.006l2.87-2.87a.75.75 0 0 0 0-1.06l-2.87-2.87v-.001h3.571a.75.75 0 0 0 .75-.75V.703a.75.75 0 0 0-.75-.75h-3.751a.75.75 0 0 0-.75.75v3.571l-2.871 2.87a.75.75 0 0 0 0 1.06l2.871 2.87v-.001-.001 3.572a.75.75 0 0 0 .75.75h3.751a.75.75 0 0 0 .75-.75v-3.752a.75.75 0 0 0-.75-.75h-3.571l.001-.001v-.001l-.001-.001.001.001-.001-.001.001.001-.001-.001.001.001-.001-.001.001.001-.001-.001.001.001-.001-.001zM8.322 12.006l-2.87 2.87a.75.75 0 0 0 0 1.06l2.87 2.87v.001H4.751a.75.75 0 0 0-.75.75v3.751a.75.75 0 0 0 .75.75h3.751a.75.75 0 0 0 .75-.75v-3.571l2.871-2.87a.75.75 0 0 0 0-1.06l-2.871-2.87v.001.001-3.572a.75.75 0 0 0-.75-.75H4.751a.75.75 0 0 0-.75.75v3.752a.75.75 0 0 0 .75.75h3.571z"/>
-                    </svg>
-                </div>
-                <span>Zapier</span>
-            </div>
-        </div>
-        
-        <div class="integrations-cta">
-            <p>And 50+ more integrations</p>
-            <a href="{% url 'features' %}" class="link-with-arrow">
-                View All Integrations
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-            </a>
-        </div>
-    </div>
-</section>
-
-<section class="cta-ultra">
-    <div class="cta-bg-effects">
-        <div class="cta-orb cta-orb-1"></div>
-        <div class="cta-orb cta-orb-2"></div>
-        <div class="cta-grid-pattern"></div>
-    </div>
-    
-    <div class="container">
-        <div class="cta-content-ultra">
-            <h2 class="cta-title-ultra">
-                Ready to Transform<br>Your Invoicing?
-            </h2>
-            <p class="cta-subtitle-ultra">
-                Join 50,000+ businesses already using InvoiceFlow to get paid faster. 
-                Start free, no credit card required.
-            </p>
-            
-            <div class="cta-actions-ultra">
-                <a href="{% url 'signup' %}" class="btn-ultra btn-ultra-white btn-ultra-large">
-                    <span>Get Started Free</span>
-                    <div class="btn-shine"></div>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                </a>
-                <a href="{% url 'contact' %}" class="btn-ultra btn-ultra-outline-white btn-ultra-large">
-                    <span>Talk to Sales</span>
-                </a>
-            </div>
-            
-            <div class="cta-guarantee">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    <polyline points="9 12 11 14 15 10"/>
-                </svg>
-                <span>14-day free trial. Cancel anytime. No questions asked.</span>
-            </div>
-        </div>
-    </div>
-</section>
-{% endblock %}
+{% block title %}Professional Invoicing Made Simple | InvoiceFlow{% endblock %}
+{% block meta_description %}Create stunning invoices in 60 seconds. InvoiceFlow is the modern invoicing platform trusted by 50,000+ businesses to automate billing and get paid 3x faster.{% endblock %}
 
 {% block extra_css %}
 <style>
-:root {
-    --hero-gradient-1: #6366f1;
-    --hero-gradient-2: #8b5cf6;
-    --hero-gradient-3: #a855f7;
-}
-
 .hero-ultra {
     min-height: 100vh;
     position: relative;
+    overflow: hidden;
     display: flex;
     align-items: center;
     padding: 120px 0 80px;
-    overflow: hidden;
-    background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
+    background: linear-gradient(135deg, #0f0c29 0%, #1a1744 25%, #302b63 50%, #1e1b4b 75%, #0f0c29 100%);
 }
 
 .hero-particles {
     position: absolute;
     inset: 0;
     overflow: hidden;
+    pointer-events: none;
+}
+
+.hero-particles::before,
+.hero-particles::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    animation: particle-float 20s infinite;
+}
+
+.hero-particles::before {
+    width: 4px;
+    height: 4px;
+    background: rgba(139, 92, 246, 0.6);
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.hero-particles::after {
+    width: 6px;
+    height: 6px;
+    background: rgba(99, 102, 241, 0.5);
+    top: 60%;
+    right: 15%;
+    animation-delay: -5s;
+}
+
+@keyframes particle-float {
+    0%, 100% { transform: translateY(0) translateX(0); opacity: 0.5; }
+    25% { transform: translateY(-30px) translateX(20px); opacity: 1; }
+    50% { transform: translateY(-10px) translateX(-15px); opacity: 0.7; }
+    75% { transform: translateY(-50px) translateX(10px); opacity: 0.9; }
 }
 
 .hero-gradient-orbs {
     position: absolute;
     inset: 0;
-    overflow: hidden;
     pointer-events: none;
+    overflow: hidden;
 }
 
 .orb {
     position: absolute;
     border-radius: 50%;
     filter: blur(80px);
-    opacity: 0.5;
-    animation: float-orb 20s ease-in-out infinite;
+    opacity: 0.6;
+    will-change: transform;
 }
 
 .orb-1 {
     width: 600px;
     height: 600px;
-    background: var(--hero-gradient-1);
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%);
     top: -200px;
-    left: -200px;
+    right: -150px;
+    animation: orb-float-1 15s ease-in-out infinite;
 }
 
 .orb-2 {
     width: 500px;
     height: 500px;
-    background: var(--hero-gradient-2);
-    bottom: -150px;
-    right: -150px;
-    animation-delay: -7s;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.35) 0%, transparent 70%);
+    bottom: -100px;
+    left: -100px;
+    animation: orb-float-2 18s ease-in-out infinite;
 }
 
 .orb-3 {
     width: 400px;
     height: 400px;
-    background: var(--hero-gradient-3);
-    top: 50%;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%);
+    top: 40%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    animation-delay: -14s;
+    transform: translateX(-50%);
+    animation: orb-float-3 20s ease-in-out infinite;
 }
 
-@keyframes float-orb {
+@keyframes orb-float-1 {
     0%, 100% { transform: translate(0, 0) scale(1); }
-    25% { transform: translate(50px, -30px) scale(1.1); }
-    50% { transform: translate(-30px, 50px) scale(0.9); }
-    75% { transform: translate(-50px, -20px) scale(1.05); }
+    33% { transform: translate(-30px, 40px) scale(1.1); }
+    66% { transform: translate(20px, -30px) scale(0.95); }
+}
+
+@keyframes orb-float-2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(40px, -40px) scale(1.15); }
+}
+
+@keyframes orb-float-3 {
+    0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.3; }
+    50% { transform: translateX(-50%) scale(1.2); opacity: 0.5; }
 }
 
 .hero-grid-pattern {
@@ -689,16 +121,24 @@
         linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
     background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+    mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+    pointer-events: none;
 }
 
 .hero-ultra .container {
+    position: relative;
+    z-index: 10;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 60px;
     align-items: center;
-    position: relative;
-    z-index: 2;
+}
+
+@media (min-width: 1024px) {
+    .hero-ultra .container {
+        grid-template-columns: 1fr 1.1fr;
+        gap: 80px;
+    }
 }
 
 .hero-ultra-content {
@@ -706,94 +146,112 @@
 }
 
 .hero-announcement {
-    margin-bottom: 32px;
+    margin-bottom: 28px;
 }
 
 .announcement-badge {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
-    padding: 8px 20px 8px 12px;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.15);
+    gap: 10px;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.1));
+    border: 1px solid rgba(139, 92, 246, 0.25);
     border-radius: 100px;
-    color: #fff;
     font-size: 14px;
     font-weight: 500;
-    backdrop-filter: blur(10px);
+    color: rgba(255,255,255,0.9);
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .announcement-badge:hover {
-    background: rgba(255,255,255,0.15);
-    border-color: rgba(255,255,255,0.25);
+    border-color: rgba(139, 92, 246, 0.5);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.15));
+    transform: translateY(-2px);
 }
 
 .pulse-dot {
     width: 8px;
     height: 8px;
-    background: #22c55e;
+    background: #10b981;
     border-radius: 50%;
-    animation: pulse 2s ease-in-out infinite;
+    animation: pulse-glow 2s ease-in-out infinite;
 }
 
-@keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.2); }
+@keyframes pulse-glow {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    50% { opacity: 0.8; box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
 }
 
 .announcement-arrow {
     width: 16px;
     height: 16px;
-    opacity: 0.7;
+    transition: transform 0.3s ease;
+}
+
+.announcement-badge:hover .announcement-arrow {
+    transform: translateX(4px);
 }
 
 .hero-ultra-title {
-    font-size: clamp(48px, 6vw, 80px);
+    font-size: clamp(42px, 6vw, 72px);
     font-weight: 800;
     line-height: 1.05;
+    letter-spacing: -0.03em;
     margin-bottom: 24px;
     color: #fff;
 }
 
 .title-line {
     display: block;
-    opacity: 0.9;
+    color: rgba(255,255,255,0.95);
 }
 
 .title-gradient {
     display: block;
-    background: linear-gradient(135deg, #818cf8, #c084fc, #f472b6);
+    background: linear-gradient(135deg, #a855f7 0%, #c084fc 30%, #e879f9 60%, #f0abfc 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    background-size: 200% 200%;
+    animation: gradient-shift 8s ease infinite;
+}
+
+@keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
 .hero-ultra-subtitle {
-    font-size: 20px;
-    line-height: 1.7;
+    font-size: clamp(17px, 2vw, 20px);
     color: rgba(255,255,255,0.7);
-    margin-bottom: 40px;
+    line-height: 1.7;
+    margin-bottom: 36px;
+    max-width: 520px;
 }
 
 .hero-ultra-actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 16px;
-    margin-bottom: 48px;
+    margin-bottom: 40px;
 }
 
 .btn-ultra {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
+    justify-content: center;
+    gap: 10px;
     padding: 16px 32px;
     font-size: 16px;
     font-weight: 600;
-    border-radius: 12px;
-    text-decoration: none;
-    transition: all 0.3s ease;
+    border-radius: 14px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
 }
 
 .btn-ultra svg {
@@ -807,14 +265,14 @@
 }
 
 .btn-ultra-primary {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
     color: #fff;
-    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.35), inset 0 1px 0 rgba(255,255,255,0.2);
 }
 
 .btn-ultra-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 48px rgba(99, 102, 241, 0.45), inset 0 1px 0 rgba(255,255,255,0.2);
 }
 
 .btn-shine {
@@ -824,61 +282,61 @@
     width: 100%;
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    animation: shine 3s ease-in-out infinite;
+    animation: btn-shine 3s ease-in-out infinite;
 }
 
-@keyframes shine {
+@keyframes btn-shine {
     0% { left: -100%; }
     50%, 100% { left: 100%; }
 }
 
 .btn-ultra-glass {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
     color: #fff;
-    border: 1px solid rgba(255,255,255,0.2);
-    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.15);
 }
 
 .btn-ultra-glass:hover {
-    background: rgba(255,255,255,0.15);
-    border-color: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.25);
+    transform: translateY(-3px);
 }
 
 .btn-icon-wrapper {
     width: 36px;
     height: 36px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255,255,255,0.15);
-    border-radius: 50%;
 }
 
 .btn-icon-wrapper svg {
     width: 14px;
     height: 14px;
-    margin-left: 2px;
 }
 
 .hero-trust-badges {
     display: flex;
-    align-items: center;
-    gap: 24px;
     flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
 }
 
 .trust-badge {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: rgba(255,255,255,0.6);
     font-size: 14px;
+    color: rgba(255,255,255,0.6);
 }
 
 .trust-badge svg {
     width: 18px;
     height: 18px;
-    color: #22c55e;
+    color: rgba(255,255,255,0.5);
 }
 
 .trust-divider {
@@ -889,25 +347,33 @@
 
 .hero-ultra-visual {
     position: relative;
+    perspective: 1500px;
 }
 
 .dashboard-mockup {
-    background: #1a1a2e;
-    border-radius: 16px;
+    position: relative;
+    background: linear-gradient(135deg, #1f2937, #111827);
+    border-radius: 20px;
     overflow: hidden;
     box-shadow: 
-        0 25px 50px rgba(0,0,0,0.5),
+        0 50px 100px -20px rgba(0,0,0,0.5),
+        0 30px 60px -30px rgba(0,0,0,0.3),
         0 0 0 1px rgba(255,255,255,0.1);
-    position: relative;
+    transform: rotateY(-5deg) rotateX(3deg);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dashboard-mockup:hover {
+    transform: rotateY(0) rotateX(0) translateY(-10px);
 }
 
 .mockup-header {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 16px;
-    background: rgba(255,255,255,0.05);
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 14px 18px;
+    background: rgba(0,0,0,0.4);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 .mockup-dots {
@@ -919,19 +385,22 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.2);
 }
 
-.mockup-dots span:first-child { background: #ff5f57; }
-.mockup-dots span:nth-child(2) { background: #ffbd2e; }
-.mockup-dots span:nth-child(3) { background: #28ca41; }
+.mockup-dots span:nth-child(1) { background: #ef4444; }
+.mockup-dots span:nth-child(2) { background: #fbbf24; }
+.mockup-dots span:nth-child(3) { background: #22c55e; }
 
 .mockup-url {
     flex: 1;
     text-align: center;
     font-size: 12px;
-    color: rgba(255,255,255,0.4);
+    color: rgba(255,255,255,0.5);
     font-family: monospace;
+}
+
+.mockup-content {
+    position: relative;
 }
 
 .mockup-content img {
@@ -941,13 +410,14 @@
 
 .floating-notification {
     position: absolute;
+    background: rgba(255,255,255,0.98);
+    border-radius: 14px;
+    padding: 14px 18px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
-    background: rgba(255,255,255,0.95);
-    border-radius: 12px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    gap: 14px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    z-index: 20;
     animation: float-notification 6s ease-in-out infinite;
 }
 
@@ -958,8 +428,8 @@
 }
 
 .notif-2 {
-    bottom: 30%;
-    left: -40px;
+    bottom: 35%;
+    left: -25px;
     animation-delay: -2s;
 }
 
@@ -971,60 +441,28 @@
 
 @keyframes float-notification {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    50% { transform: translateY(-15px); }
 }
 
 .notif-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.notif-icon.success {
-    background: #dcfce7;
-    color: #16a34a;
-}
+.notif-icon.success { background: #dcfce7; color: #16a34a; }
+.notif-icon.info { background: #dbeafe; color: #2563eb; }
+.notif-icon.warning { background: #fef3c7; color: #d97706; }
 
-.notif-icon.info {
-    background: #dbeafe;
-    color: #2563eb;
-}
+.notif-icon svg { width: 22px; height: 22px; }
 
-.notif-icon.warning {
-    background: #fef3c7;
-    color: #d97706;
-}
-
-.notif-icon svg {
-    width: 20px;
-    height: 20px;
-}
-
-.notif-content {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.notif-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: #1f2937;
-}
-
-.notif-amount {
-    font-size: 16px;
-    font-weight: 700;
-    color: #16a34a;
-}
-
-.notif-subtitle {
-    font-size: 12px;
-    color: #6b7280;
-}
+.notif-content { display: flex; flex-direction: column; gap: 3px; }
+.notif-title { font-size: 14px; font-weight: 600; color: #1f2937; }
+.notif-amount { font-size: 17px; font-weight: 700; color: #16a34a; }
+.notif-subtitle { font-size: 12px; color: #6b7280; }
 
 .scroll-indicator {
     position: absolute;
@@ -1035,27 +473,28 @@
     flex-direction: column;
     align-items: center;
     gap: 12px;
-    color: rgba(255,255,255,0.5);
-    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 2px;
+    z-index: 20;
 }
 
 .scroll-line {
     width: 1px;
-    height: 60px;
-    background: rgba(255,255,255,0.2);
+    height: 50px;
+    background: rgba(255,255,255,0.15);
     position: relative;
     overflow: hidden;
 }
 
 .scroll-dot {
-    width: 6px;
-    height: 6px;
+    width: 4px;
+    height: 4px;
     background: #fff;
     border-radius: 50%;
     position: absolute;
-    left: -2.5px;
+    left: -1.5px;
     animation: scroll-down 2s ease-in-out infinite;
 }
 
@@ -1067,7 +506,7 @@
 }
 
 .stats-section {
-    padding: 80px 0;
+    padding: 100px 0;
     background: #fff;
     position: relative;
 }
@@ -1080,40 +519,52 @@
 
 .stat-card {
     text-align: center;
-    padding: 32px 24px;
+    padding: 40px 28px;
     background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-    border-radius: 20px;
+    border-radius: 24px;
     border: 1px solid #e2e8f0;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
 }
 
+.stat-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.03));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.stat-card:hover::before { opacity: 1; }
+
 .stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+    border-color: #c7d2fe;
 }
 
 .stat-icon {
-    width: 56px;
-    height: 56px;
-    margin: 0 auto 20px;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 24px;
     background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    border-radius: 14px;
+    border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
 }
 
-.stat-icon svg {
-    width: 28px;
-    height: 28px;
-    color: #fff;
-}
+.stat-icon svg { width: 32px; height: 32px; color: #fff; }
 
 .stat-number {
-    font-size: 40px;
+    font-size: 44px;
     font-weight: 800;
     color: #1f2937;
     margin-bottom: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .stat-label {
@@ -1124,22 +575,22 @@
 
 .section-header-ultra {
     text-align: center;
-    max-width: 700px;
-    margin: 0 auto 60px;
+    max-width: 720px;
+    margin: 0 auto 70px;
 }
 
 .section-eyebrow {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 16px;
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+    padding: 10px 18px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.08));
     border: 1px solid rgba(99, 102, 241, 0.2);
     border-radius: 100px;
     color: #6366f1;
     font-size: 14px;
     font-weight: 600;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .section-eyebrow.light {
@@ -1148,142 +599,125 @@
     color: #fff;
 }
 
-.eyebrow-icon {
-    width: 16px;
-    height: 16px;
-}
-
-.eyebrow-icon svg {
-    width: 100%;
-    height: 100%;
-}
+.eyebrow-icon { width: 18px; height: 18px; }
+.eyebrow-icon svg { width: 100%; height: 100%; }
 
 .section-title-ultra {
-    font-size: clamp(32px, 4vw, 48px);
+    font-size: clamp(36px, 5vw, 52px);
     font-weight: 800;
-    line-height: 1.2;
+    line-height: 1.15;
     color: #1f2937;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
+    letter-spacing: -0.02em;
 }
 
 .text-gradient-animated {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 40%, #a855f7 70%, #c084fc 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
 .text-gradient-light {
-    background: linear-gradient(135deg, #c4b5fd, #f0abfc);
+    background: linear-gradient(135deg, #c4b5fd, #e879f9, #f0abfc);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
 .section-subtitle-ultra {
-    font-size: 18px;
+    font-size: 19px;
     color: #64748b;
     line-height: 1.7;
 }
 
 .bento-section {
-    padding: 100px 0;
-    background: #f8fafc;
+    padding: 120px 0;
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 50%, #f8fafc 100%);
 }
 
 .bento-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+    gap: 28px;
 }
 
 .bento-card {
     background: #fff;
-    border-radius: 24px;
-    padding: 32px;
+    border-radius: 28px;
+    padding: 36px;
     position: relative;
     overflow: hidden;
     border: 1px solid #e2e8f0;
-    transition: all 0.4s ease;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .bento-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+    transform: translateY(-8px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.12);
+    border-color: #c7d2fe;
 }
 
-.bento-card.bento-large {
-    grid-column: span 2;
-}
+.bento-card.bento-large { grid-column: span 2; }
 
 .bento-glow {
     position: absolute;
     inset: 0;
     opacity: 0;
-    transition: opacity 0.4s ease;
+    transition: opacity 0.5s ease;
     pointer-events: none;
 }
 
-.bento-card:hover .bento-glow {
-    opacity: 1;
-}
+.bento-card:hover .bento-glow { opacity: 1; }
 
-.bento-gradient-1 .bento-glow { background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.15), transparent 60%); }
-.bento-gradient-2 .bento-glow { background: radial-gradient(circle at 50% 50%, rgba(34, 197, 94, 0.15), transparent 60%); }
-.bento-gradient-3 .bento-glow { background: radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.15), transparent 60%); }
-.bento-gradient-4 .bento-glow { background: radial-gradient(circle at 50% 50%, rgba(249, 115, 22, 0.15), transparent 60%); }
-.bento-gradient-5 .bento-glow { background: radial-gradient(circle at 70% 30%, rgba(139, 92, 246, 0.15), transparent 60%); }
-.bento-gradient-6 .bento-glow { background: radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.15), transparent 60%); }
-.bento-gradient-7 .bento-glow { background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.15), transparent 60%); }
+.bento-gradient-1 .bento-glow { background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.12), transparent 60%); }
+.bento-gradient-2 .bento-glow { background: radial-gradient(circle at 50% 50%, rgba(34, 197, 94, 0.12), transparent 60%); }
+.bento-gradient-3 .bento-glow { background: radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.12), transparent 60%); }
+.bento-gradient-4 .bento-glow { background: radial-gradient(circle at 50% 50%, rgba(249, 115, 22, 0.12), transparent 60%); }
+.bento-gradient-5 .bento-glow { background: radial-gradient(circle at 70% 30%, rgba(139, 92, 246, 0.12), transparent 60%); }
+.bento-gradient-6 .bento-glow { background: radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.12), transparent 60%); }
+.bento-gradient-7 .bento-glow { background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.12), transparent 60%); }
 
-.bento-content {
-    position: relative;
-    z-index: 1;
-}
+.bento-content { position: relative; z-index: 1; }
 
 .bento-icon {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    border-radius: 12px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25);
 }
 
-.bento-icon svg {
-    width: 24px;
-    height: 24px;
-    color: #fff;
-}
+.bento-icon svg { width: 28px; height: 28px; color: #fff; }
 
 .bento-title {
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 700;
     color: #1f2937;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
 
 .bento-description {
-    font-size: 15px;
+    font-size: 16px;
     color: #64748b;
-    line-height: 1.6;
+    line-height: 1.7;
 }
 
 .bento-visual {
-    margin-top: 24px;
-    border-radius: 12px;
+    margin-top: 28px;
+    border-radius: 16px;
     overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-.bento-visual img {
-    width: 100%;
-    display: block;
-}
+.bento-visual img { width: 100%; display: block; }
 
 .workflow-section {
-    padding: 100px 0;
+    padding: 120px 0;
     background: #fff;
 }
 
@@ -1291,7 +725,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 32px;
+    gap: 40px;
     max-width: 1100px;
     margin: 0 auto;
 }
@@ -1303,113 +737,117 @@
 }
 
 .step-number {
-    font-size: 64px;
+    font-size: 72px;
     font-weight: 900;
     background: linear-gradient(135deg, #e0e7ff, #f0e7ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     line-height: 1;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
 }
 
-.step-content {
-    padding: 0 20px;
-}
+.step-content { padding: 0 20px; }
 
 .step-icon {
-    width: 64px;
-    height: 64px;
+    width: 72px;
+    height: 72px;
     background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    border-radius: 16px;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 20px;
+    margin: 0 auto 24px;
+    box-shadow: 0 12px 32px rgba(99, 102, 241, 0.3);
+    transition: transform 0.4s ease;
 }
 
-.step-icon svg {
-    width: 32px;
-    height: 32px;
-    color: #fff;
-}
+.workflow-step:hover .step-icon { transform: scale(1.1) rotate(5deg); }
+
+.step-icon svg { width: 36px; height: 36px; color: #fff; }
 
 .step-content h3 {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 700;
     color: #1f2937;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
 
 .step-content p {
-    font-size: 15px;
+    font-size: 16px;
     color: #64748b;
-    line-height: 1.6;
+    line-height: 1.7;
 }
 
 .step-connector {
     position: absolute;
-    top: 100px;
-    right: -60px;
-    width: 80px;
+    top: 110px;
+    right: -70px;
+    width: 100px;
     color: #e2e8f0;
 }
 
-.workflow-step:last-child .step-connector {
-    display: none;
-}
+.workflow-step:last-child .step-connector { display: none; }
 
 .showcase-ultra {
-    padding: 100px 0;
+    padding: 120px 0;
     background: linear-gradient(135deg, #1e1b4b, #312e81);
     position: relative;
     overflow: hidden;
 }
 
+.showcase-ultra::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.2) 0%, transparent 50%);
+    pointer-events: none;
+}
+
 .showcase-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 80px;
+    gap: 100px;
     align-items: center;
+    position: relative;
+    z-index: 1;
 }
 
-.showcase-content-side {
-    color: #fff;
-}
+.showcase-content-side { color: #fff; }
 
 .showcase-title-ultra {
-    font-size: clamp(28px, 3vw, 42px);
+    font-size: clamp(32px, 4vw, 48px);
     font-weight: 800;
-    line-height: 1.2;
-    margin-bottom: 20px;
+    line-height: 1.15;
+    margin-bottom: 24px;
     color: #fff;
 }
 
 .showcase-description-ultra {
-    font-size: 17px;
-    color: rgba(255,255,255,0.7);
-    line-height: 1.7;
-    margin-bottom: 32px;
+    font-size: 18px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.8;
+    margin-bottom: 36px;
 }
 
 .feature-checklist {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-bottom: 40px;
+    gap: 18px;
+    margin-bottom: 44px;
 }
 
 .checklist-item {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
     color: rgba(255,255,255,0.9);
-    font-size: 16px;
+    font-size: 17px;
 }
 
 .check-icon {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     background: rgba(34, 197, 94, 0.2);
     border-radius: 50%;
     display: flex;
@@ -1418,38 +856,30 @@
     flex-shrink: 0;
 }
 
-.check-icon svg {
-    width: 14px;
-    height: 14px;
-    color: #22c55e;
-}
+.check-icon svg { width: 16px; height: 16px; color: #22c55e; }
 
 .btn-ultra-white {
     background: #fff;
     color: #1f2937;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
 }
 
 .btn-ultra-white:hover {
     background: #f8fafc;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.2);
 }
 
-.showcase-visual-side {
-    position: relative;
-}
+.showcase-visual-side { position: relative; }
 
 .showcase-image-wrapper {
     position: relative;
-    border-radius: 20px;
+    border-radius: 24px;
     overflow: hidden;
-    box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+    box-shadow: 0 50px 100px rgba(0,0,0,0.4);
 }
 
-.showcase-image-wrapper img {
-    width: 100%;
-    display: block;
-}
+.showcase-image-wrapper img { width: 100%; display: block; }
 
 .image-glow {
     position: absolute;
@@ -1459,15 +889,15 @@
 }
 
 .integrations-section {
-    padding: 100px 0;
-    background: #f8fafc;
+    padding: 120px 0;
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
 }
 
 .integrations-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    max-width: 800px;
+    gap: 24px;
+    max-width: 900px;
     margin: 0 auto;
 }
 
@@ -1475,33 +905,30 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
-    padding: 32px 24px;
+    gap: 14px;
+    padding: 36px 28px;
     background: #fff;
-    border-radius: 16px;
+    border-radius: 20px;
     border: 1px solid #e2e8f0;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .integration-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
     border-color: #c7d2fe;
 }
 
 .integration-icon {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #6366f1;
 }
 
-.integration-icon svg {
-    width: 36px;
-    height: 36px;
-}
+.integration-icon svg { width: 44px; height: 44px; }
 
 .integration-icon.stripe { color: #635bff; }
 .integration-icon.paypal { color: #00457c; }
@@ -1509,19 +936,19 @@
 .integration-icon.zapier { color: #ff4a00; }
 
 .integration-card span {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     color: #1f2937;
 }
 
 .integrations-cta {
     text-align: center;
-    margin-top: 48px;
+    margin-top: 56px;
 }
 
 .integrations-cta p {
     color: #64748b;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
 
 .link-with-arrow {
@@ -1534,17 +961,11 @@
     transition: gap 0.3s ease;
 }
 
-.link-with-arrow:hover {
-    gap: 12px;
-}
-
-.link-with-arrow svg {
-    width: 18px;
-    height: 18px;
-}
+.link-with-arrow:hover { gap: 14px; }
+.link-with-arrow svg { width: 20px; height: 20px; }
 
 .cta-ultra {
-    padding: 120px 0;
+    padding: 140px 0;
     background: linear-gradient(135deg, #1e1b4b, #312e81);
     position: relative;
     overflow: hidden;
@@ -1559,23 +980,23 @@
 .cta-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(100px);
-    opacity: 0.4;
+    filter: blur(120px);
+    opacity: 0.5;
 }
 
 .cta-orb-1 {
-    width: 500px;
-    height: 500px;
+    width: 600px;
+    height: 600px;
     background: #6366f1;
-    top: -200px;
+    top: -250px;
     right: -200px;
 }
 
 .cta-orb-2 {
-    width: 400px;
-    height: 400px;
+    width: 500px;
+    height: 500px;
     background: #a855f7;
-    bottom: -150px;
+    bottom: -200px;
     left: -150px;
 }
 
@@ -1585,42 +1006,43 @@
     background-image: 
         linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-size: 50px 50px;
 }
 
 .cta-content-ultra {
     text-align: center;
     position: relative;
     z-index: 2;
-    max-width: 700px;
+    max-width: 750px;
     margin: 0 auto;
 }
 
 .cta-title-ultra {
-    font-size: clamp(36px, 5vw, 56px);
+    font-size: clamp(40px, 6vw, 64px);
     font-weight: 800;
     line-height: 1.1;
     color: #fff;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
 }
 
 .cta-subtitle-ultra {
-    font-size: 19px;
-    color: rgba(255,255,255,0.7);
+    font-size: 20px;
+    color: rgba(255,255,255,0.75);
     line-height: 1.7;
-    margin-bottom: 40px;
+    margin-bottom: 48px;
 }
 
 .cta-actions-ultra {
     display: flex;
     justify-content: center;
-    gap: 16px;
-    margin-bottom: 32px;
+    gap: 18px;
+    margin-bottom: 40px;
 }
 
 .btn-ultra-large {
-    padding: 20px 40px;
-    font-size: 17px;
+    padding: 22px 44px;
+    font-size: 18px;
 }
 
 .btn-ultra-outline-white {
@@ -1637,26 +1059,25 @@
 .cta-guarantee {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     color: rgba(255,255,255,0.6);
-    font-size: 14px;
+    font-size: 15px;
 }
 
-.cta-guarantee svg {
-    width: 20px;
-    height: 20px;
-    color: #22c55e;
-}
+.cta-guarantee svg { width: 22px; height: 22px; color: #22c55e; }
 
 .animate-fade-down {
+    opacity: 0;
     animation: fadeDown 0.8s ease-out forwards;
 }
 
 .animate-fade-up {
+    opacity: 0;
     animation: fadeUp 0.8s ease-out forwards;
 }
 
 .animate-scale-in {
+    opacity: 0;
     animation: scaleIn 1s ease-out forwards;
 }
 
@@ -1666,126 +1087,712 @@
 .delay-400 { animation-delay: 0.4s; }
 
 @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-20px); }
+    from { opacity: 0; transform: translateY(-30px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes scaleIn {
-    from { opacity: 0; transform: scale(0.95); }
+    from { opacity: 0; transform: scale(0.92); }
     to { opacity: 1; transform: scale(1); }
 }
 
 @media (max-width: 1024px) {
-    .hero-ultra .container {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    
-    .hero-ultra-content {
-        max-width: 100%;
-    }
-    
-    .hero-ultra-actions {
-        justify-content: center;
-    }
-    
-    .hero-trust-badges {
-        justify-content: center;
-    }
-    
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .bento-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .bento-card.bento-large {
-        grid-column: span 1;
-    }
-    
-    .workflow-steps {
-        flex-direction: column;
-    }
-    
-    .step-connector {
-        display: none;
-    }
-    
-    .showcase-wrapper {
-        grid-template-columns: 1fr;
-    }
-    
-    .integrations-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    .hero-ultra .container { grid-template-columns: 1fr; text-align: center; }
+    .hero-ultra-content { max-width: 100%; }
+    .hero-ultra-actions { justify-content: center; }
+    .hero-trust-badges { justify-content: center; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .bento-grid { grid-template-columns: 1fr; }
+    .bento-card.bento-large { grid-column: span 1; }
+    .workflow-steps { flex-direction: column; }
+    .step-connector { display: none; }
+    .showcase-wrapper { grid-template-columns: 1fr; }
+    .integrations-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 640px) {
-    .hero-ultra-title {
-        font-size: 36px;
-    }
-    
-    .hero-ultra-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .hero-trust-badges {
-        flex-direction: column;
-        gap: 12px;
-    }
-    
-    .trust-divider {
-        display: none;
-    }
-    
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .cta-actions-ultra {
-        flex-direction: column;
-    }
-    
-    .floating-notification {
-        display: none;
-    }
+    .hero-ultra-title { font-size: 38px; }
+    .hero-ultra-actions { flex-direction: column; align-items: stretch; }
+    .hero-trust-badges { flex-direction: column; gap: 14px; }
+    .trust-divider { display: none; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .cta-actions-ultra { flex-direction: column; }
+    .floating-notification { display: none; }
 }
 </style>
 {% endblock %}
 
+{% block content %}
+<section class="hero-ultra" aria-labelledby="hero-heading">
+    <div class="hero-particles" id="particles" aria-hidden="true"></div>
+    <div class="hero-gradient-orbs" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="hero-grid-pattern" aria-hidden="true"></div>
+    
+    <div class="container">
+        <div class="hero-ultra-content">
+            <div class="hero-announcement animate-fade-down">
+                <span class="announcement-badge" role="status">
+                    <span class="pulse-dot" aria-hidden="true"></span>
+                    <span class="announcement-text">New: AI-Powered Invoice Generation</span>
+                    <svg class="announcement-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </span>
+            </div>
+            
+            <h1 id="hero-heading" class="hero-ultra-title animate-fade-up">
+                <span class="title-line">The Future of</span>
+                <span class="title-gradient">Professional Invoicing</span>
+            </h1>
+            
+            <p class="hero-ultra-subtitle animate-fade-up delay-100">
+                Create beautiful invoices in seconds, automate your entire billing workflow, 
+                and get paid 3x faster with the platform trusted by 50,000+ businesses worldwide.
+            </p>
+            
+            <div class="hero-ultra-actions animate-fade-up delay-200">
+                <a href="{% url 'signup' %}" class="btn-ultra btn-ultra-primary">
+                    <span>Start Free Today</span>
+                    <div class="btn-shine" aria-hidden="true"></div>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="#demo" class="btn-ultra btn-ultra-glass">
+                    <div class="btn-icon-wrapper" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                    </div>
+                    <span>Watch Demo</span>
+                </a>
+            </div>
+            
+            <div class="hero-trust-badges animate-fade-up delay-300">
+                <div class="trust-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span>Bank-grade security</span>
+                </div>
+                <div class="trust-divider" aria-hidden="true"></div>
+                <div class="trust-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <span>60-second setup</span>
+                </div>
+                <div class="trust-divider" aria-hidden="true"></div>
+                <div class="trust-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    <span>No credit card required</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="hero-ultra-visual animate-scale-in delay-400">
+            <div class="dashboard-mockup">
+                <div class="mockup-header">
+                    <div class="mockup-dots" aria-hidden="true">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="mockup-url">app.invoiceflow.com.ng/dashboard</div>
+                </div>
+                <div class="mockup-content">
+                    <img src="/static/images/landing/modern_invoicing_dashboard_ui.png" alt="InvoiceFlow Dashboard - Modern invoicing interface with analytics, payment tracking, and client management" loading="eager" width="800" height="500">
+                </div>
+                
+                <div class="floating-notification notif-1" aria-hidden="true">
+                    <div class="notif-icon success">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>
+                    <div class="notif-content">
+                        <span class="notif-title">Payment Received</span>
+                        <span class="notif-amount">+$4,250.00</span>
+                    </div>
+                </div>
+                
+                <div class="floating-notification notif-2" aria-hidden="true">
+                    <div class="notif-icon info">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                        </svg>
+                    </div>
+                    <div class="notif-content">
+                        <span class="notif-title">Invoice Sent</span>
+                        <span class="notif-subtitle">INV-2025-0847</span>
+                    </div>
+                </div>
+                
+                <div class="floating-notification notif-3" aria-hidden="true">
+                    <div class="notif-icon warning">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 20V10M12 20V4M6 20v-6"/>
+                        </svg>
+                    </div>
+                    <div class="notif-content">
+                        <span class="notif-title">Revenue Up</span>
+                        <span class="notif-subtitle">+32% this month</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="scroll-indicator" aria-hidden="true">
+        <span>Explore</span>
+        <div class="scroll-line">
+            <div class="scroll-dot"></div>
+        </div>
+    </div>
+</section>
+
+<section class="stats-section" aria-labelledby="stats-heading">
+    <h2 id="stats-heading" class="sr-only">Platform Statistics</h2>
+    <div class="container">
+        <div class="stats-grid">
+            <article class="stat-card" data-count="50000">
+                <div class="stat-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <div class="stat-number"><span class="counter">50,000</span>+</div>
+                <div class="stat-label">Active Users</div>
+            </article>
+            
+            <article class="stat-card" data-count="2500000">
+                <div class="stat-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                </div>
+                <div class="stat-number">$<span class="counter">2.5</span>B+</div>
+                <div class="stat-label">Invoices Processed</div>
+            </article>
+            
+            <article class="stat-card" data-count="99">
+                <div class="stat-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                </div>
+                <div class="stat-number"><span class="counter">99.9</span>%</div>
+                <div class="stat-label">Uptime Guaranteed</div>
+            </article>
+            
+            <article class="stat-card" data-count="150">
+                <div class="stat-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                </div>
+                <div class="stat-number"><span class="counter">150</span>+</div>
+                <div class="stat-label">Countries Supported</div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="bento-section" id="features" aria-labelledby="features-heading">
+    <div class="container">
+        <header class="section-header-ultra">
+            <span class="section-eyebrow">
+                <span class="eyebrow-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </span>
+                Powerful Features
+            </span>
+            <h2 id="features-heading" class="section-title-ultra">
+                Everything You Need to <span class="text-gradient-animated">Get Paid Faster</span>
+            </h2>
+            <p class="section-subtitle-ultra">
+                A complete invoicing toolkit designed for modern businesses
+            </p>
+        </header>
+        
+        <div class="bento-grid">
+            <article class="bento-card bento-large bento-gradient-1">
+                <div class="bento-content">
+                    <div class="bento-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="3" y1="9" x2="21" y2="9"/>
+                            <line x1="9" y1="21" x2="9" y2="9"/>
+                        </svg>
+                    </div>
+                    <h3 class="bento-title">Smart Dashboard</h3>
+                    <p class="bento-description">Get a bird's-eye view of your entire business. Track revenue, monitor outstanding invoices, and spot trends at a glance.</p>
+                    <div class="bento-visual">
+                        <img src="/static/images/landing/analytics_dashboard_visualization.png" alt="Analytics Dashboard showing revenue trends and payment metrics" loading="lazy" width="600" height="350">
+                    </div>
+                </div>
+                <div class="bento-glow" aria-hidden="true"></div>
+            </article>
+            
+            <article class="bento-card bento-gradient-2">
+                <div class="bento-content">
+                    <div class="bento-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <h3 class="bento-title">60-Second Invoices</h3>
+                    <p class="bento-description">Create professional invoices faster than ever with our intelligent templates and auto-complete features.</p>
+                </div>
+                <div class="bento-glow" aria-hidden="true"></div>
+            </article>
+            
+            <article class="bento-card bento-gradient-3">
+                <div class="bento-content">
+                    <div class="bento-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <h3 class="bento-title">Bank-Grade Security</h3>
+                    <p class="bento-description">256-bit encryption protects your data like the world's leading financial institutions.</p>
+                </div>
+                <div class="bento-glow" aria-hidden="true"></div>
+            </article>
+            
+            <article class="bento-card bento-gradient-4">
+                <div class="bento-content">
+                    <div class="bento-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="17 1 21 5 17 9"/>
+                            <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+                            <polyline points="7 23 3 19 7 15"/>
+                            <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+                        </svg>
+                    </div>
+                    <h3 class="bento-title">Recurring Billing</h3>
+                    <p class="bento-description">Set up automatic invoicing for retainer clients and subscription services.</p>
+                </div>
+                <div class="bento-glow" aria-hidden="true"></div>
+            </article>
+            
+            <article class="bento-card bento-large bento-gradient-5">
+                <div class="bento-content">
+                    <div class="bento-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="bento-title">Automated Reminders</h3>
+                    <p class="bento-description">Never chase payments again. Our smart reminder system sends polite follow-ups at the perfect time to maximize your collection rate.</p>
+                    <div class="bento-visual">
+                        <img src="/static/images/landing/automation_workflow_illustration.png" alt="Automated billing workflow showing invoice creation to payment received" loading="lazy" width="600" height="350">
+                    </div>
+                </div>
+                <div class="bento-glow" aria-hidden="true"></div>
+            </article>
+            
+            <article class="bento-card bento-gradient-6">
+                <div class="bento-content">
+                    <div class="bento-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                    </div>
+                    <h3 class="bento-title">Multi-Currency</h3>
+                    <p class="bento-description">Invoice in 100+ currencies with real-time exchange rates for global clients.</p>
+                </div>
+                <div class="bento-glow" aria-hidden="true"></div>
+            </article>
+            
+            <article class="bento-card bento-gradient-7">
+                <div class="bento-content">
+                    <div class="bento-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                        </svg>
+                    </div>
+                    <h3 class="bento-title">Real-Time Analytics</h3>
+                    <p class="bento-description">Make data-driven decisions with powerful reporting and insights tools.</p>
+                </div>
+                <div class="bento-glow" aria-hidden="true"></div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="workflow-section" id="demo" aria-labelledby="workflow-heading">
+    <div class="container">
+        <header class="section-header-ultra">
+            <span class="section-eyebrow">
+                <span class="eyebrow-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polygon points="10 8 16 12 10 16 10 8"/>
+                    </svg>
+                </span>
+                How It Works
+            </span>
+            <h2 id="workflow-heading" class="section-title-ultra">
+                From Invoice to <span class="text-gradient-animated">Payment in Minutes</span>
+            </h2>
+        </header>
+        
+        <div class="workflow-steps" role="list">
+            <article class="workflow-step" role="listitem">
+                <div class="step-number" aria-hidden="true">01</div>
+                <div class="step-content">
+                    <div class="step-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                    </div>
+                    <h3>Create Your Invoice</h3>
+                    <p>Use our intuitive builder or smart templates to create professional invoices in under 60 seconds.</p>
+                </div>
+                <div class="step-connector" aria-hidden="true">
+                    <svg viewBox="0 0 100 20" preserveAspectRatio="none">
+                        <path d="M0 10 H100" stroke="currentColor" stroke-width="2" stroke-dasharray="5,5" fill="none"/>
+                        <polygon points="95,5 100,10 95,15" fill="currentColor"/>
+                    </svg>
+                </div>
+            </article>
+            
+            <article class="workflow-step" role="listitem">
+                <div class="step-number" aria-hidden="true">02</div>
+                <div class="step-content">
+                    <div class="step-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                        </svg>
+                    </div>
+                    <h3>Send Instantly</h3>
+                    <p>Deliver invoices via email, WhatsApp, or shareable link. Clients receive them immediately.</p>
+                </div>
+                <div class="step-connector" aria-hidden="true">
+                    <svg viewBox="0 0 100 20" preserveAspectRatio="none">
+                        <path d="M0 10 H100" stroke="currentColor" stroke-width="2" stroke-dasharray="5,5" fill="none"/>
+                        <polygon points="95,5 100,10 95,15" fill="currentColor"/>
+                    </svg>
+                </div>
+            </article>
+            
+            <article class="workflow-step" role="listitem">
+                <div class="step-number" aria-hidden="true">03</div>
+                <div class="step-content">
+                    <div class="step-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="1" x2="12" y2="23"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                    </div>
+                    <h3>Get Paid Faster</h3>
+                    <p>Clients pay with one click. Funds arrive in your account up to 3x faster than traditional methods.</p>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="showcase-ultra" aria-labelledby="showcase-heading">
+    <div class="container">
+        <div class="showcase-wrapper">
+            <div class="showcase-content-side">
+                <span class="section-eyebrow light">
+                    <span class="eyebrow-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                    </span>
+                    Invoice Creation
+                </span>
+                <h2 id="showcase-heading" class="showcase-title-ultra">
+                    Beautifully Crafted Invoices That <span class="text-gradient-light">Impress Clients</span>
+                </h2>
+                <p class="showcase-description-ultra">
+                    Your invoices are a reflection of your brand. Create stunning, professional documents 
+                    that make clients want to pay immediately.
+                </p>
+                
+                <ul class="feature-checklist">
+                    <li class="checklist-item">
+                        <div class="check-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <span>Professional templates for every industry</span>
+                    </li>
+                    <li class="checklist-item">
+                        <div class="check-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <span>Custom branding with your logo and colors</span>
+                    </li>
+                    <li class="checklist-item">
+                        <div class="check-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <span>Automatic tax calculations and line items</span>
+                    </li>
+                    <li class="checklist-item">
+                        <div class="check-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <span>One-click PDF export and email delivery</span>
+                    </li>
+                </ul>
+                
+                <a href="{% url 'signup' %}" class="btn-ultra btn-ultra-white">
+                    <span>Start Creating</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+            
+            <div class="showcase-visual-side">
+                <div class="showcase-image-wrapper">
+                    <img src="/static/images/landing/invoice_creation_interface.png" alt="Invoice creation interface with form fields, line items, and live preview" loading="lazy" width="600" height="400">
+                    <div class="image-glow" aria-hidden="true"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="integrations-section" aria-labelledby="integrations-heading">
+    <div class="container">
+        <header class="section-header-ultra">
+            <span class="section-eyebrow">
+                <span class="eyebrow-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                </span>
+                Integrations
+            </span>
+            <h2 id="integrations-heading" class="section-title-ultra">
+                Works With Your <span class="text-gradient-animated">Favorite Tools</span>
+            </h2>
+            <p class="section-subtitle-ultra">
+                Connect InvoiceFlow with the tools you already use and love
+            </p>
+        </header>
+        
+        <div class="integrations-grid" role="list">
+            <article class="integration-card" role="listitem">
+                <div class="integration-icon stripe" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.594-7.305z"/>
+                    </svg>
+                </div>
+                <span>Stripe</span>
+            </article>
+            
+            <article class="integration-card" role="listitem">
+                <div class="integration-icon paypal" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.59 3.025-2.566 6.082-8.558 6.082H9.19c-.09 0-.163.076-.177.164l-.95 6.02-.027.168-.37 2.343c-.048.298.181.57.483.57h3.393c.46 0 .85-.334.922-.788.06-.384.345-2.188.43-2.756.072-.48.406-.831.89-.831h.562c3.632 0 6.474-1.476 7.307-5.747.368-1.888.216-3.384-.635-4.438z"/>
+                    </svg>
+                </div>
+                <span>PayPal</span>
+            </article>
+            
+            <article class="integration-card" role="listitem">
+                <div class="integration-icon slack" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/>
+                    </svg>
+                </div>
+                <span>Slack</span>
+            </article>
+            
+            <article class="integration-card" role="listitem">
+                <div class="integration-icon zapier" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M15.137 11.998c0-.584.064-1.154.179-1.706l-4.044-1.642 3.232-2.638c.395-.32.817-.608 1.259-.865l-2.66-3.22 4.067-.002.905-1.925h-4.807L12 3.562 10.732 0H5.925l.905 1.925 4.067.002-2.66 3.22c.442.257.864.545 1.259.865l3.232 2.638-4.044 1.642c.115.552.179 1.122.179 1.706 0 .584-.064 1.154-.179 1.706l4.044 1.642-3.232 2.638c-.395.32-.817.608-1.259.865l2.66 3.22-4.067.002-.905 1.925h4.807L12 20.438l1.268 3.562h4.807l-.905-1.925-4.067-.002 2.66-3.22a7.965 7.965 0 0 1-1.259-.865l-3.232-2.638 4.044-1.642a8.11 8.11 0 0 1-.179-1.71z"/>
+                    </svg>
+                </div>
+                <span>Zapier</span>
+            </article>
+        </div>
+        
+        <div class="integrations-cta">
+            <p>Plus 50+ more integrations</p>
+            <a href="{% url 'features' %}" class="link-with-arrow">
+                View all integrations
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="cta-ultra" aria-labelledby="cta-heading">
+    <div class="cta-bg-effects" aria-hidden="true">
+        <div class="cta-orb cta-orb-1"></div>
+        <div class="cta-orb cta-orb-2"></div>
+        <div class="cta-grid-pattern"></div>
+    </div>
+    
+    <div class="container">
+        <div class="cta-content-ultra">
+            <h2 id="cta-heading" class="cta-title-ultra">
+                Ready to Get Paid Faster?
+            </h2>
+            <p class="cta-subtitle-ultra">
+                Join 50,000+ businesses already using InvoiceFlow to streamline their billing 
+                and increase cash flow. Start your free trial today.
+            </p>
+            
+            <div class="cta-actions-ultra">
+                <a href="{% url 'signup' %}" class="btn-ultra btn-ultra-primary btn-ultra-large">
+                    <span>Start Free Trial</span>
+                    <div class="btn-shine" aria-hidden="true"></div>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="{% url 'contact' %}" class="btn-ultra btn-ultra-outline-white btn-ultra-large">
+                    <span>Contact Sales</span>
+                </a>
+            </div>
+            
+            <div class="cta-guarantee">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+                <span>14-day free trial. No credit card required.</span>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
 {% block extra_js %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('InvoiceFlow v5.0 - Ultra Edition initialized');
+(function() {
+    'use strict';
     
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('InvoiceFlow v6.0 - Enterprise Edition initialized');
+        
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -80px 0px'
+        };
+        
+        const animationObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    animationObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.bento-card, .stat-card, .workflow-step, .integration-card').forEach((el, index) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(40px)';
+            el.style.transition = `all 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.1}s`;
+            animationObserver.observe(el);
         });
-    }, observerOptions);
-    
-    document.querySelectorAll('.bento-card, .stat-card, .workflow-step, .integration-card').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = 'all 0.6s ease-out';
-        observer.observe(el);
+        
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target.querySelector('.counter');
+                    if (counter && !counter.dataset.animated) {
+                        counter.dataset.animated = 'true';
+                        animateCounter(counter);
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        document.querySelectorAll('.stat-card').forEach(card => {
+            counterObserver.observe(card);
+        });
+        
+        function animateCounter(element) {
+            const text = element.textContent;
+            const hasDecimal = text.includes('.');
+            const endValue = parseFloat(text.replace(/[^0-9.]/g, ''));
+            const duration = 2000;
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeProgress = 1 - Math.pow(1 - progress, 4);
+                const currentValue = easeProgress * endValue;
+                
+                if (hasDecimal) {
+                    element.textContent = currentValue.toFixed(1);
+                } else {
+                    element.textContent = Math.floor(currentValue).toLocaleString();
+                }
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+        
+        const mockup = document.querySelector('.dashboard-mockup');
+        if (mockup) {
+            mockup.addEventListener('mousemove', (e) => {
+                const rect = mockup.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+                
+                mockup.style.transform = `rotateY(${x * 10}deg) rotateX(${-y * 10}deg)`;
+            });
+            
+            mockup.addEventListener('mouseleave', () => {
+                mockup.style.transform = 'rotateY(-5deg) rotateX(3deg)';
+            });
+        }
     });
-});
+})();
 </script>
 {% endblock %}
