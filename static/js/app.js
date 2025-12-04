@@ -5,6 +5,7 @@
     init() {
       this.initNavigation();
       this.initMobileMenu();
+      this.initAppSidebar();
       this.initScrollAnimations();
       this.initScrollReveal();
       this.initParallax();
@@ -18,6 +19,58 @@
       this.initSkeletonLoaders();
       this.initModalSystem();
       console.log('InvoiceFlow v7.0 - Enhanced Edition initialized');
+    },
+
+    initAppSidebar() {
+      const mobileToggle = document.querySelector('.mobile-menu-toggle');
+      const sidebar = document.querySelector('.app-sidebar, .dashboard-sidebar');
+      
+      if (!mobileToggle || !sidebar) return;
+
+      let overlay = document.querySelector('.sidebar-overlay');
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'sidebar-overlay';
+        document.body.appendChild(overlay);
+      }
+
+      const openSidebar = () => {
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        mobileToggle.setAttribute('aria-expanded', 'true');
+      };
+
+      const closeSidebar = () => {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        mobileToggle.setAttribute('aria-expanded', 'false');
+      };
+
+      mobileToggle.addEventListener('click', () => {
+        if (sidebar.classList.contains('open')) {
+          closeSidebar();
+        } else {
+          openSidebar();
+        }
+      });
+
+      overlay.addEventListener('click', closeSidebar);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+          closeSidebar();
+        }
+      });
+
+      sidebar.querySelectorAll('.sidebar-link').forEach(link => {
+        link.addEventListener('click', () => {
+          if (window.innerWidth <= 1024) {
+            closeSidebar();
+          }
+        });
+      });
     },
 
     initNavigation() {

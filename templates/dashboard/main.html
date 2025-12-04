@@ -74,6 +74,14 @@
         </div>
     </aside>
     
+    <button class="mobile-menu-toggle" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+    </button>
+    
     <main class="dashboard-main">
         <header class="dashboard-header">
             <div class="dashboard-header-content">
@@ -309,8 +317,12 @@
 @media (max-width: 1024px) {
     .dashboard-main {
         margin-left: 0;
+        padding: var(--spacing-6);
+        padding-top: 80px;
     }
 }
+
+/* Mobile menu toggle styles moved to components.css */
 
 .dashboard-header {
     display: flex;
@@ -566,5 +578,35 @@
     70% { transform: scale(0.9); }
     100% { transform: scale(1); opacity: 1; }
 }
+
+@media (max-width: 640px) {
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .dashboard-actions {
+        width: 100%;
+    }
+    
+    .dashboard-actions .btn {
+        width: 100%;
+    }
+    
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .invoices-table {
+        overflow-x: auto;
+    }
+    
+    .invoices-table table {
+        min-width: 600px;
+    }
+}
+
+/* Sidebar overlay styles moved to components.css */
+/* Sidebar toggle JS moved to app.js initAppSidebar() */
 </style>
 {% endblock %}

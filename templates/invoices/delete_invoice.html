@@ -1,33 +1,204 @@
 {% extends "base/layout.html" %}
 
 {% block title %}Delete Invoice - InvoiceFlow{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+
+{% block nav %}{% endblock %}
+{% block footer %}{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full">
-        <div class="bg-white shadow-lg rounded-2xl p-8 text-center">
-            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                </svg>
-            </div>
-            
-            <h2 class="text-2xl font-bold text-gray-900 mb-2">Delete Invoice?</h2>
-            <p class="text-gray-600 mb-6">
-                Are you sure you want to delete invoice <strong>#{{ invoice.invoice_number }}</strong>? 
-                This action cannot be undone.
-            </p>
-            
-            <form method="post" class="space-y-4">
-                {% csrf_token %}
-                <button type="submit" class="w-full px-6 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors font-medium">
-                    Yes, Delete Invoice
-                </button>
-                <a href="{% url 'invoice_detail' invoice.id %}" class="block w-full px-6 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors text-center">
-                    Cancel
-                </a>
-            </form>
+<div class="delete-container">
+    <div class="delete-bg"></div>
+    <div class="delete-glow"></div>
+    
+    <div class="delete-card glass-card">
+        <div class="delete-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+            </svg>
         </div>
+        
+        <h1 class="delete-title">Delete Invoice?</h1>
+        <p class="delete-subtitle">
+            Are you sure you want to delete invoice <strong>{{ invoice.invoice_id }}</strong>? 
+            This action cannot be undone.
+        </p>
+        
+        <div class="delete-info">
+            <div class="info-row">
+                <span class="info-label">Client</span>
+                <span class="info-value">{{ invoice.client_name }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Amount</span>
+                <span class="info-value">{{ invoice.currency }} {{ invoice.total }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Status</span>
+                <span class="status-badge status-{{ invoice.status }}">{{ invoice.get_status_display }}</span>
+            </div>
+        </div>
+        
+        <form method="post" class="delete-form">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-lg btn-full">
+                <svg class="btn-icon" style="transform: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+                Yes, Delete Invoice
+            </button>
+            <a href="{% url 'invoice_detail' invoice.id %}" class="btn btn-secondary btn-lg btn-full">
+                Cancel
+            </a>
+        </form>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-8);
+}
+
+.delete-container {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+}
+
+.delete-bg {
+    position: fixed;
+    inset: 0;
+    background: var(--gradient-hero);
+    z-index: -2;
+}
+
+.delete-glow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(239, 68, 68, 0.15), transparent 60%);
+    border-radius: 50%;
+    filter: blur(100px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+.delete-card {
+    padding: var(--spacing-10);
+    text-align: center;
+}
+
+.delete-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto var(--spacing-6);
+    background: rgba(239, 68, 68, 0.15);
+    border-radius: var(--radius-2xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-error);
+}
+
+.delete-icon svg {
+    width: 36px;
+    height: 36px;
+}
+
+.delete-title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-neutral-0);
+    margin-bottom: var(--spacing-3);
+}
+
+.delete-subtitle {
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-400);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--spacing-6);
+}
+
+.delete-subtitle strong {
+    color: var(--color-neutral-0);
+}
+
+.delete-info {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-2) 0;
+}
+
+.info-row:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.info-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-neutral-400);
+}
+
+.info-value {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-neutral-0);
+}
+
+.status-badge {
+    display: inline-flex;
+    padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+}
+
+.status-paid {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--color-accent-500);
+}
+
+.status-unpaid {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--color-warning);
+}
+
+.delete-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.btn-danger {
+    background: var(--color-error);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+}
+
+.btn-full {
+    width: 100%;
+}
+</style>
 {% endblock %}

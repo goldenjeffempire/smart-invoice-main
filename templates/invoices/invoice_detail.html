@@ -1,118 +1,886 @@
 {% extends "base/layout.html" %}
 
-{% block title %}Invoice #{{ invoice.invoice_number }} - InvoiceFlow{% endblock %}
+{% block title %}Invoice {{ invoice.invoice_id }} - InvoiceFlow{% endblock %}
+{% block body_class %}app-page{% endblock %}
+
+{% block nav %}{% endblock %}
+{% block footer %}{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gray-50 py-8">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mb-8 flex justify-between items-center">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900">Invoice #{{ invoice.invoice_number }}</h1>
-                <p class="mt-2 text-gray-600">Created on {{ invoice.created_at|date:"F d, Y" }}</p>
-            </div>
-            <div class="flex space-x-4">
-                <a href="{% url 'edit_invoice' invoice.id %}" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
-                    Edit
-                </a>
-                <a href="{% url 'download_invoice' invoice.id %}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                    Download PDF
-                </a>
-            </div>
+<div class="app-layout">
+    <aside class="app-sidebar">
+        <div class="sidebar-header">
+            <a href="{% url 'home' %}" class="nav-logo">
+                <div class="nav-logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                </div>
+                <span class="nav-logo-text">InvoiceFlow</span>
+            </a>
         </div>
-
-        <div class="bg-white shadow-lg rounded-2xl overflow-hidden">
-            <div class="p-8">
-                <div class="flex justify-between mb-8">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {% if invoice.status == 'paid' %}bg-green-100 text-green-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
-                        {{ invoice.get_status_display }}
-                    </span>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-500">Due Date</p>
-                        <p class="text-lg font-semibold text-gray-900">{{ invoice.due_date|date:"F d, Y" }}</p>
+        
+        <nav class="sidebar-nav">
+            <a href="{% url 'dashboard' %}" class="sidebar-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                </svg>
+                Dashboard
+            </a>
+            <a href="{% url 'create_invoice' %}" class="sidebar-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                </svg>
+                New Invoice
+            </a>
+            <a href="{% url 'analytics' %}" class="sidebar-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                </svg>
+                Analytics
+            </a>
+            <a href="{% url 'settings' %}" class="sidebar-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                Settings
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="{% url 'logout' %}" class="sidebar-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                Log out
+            </a>
+        </div>
+    </aside>
+    
+    <button class="mobile-menu-toggle" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+    </button>
+    
+    <main class="app-main">
+        <header class="page-header">
+            <div class="page-header-top">
+                <a href="{% url 'dashboard' %}" class="back-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="19" y1="12" x2="5" y2="12"/>
+                        <polyline points="12 19 5 12 12 5"/>
+                    </svg>
+                    Back to Dashboard
+                </a>
+            </div>
+            <div class="page-header-content">
+                <div class="page-header-info">
+                    <div class="invoice-id-wrapper">
+                        <h1 class="page-title">{{ invoice.invoice_id }}</h1>
+                        <span class="status-badge status-{{ invoice.status }}">
+                            {{ invoice.get_status_display }}
+                        </span>
+                    </div>
+                    <p class="page-subtitle">Created on {{ invoice.created_at|date:"F d, Y" }}</p>
+                </div>
+                <div class="page-header-actions">
+                    <a href="{% url 'edit_invoice' invoice.id %}" class="btn btn-secondary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        Edit
+                    </a>
+                    <a href="{% url 'generate_pdf' invoice.id %}" class="btn btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Download PDF
+                    </a>
+                </div>
+            </div>
+        </header>
+        
+        <div class="invoice-detail glass-card">
+            <div class="invoice-meta">
+                <div class="meta-row">
+                    <div class="meta-item">
+                        <span class="meta-label">Invoice Date</span>
+                        <span class="meta-value">{{ invoice.invoice_date|date:"F d, Y" }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Due Date</span>
+                        <span class="meta-value {% if invoice.is_overdue %}overdue{% endif %}">
+                            {{ invoice.due_date|date:"F d, Y" }}
+                            {% if invoice.is_overdue %}<span class="overdue-badge">Overdue</span>{% endif %}
+                        </span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Currency</span>
+                        <span class="meta-value">{{ invoice.currency }}</span>
                     </div>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500 uppercase mb-2">From</h3>
-                        <p class="text-lg font-semibold text-gray-900">{{ invoice.business_name }}</p>
-                        <p class="text-gray-600">{{ invoice.business_email }}</p>
-                        <p class="text-gray-600">{{ invoice.business_phone }}</p>
-                        <p class="text-gray-600 whitespace-pre-line">{{ invoice.business_address }}</p>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500 uppercase mb-2">To</h3>
-                        <p class="text-lg font-semibold text-gray-900">{{ invoice.client_name }}</p>
-                        <p class="text-gray-600">{{ invoice.client_email }}</p>
-                        <p class="text-gray-600">{{ invoice.client_phone }}</p>
-                        <p class="text-gray-600 whitespace-pre-line">{{ invoice.client_address }}</p>
-                    </div>
-                </div>
-
-                <div class="border-t border-gray-200 pt-8">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Line Items</h3>
-                    <table class="w-full">
-                        <thead>
-                            <tr class="border-b border-gray-200">
-                                <th class="text-left py-3 text-sm font-medium text-gray-500">Description</th>
-                                <th class="text-right py-3 text-sm font-medium text-gray-500">Qty</th>
-                                <th class="text-right py-3 text-sm font-medium text-gray-500">Price</th>
-                                <th class="text-right py-3 text-sm font-medium text-gray-500">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in invoice.line_items.all %}
-                            <tr class="border-b border-gray-100">
-                                <td class="py-3 text-gray-900">{{ item.description }}</td>
-                                <td class="py-3 text-right text-gray-600">{{ item.quantity }}</td>
-                                <td class="py-3 text-right text-gray-600">{{ invoice.currency }} {{ item.unit_price }}</td>
-                                <td class="py-3 text-right text-gray-900 font-medium">{{ invoice.currency }} {{ item.total }}</td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="4" class="py-4 text-center text-gray-500">No line items</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="mt-8 border-t border-gray-200 pt-8">
-                    <div class="flex justify-end">
-                        <div class="w-64 space-y-2">
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Subtotal</span>
-                                <span class="text-gray-900">{{ invoice.currency }} {{ invoice.subtotal }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Tax ({{ invoice.tax_rate }}%)</span>
-                                <span class="text-gray-900">{{ invoice.currency }} {{ invoice.tax_amount }}</span>
-                            </div>
-                            <div class="flex justify-between text-lg font-bold border-t pt-2">
-                                <span>Total</span>
-                                <span>{{ invoice.currency }} {{ invoice.total_amount }}</span>
-                            </div>
+            </div>
+            
+            <div class="invoice-parties">
+                <div class="party-card">
+                    <div class="party-header">
+                        <div class="party-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
                         </div>
+                        <span class="party-label">From</span>
+                    </div>
+                    <div class="party-content">
+                        <h3 class="party-name">{{ invoice.business_name }}</h3>
+                        {% if invoice.business_email %}<p class="party-detail">{{ invoice.business_email }}</p>{% endif %}
+                        {% if invoice.business_phone %}<p class="party-detail">{{ invoice.business_phone }}</p>{% endif %}
+                        {% if invoice.business_address %}<p class="party-detail party-address">{{ invoice.business_address|linebreaksbr }}</p>{% endif %}
                     </div>
                 </div>
-
-                {% if invoice.notes %}
-                <div class="mt-8 border-t border-gray-200 pt-8">
-                    <h3 class="text-sm font-medium text-gray-500 uppercase mb-2">Notes</h3>
-                    <p class="text-gray-600 whitespace-pre-line">{{ invoice.notes }}</p>
+                
+                <div class="party-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                    </svg>
                 </div>
-                {% endif %}
+                
+                <div class="party-card">
+                    <div class="party-header">
+                        <div class="party-icon client">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                        <span class="party-label">To</span>
+                    </div>
+                    <div class="party-content">
+                        <h3 class="party-name">{{ invoice.client_name }}</h3>
+                        {% if invoice.client_email %}<p class="party-detail">{{ invoice.client_email }}</p>{% endif %}
+                        {% if invoice.client_phone %}<p class="party-detail">{{ invoice.client_phone }}</p>{% endif %}
+                        {% if invoice.client_address %}<p class="party-detail party-address">{{ invoice.client_address|linebreaksbr }}</p>{% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="invoice-items">
+                <h3 class="items-title">Line Items</h3>
+                <div class="items-table">
+                    <div class="items-header">
+                        <span class="col-description">Description</span>
+                        <span class="col-quantity">Qty</span>
+                        <span class="col-price">Unit Price</span>
+                        <span class="col-total">Total</span>
+                    </div>
+                    <div class="items-body">
+                        {% for item in invoice.line_items.all %}
+                        <div class="item-row">
+                            <span class="col-description">{{ item.description }}</span>
+                            <span class="col-quantity">{{ item.quantity }}</span>
+                            <span class="col-price">{{ invoice.currency }} {{ item.unit_price }}</span>
+                            <span class="col-total">{{ invoice.currency }} {{ item.total }}</span>
+                        </div>
+                        {% empty %}
+                        <div class="item-row empty">
+                            <span>No line items</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="invoice-summary">
+                <div class="summary-row">
+                    <span class="summary-label">Subtotal</span>
+                    <span class="summary-value">{{ invoice.currency }} {{ invoice.subtotal }}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Tax ({{ invoice.tax_rate }}%)</span>
+                    <span class="summary-value">{{ invoice.currency }} {{ invoice.tax_amount }}</span>
+                </div>
+                <div class="summary-row total">
+                    <span class="summary-label">Total</span>
+                    <span class="summary-value">{{ invoice.currency }} {{ invoice.total }}</span>
+                </div>
+            </div>
+            
+            {% if invoice.notes %}
+            <div class="invoice-notes">
+                <h3 class="notes-title">Notes</h3>
+                <p class="notes-content">{{ invoice.notes|linebreaksbr }}</p>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="invoice-actions">
+            <form method="post" action="{% url 'update_invoice_status' invoice.id %}" class="status-form">
+                {% csrf_token %}
+                <label class="status-label">Update Status:</label>
+                <select name="status" class="status-select">
+                    <option value="unpaid" {% if invoice.status == 'unpaid' %}selected{% endif %}>Unpaid</option>
+                    <option value="paid" {% if invoice.status == 'paid' %}selected{% endif %}>Paid</option>
+                </select>
+                <button type="submit" class="btn btn-secondary btn-sm">Update</button>
+            </form>
+            
+            <div class="action-links">
+                <a href="{% url 'send_invoice_email' invoice.id %}" class="action-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    Send via Email
+                </a>
+                <a href="{% url 'whatsapp_share' invoice.id %}" class="action-link" target="_blank">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    Share on WhatsApp
+                </a>
+                <a href="{% url 'delete_invoice' invoice.id %}" class="action-link danger">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        <line x1="10" y1="11" x2="10" y2="17"/>
+                        <line x1="14" y1="11" x2="14" y2="17"/>
+                    </svg>
+                    Delete Invoice
+                </a>
             </div>
         </div>
-
-        <div class="mt-6 flex justify-between">
-            <a href="{% url 'dashboard' %}" class="text-indigo-600 hover:text-indigo-800">
-                Back to Dashboard
-            </a>
-            <a href="{% url 'delete_invoice' invoice.id %}" class="text-red-600 hover:text-red-800">
-                Delete Invoice
-            </a>
-        </div>
-    </div>
+    </main>
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.app-page {
+    background: var(--gradient-dark);
+}
+
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.app-sidebar {
+    width: 260px;
+    background: rgba(0, 0, 0, 0.3);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+    transition: transform var(--transition-base);
+}
+
+@media (max-width: 1024px) {
+    .app-sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .app-sidebar.open {
+        transform: translateX(0);
+    }
+}
+
+.sidebar-header {
+    padding: var(--spacing-6);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: var(--spacing-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-3) var(--spacing-4);
+    border-radius: var(--radius-xl);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-neutral-400);
+    transition: all var(--transition-fast);
+}
+
+.sidebar-link svg {
+    width: 20px;
+    height: 20px;
+}
+
+.sidebar-link:hover {
+    color: var(--color-neutral-0);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-link.active {
+    color: var(--color-neutral-0);
+    background: var(--gradient-primary);
+}
+
+.sidebar-footer {
+    padding: var(--spacing-4);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mobile-menu-toggle {
+    display: none;
+    position: fixed;
+    top: var(--spacing-4);
+    left: var(--spacing-4);
+    z-index: 150;
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-xl);
+    align-items: center;
+    justify-content: center;
+    color: var(--color-neutral-0);
+}
+
+.mobile-menu-toggle svg {
+    width: 24px;
+    height: 24px;
+}
+
+@media (max-width: 1024px) {
+    .mobile-menu-toggle {
+        display: flex;
+    }
+}
+
+.app-main {
+    flex: 1;
+    margin-left: 260px;
+    padding: var(--spacing-8);
+    max-width: 1000px;
+}
+
+@media (max-width: 1024px) {
+    .app-main {
+        margin-left: 0;
+        padding: var(--spacing-6);
+        padding-top: 80px;
+    }
+}
+
+.page-header {
+    margin-bottom: var(--spacing-8);
+}
+
+.page-header-top {
+    margin-bottom: var(--spacing-4);
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: var(--font-size-sm);
+    color: var(--color-neutral-400);
+    transition: color var(--transition-fast);
+}
+
+.back-link:hover {
+    color: var(--color-neutral-0);
+}
+
+.back-link svg {
+    width: 16px;
+    height: 16px;
+}
+
+.page-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--spacing-4);
+    flex-wrap: wrap;
+}
+
+.invoice-id-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+    flex-wrap: wrap;
+}
+
+.page-title {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-neutral-0);
+}
+
+.status-badge {
+    display: inline-flex;
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+}
+
+.status-paid {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--color-accent-500);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-unpaid {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--color-warning);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.page-subtitle {
+    color: var(--color-neutral-400);
+    margin-top: var(--spacing-2);
+}
+
+.page-header-actions {
+    display: flex;
+    gap: var(--spacing-3);
+}
+
+@media (max-width: 640px) {
+    .page-header-actions {
+        width: 100%;
+    }
+    
+    .page-header-actions .btn {
+        flex: 1;
+    }
+}
+
+.page-header-actions .btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.invoice-detail {
+    padding: var(--spacing-8);
+}
+
+@media (max-width: 640px) {
+    .invoice-detail {
+        padding: var(--spacing-5);
+    }
+}
+
+.invoice-meta {
+    margin-bottom: var(--spacing-8);
+    padding-bottom: var(--spacing-6);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.meta-row {
+    display: flex;
+    gap: var(--spacing-8);
+    flex-wrap: wrap;
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.meta-label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-neutral-400);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wide);
+}
+
+.meta-value {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-neutral-0);
+}
+
+.meta-value.overdue {
+    color: var(--color-error);
+}
+
+.overdue-badge {
+    display: inline-flex;
+    margin-left: var(--spacing-2);
+    padding: 2px 8px;
+    font-size: var(--font-size-xs);
+    background: rgba(239, 68, 68, 0.15);
+    border-radius: var(--radius-full);
+}
+
+.invoice-parties {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--spacing-6);
+    align-items: center;
+    margin-bottom: var(--spacing-8);
+}
+
+@media (max-width: 768px) {
+    .invoice-parties {
+        grid-template-columns: 1fr;
+    }
+    
+    .party-arrow {
+        display: none;
+    }
+}
+
+.party-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-2xl);
+    padding: var(--spacing-5);
+}
+
+.party-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-4);
+}
+
+.party-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: var(--radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary-400);
+}
+
+.party-icon.client {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--color-accent-500);
+}
+
+.party-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.party-label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-neutral-400);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wide);
+}
+
+.party-name {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-neutral-0);
+    margin-bottom: var(--spacing-2);
+}
+
+.party-detail {
+    font-size: var(--font-size-sm);
+    color: var(--color-neutral-400);
+    margin-bottom: var(--spacing-1);
+}
+
+.party-address {
+    margin-top: var(--spacing-2);
+    line-height: var(--line-height-relaxed);
+}
+
+.party-arrow {
+    color: var(--color-neutral-600);
+}
+
+.party-arrow svg {
+    width: 32px;
+    height: 32px;
+}
+
+.invoice-items {
+    margin-bottom: var(--spacing-8);
+}
+
+.items-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-neutral-0);
+    margin-bottom: var(--spacing-4);
+}
+
+.items-table {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+.items-header {
+    display: grid;
+    grid-template-columns: 2fr 80px 120px 120px;
+    gap: var(--spacing-4);
+    padding: var(--spacing-4);
+    background: rgba(0, 0, 0, 0.2);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-neutral-400);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wide);
+}
+
+@media (max-width: 640px) {
+    .items-header {
+        display: none;
+    }
+}
+
+.item-row {
+    display: grid;
+    grid-template-columns: 2fr 80px 120px 120px;
+    gap: var(--spacing-4);
+    padding: var(--spacing-4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    align-items: center;
+}
+
+.item-row:last-child {
+    border-bottom: none;
+}
+
+@media (max-width: 640px) {
+    .item-row {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-2);
+        align-items: flex-start;
+    }
+    
+    .item-row .col-description {
+        font-weight: var(--font-weight-medium);
+        color: var(--color-neutral-0);
+    }
+    
+    .item-row .col-quantity::before {
+        content: 'Qty: ';
+        color: var(--color-neutral-500);
+    }
+    
+    .item-row .col-price::before {
+        content: 'Price: ';
+        color: var(--color-neutral-500);
+    }
+    
+    .item-row .col-total::before {
+        content: 'Total: ';
+        color: var(--color-neutral-500);
+    }
+}
+
+.col-description {
+    color: var(--color-neutral-200);
+}
+
+.col-quantity,
+.col-price {
+    color: var(--color-neutral-400);
+    text-align: right;
+}
+
+.col-total {
+    color: var(--color-neutral-0);
+    font-weight: var(--font-weight-medium);
+    text-align: right;
+}
+
+.item-row.empty {
+    display: flex;
+    justify-content: center;
+    color: var(--color-neutral-500);
+    font-style: italic;
+}
+
+.invoice-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-8);
+    padding-top: var(--spacing-6);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    width: 280px;
+    padding: var(--spacing-2) 0;
+}
+
+@media (max-width: 480px) {
+    .summary-row {
+        width: 100%;
+    }
+}
+
+.summary-label {
+    color: var(--color-neutral-400);
+}
+
+.summary-value {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-neutral-0);
+}
+
+.summary-row.total {
+    padding-top: var(--spacing-4);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.summary-row.total .summary-label,
+.summary-row.total .summary-value {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+}
+
+.summary-row.total .summary-value {
+    color: var(--color-accent-500);
+}
+
+.invoice-notes {
+    padding-top: var(--spacing-6);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.notes-title {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-neutral-400);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wide);
+    margin-bottom: var(--spacing-3);
+}
+
+.notes-content {
+    color: var(--color-neutral-300);
+    line-height: var(--line-height-relaxed);
+}
+
+.invoice-actions {
+    margin-top: var(--spacing-6);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-4);
+}
+
+@media (max-width: 768px) {
+    .invoice-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+.status-form {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.status-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-neutral-400);
+}
+
+.status-select {
+    padding: var(--spacing-2) var(--spacing-3);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    color: var(--color-neutral-0);
+    font-size: var(--font-size-sm);
+}
+
+.status-select:focus {
+    outline: none;
+    border-color: var(--color-primary-500);
+}
+
+.action-links {
+    display: flex;
+    gap: var(--spacing-4);
+    flex-wrap: wrap;
+}
+
+.action-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: var(--font-size-sm);
+    color: var(--color-primary-400);
+    transition: color var(--transition-fast);
+}
+
+.action-link:hover {
+    color: var(--color-primary-300);
+}
+
+.action-link svg {
+    width: 18px;
+    height: 18px;
+}
+
+.action-link.danger {
+    color: var(--color-error);
+}
+
+.action-link.danger:hover {
+    color: #f87171;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    const sidebar = document.querySelector('.app-sidebar');
+    
+    if (mobileToggle && sidebar) {
+        mobileToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('open');
+        });
+    }
+});
+</script>
 {% endblock %}
