@@ -97,7 +97,7 @@ externalPort = 8081
 [userenv]
 
 [userenv.shared]
-SENDGRID_FROM_EMAIL = "team@smartinvoice.com"
+SENDGRID_FROM_EMAIL = "noreply@invoiceflow.com.ng"
 
 [deployment]
 deploymentTarget = "autoscale"
