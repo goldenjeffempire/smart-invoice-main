@@ -448,22 +448,28 @@ class SendGridEmailService:
             return f"Bank: {invoice.bank_name}\nAccount: {invoice.account_name}\nAccount #: {invoice.account_number}"
         return "N/A"
 
+    def _get_base_url(self):
+        """Get base URL from environment or default to production domain."""
+        base_url = os.environ.get("WEBHOOK_BASE_URL") or os.environ.get("API_BASE_URL")
+        if base_url:
+            return base_url.rstrip("/")
+        return "https://invoiceflow.com.ng"
+
     def _get_invoice_view_url(self, invoice):
         """Get invoice view URL for email links."""
-        # This would be the absolute URL - adjust based on your domain
-        return f"https://invoiceflow.example.com/invoices/invoice/{invoice.id}/"
+        return f"{self._get_base_url()}/invoices/invoice/{invoice.id}/"
 
     def _get_dashboard_url(self):
         """Get dashboard URL."""
-        return "https://invoiceflow.example.com/invoices/dashboard/"
+        return f"{self._get_base_url()}/invoices/dashboard/"
 
     def _get_help_url(self):
         """Get help/documentation URL."""
-        return "https://invoiceflow.example.com/faq/"
+        return f"{self._get_base_url()}/faq/"
 
     def _get_password_reset_url(self, token):
         """Get password reset URL."""
-        return f"https://invoiceflow.example.com/password-reset-confirm/{token}/"
+        return f"{self._get_base_url()}/password-reset-confirm/{token}/"
 
     def send_test_email(self, recipient_email):
         """Send a test email to verify SendGrid configuration.
