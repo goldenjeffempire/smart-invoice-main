@@ -127,63 +127,6 @@
     });
   }
   
-  function initPricingToggle() {
-    var toggleSwitch = document.querySelector('.pricing-toggle-switch');
-    var monthlyLabel = document.querySelector('[data-billing="monthly"]');
-    var annualLabel = document.querySelector('[data-billing="annual"]');
-    var priceAmounts = document.querySelectorAll('.pricing-amount[data-monthly]');
-    
-    if (!toggleSwitch) return;
-    
-    var isAnnual = false;
-    
-    function updatePrices() {
-      priceAmounts.forEach(function(amount) {
-        var monthlyPrice = amount.getAttribute('data-monthly');
-        var annualPrice = amount.getAttribute('data-annual');
-        var currency = amount.querySelector('.pricing-amount-currency');
-        var currencyText = currency ? currency.outerHTML : '<span class="pricing-amount-currency">$</span>';
-        
-        if (isAnnual && annualPrice) {
-          amount.innerHTML = currencyText + annualPrice;
-        } else if (monthlyPrice) {
-          amount.innerHTML = currencyText + monthlyPrice;
-        }
-      });
-      
-      if (monthlyLabel && annualLabel) {
-        monthlyLabel.classList.toggle('active', !isAnnual);
-        annualLabel.classList.toggle('active', isAnnual);
-      }
-      
-      toggleSwitch.classList.toggle('active', isAnnual);
-      toggleSwitch.setAttribute('aria-checked', isAnnual.toString());
-    }
-    
-    toggleSwitch.addEventListener('click', function() {
-      isAnnual = !isAnnual;
-      updatePrices();
-    });
-    
-    if (monthlyLabel) {
-      monthlyLabel.addEventListener('click', function() {
-        if (isAnnual) {
-          isAnnual = false;
-          updatePrices();
-        }
-      });
-    }
-    
-    if (annualLabel) {
-      annualLabel.addEventListener('click', function() {
-        if (!isAnnual) {
-          isAnnual = true;
-          updatePrices();
-        }
-      });
-    }
-  }
-  
   function handleResize() {
     clearTimeout(resizeTimeout);
     document.body.classList.add('resize-animation-stopper');
