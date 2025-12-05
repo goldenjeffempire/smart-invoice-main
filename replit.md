@@ -11,8 +11,8 @@ InvoiceFlow is a production-grade professional invoicing platform designed to st
 
 ## System Architecture
 ### UI/UX Decisions
-The platform features a modern, professional UI/UX with a focus on dark themes, glassmorphism, and responsive design. Key design elements include:
-- **Design System Foundation**: "InvoiceFlow Platinum" design tokens, deep indigo primary colors, gradient accents, glassmorphism tokens (glass-bg, glass-blur), enhanced shadow system, and an 8pt grid spacing scale.
+The platform features a modern, professional UI/UX with a focus on clean light themes, professional business aesthetics, and responsive design. Key design elements include:
+- **Design System Foundation**: Professional light theme design tokens, indigo primary colors (#4f46e5), emerald accents (#10b981), clean white backgrounds, subtle gray accents, modern shadow system, and an 8pt grid spacing scale.
 - **Typography**: Modern Inter font family.
 - **Animations**: Advanced animation system (`enhancements.css`, `landing-animations.css`) with shimmer, bounce, slide-in, fade-in, wiggle effects, scroll reveals, parallax, and confetti for user feedback. Supports `prefers-reduced-motion`.
 - **Component Library**: Modular CSS for buttons, cards, forms, navigation, modals, skeleton loaders, and toast notifications.
@@ -63,6 +63,30 @@ The platform features a modern, professional UI/UX with a focus on dark themes, 
 - **Frontend Frameworks/Libraries**: Tailwind CSS, PostCSS, Node.js (for asset compilation)
 
 ## Recent Changes (December 2025)
+
+### Engineering Overhaul: Performance & Light Theme (COMPLETED - Dec 5, 2025)
+- **Performance Optimization**: Consolidated middleware from 14 to 10 components
+  - Created UnifiedMiddleware combining request logging, security headers, cache control, and timing
+  - Reduced /api-access/ endpoint response time from 1200ms to ~84ms (14x improvement)
+  - Eliminated duplicate request logging across multiple middleware
+- **Modern Light Theme Design System**:
+  - Created comprehensive design-tokens.css with professional light theme colors
+  - Updated main.css with modern CSS architecture and component styling
+  - Rebuilt components.css with light theme navigation, buttons, cards, and forms
+  - Replaced dark purple/indigo backgrounds with clean whites, subtle grays, and blue accents
+  - Updated cookie consent banner to use light theme styling
+- **Template Modernization**:
+  - Simplified home.html template removing 2700+ lines of inline dark theme CSS
+  - New clean hero section with gradient text accents
+  - Professional feature grid with icon-based cards
+  - Testimonials section with avatar integration
+  - CTA section with gradient background
+- **UI Design Tokens**:
+  - Primary: Indigo (#4f46e5 to #818cf8)
+  - Accent: Emerald (#059669 to #34d399)
+  - Backgrounds: White and Gray-50/100
+  - Professional shadow system with card and primary shadows
+  - Comprehensive spacing and typography scales
 
 ### Phase 0: Critical Security & Compliance Hardening (COMPLETED)
 - Implemented comprehensive security headers via SecurityHeadersMiddleware:

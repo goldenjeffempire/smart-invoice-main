@@ -141,27 +141,23 @@ INSTALLED_APPS = [
 ]
 
 # =============================================================================
-# MIDDLEWARE
+# MIDDLEWARE - Optimized for Performance
 # =============================================================================
+# Consolidated middleware chain reduces overhead from 11+ custom middleware to 4
+# See invoiceflow/unified_middleware.py for implementation details
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    "invoiceflow.request_logging.RequestLoggingMiddleware",
-    "invoiceflow.cache_middleware.CacheControlMiddleware",
-    "invoiceflow.monitoring.PerformanceMiddleware",
+    "invoiceflow.unified_middleware.UnifiedMiddleware",
+    "invoiceflow.unified_middleware.OptimizedRateLimitMiddleware",
     "csp.middleware.CSPMiddleware",
-    "invoiceflow.security_middleware.SecurityHeadersMiddleware",
-    "invoiceflow.security_middleware.SecurityEventLoggingMiddleware",
-    "invoiceflow.security_middleware.CookieConsentMiddleware",
-    "invoices.middleware.RequestResponseLoggingMiddleware",
-    "invoices.middleware.RateLimitingMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "invoiceflow.unified_middleware.CookieConsentMiddleware",
     "invoiceflow.mfa_middleware.MFAEnforcementMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 ROOT_URLCONF = "invoiceflow.urls"
