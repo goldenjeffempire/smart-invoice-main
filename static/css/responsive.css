@@ -90,7 +90,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 12, 41, 0.98);
+  background: rgba(11, 15, 26, 0.98);
   backdrop-filter: blur(24px);
   padding: 80px var(--spacing-6) var(--spacing-6);
   opacity: 0;
@@ -596,7 +596,7 @@
   z-index: 998;
   width: 44px;
   height: 44px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+  background: linear-gradient(135deg, rgba(76, 95, 213, 0.2), rgba(139, 92, 246, 0.2));
   border: 1px solid rgba(139, 92, 246, 0.3);
   border-radius: 12px;
   color: white;
@@ -608,7 +608,7 @@
 
 .mobile-menu-toggle:hover,
 .mobile-menu-toggle:active {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3));
+  background: linear-gradient(135deg, rgba(76, 95, 213, 0.3), rgba(139, 92, 246, 0.3));
 }
 
 .mobile-menu-toggle svg {

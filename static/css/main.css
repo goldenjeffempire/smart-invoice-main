@@ -112,7 +112,7 @@ h1, h2, h3, h4, h5, h6 {
 .btn-primary {
   background: var(--gradient-primary);
   color: var(--color-neutral-0);
-  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(99, 102, 241, 0.2);
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(76, 95, 213, 0.2);
 }
 
 .btn-primary:hover {
@@ -183,9 +183,9 @@ h1, h2, h3, h4, h5, h6 {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   border-radius: var(--radius-full);
-  background: rgba(99, 102, 241, 0.1);
+  background: rgba(76, 95, 213, 0.1);
   color: var(--color-primary-400);
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  border: 1px solid rgba(76, 95, 213, 0.2);
 }
 
 .badge-dot {

@@ -78,8 +78,8 @@
 }
 
 @keyframes border-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.6); }
+  0%, 100% { box-shadow: 0 0 20px rgba(76, 95, 213, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(76, 95, 213, 0.6); }
 }
 
 @keyframes counter-up {
@@ -206,7 +206,7 @@
 }
 
 .toast-info {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(79, 70, 229, 0.95));
+  background: linear-gradient(135deg, rgba(76, 95, 213, 0.95), rgba(79, 70, 229, 0.95));
   color: #fff;
 }
 
@@ -344,7 +344,7 @@
 }
 
 .table-enhanced tbody tr.selected {
-  background: rgba(99, 102, 241, 0.15);
+  background: rgba(76, 95, 213, 0.15);
 }
 
 .table-enhanced tbody td {
@@ -442,7 +442,7 @@
   width: 100px;
   height: 100px;
   margin: 0 auto 24px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.1));
+  background: linear-gradient(135deg, rgba(76, 95, 213, 0.2), rgba(76, 95, 213, 0.1));
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -509,7 +509,7 @@
   outline: none;
   border-color: var(--color-primary-400);
   background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 0 0 4px rgba(76, 95, 213, 0.15);
 }
 
 .form-input-enhanced.has-error {
@@ -664,14 +664,14 @@
 
 .card-enhanced:hover {
   transform: translateY(-6px);
-  border-color: rgba(99, 102, 241, 0.3);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(99, 102, 241, 0.1);
+  border-color: rgba(76, 95, 213, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(76, 95, 213, 0.1);
 }
 
 .card-glow {
   position: absolute;
   inset: -50%;
-  background: radial-gradient(circle at center, rgba(99, 102, 241, 0.15), transparent 50%);
+  background: radial-gradient(circle at center, rgba(76, 95, 213, 0.15), transparent 50%);
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
@@ -719,9 +719,9 @@
 }
 
 .badge-info {
-  background: rgba(99, 102, 241, 0.15);
-  color: #6366f1;
-  border: 1px solid rgba(99, 102, 241, 0.3);
+  background: rgba(76, 95, 213, 0.15);
+  color: #4C5FD5;
+  border: 1px solid rgba(76, 95, 213, 0.3);
 }
 
 .badge-dot {
@@ -965,7 +965,7 @@
 }
 
 .hover-glow:hover {
-  box-shadow: 0 0 40px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 0 40px rgba(76, 95, 213, 0.4);
 }
 
 .hover-border {
