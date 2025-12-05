@@ -25,6 +25,7 @@ weasyprint==66.0
 webencodings==0.5.1
 whitenoise==6.11.0
 zopfli==0.4.0
+requests>=2.31.0
 asgiref
 brotli
 cffi
@@ -52,3 +53,4 @@ weasyprint
 webencodings
 whitenoise
 zopfli
+requests

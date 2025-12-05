@@ -35,20 +35,26 @@
                     
                     {% if messages %}
                     {% for message in messages %}
-                    <div class="form-message {% if message.tags %}{{ message.tags }}{% endif %}">
+                    <div class="form-message {% if message.tags %}{{ message.tags }}{% endif %}" role="alert">
                         {{ message }}
                     </div>
                     {% endfor %}
                     {% endif %}
                     
+                    {% if rate_limited %}
+                    <div class="form-message error" role="alert">
+                        You have reached the submission limit. Please try again in an hour.
+                    </div>
+                    {% endif %}
+                    
                     <div class="form-row">
                         <div class="form-group">
                             <label for="name" class="form-label">Your Name</label>
-                            <input type="text" name="name" id="name" class="form-input" placeholder="John Doe" required>
+                            <input type="text" name="name" id="name" class="form-input" placeholder="John Doe" required aria-required="true">
                         </div>
                         <div class="form-group">
                             <label for="email" class="form-label">Email Address</label>
-                            <input type="email" name="email" id="email" class="form-input" placeholder="you@example.com" required>
+                            <input type="email" name="email" id="email" class="form-input" placeholder="you@example.com" required aria-required="true">
                         </div>
                     </div>
                     
@@ -65,34 +71,53 @@
                     
                     <div class="form-group">
                         <label for="message" class="form-label">Message</label>
-                        <textarea name="message" id="message" class="form-input form-textarea" placeholder="How can we help you?" rows="5" required></textarea>
+                        <textarea name="message" id="message" class="form-input form-textarea" placeholder="How can we help you?" rows="5" required aria-required="true"></textarea>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary btn-lg">
+                    <!-- Honeypot field for spam protection (hidden) -->
+                    <div style="position: absolute; left: -9999px; opacity: 0; height: 0; overflow: hidden;" aria-hidden="true">
+                        <label for="honeypot">Leave this field empty</label>
+                        <input type="text" name="honeypot" id="honeypot" tabindex="-1" autocomplete="off">
+                    </div>
+                    
+                    {% if hcaptcha_enabled %}
+                    <!-- hCaptcha widget -->
+                    <div class="form-group">
+                        <div class="h-captcha" data-sitekey="{{ hcaptcha_sitekey }}" data-theme="dark"></div>
+                    </div>
+                    {% endif %}
+                    
+                    <button type="submit" class="btn btn-primary btn-lg" {% if rate_limited %}disabled{% endif %}>
                         Send Message
-                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <line x1="22" y1="2" x2="11" y2="13"/>
                             <polygon points="22 2 15 22 11 13 2 9 22 2"/>
                         </svg>
                     </button>
+                    
+                    <p class="form-privacy-notice">
+                        By submitting this form, you agree to our 
+                        <a href="{% url 'privacy' %}">Privacy Policy</a>. 
+                        We'll only use your information to respond to your inquiry.
+                    </p>
                 </form>
             </div>
             
             <div class="contact-info" data-animate="slide-up" data-delay="200">
                 <div class="contact-info-card glass-card">
                     <div class="contact-info-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                             <polyline points="22,6 12,13 2,6"/>
                         </svg>
                     </div>
                     <h3>Email Us</h3>
-                    <p>support@invoiceflow.com</p>
+                    <p>Use the form for secure communication</p>
                 </div>
                 
                 <div class="contact-info-card glass-card">
                     <div class="contact-info-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <circle cx="12" cy="12" r="10"/>
                             <polyline points="12 6 12 12 16 14"/>
                         </svg>
@@ -103,18 +128,25 @@
                 
                 <div class="contact-info-card glass-card">
                     <div class="contact-info-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>
+                            <circle cx="12" cy="10" r="3"/>
                         </svg>
                     </div>
-                    <h3>Live Chat</h3>
-                    <p>Available Monday - Friday, 9am - 5pm</p>
+                    <h3>Office Hours</h3>
+                    <p>Monday - Friday, 9am - 5pm WAT</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 {% endblock %}
+
+{% if hcaptcha_enabled %}
+{% block head_extra %}
+<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+{% endblock %}
+{% endif %}
 
 {% block extra_css %}
 <style>
@@ -238,6 +270,22 @@
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.2);
     color: #f87171;
+}
+
+.form-privacy-notice {
+    font-size: var(--font-size-xs);
+    color: var(--color-neutral-500);
+    text-align: center;
+    margin-top: var(--spacing-2);
+}
+
+.form-privacy-notice a {
+    color: var(--color-primary-400);
+    text-decoration: underline;
+}
+
+.h-captcha {
+    margin: var(--spacing-2) 0;
 }
 
 .contact-info {

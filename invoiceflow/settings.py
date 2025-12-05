@@ -151,6 +151,7 @@ MIDDLEWARE = [
     "csp.middleware.CSPMiddleware",
     "invoiceflow.security_middleware.SecurityHeadersMiddleware",
     "invoiceflow.security_middleware.SecurityEventLoggingMiddleware",
+    "invoiceflow.security_middleware.CookieConsentMiddleware",
     "invoices.middleware.RequestResponseLoggingMiddleware",
     "invoices.middleware.RateLimitingMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -337,14 +338,16 @@ LOGGING = {
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
         "default-src": ("'self'",),
-        "script-src": ("'self'", "'unsafe-inline'", "https://fonts.googleapis.com"),
-        "style-src": ("'self'", "'unsafe-inline'", "https://fonts.googleapis.com"),
+        "script-src": ("'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://js.hcaptcha.com"),
+        "style-src": ("'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://hcaptcha.com"),
         "img-src": ("'self'", "data:", "https:", "https://ui-avatars.com"),
         "font-src": ("'self'", "https://fonts.gstatic.com", "data:"),
-        "connect-src": ("'self'", PRODUCTION_URL),
+        "connect-src": ("'self'", PRODUCTION_URL, "https://hcaptcha.com", "https://api.hcaptcha.com"),
+        "frame-src": ("https://hcaptcha.com", "https://newassets.hcaptcha.com"),
         "frame-ancestors": ("'none'",),
         "base-uri": ("'self'",),
         "form-action": ("'self'",),
+        "object-src": ("'none'",),
         "upgrade-insecure-requests": True,
         "block-all-mixed-content": True,
     }
@@ -369,18 +372,27 @@ CACHES = {
 }
 
 # =============================================================================
-# SESSION SECURITY
+# SESSION SECURITY (Phase 1 requirements)
 # =============================================================================
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SAMESITE = "Lax"
+SESSION_COOKIE_SAMESITE = "Strict"  # Phase 1: Strict for CSRF protection
 SESSION_COOKIE_AGE = 1209600  # 2 weeks
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_SAVE_EVERY_REQUEST = True  # Extend session on activity
 
 # =============================================================================
 # CSRF SECURITY
 # =============================================================================
 CSRF_COOKIE_HTTPONLY = True
-CSRF_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "Strict"  # Phase 1: Strict for enhanced security
 CSRF_USE_SESSIONS = False
+
+# =============================================================================
+# HCAPTCHA CONFIGURATION (Phase 0: Contact form protection)
+# =============================================================================
+HCAPTCHA_SITEKEY = env("HCAPTCHA_SITEKEY", default="")  # type: ignore
+HCAPTCHA_SECRET = env("HCAPTCHA_SECRET", default="")  # type: ignore
+HCAPTCHA_ENABLED = bool(HCAPTCHA_SITEKEY and HCAPTCHA_SECRET)
 
 # =============================================================================
 # SENTRY ERROR TRACKING

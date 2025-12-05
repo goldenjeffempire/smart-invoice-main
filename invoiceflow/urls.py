@@ -8,11 +8,19 @@ from django.contrib.sitemaps.views import sitemap as sitemap_view
 from invoices import views
 from invoices.health import health_check, readiness_check, liveness_check
 from invoices.sitemap import sitemaps
+from invoiceflow import cookie_consent, gdpr
 
 handler404 = "invoices.views.custom_404"
 handler500 = "invoices.views.custom_500"
 
 urlpatterns = [
+    # Cookie Consent & GDPR Compliance
+    path("api/consent/set/", cookie_consent.set_cookie_consent, name="set_cookie_consent"),
+    path("api/consent/get/", cookie_consent.get_cookie_consent, name="get_cookie_consent"),
+    path("api/consent/withdraw/", cookie_consent.withdraw_cookie_consent, name="withdraw_cookie_consent"),
+    path("api/gdpr/export/", gdpr.export_user_data, name="gdpr_export"),
+    path("api/gdpr/delete/", gdpr.request_data_deletion, name="gdpr_delete"),
+    path("api/gdpr/sar/", gdpr.submit_sar, name="gdpr_sar"),
     # Health checks
     path("health/", health_check, name="health_check"),
     path("health/ready/", readiness_check, name="readiness_check"),

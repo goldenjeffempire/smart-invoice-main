@@ -374,20 +374,65 @@ def careers(request):
 
 
 def contact(request):
-    """Contact page with contact form - handles form submission and stores in database."""
+    """Contact page with contact form - handles form submission with rate limiting and CAPTCHA."""
     from django.core.mail import send_mail
+    from django.core.cache import cache
     from django.conf import settings
     from .forms import ContactForm
+    from .middleware import RequestResponseLoggingMiddleware
     import logging
+    import requests
 
     logger = logging.getLogger(__name__)
+    
+    # Rate limiting for contact form (5 submissions per hour per IP)
+    client_ip = get_client_ip(request)
+    rate_limit_key = f"contact_form:{client_ip}"
+    submission_count = cache.get(rate_limit_key, 0)
 
     if request.method == "POST":
+        # Check rate limit
+        if submission_count >= 5:
+            messages.error(
+                request,
+                "Too many submissions. Please try again later.",
+            )
+            logger.warning(f"Contact form rate limit exceeded for IP: {client_ip}")
+            return render(request, "pages/contact.html", {"form": ContactForm(), "rate_limited": True})
+        
         form = ContactForm(request.POST)
-        if form.is_valid():
+        
+        # Verify hCaptcha if enabled
+        hcaptcha_valid = True
+        if getattr(settings, 'HCAPTCHA_ENABLED', False):
+            hcaptcha_response = request.POST.get('h-captcha-response', '')
+            if not hcaptcha_response:
+                hcaptcha_valid = False
+                messages.error(request, "Please complete the CAPTCHA verification.")
+            else:
+                try:
+                    verify_response = requests.post(
+                        'https://api.hcaptcha.com/siteverify',
+                        data={
+                            'secret': settings.HCAPTCHA_SECRET,
+                            'response': hcaptcha_response,
+                            'remoteip': client_ip,
+                        },
+                        timeout=10
+                    )
+                    result = verify_response.json()
+                    hcaptcha_valid = result.get('success', False)
+                    if not hcaptcha_valid:
+                        messages.error(request, "CAPTCHA verification failed. Please try again.")
+                        logger.warning(f"hCaptcha verification failed for IP: {client_ip}")
+                except Exception as e:
+                    logger.error(f"hCaptcha verification error: {e}")
+                    hcaptcha_valid = True  # Fail open to not block legitimate users
+        
+        if form.is_valid() and hcaptcha_valid:
             try:
                 submission = form.save(commit=False)
-                submission.ip_address = get_client_ip(request)
+                submission.ip_address = client_ip
                 submission.user_agent = request.META.get("HTTP_USER_AGENT", "")[:500]
                 submission.save()
 
@@ -417,6 +462,10 @@ Submitted: {submission.submitted_at}
                     "Thank you for your message! We'll get back to you within 24 hours.",
                 )
                 logger.info(f"Contact form submitted by {submission.email}")
+                
+                # Increment rate limit counter
+                cache.set(rate_limit_key, submission_count + 1, 3600)  # 1 hour
+                
                 return redirect("contact")
             except Exception as e:
                 logger.error(f"Contact form submission failed: {e}")
@@ -435,7 +484,11 @@ Submitted: {submission.submitted_at}
     else:
         form = ContactForm()
 
-    return render(request, "pages/contact.html", {"form": form})
+    return render(request, "pages/contact.html", {
+        "form": form,
+        "hcaptcha_enabled": getattr(settings, 'HCAPTCHA_ENABLED', False),
+        "hcaptcha_sitekey": getattr(settings, 'HCAPTCHA_SITEKEY', ''),
+    })
 
 
 def changelog(request):

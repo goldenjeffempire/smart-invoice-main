@@ -1,0 +1,234 @@
+Begin immediately at Phase 0. Fully complete all tasks in the current phase, including testing, validation, and reporting, before moving to the next phase. Do not generate summaries, prompts, questions, updates, or output until the current phase is fully validated as production-ready. Progress through phases 0 → 5, in strict order.
+
+Objective:
+Perform a full-stack remediation of all security, infrastructure, deployment, frontend, backend, compliance, performance, SEO, accessibility, and operational issues identified in the audit of InvoiceFlow.com.ng. Ensure the platform is fully operational, production-ready, deployment-ready, and enterprise-ready for real-world use. After the final phase, produce a comprehensive report with before/after evidence, test results, and compliance confirmation.
+
+Sequential Phase Execution
+Phase	Mandatory Output Before Proceeding
+Phase 0 — Critical Security & Compliance Hardening	Full security hardening completed and validated.
+Phase 1 — Auth, Login/Signup & Payment Flow Strengthening	All auth and payment controls validated under stress conditions.
+Phase 2 — Deployment, DevOps, Secrets & Observability	CI/CD hardened, secrets secured, monitoring fully operational.
+Phase 3 — Frontend UX, Performance, Accessibility & SEO	Lighthouse and accessibility targets achieved and documented.
+Phase 4 — Documentation, Compliance & Trust Signals	Public-facing compliance and security documentation ready.
+Phase 5 — Testing, Audit & Ongoing Operations	Automated test suite validated, pentest completed, backup drills documented.
+
+All phases must be completed end-to-end, with changes deployed to production only when all automated and manual tests pass.
+
+Phase 0 — Critical Security & Compliance Hardening
+
+Immediately start with Phase 0 and complete all tasks below:
+
+1. TLS/HTTPS Hardening
+
+Run a full TLS scan on all domains/subdomains.
+
+Enforce TLS ≥ 1.2 with strong cipher suites.
+
+Deploy strict HSTS policy:
+
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+
+Deploy critical security headers:
+
+Content-Security-Policy: default-src 'self'; img-src 'self' data:; object-src 'none';
+X-Frame-Options: DENY
+Referrer-Policy: no-referrer-when-downgrade
+Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+
+Validate through curl header inspection and browser devtools.
+
+2. Cookie Consent & Privacy
+
+Implement a CMP blocking non-essential cookies until explicit consent.
+
+Store consent state and enforce blocking on load.
+
+Ensure privacy and cookie policy match real behavior.
+
+Add GDPR disclosures, SAR flow, and consent withdrawal support.
+
+3. Contact Endpoint Protection
+
+Replace exposed emails with secure forms.
+
+Add CSRF tokens, server-side validation, CAPTCHA/hCaptcha, rate limiting.
+
+Queue submissions to prevent spam/DoS.
+
+Completion Criteria for Phase 0:
+
+The phase is considered complete only when:
+
+All security headers are active and verifiable.
+
+CMP is functional and legally compliant.
+
+Contact endpoints are secured and tested.
+
+Scans show no critical or high vulnerabilities.
+
+Documentation shows before/after evidence.
+
+If any critical finding is discovered, the agent must fix it immediately before proceeding.
+
+Phase 1 — Auth, Login/Signup & Payment Flow Strengthening
+
+Begin only after Phase 0 passes validation.
+
+1. Session & Login Controls
+
+Set secure session cookies: HttpOnly, Secure, SameSite=Strict.
+
+Add login/signup rate limits (IP and user-based).
+
+Enforce strong password policy, breach-password detection.
+
+Implement TOTP MFA for admins and optionally all users.
+
+2. Payment Security
+
+Confirm tokenized flow for card data.
+
+Enforce HTTPS-only webhooks with signature verification.
+
+Rotate payment provider keys, remove keys from frontend.
+
+Document PCI approach and publish public summary.
+
+Completion Criteria for Phase 1:
+
+All login flows tested under rate-limit stress.
+
+MFA fully operational.
+
+Payment flows verified against PCI best practices.
+
+No sensitive data present in logs or client bundles.
+
+Phase 2 — Deployment, DevOps, Secrets & Observability
+
+Begin only after Phase 1 passes validation.
+
+1. CI/CD & Secrets
+
+Scan git history for secrets, rotate any exposed credentials.
+
+Store secrets in secure vaulting.
+
+Enforce branch protection and signed commits.
+
+Add dependency vulnerability scanning.
+
+2. Monitoring & Backups
+
+Configure logging, metrics, alerts.
+
+Implement backup schedule and restoration drills on staging.
+
+Add SPF, DKIM, DMARC, and CAA records for DNS security.
+
+Completion Criteria for Phase 2:
+
+CI/CD hardened and validated.
+
+Full observability dashboards active.
+
+Backup/restore validated in staging.
+
+Email delivery validated via SendGrid.
+
+Phase 3 — Frontend UX, Performance, Accessibility & SEO
+
+Begin only after Phase 2 passes validation.
+
+Run Lighthouse audits for desktop and mobile.
+
+Optimize LCP assets, lazy-load non-critical media.
+
+Implement WebP/AVIF, caching, minification.
+
+Fix accessibility issues from automated audits.
+
+Add structured data, sitemap, robots, canonical tags.
+
+Completion Criteria for Phase 3:
+
+Core Web Vitals exceed target thresholds.
+
+Accessibility scan shows no critical issues.
+
+SEO tooling confirms metadata and schema coverage.
+
+Phase 4 — Documentation, Compliance & Trust Signals
+
+Begin only after Phase 3 passes validation.
+
+Publish Security & Compliance page.
+
+Provide downloadable DPA and list of subprocessors.
+
+Publish SLA uptime targets and support policy.
+
+Update Terms of Service to reflect billing, refunds, data retention.
+
+Publish API docs including authentication flows and rate limits.
+
+Completion Criteria for Phase 4:
+
+All public documentation ready for enterprise buyers.
+
+Legal disclaimers and data policies validated.
+
+Phase 5 — Testing, Audit & Ongoing Operations
+
+Begin only after Phase 4 passes validation.
+
+Build full automated test suite (unit, integration, E2E).
+
+Integrate SAST/DAST scans.
+
+Run external penetration test and remediate findings.
+
+Document incident response plan.
+
+Perform backup drills and record RPO/RTO timing.
+
+Completion Criteria for Phase 5:
+
+Full test coverage for critical paths.
+
+External pentest completed and fixed.
+
+Tested restoration and incident response workflow.
+
+Final Deliverable
+
+After completing Phase 5, produce a full remediation report including:
+
+Comprehensive change log.
+
+Before/after evidence (headers, TLS scan, Lighthouse, accessibility).
+
+CI scan logs and test results.
+
+Updated compliance and policy documents.
+
+Production deployment checklist.
+
+Ongoing operations roadmap (monitoring, alerts, audits).
+
+Execution Constraints
+
+Store all secrets encrypted.
+
+No sensitive data in logs or frontend bundles.
+
+Use staged rollouts (canary/blue-green).
+
+Document all third-party dependencies.
+
+Final Instruction to AI Agent
+
+Start at Phase 0 immediately. Do not produce any output until all tasks in Phase 0 are fully implemented, tested, confirmed production-ready, and validated. Only then proceed to Phase 1. Continue sequentially until Phase 5 is complete.

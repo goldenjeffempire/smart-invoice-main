@@ -259,6 +259,171 @@
     {% endblock %}
     
     <script src="/static/js/app.js" defer></script>
+    
+    <!-- Cookie Consent Banner (GDPR Compliant) -->
+    <div id="cookie-consent-banner" class="cookie-consent-banner" style="display: none;" role="dialog" aria-labelledby="cookie-consent-title" aria-describedby="cookie-consent-description">
+        <div class="cookie-consent-content">
+            <div class="cookie-consent-text">
+                <h3 id="cookie-consent-title">Cookie Preferences</h3>
+                <p id="cookie-consent-description">
+                    We use cookies to enhance your experience. Essential cookies are required for the site to function. 
+                    You can choose to accept additional cookies for analytics and personalization.
+                    <a href="{% url 'privacy' %}#cookies" class="cookie-link">Learn more in our Privacy Policy</a>
+                </p>
+            </div>
+            <div class="cookie-consent-options">
+                <div class="cookie-option">
+                    <input type="checkbox" id="cookie-essential" checked disabled>
+                    <label for="cookie-essential">Essential (Required)</label>
+                </div>
+                <div class="cookie-option">
+                    <input type="checkbox" id="cookie-analytics">
+                    <label for="cookie-analytics">Analytics</label>
+                </div>
+                <div class="cookie-option">
+                    <input type="checkbox" id="cookie-marketing">
+                    <label for="cookie-marketing">Marketing</label>
+                </div>
+            </div>
+            <div class="cookie-consent-actions">
+                <button type="button" id="cookie-reject-all" class="btn btn-secondary btn-sm">Reject All</button>
+                <button type="button" id="cookie-accept-selected" class="btn btn-secondary btn-sm">Accept Selected</button>
+                <button type="button" id="cookie-accept-all" class="btn btn-primary btn-sm">Accept All</button>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+    .cookie-consent-banner {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(15, 15, 25, 0.98);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1.5rem;
+        z-index: 9999;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+    }
+    .cookie-consent-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 1.5rem;
+    }
+    .cookie-consent-text {
+        flex: 1;
+        min-width: 280px;
+    }
+    .cookie-consent-text h3 {
+        font-size: 1.1rem;
+        color: #fff;
+        margin-bottom: 0.5rem;
+    }
+    .cookie-consent-text p {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0;
+        line-height: 1.5;
+    }
+    .cookie-link {
+        color: #818cf8;
+        text-decoration: underline;
+    }
+    .cookie-consent-options {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+    .cookie-option {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .cookie-option input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #6366f1;
+    }
+    .cookie-option label {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.9);
+        cursor: pointer;
+    }
+    .cookie-consent-actions {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+    .btn-sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+    @media (max-width: 768px) {
+        .cookie-consent-content {
+            flex-direction: column;
+            text-align: center;
+        }
+        .cookie-consent-options {
+            justify-content: center;
+        }
+        .cookie-consent-actions {
+            justify-content: center;
+            width: 100%;
+        }
+    }
+    </style>
+    
+    <script>
+    (function() {
+        const banner = document.getElementById('cookie-consent-banner');
+        const acceptAll = document.getElementById('cookie-accept-all');
+        const acceptSelected = document.getElementById('cookie-accept-selected');
+        const rejectAll = document.getElementById('cookie-reject-all');
+        const analyticsCheckbox = document.getElementById('cookie-analytics');
+        const marketingCheckbox = document.getElementById('cookie-marketing');
+        
+        // Check if consent already given
+        fetch('/api/consent/get/')
+            .then(r => r.json())
+            .then(data => {
+                if (!data.hasConsent) {
+                    banner.style.display = 'block';
+                }
+            })
+            .catch(() => {
+                banner.style.display = 'block';
+            });
+        
+        function saveConsent(analytics, marketing) {
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                             document.cookie.split('; ').find(row => row.startsWith('csrftoken='))?.split('=')[1];
+            
+            fetch('/api/consent/set/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({
+                    analytics: analytics,
+                    marketing: marketing,
+                    preferences: true
+                })
+            }).then(() => {
+                banner.style.display = 'none';
+            }).catch(console.error);
+        }
+        
+        acceptAll?.addEventListener('click', () => saveConsent(true, true));
+        acceptSelected?.addEventListener('click', () => saveConsent(analyticsCheckbox.checked, marketingCheckbox.checked));
+        rejectAll?.addEventListener('click', () => saveConsent(false, false));
+    })();
+    </script>
+    
     {% block extra_js %}{% endblock %}
 </body>
 </html>
