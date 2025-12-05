@@ -105,6 +105,22 @@
   display: none;
 }
 
+.floating-card-4 {
+  display: none;
+}
+
+.intro-floating-elements {
+  display: none;
+}
+
+.notification-stack-enhanced {
+  display: none;
+}
+
+.analytics-cards-enhanced {
+  display: none;
+}
+
 .hero-scroll-indicator {
   display: none;
 }
@@ -646,7 +662,10 @@ button,
   }
 
   .notification-stack,
-  .analytics-cards {
+  .analytics-cards,
+  .notification-stack-enhanced,
+  .analytics-cards-enhanced,
+  .intro-floating-elements {
     display: flex;
   }
 
@@ -698,7 +717,8 @@ button,
     font-size: clamp(2.25rem, 4vw, 3rem);
   }
 
-  .floating-card-3 {
+  .floating-card-3,
+  .floating-card-4 {
     display: flex;
   }
 }
