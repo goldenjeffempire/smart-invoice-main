@@ -177,6 +177,9 @@ InvoiceFlow is a production-grade Django invoicing platform with strong security
 ### Fixed During Audit
 1. **Sitemap Security** - Removed private invoice exposure
 2. **Structured Data** - Fixed placeholder contact info
+3. **Requirements.txt Cleanup** - Removed 47 duplicate entries (89 → 42 clean pinned dependencies)
+4. **CSV Export Fix** - Fixed encoding issue in invoice export (line 1022)
+5. **Type Annotations** - Updated Manager type annotations to quoted strings for forward references
 
 ### Recommendations (Non-Critical)
 1. **Upgrade Render Plan** - Free tier has cold starts and limited resources
