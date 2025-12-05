@@ -6,9 +6,7 @@
       this.initNavigation();
       this.initMobileMenu();
       this.initAppSidebar();
-      this.initScrollAnimations();
       this.initScrollReveal();
-      this.initParallax();
       this.initMicroInteractions();
       this.initSmoothScroll();
       this.initLazyLoading();
@@ -16,9 +14,8 @@
       this.initToastSystem();
       this.initCounterAnimations();
       this.initEnhancedForms();
-      this.initSkeletonLoaders();
       this.initModalSystem();
-      console.log('InvoiceFlow v7.0 - Enhanced Edition initialized');
+      console.log('InvoiceFlow v8.0 - Premium Edition initialized');
     },
 
     initAppSidebar() {
@@ -89,22 +86,16 @@
           nav.classList.remove('scrolled');
         }
 
-        if (currentScroll > lastScroll && currentScroll > 300) {
-          nav.style.transform = 'translateY(-100%)';
-        } else {
-          nav.style.transform = 'translateY(0)';
-        }
-
         lastScroll = currentScroll;
       };
 
       window.addEventListener('scroll', this.throttle(handleScroll, 16), { passive: true });
+      handleScroll();
     },
 
     initMobileMenu() {
       const toggle = document.querySelector('.nav-mobile-toggle');
       const menu = document.querySelector('.nav-mobile-menu');
-      const nav = document.querySelector('.nav');
       
       if (!toggle || !menu) return;
 
@@ -112,60 +103,33 @@
         const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
         toggle.setAttribute('aria-expanded', !isExpanded);
         menu.setAttribute('aria-hidden', isExpanded);
-        toggle.classList.toggle('active');
-        menu.classList.toggle('active');
-        document.body.classList.toggle('menu-open');
+        document.body.style.overflow = isExpanded ? '' : 'hidden';
       });
 
       menu.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
           toggle.setAttribute('aria-expanded', 'false');
           menu.setAttribute('aria-hidden', 'true');
-          toggle.classList.remove('active');
-          menu.classList.remove('active');
-          document.body.classList.remove('menu-open');
+          document.body.style.overflow = '';
         });
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+          toggle.setAttribute('aria-expanded', 'false');
+          menu.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        }
       });
 
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && menu.classList.contains('active')) {
+        if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
           toggle.setAttribute('aria-expanded', 'false');
           menu.setAttribute('aria-hidden', 'true');
-          toggle.classList.remove('active');
-          menu.classList.remove('active');
-          document.body.classList.remove('menu-open');
+          document.body.style.overflow = '';
           toggle.focus();
         }
       });
-    },
-
-    initScrollAnimations() {
-      const animatedElements = document.querySelectorAll('[data-animate]');
-      if (!animatedElements.length) return;
-
-      const observerOptions = {
-        root: null,
-        rootMargin: '0px 0px -100px 0px',
-        threshold: 0.1
-      };
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const el = entry.target;
-            const animation = el.dataset.animate;
-            const delay = el.dataset.delay || 0;
-
-            setTimeout(() => {
-              el.classList.add('animated', `animate-${animation}`);
-            }, parseInt(delay));
-
-            observer.unobserve(el);
-          }
-        });
-      }, observerOptions);
-
-      animatedElements.forEach(el => observer.observe(el));
     },
 
     initScrollReveal() {
@@ -180,14 +144,14 @@
       const observerOptions = {
         root: null,
         rootMargin: '0px 0px -80px 0px',
-        threshold: 0.15
+        threshold: 0.1
       };
 
       const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const el = entry.target;
-            const delay = el.dataset.revealDelay || index * 100;
+            const delay = el.dataset.revealDelay || 0;
 
             setTimeout(() => {
               el.classList.add('revealed');
@@ -201,78 +165,17 @@
       revealElements.forEach(el => observer.observe(el));
     },
 
-    initParallax() {
-      const parallaxElements = document.querySelectorAll('[data-parallax]');
-      if (!parallaxElements.length) return;
-
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-      const handleParallax = () => {
-        const scrollY = window.pageYOffset;
-
-        parallaxElements.forEach(el => {
-          const speed = parseFloat(el.dataset.parallax) || 0.5;
-          const offset = scrollY * speed;
-          el.style.transform = `translateY(${offset}px)`;
-        });
-      };
-
-      window.addEventListener('scroll', this.throttle(handleParallax, 16), { passive: true });
-    },
-
     initMicroInteractions() {
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       if (!prefersReducedMotion) {
-        document.querySelectorAll('.btn').forEach(btn => {
-          btn.addEventListener('mouseenter', (e) => {
-            const rect = btn.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const ripple = document.createElement('span');
-            ripple.className = 'btn-ripple';
-            ripple.style.left = `${x}px`;
-            ripple.style.top = `${y}px`;
-            
-            btn.appendChild(ripple);
-            
-            setTimeout(() => ripple.remove(), 600);
-          });
-        });
-
-        document.querySelectorAll('.glass-card, .bento-card, .card-enhanced').forEach(card => {
-          card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const rotateX = (y - centerY) / 30;
-            const rotateY = (centerX - x) / 30;
-            
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
-            
-            const glowX = (x / rect.width) * 100;
-            const glowY = (y / rect.height) * 100;
-            card.style.setProperty('--glow-x', `${glowX}%`);
-            card.style.setProperty('--glow-y', `${glowY}%`);
-          });
-
-          card.addEventListener('mouseleave', () => {
-            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
-          });
-        });
-
-        document.querySelectorAll('.feature-card, .stat-card').forEach(card => {
+        document.querySelectorAll('.feature-card').forEach(card => {
           card.addEventListener('mouseenter', () => {
-            card.style.transform = 'translateY(-8px) scale(1.02)';
+            card.style.transform = 'translateY(-8px)';
           });
 
           card.addEventListener('mouseleave', () => {
-            card.style.transform = 'translateY(0) scale(1)';
+            card.style.transform = 'translateY(0)';
           });
         });
 
@@ -380,7 +283,6 @@
         container.setAttribute('role', 'region');
         container.setAttribute('aria-label', 'Notifications');
         container.setAttribute('aria-live', 'polite');
-        container.setAttribute('aria-atomic', 'false');
         document.body.appendChild(container);
       }
 
@@ -394,17 +296,16 @@
           const toast = document.createElement('div');
           toast.className = `toast toast-${type}`;
           toast.setAttribute('role', type === 'error' ? 'alert' : 'status');
-          toast.setAttribute('aria-live', type === 'error' ? 'assertive' : 'polite');
           
           if (prefersReducedMotion) {
             toast.style.animation = 'none';
           }
           
           const icons = {
-            success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
-            error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
-            warning: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
-            info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+            success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+            error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+            warning: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+            info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
           };
 
           toast.innerHTML = `
@@ -413,8 +314,8 @@
               ${title ? `<div class="toast-title">${title}</div>` : ''}
               ${message ? `<div class="toast-message">${message}</div>` : ''}
             </div>
-            ${closable ? `<button class="toast-close" aria-label="Dismiss notification" type="button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            ${closable ? `<button class="toast-close" aria-label="Dismiss notification">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
               </svg>
             </button>` : ''}
@@ -434,12 +335,6 @@
 
           if (closeBtn) {
             closeBtn.addEventListener('click', removeToast);
-            closeBtn.addEventListener('keydown', (e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                removeToast();
-              }
-            });
           }
 
           if (duration > 0) {
@@ -480,7 +375,6 @@
 
         if (prefersReducedMotion) {
           element.textContent = prefix + target.toLocaleString() + suffix;
-          element.classList.add('counter-complete');
           return;
         }
 
@@ -501,7 +395,6 @@
             requestAnimationFrame(updateCounter);
           } else {
             element.textContent = prefix + target.toLocaleString() + suffix;
-            element.classList.add('counter-complete');
           }
         };
 
@@ -540,99 +433,9 @@
           }
         });
       });
-
-      document.querySelectorAll('form[data-validate]').forEach(form => {
-        form.addEventListener('submit', (e) => {
-          let isValid = true;
-          
-          form.querySelectorAll('[required]').forEach(field => {
-            if (!field.value.trim()) {
-              isValid = false;
-              field.classList.add('has-error');
-              field.classList.remove('is-valid');
-              
-              const errorEl = field.parentNode.querySelector('.form-error');
-              if (!errorEl) {
-                const error = document.createElement('div');
-                error.className = 'form-error';
-                error.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> This field is required';
-                field.parentNode.appendChild(error);
-              }
-            } else {
-              field.classList.remove('has-error');
-              field.classList.add('is-valid');
-              const errorEl = field.parentNode.querySelector('.form-error');
-              if (errorEl) errorEl.remove();
-            }
-          });
-
-          if (!isValid) {
-            e.preventDefault();
-            const firstError = form.querySelector('.has-error');
-            if (firstError) {
-              firstError.focus();
-              firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-          }
-        });
-      });
-    },
-
-    initSkeletonLoaders() {
-      window.Skeleton = {
-        show(container) {
-          container.dataset.originalContent = container.innerHTML;
-          container.innerHTML = this.generateSkeleton(container);
-          container.classList.add('loading');
-        },
-
-        hide(container) {
-          if (container.dataset.originalContent) {
-            container.innerHTML = container.dataset.originalContent;
-            delete container.dataset.originalContent;
-          }
-          container.classList.remove('loading');
-        },
-
-        generateSkeleton(container) {
-          const type = container.dataset.skeletonType || 'default';
-          
-          const skeletons = {
-            card: `
-              <div class="skeleton-stat-card">
-                <div class="skeleton skeleton-icon"></div>
-                <div class="skeleton skeleton-value"></div>
-                <div class="skeleton skeleton-label"></div>
-              </div>
-            `,
-            table: `
-              <div class="skeleton-row">
-                <div class="skeleton" style="width: 18px; height: 18px;"></div>
-                <div class="skeleton" style="width: 100px; height: 16px;"></div>
-                <div class="skeleton" style="width: 150px; height: 16px;"></div>
-                <div class="skeleton" style="width: 80px; height: 16px;"></div>
-                <div class="skeleton" style="width: 60px; height: 24px; border-radius: 12px;"></div>
-              </div>
-            `.repeat(5),
-            text: `
-              <div class="skeleton skeleton-title"></div>
-              <div class="skeleton skeleton-text"></div>
-              <div class="skeleton skeleton-text"></div>
-              <div class="skeleton skeleton-text-sm"></div>
-            `,
-            default: `
-              <div class="skeleton skeleton-card"></div>
-            `
-          };
-
-          return skeletons[type] || skeletons.default;
-        }
-      };
     },
 
     initModalSystem() {
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
       window.Modal = {
         show(options) {
           const { title, content, actions, onClose } = options;
@@ -641,162 +444,125 @@
 
           const overlay = document.createElement('div');
           overlay.className = 'modal-overlay';
-          overlay.setAttribute('data-modal-overlay', modalId);
-          
+          overlay.id = modalId + '-overlay';
+
           const modal = document.createElement('div');
-          modal.className = 'modal-container';
+          modal.className = 'modal';
+          modal.id = modalId;
           modal.setAttribute('role', 'dialog');
           modal.setAttribute('aria-modal', 'true');
-          modal.setAttribute('tabindex', '-1');
-          modal.setAttribute('data-modal', modalId);
-          if (title) modal.setAttribute('aria-labelledby', 'modal-title-' + modalId);
-          
-          if (prefersReducedMotion) {
-            overlay.style.transition = 'opacity 0.01ms';
-            modal.style.transition = 'opacity 0.01ms';
+          modal.setAttribute('aria-labelledby', modalId + '-title');
+
+          let actionsHtml = '';
+          if (actions && actions.length) {
+            actionsHtml = `<div class="modal-footer">${actions.map(action => 
+              `<button class="btn btn-${action.type || 'secondary'}" data-action="${action.id || ''}">${action.label}</button>`
+            ).join('')}</div>`;
           }
 
           modal.innerHTML = `
             <div class="modal-header">
-              ${title ? `<h2 class="modal-title" id="modal-title-${modalId}">${title}</h2>` : ''}
-              <button class="modal-close" aria-label="Close dialog" type="button">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <h3 class="modal-title" id="${modalId}-title">${title || ''}</h3>
+              <button class="modal-close" aria-label="Close modal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
               </button>
             </div>
             <div class="modal-body">${content || ''}</div>
-            ${actions ? `<div class="modal-actions">${actions}</div>` : ''}
+            ${actionsHtml}
           `;
 
           document.body.appendChild(overlay);
           document.body.appendChild(modal);
           document.body.style.overflow = 'hidden';
 
-          const focusableElements = modal.querySelectorAll(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-          );
-          const firstFocusable = focusableElements[0];
-          const lastFocusable = focusableElements[focusableElements.length - 1];
-
-          const trapFocus = (e) => {
-            if (e.key !== 'Tab') return;
-            
-            if (e.shiftKey) {
-              if (document.activeElement === firstFocusable) {
-                e.preventDefault();
-                lastFocusable.focus();
-              }
-            } else {
-              if (document.activeElement === lastFocusable) {
-                e.preventDefault();
-                firstFocusable.focus();
-              }
-            }
-          };
-
           requestAnimationFrame(() => {
             overlay.classList.add('active');
             modal.classList.add('active');
-            if (firstFocusable) firstFocusable.focus();
           });
 
-          const close = () => {
-            modal.removeEventListener('keydown', trapFocus);
-            document.removeEventListener('keydown', escHandler);
-            
-            if (prefersReducedMotion) {
+          const closeModal = () => {
+            overlay.classList.remove('active');
+            modal.classList.remove('active');
+
+            setTimeout(() => {
               overlay.remove();
               modal.remove();
               document.body.style.overflow = '';
-              if (previousActiveElement && previousActiveElement.focus) {
+              if (previousActiveElement) {
                 previousActiveElement.focus();
               }
               if (onClose) onClose();
-            } else {
-              overlay.classList.remove('active');
-              modal.classList.remove('active');
-              setTimeout(() => {
-                overlay.remove();
-                modal.remove();
-                document.body.style.overflow = '';
-                if (previousActiveElement && previousActiveElement.focus) {
-                  previousActiveElement.focus();
-                }
-                if (onClose) onClose();
-              }, 300);
-            }
+            }, 300);
           };
 
-          const escHandler = (e) => {
+          modal.querySelector('.modal-close').addEventListener('click', closeModal);
+          overlay.addEventListener('click', closeModal);
+
+          document.addEventListener('keydown', function escHandler(e) {
             if (e.key === 'Escape') {
-              close();
+              closeModal();
+              document.removeEventListener('keydown', escHandler);
             }
-          };
+          });
 
-          overlay.addEventListener('click', close);
-          modal.querySelector('.modal-close').addEventListener('click', close);
-          modal.addEventListener('keydown', trapFocus);
-          document.addEventListener('keydown', escHandler);
+          if (actions && actions.length) {
+            actions.forEach(action => {
+              const btn = modal.querySelector(`[data-action="${action.id}"]`);
+              if (btn && action.handler) {
+                btn.addEventListener('click', () => {
+                  action.handler(closeModal);
+                });
+              }
+            });
+          }
 
-          return { close, modal };
+          const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+          const firstFocusable = focusableElements[0];
+          const lastFocusable = focusableElements[focusableElements.length - 1];
+
+          firstFocusable.focus();
+
+          modal.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+              if (e.shiftKey) {
+                if (document.activeElement === firstFocusable) {
+                  e.preventDefault();
+                  lastFocusable.focus();
+                }
+              } else {
+                if (document.activeElement === lastFocusable) {
+                  e.preventDefault();
+                  firstFocusable.focus();
+                }
+              }
+            }
+          });
+
+          return { close: closeModal, modal, overlay };
         },
 
         confirm(options) {
-          return new Promise((resolve) => {
-            const { title, message, confirmText = 'Confirm', cancelText = 'Cancel', type = 'primary' } = options;
-            
-            const { close, modal } = this.show({
-              title,
-              content: `<p>${message}</p>`,
-              actions: `
-                <button class="btn btn-secondary modal-cancel" type="button">${cancelText}</button>
-                <button class="btn btn-${type} modal-confirm" type="button">${confirmText}</button>
-              `,
-              onClose: () => resolve(false)
-            });
+          const { title, message, confirmText = 'Confirm', cancelText = 'Cancel', onConfirm, onCancel, type = 'info' } = options;
 
-            modal.querySelector('.modal-cancel').addEventListener('click', () => {
-              close();
-              resolve(false);
-            });
-
-            modal.querySelector('.modal-confirm').addEventListener('click', () => {
-              close();
-              resolve(true);
-            });
+          return this.show({
+            title,
+            content: `<p>${message}</p>`,
+            actions: [
+              { id: 'cancel', label: cancelText, type: 'secondary', handler: (close) => { if (onCancel) onCancel(); close(); } },
+              { id: 'confirm', label: confirmText, type: type === 'danger' ? 'danger' : 'primary', handler: (close) => { if (onConfirm) onConfirm(); close(); } }
+            ]
           });
         }
       };
     },
 
-    showConfetti() {
-      const container = document.createElement('div');
-      container.className = 'confetti-container';
-      document.body.appendChild(container);
-
-      const colors = ['#6366f1', '#8b5cf6', '#a855f7', '#10b981', '#f59e0b', '#ef4444'];
-      
-      for (let i = 0; i < 50; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.left = Math.random() * 100 + '%';
-        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.animationDelay = Math.random() * 2 + 's';
-        confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-        container.appendChild(confetti);
-      }
-
-      setTimeout(() => container.remove(), 5000);
-    },
-
     throttle(func, limit) {
       let inThrottle;
-      return function() {
-        const args = arguments;
-        const context = this;
+      return function(...args) {
         if (!inThrottle) {
-          func.apply(context, args);
+          func.apply(this, args);
           inThrottle = true;
           setTimeout(() => inThrottle = false, limit);
         }
@@ -805,20 +571,29 @@
 
     debounce(func, wait) {
       let timeout;
-      return function() {
-        const context = this;
-        const args = arguments;
+      return function(...args) {
         clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(context, args), wait);
+        timeout = setTimeout(() => func.apply(this, args), wait);
       };
+    },
+
+    formatCurrency(amount, currency = 'USD') {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: currency
+      }).format(amount);
+    },
+
+    formatDate(date, options = {}) {
+      const defaultOptions = { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      };
+      return new Intl.DateTimeFormat('en-US', { ...defaultOptions, ...options }).format(new Date(date));
     }
   };
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => InvoiceFlow.init());
-  } else {
-    InvoiceFlow.init();
-  }
-
+  document.addEventListener('DOMContentLoaded', () => InvoiceFlow.init());
   window.InvoiceFlow = InvoiceFlow;
 })();
