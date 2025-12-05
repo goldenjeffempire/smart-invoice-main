@@ -675,6 +675,226 @@
 }
 
 /* ============================================
+   SECURITY SECTION
+   ============================================ */
+.security-section {
+  position: relative;
+  padding: var(--spacing-28) 0;
+  overflow: hidden;
+}
+
+.security-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.security-gradient-1 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%);
+  top: 10%;
+  left: -5%;
+}
+
+.security-gradient-2 {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
+  bottom: 10%;
+  right: -5%;
+}
+
+.security-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
+  opacity: 0.5;
+}
+
+.security-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-12);
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .security-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-16);
+  }
+}
+
+.security-content {
+  max-width: 600px;
+}
+
+.security-content .section-title {
+  text-align: left;
+}
+
+.security-content .section-description {
+  text-align: left;
+  max-width: none;
+}
+
+.security-features-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-5);
+  margin-top: var(--spacing-8);
+}
+
+@media (min-width: 640px) {
+  .security-features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.security-feature-item {
+  display: flex;
+  gap: var(--spacing-4);
+  padding: var(--spacing-5);
+  background: var(--color-white);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  transition: all var(--transition-base);
+}
+
+.security-feature-item:hover {
+  border-color: rgba(16, 185, 129, 0.3);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.security-feature-icon {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-emerald-600);
+}
+
+.security-feature-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.security-feature-content h4 {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-slate-900);
+  margin-bottom: var(--spacing-1);
+}
+
+.security-feature-content p {
+  font-size: var(--font-size-xs);
+  color: var(--color-slate-500);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+.security-visual {
+  position: relative;
+}
+
+.security-image-wrapper {
+  position: relative;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-2xl);
+}
+
+.security-image-glow {
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(circle at center, rgba(16, 185, 129, 0.15) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.security-image-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.security-floating-badges {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.security-badge-float {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-4);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-emerald-700);
+  box-shadow: var(--shadow-lg);
+  animation: floatBadge 4s ease-in-out infinite;
+}
+
+.security-badge-float svg {
+  width: 14px;
+  height: 14px;
+  color: var(--color-emerald-500);
+}
+
+.security-badge-1 {
+  top: 15%;
+  right: 10%;
+  animation-delay: 0s;
+}
+
+.security-badge-2 {
+  bottom: 30%;
+  left: 5%;
+  animation-delay: 1.3s;
+}
+
+.security-badge-3 {
+  bottom: 10%;
+  right: 15%;
+  animation-delay: 2.6s;
+}
+
+@keyframes floatBadge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@media (max-width: 1023px) {
+  .security-floating-badges {
+    display: none;
+  }
+  
+  .security-content .section-title,
+  .security-content .section-description {
+    text-align: center;
+  }
+  
+  .security-content {
+    max-width: none;
+  }
+}
+
+/* ============================================
    INTEGRATIONS SECTION
    ============================================ */
 .integrations-section {

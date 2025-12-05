@@ -32,7 +32,6 @@
     initStaggerAnimations();
     initLazyLoading();
     initFAQAccordion();
-    initPricingToggle();
     
     window.addEventListener('resize', handleResize);
     window.addEventListener('beforeunload', cleanup);
@@ -40,35 +39,90 @@
   
   function initFAQAccordion() {
     var faqItems = document.querySelectorAll('.faq-item');
+    var faqButtons = [];
     
-    faqItems.forEach(function(item) {
+    faqItems.forEach(function(item, index) {
       var question = item.querySelector('.faq-question');
+      var answer = item.querySelector('.faq-answer');
       
-      if (question) {
-        question.addEventListener('click', function() {
-          var isActive = item.classList.contains('active');
-          var expanded = question.getAttribute('aria-expanded') === 'true';
-          
-          faqItems.forEach(function(otherItem) {
-            otherItem.classList.remove('active');
-            var otherQuestion = otherItem.querySelector('.faq-question');
-            if (otherQuestion) {
-              otherQuestion.setAttribute('aria-expanded', 'false');
-            }
-          });
-          
-          if (!isActive) {
+      if (question && answer) {
+        var panelId = 'faq-panel-' + index;
+        var buttonId = 'faq-button-' + index;
+        
+        question.setAttribute('id', buttonId);
+        question.setAttribute('aria-controls', panelId);
+        answer.setAttribute('id', panelId);
+        answer.setAttribute('role', 'region');
+        answer.setAttribute('aria-labelledby', buttonId);
+        
+        faqButtons.push(question);
+        
+        function toggleItem(open) {
+          if (open) {
+            faqItems.forEach(function(otherItem) {
+              otherItem.classList.remove('active');
+              var otherQuestion = otherItem.querySelector('.faq-question');
+              var otherAnswer = otherItem.querySelector('.faq-answer');
+              if (otherQuestion) {
+                otherQuestion.setAttribute('aria-expanded', 'false');
+              }
+              if (otherAnswer) {
+                otherAnswer.setAttribute('aria-hidden', 'true');
+              }
+            });
+            
             item.classList.add('active');
             question.setAttribute('aria-expanded', 'true');
+            answer.setAttribute('aria-hidden', 'false');
+          } else {
+            item.classList.remove('active');
+            question.setAttribute('aria-expanded', 'false');
+            answer.setAttribute('aria-hidden', 'true');
           }
+        }
+        
+        question.addEventListener('click', function() {
+          var isActive = item.classList.contains('active');
+          toggleItem(!isActive);
         });
         
         question.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            question.click();
+          var currentIndex = faqButtons.indexOf(question);
+          var lastIndex = faqButtons.length - 1;
+          
+          switch (e.key) {
+            case 'Enter':
+            case ' ':
+              e.preventDefault();
+              var isActive = item.classList.contains('active');
+              toggleItem(!isActive);
+              break;
+            case 'ArrowDown':
+              e.preventDefault();
+              var nextIndex = currentIndex < lastIndex ? currentIndex + 1 : 0;
+              faqButtons[nextIndex].focus();
+              break;
+            case 'ArrowUp':
+              e.preventDefault();
+              var prevIndex = currentIndex > 0 ? currentIndex - 1 : lastIndex;
+              faqButtons[prevIndex].focus();
+              break;
+            case 'Home':
+              e.preventDefault();
+              faqButtons[0].focus();
+              break;
+            case 'End':
+              e.preventDefault();
+              faqButtons[lastIndex].focus();
+              break;
           }
         });
+        
+        if (!item.classList.contains('active')) {
+          answer.setAttribute('aria-hidden', 'true');
+        } else {
+          answer.setAttribute('aria-hidden', 'false');
+        }
       }
     });
   }
