@@ -1,4 +1,4 @@
-modules = ["web", "python-3.12", "nodejs-20"]
+modules = ["web", "nodejs-20", "python-3.11"]
 [nix]
 channel = "stable-25_05"
 packages = ["awsebcli", "cairo", "cargo", "fontconfig", "freetype", "gdk-pixbuf", "ghostscript", "glib", "harfbuzz", "lcms2", "libffi", "libiconv", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "libyaml", "openjpeg", "openssl", "pango", "pgadmin4", "pkg-config", "postgresql", "rustc", "shared-mime-info", "tcl", "tk", "unzip", "zlib"]
@@ -27,7 +27,7 @@ outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python3 -m gunicorn --bind=0.0.0.0:5000 --workers=2 --timeout=120 invoiceflow.wsgi:application"
+args = "/home/runner/workspace/.pythonlibs/bin/python3.11 -m gunicorn --bind=0.0.0.0:5000 --workers=2 --timeout=120 invoiceflow.wsgi:application"
 waitForPort = 5000
 
 [[ports]]
@@ -35,7 +35,7 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 38867
+localPort = 37429
 externalPort = 8008
 
 [[ports]]
@@ -98,6 +98,9 @@ externalPort = 8099
 
 [userenv.shared]
 SENDGRID_FROM_EMAIL = "noreply@invoiceflow.com.ng"
+SECRET_KEY = "P-xsqzlcYttOpntIDZTUkRkcE1YDsu6H9z1zcj1-woUtnppOPr2Ht-lJn4UTTqvu3eo"
+DEBUG = "True"
+ALLOWED_HOSTS = "*"
 
 [deployment]
 deploymentTarget = "autoscale"
