@@ -305,9 +305,10 @@ class SendGridEmailService:
             # Use dynamic template if ID is provided
             if template_id:
                 message.template_id = TemplateId(template_id)
-                message.personalizations = [Personalization()]
-                message.personalizations[0].to = To(to_email)
-                message.personalizations[0].dynamic_template_data = template_data
+                personalization = Personalization()
+                personalization.add_to(To(to_email))
+                personalization.dynamic_template_data = template_data
+                message.add_personalization(personalization)
             else:
                 # Fallback to simple email if no template
                 return self._send_simple_email(

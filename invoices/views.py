@@ -915,11 +915,14 @@ def bulk_export(request):
 
     if export_format == "csv":
         csv_data = InvoiceExport.export_to_csv(invoices)
-        response = HttpResponse(csv_data.encode("utf-8"), content_type="text/csv")
+        response = HttpResponse(csv_data, content_type="text/csv; charset=utf-8")
         response["Content-Disposition"] = 'attachment; filename="invoices.csv"'
         return response
     elif export_format == "pdf":
         pdfs = InvoiceExport.bulk_export_pdfs(invoices)
+        if not pdfs:
+            messages.error(request, "No invoices could be exported.")
+            return redirect("dashboard")
         if len(pdfs) == 1:
             response = HttpResponse(pdfs[0][1], content_type="application/pdf")
             response["Content-Disposition"] = f'attachment; filename="{pdfs[0][0]}.pdf"'
