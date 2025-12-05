@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 class Waitlist(models.Model):
     """Email waitlist for upcoming features (Templates, API, etc)."""
 
-    objects: models.Manager["Waitlist"]
+    objects: "models.Manager[Waitlist]"
 
     FEATURE_CHOICES = [
         ("templates", "Invoice Templates"),
@@ -40,7 +40,7 @@ class Waitlist(models.Model):
 class ContactSubmission(models.Model):
     """Store contact form submissions for follow-up and audit."""
 
-    objects: models.Manager["ContactSubmission"]
+    objects: "models.Manager[ContactSubmission]"
 
     SUBJECT_CHOICES = [
         ("sales", "Sales Inquiry"),
@@ -80,7 +80,7 @@ class ContactSubmission(models.Model):
 class UserProfile(models.Model):
     """Extended user profile with business preferences and settings."""
 
-    objects: models.Manager["UserProfile"]
+    objects: "models.Manager[UserProfile]"
 
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -126,7 +126,7 @@ class UserProfile(models.Model):
 class InvoiceTemplate(models.Model):
     """Reusable invoice templates for quick invoice creation."""
 
-    objects: models.Manager["InvoiceTemplate"]
+    objects: "models.Manager[InvoiceTemplate]"
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -156,7 +156,7 @@ class InvoiceTemplate(models.Model):
 class RecurringInvoice(models.Model):
     """Recurring invoice configuration for automated invoicing."""
 
-    objects: models.Manager["RecurringInvoice"]
+    objects: "models.Manager[RecurringInvoice]"
 
     FREQUENCY_CHOICES = [
         ("weekly", "Weekly"),
@@ -225,7 +225,7 @@ class RecurringInvoice(models.Model):
 class Invoice(models.Model):
     """Invoice model for storing invoice data and metadata."""
 
-    objects: models.Manager["Invoice"]
+    objects: "models.Manager[Invoice]"
 
     CURRENCY_CHOICES = [
         ("USD", "US Dollar"),
@@ -342,7 +342,7 @@ class Invoice(models.Model):
 class LineItem(models.Model):
     """Line item model for invoice line items."""
 
-    objects: models.Manager["LineItem"]
+    objects: "models.Manager[LineItem]"
 
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="line_items")
     description = models.CharField(max_length=500)
@@ -361,7 +361,7 @@ class LineItem(models.Model):
 class MFAProfile(models.Model):
     """Multi-Factor Authentication profile for enhanced security."""
 
-    objects: models.Manager["MFAProfile"]
+    objects: "models.Manager[MFAProfile]"
 
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -393,7 +393,7 @@ class MFAProfile(models.Model):
 class LoginAttempt(models.Model):
     """Track login attempts for security and rate limiting."""
 
-    objects: models.Manager["LoginAttempt"]
+    objects: "models.Manager[LoginAttempt]"
 
     username = models.CharField(max_length=150)
     ip_address = models.GenericIPAddressField()

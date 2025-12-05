@@ -1016,7 +1016,7 @@ def bulk_export(request):
 
     if export_format == "csv":
         csv_data = InvoiceExport.export_to_csv(invoices)
-        response = HttpResponse(csv_data, content_type="text/csv; charset=utf-8")
+        response = HttpResponse(csv_data.encode("utf-8"), content_type="text/csv; charset=utf-8")
         response["Content-Disposition"] = 'attachment; filename="invoices.csv"'
         return response
     elif export_format == "pdf":
