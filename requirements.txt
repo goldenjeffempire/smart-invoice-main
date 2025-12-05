@@ -8,7 +8,7 @@ django-csp==4.0
 django-ratelimit==4.1.0
 
 # Database
-psycopg2-binary==2.9.9
+psycopg2-binary==2.9.11
 
 # Web Server
 gunicorn==23.0.0
@@ -50,33 +50,3 @@ python-dateutil==2.9.0
 PyYAML==6.0.3
 sqlparse==0.5.3
 requests==2.32.3
-asgiref
-brotli
-cffi
-cryptography
-cssselect2
-Django
-django-csp
-django-environ
-django-ratelimit
-fonttools
-gunicorn
-pillow
-psycopg2-binary
-pycparser
-pydyf
-pyotp
-pyphen
-python-dateutil
-PyYAML
-qrcode
-requests
-sendgrid
-sentry-sdk
-sqlparse
-tinycss2
-tinyhtml5
-weasyprint
-webencodings
-whitenoise
-zopfli
