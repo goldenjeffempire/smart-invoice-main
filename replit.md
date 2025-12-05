@@ -61,3 +61,38 @@ The platform features a modern, professional UI/UX with a focus on dark themes, 
 - **Payment Processing**: Paystack (optional, via `PAYSTACK_SECRET_KEY`)
 - **Error Tracking**: Sentry (optional, via `SENTRY_DSN`)
 - **Frontend Frameworks/Libraries**: Tailwind CSS, PostCSS, Node.js (for asset compilation)
+
+## Recent Changes (December 2025)
+
+### Phase 0: Critical Security & Compliance Hardening (COMPLETED)
+- Implemented comprehensive security headers via SecurityHeadersMiddleware:
+  - HSTS with preload, includeSubDomains (max-age: 31536000)
+  - Content Security Policy (CSP) with strict directives
+  - X-Content-Type-Options: nosniff
+  - X-Frame-Options: DENY
+  - Referrer-Policy: strict-origin-when-cross-origin
+  - Permissions-Policy restricting dangerous features
+- GDPR compliance with cookie consent management
+- CORS configuration for API endpoints
+
+### Phase 1: Authentication & Login Security (COMPLETED)
+- Session security hardening:
+  - SESSION_COOKIE_HTTPONLY = True
+  - SESSION_COOKIE_SAMESITE = "Strict"
+  - SESSION_COOKIE_SECURE = True (production)
+  - CSRF_COOKIE_HTTPONLY = True
+- Enhanced password validators:
+  - Minimum 12 characters
+  - Complexity requirements (uppercase, lowercase, digit, special char)
+  - Breach detection via Have I Been Pwned API (k-anonymity)
+- TOTP MFA implementation:
+  - MFAProfile model with encrypted secrets
+  - QR code generation for authenticator apps
+  - Recovery codes (8 codes, one-time use)
+  - MFAEnforcementMiddleware blocks protected views until mfa_verified=True
+  - Admin access requires MFA verification
+  - MFA disable requires password + TOTP verification
+- Login security:
+  - LoginAttempt model tracks all login attempts
+  - Dual lockout system (per-IP and per-username)
+  - Configurable thresholds via settings

@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from django.contrib.sitemaps.views import sitemap as sitemap_view
 from invoices import views
-from invoices.health import health_check, readiness_check, liveness_check
+from invoices.health import health_check, readiness_check, liveness_check, detailed_health
 from invoices.sitemap import sitemaps
 from invoiceflow import cookie_consent, gdpr, mfa
 
@@ -30,6 +30,7 @@ urlpatterns = [
     path("health/", health_check, name="health_check"),
     path("health/ready/", readiness_check, name="readiness_check"),
     path("health/live/", liveness_check, name="liveness_check"),
+    path("health/detailed/", detailed_health, name="detailed_health"),
     # Robots.txt (dynamic)
     path("robots.txt", views.robots_txt, name="robots_txt"),
     # Sitemap for SEO

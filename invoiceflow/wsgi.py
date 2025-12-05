@@ -9,8 +9,13 @@ https://docs.djangoproject.com/en/5.0/howto/deployment/wsgi/
 
 import os
 
-from django.core.wsgi import get_wsgi_application
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "invoiceflow.settings")
+
+from django.conf import settings
+from invoiceflow.env_validation import validate_environment
+
+validate_environment(exit_on_error=not getattr(settings, 'DEBUG', False))
+
+from django.core.wsgi import get_wsgi_application
 
 application = get_wsgi_application()

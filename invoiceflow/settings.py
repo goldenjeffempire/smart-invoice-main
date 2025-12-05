@@ -146,6 +146,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "invoiceflow.request_logging.RequestLoggingMiddleware",
     "invoiceflow.cache_middleware.CacheControlMiddleware",
     "invoiceflow.monitoring.PerformanceMiddleware",
     "csp.middleware.CSPMiddleware",
@@ -327,18 +328,20 @@ LOGGING = {
             "style": "{",
         },
         "json": {
-            "format": '{"level": "%(levelname)s", "time": "%(asctime)s", "module": "%(module)s", "message": "%(message)s"}',
+            "()": "invoiceflow.logging_config.JsonFormatter",
         },
     },
     "filters": {
         "require_debug_false": {"()": "django.utils.log.RequireDebugFalse"},
         "require_debug_true": {"()": "django.utils.log.RequireDebugTrue"},
+        "request_context": {"()": "invoiceflow.logging_config.RequestContextFilter"},
     },
     "handlers": {
         "console": {
             "level": "INFO",
             "class": "logging.StreamHandler",
             "formatter": "json" if not DEBUG else "verbose",
+            "filters": ["request_context"],
         },
         "file": {
             "level": "WARNING",
@@ -346,7 +349,8 @@ LOGGING = {
             "filename": str(BASE_DIR / "logs" / "django.log"),
             "maxBytes": 1024 * 1024 * 15,
             "backupCount": 10,
-            "formatter": "verbose",
+            "formatter": "json",
+            "filters": ["request_context"],
         },
         "mail_admins": {
             "level": "ERROR",
