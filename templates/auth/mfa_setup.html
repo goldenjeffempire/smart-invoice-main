@@ -1,0 +1,254 @@
+{% extends "base/layout.html" %}
+
+{% block title %}Set Up Two-Factor Authentication{% endblock %}
+{% block meta_description %}Enable two-factor authentication to secure your InvoiceFlow account.{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="auth-container">
+            <div class="glass-card auth-card">
+                <div class="auth-header">
+                    <h1 class="auth-title">Two-Factor Authentication</h1>
+                    <p class="auth-subtitle">
+                        {% if is_enabled %}
+                        Your account is protected with 2FA
+                        {% else %}
+                        Secure your account with an authenticator app
+                        {% endif %}
+                    </p>
+                </div>
+
+                {% if error %}
+                <div class="alert alert-error">
+                    {{ error }}
+                </div>
+                {% endif %}
+
+                {% if is_enabled %}
+                <div class="mfa-status">
+                    <div class="mfa-enabled-badge">
+                        <svg class="mfa-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="M9 12l2 2 4-4"/>
+                        </svg>
+                        <span>Two-Factor Authentication is Enabled</span>
+                    </div>
+                    <p class="mfa-info">Your account has an extra layer of security.</p>
+                    
+                    <form method="post" action="{% url 'mfa_disable' %}" class="mfa-disable-form" id="mfaDisableForm">
+                        {% csrf_token %}
+                        <label for="password">Enter your password to disable 2FA:</label>
+                        <input type="password" name="password" id="password" class="form-control" required placeholder="Your password">
+                        <button type="submit" class="btn btn-secondary btn-danger-outline">Disable 2FA</button>
+                    </form>
+                </div>
+                {% else %}
+                <div class="mfa-setup-steps">
+                    <div class="setup-step">
+                        <span class="step-number">1</span>
+                        <div class="step-content">
+                            <h3>Install an Authenticator App</h3>
+                            <p>Download Google Authenticator, Authy, or any TOTP-compatible app.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="setup-step">
+                        <span class="step-number">2</span>
+                        <div class="step-content">
+                            <h3>Scan the QR Code</h3>
+                            {% if qr_code %}
+                            <div class="qr-code-container">
+                                <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code for 2FA setup" class="qr-code">
+                            </div>
+                            <p class="manual-key">Or enter this key manually: <code>{{ secret_key }}</code></p>
+                            {% else %}
+                            <p class="error-text">Unable to generate QR code. Please try again.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="setup-step">
+                        <span class="step-number">3</span>
+                        <div class="step-content">
+                            <h3>Enter Verification Code</h3>
+                            <form method="post" class="mfa-verify-form">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input type="text" 
+                                           name="token" 
+                                           class="form-control mfa-code-input" 
+                                           placeholder="000000"
+                                           pattern="[0-9]{6}" 
+                                           maxlength="6"
+                                           inputmode="numeric"
+                                           autocomplete="one-time-code"
+                                           required>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-full">Enable 2FA</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <div class="auth-footer">
+                    <a href="{% url 'settings_security' %}" class="link-secondary">Back to Security Settings</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.auth-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: var(--spacing-8) 0;
+}
+
+.auth-card {
+    padding: var(--spacing-8);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: var(--spacing-8);
+}
+
+.auth-title {
+    font-size: var(--font-size-2xl);
+    color: var(--color-neutral-0);
+    margin-bottom: var(--spacing-2);
+}
+
+.auth-subtitle {
+    color: var(--color-neutral-400);
+}
+
+.mfa-status {
+    text-align: center;
+}
+
+.mfa-enabled-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    padding: var(--spacing-3) var(--spacing-4);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-4);
+}
+
+.mfa-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.mfa-info {
+    color: var(--color-neutral-400);
+    margin-bottom: var(--spacing-6);
+}
+
+.mfa-disable-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.mfa-setup-steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+}
+
+.setup-step {
+    display: flex;
+    gap: var(--spacing-4);
+}
+
+.step-number {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: var(--color-primary-500);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.step-content h3 {
+    font-size: var(--font-size-lg);
+    color: var(--color-neutral-0);
+    margin-bottom: var(--spacing-2);
+}
+
+.step-content p {
+    color: var(--color-neutral-400);
+    font-size: var(--font-size-sm);
+}
+
+.qr-code-container {
+    background: white;
+    padding: var(--spacing-4);
+    border-radius: var(--radius-lg);
+    display: inline-block;
+    margin: var(--spacing-4) 0;
+}
+
+.qr-code {
+    width: 200px;
+    height: 200px;
+}
+
+.manual-key {
+    font-size: var(--font-size-sm);
+    margin-top: var(--spacing-2);
+}
+
+.manual-key code {
+    background: rgba(255, 255, 255, 0.1);
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--radius-sm);
+    font-family: monospace;
+    word-break: break-all;
+}
+
+.mfa-code-input {
+    text-align: center;
+    font-size: var(--font-size-2xl);
+    letter-spacing: 0.5em;
+    padding: var(--spacing-4);
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: var(--spacing-6);
+    padding-top: var(--spacing-6);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-danger-outline {
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+.btn-danger-outline:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    padding: var(--spacing-3) var(--spacing-4);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-6);
+}
+</style>
+{% endblock %}

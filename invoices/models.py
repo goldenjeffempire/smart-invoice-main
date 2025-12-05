@@ -356,3 +356,59 @@ class LineItem(models.Model):
 
     def __str__(self) -> str:
         return f"{self.description} - {self.invoice.invoice_id}"
+
+
+class MFAProfile(models.Model):
+    """Multi-Factor Authentication profile for enhanced security."""
+
+    objects: models.Manager["MFAProfile"]
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="mfa_profile"
+    )
+    is_enabled = models.BooleanField(default=False)
+    secret_key = models.CharField(max_length=64, blank=True)
+    recovery_codes = models.JSONField(default=list, blank=True)
+    backup_phone = models.CharField(max_length=20, blank=True)
+    last_used = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "MFA Profile"
+        verbose_name_plural = "MFA Profiles"
+
+    def __str__(self) -> str:
+        status = "enabled" if self.is_enabled else "disabled"
+        return f"{self.user.username}'s MFA ({status})"
+
+    @property
+    def recovery_codes_remaining(self) -> int:
+        """Return count of remaining recovery codes."""
+        return len(self.recovery_codes) if self.recovery_codes else 0
+
+
+class LoginAttempt(models.Model):
+    """Track login attempts for security and rate limiting."""
+
+    objects: models.Manager["LoginAttempt"]
+
+    username = models.CharField(max_length=150)
+    ip_address = models.GenericIPAddressField()
+    user_agent = models.TextField(blank=True)
+    success = models.BooleanField(default=False)
+    failure_reason = models.CharField(max_length=100, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["username", "created_at"], name="idx_login_user_time"),
+            models.Index(fields=["ip_address", "created_at"], name="idx_login_ip_time"),
+        ]
+
+    def __str__(self) -> str:
+        status = "success" if self.success else "failed"
+        return f"{self.username} - {self.ip_address} ({status})"

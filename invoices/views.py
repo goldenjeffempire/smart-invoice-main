@@ -52,34 +52,82 @@ def signup(request):
 
 
 def login_view(request):
-    """Authenticate user credentials and establish session with rate limiting."""
+    """Authenticate user credentials and establish session with rate limiting and MFA support."""
     from django.core.cache import cache
+    from django.conf import settings
     from .middleware import RequestResponseLoggingMiddleware
+    from .models import LoginAttempt, MFAProfile
 
     if request.method == "POST":
         client_ip = RequestResponseLoggingMiddleware.get_client_ip(request)
-        cache_key = f"login_attempt:{client_ip}"
-        attempt_count = cache.get(cache_key, 0)
+        user_agent = request.META.get("HTTP_USER_AGENT", "")
+        username = request.POST.get("username", "")
+        password = request.POST.get("password")
 
-        if attempt_count >= 5:
-            messages.error(request, "Too many login attempts. Please try again in 15 minutes.")
+        lockout_threshold = getattr(settings, 'ACCOUNT_LOCKOUT_THRESHOLD', 5)
+        lockout_duration = getattr(settings, 'ACCOUNT_LOCKOUT_DURATION', 900)
+
+        ip_cache_key = f"login_attempt:ip:{client_ip}"
+        user_cache_key = f"login_attempt:user:{username.lower()}" if username else None
+
+        ip_attempts = cache.get(ip_cache_key, 0)
+        user_attempts = cache.get(user_cache_key, 0) if user_cache_key else 0
+
+        if ip_attempts >= lockout_threshold:
+            messages.error(request, "Too many login attempts from this location. Please try again in 15 minutes.")
             return render(request, "auth/login.html")
 
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+        if user_attempts >= lockout_threshold:
+            messages.error(request, "This account is temporarily locked due to too many failed attempts. Please try again in 15 minutes.")
+            return render(request, "auth/login.html")
+
         user = authenticate(request, username=username, password=password)
+        
         if user is not None:
-            cache.delete(cache_key)
+            cache.delete(ip_cache_key)
+            if user_cache_key:
+                cache.delete(user_cache_key)
+            
+            LoginAttempt.objects.create(
+                username=username,
+                ip_address=client_ip,
+                user_agent=user_agent,
+                success=True
+            )
+            
             login(request, user)
+            
+            if getattr(settings, 'MFA_ENABLED', False):
+                try:
+                    mfa_profile = MFAProfile.objects.get(user=user)
+                    if mfa_profile.is_enabled:
+                        request.session['mfa_verified'] = False
+                        return redirect("mfa_verify")
+                except MFAProfile.DoesNotExist:
+                    pass
+            
+            request.session['mfa_verified'] = True
             return redirect("dashboard")
         else:
-            cache.set(cache_key, attempt_count + 1, 900)
+            cache.set(ip_cache_key, ip_attempts + 1, lockout_duration)
+            if user_cache_key:
+                cache.set(user_cache_key, user_attempts + 1, lockout_duration)
+            
+            LoginAttempt.objects.create(
+                username=username or "unknown",
+                ip_address=client_ip,
+                user_agent=user_agent,
+                success=False,
+                failure_reason="Invalid credentials"
+            )
+            
             messages.error(request, "Invalid username or password.")
     return render(request, "auth/login.html")
 
 
 def logout_view(request):
-    """End user session and redirect to home page."""
+    """End user session, clear MFA verification, and redirect to home page."""
+    request.session.pop('mfa_verified', None)
     logout(request)
     return redirect("home")
 

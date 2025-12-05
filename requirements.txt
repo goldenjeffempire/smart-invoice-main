@@ -26,6 +26,8 @@ webencodings==0.5.1
 whitenoise==6.11.0
 zopfli==0.4.0
 requests>=2.31.0
+pyotp>=2.9.0
+qrcode>=7.4
 asgiref
 brotli
 cffi

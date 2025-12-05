@@ -8,7 +8,7 @@ from django.contrib.sitemaps.views import sitemap as sitemap_view
 from invoices import views
 from invoices.health import health_check, readiness_check, liveness_check
 from invoices.sitemap import sitemaps
-from invoiceflow import cookie_consent, gdpr
+from invoiceflow import cookie_consent, gdpr, mfa
 
 handler404 = "invoices.views.custom_404"
 handler500 = "invoices.views.custom_500"
@@ -21,6 +21,11 @@ urlpatterns = [
     path("api/gdpr/export/", gdpr.export_user_data, name="gdpr_export"),
     path("api/gdpr/delete/", gdpr.request_data_deletion, name="gdpr_delete"),
     path("api/gdpr/sar/", gdpr.submit_sar, name="gdpr_sar"),
+    # MFA (Two-Factor Authentication)
+    path("mfa/setup/", mfa.mfa_setup, name="mfa_setup"),
+    path("mfa/verify/", mfa.mfa_verify, name="mfa_verify"),
+    path("mfa/disable/", mfa.mfa_disable, name="mfa_disable"),
+    path("mfa/recovery/regenerate/", mfa.mfa_regenerate_recovery, name="mfa_regenerate_recovery"),
     # Health checks
     path("health/", health_check, name="health_check"),
     path("health/ready/", readiness_check, name="readiness_check"),

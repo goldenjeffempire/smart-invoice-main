@@ -158,6 +158,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "invoiceflow.mfa_middleware.MFAEnforcementMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -211,13 +212,25 @@ else:
     }
 
 # =============================================================================
-# PASSWORD VALIDATION
+# PASSWORD VALIDATION - Enhanced Security (Phase 1)
 # =============================================================================
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "OPTIONS": {"max_similarity": 0.6},
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {"min_length": 12},  # Increased from default 8
+    },
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {
+        "NAME": "invoiceflow.password_validators.BreachedPasswordValidator",
+    },
+    {
+        "NAME": "invoiceflow.password_validators.ComplexityValidator",
+    },
 ]
 
 # =============================================================================
@@ -251,6 +264,39 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "dashboard"
 LOGOUT_REDIRECT_URL = "home"
+
+# =============================================================================
+# SESSION SECURITY - Phase 1 Security Hardening
+# =============================================================================
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7  # 1 week
+SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript access
+SESSION_COOKIE_NAME = "invoiceflow_session"
+SESSION_COOKIE_SAMESITE = "Strict"  # Strict CSRF protection
+SESSION_SAVE_EVERY_REQUEST = True  # Refresh session on every request
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+# Secure cookies in production
+if not DEBUG or IS_REPLIT:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    CSRF_COOKIE_HTTPONLY = True
+    CSRF_COOKIE_SAMESITE = "Strict"
+
+# =============================================================================
+# ACCOUNT SECURITY SETTINGS
+# =============================================================================
+ACCOUNT_LOCKOUT_THRESHOLD = 5  # Lock after 5 failed attempts
+ACCOUNT_LOCKOUT_DURATION = 15 * 60  # 15 minutes lockout
+LOGIN_RATE_LIMIT_MAX = 10  # Max login attempts per window
+LOGIN_RATE_LIMIT_WINDOW = 15 * 60  # 15 minute window
+SIGNUP_RATE_LIMIT_MAX = 3  # Max signups per IP
+SIGNUP_RATE_LIMIT_WINDOW = 60 * 60  # 1 hour window
+
+# MFA Configuration
+MFA_ENABLED = env.bool("MFA_ENABLED", default=True)  # type: ignore
+MFA_ISSUER_NAME = "InvoiceFlow"
+MFA_RECOVERY_CODES_COUNT = 10
 
 # =============================================================================
 # EMAIL CONFIGURATION

@@ -1,0 +1,194 @@
+{% extends "base/layout.html" %}
+
+{% block title %}Two-Factor Authentication Enabled{% endblock %}
+{% block meta_description %}Your account is now protected with two-factor authentication.{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="auth-container">
+            <div class="glass-card auth-card">
+                <div class="auth-header">
+                    <div class="success-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                    </div>
+                    <h1 class="auth-title">Two-Factor Authentication Enabled</h1>
+                    <p class="auth-subtitle">Your account is now more secure</p>
+                </div>
+
+                <div class="recovery-codes-section">
+                    <h2>Recovery Codes</h2>
+                    <p class="recovery-warning">
+                        Save these recovery codes in a safe place. You can use them to access your 
+                        account if you lose access to your authenticator app.
+                    </p>
+                    
+                    <div class="recovery-codes-grid">
+                        {% for code in recovery_codes %}
+                        <div class="recovery-code">{{ code }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="recovery-actions">
+                        <button type="button" class="btn btn-secondary" onclick="downloadCodes()">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Download Codes
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="copyCodes()">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                            Copy Codes
+                        </button>
+                    </div>
+                </div>
+
+                <div class="auth-footer">
+                    <a href="{% url 'dashboard' %}" class="btn btn-primary btn-full">Continue to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+const recoveryCodes = [{% for code in recovery_codes %}"{{ code }}"{% if not forloop.last %}, {% endif %}{% endfor %}];
+
+function downloadCodes() {
+    const content = "InvoiceFlow Recovery Codes\n" +
+                   "========================\n\n" +
+                   "Keep these codes safe. Each code can only be used once.\n\n" +
+                   recoveryCodes.join("\n");
+    
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'invoiceflow-recovery-codes.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function copyCodes() {
+    const codesText = recoveryCodes.join('\n');
+    navigator.clipboard.writeText(codesText).then(() => {
+        const btn = event.target.closest('button');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = 'Copied!';
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+        }, 2000);
+    });
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.auth-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: var(--spacing-8) 0;
+}
+
+.auth-card {
+    padding: var(--spacing-8);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: var(--spacing-8);
+}
+
+.success-icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(34, 197, 94, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-4);
+}
+
+.success-icon svg {
+    width: 32px;
+    height: 32px;
+    color: #22c55e;
+}
+
+.auth-title {
+    font-size: var(--font-size-xl);
+    color: var(--color-neutral-0);
+    margin-bottom: var(--spacing-2);
+}
+
+.auth-subtitle {
+    color: var(--color-neutral-400);
+}
+
+.recovery-codes-section {
+    margin-bottom: var(--spacing-8);
+}
+
+.recovery-codes-section h2 {
+    font-size: var(--font-size-lg);
+    color: var(--color-neutral-0);
+    margin-bottom: var(--spacing-2);
+}
+
+.recovery-warning {
+    color: var(--color-neutral-400);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-4);
+    padding: var(--spacing-3);
+    background: rgba(234, 179, 8, 0.1);
+    border: 1px solid rgba(234, 179, 8, 0.2);
+    border-radius: var(--radius-lg);
+}
+
+.recovery-codes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-4);
+}
+
+.recovery-code {
+    background: rgba(255, 255, 255, 0.05);
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--radius-md);
+    font-family: monospace;
+    font-size: var(--font-size-sm);
+    color: var(--color-neutral-200);
+    text-align: center;
+}
+
+.recovery-actions {
+    display: flex;
+    gap: var(--spacing-3);
+    justify-content: center;
+}
+
+.btn-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: var(--spacing-2);
+}
+
+.auth-footer {
+    padding-top: var(--spacing-6);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+</style>
+{% endblock %}
