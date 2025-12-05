@@ -40,15 +40,26 @@ Security settings are properly configured for production (controlled by environm
 - HSTS headers configured
 - SECRET_KEY from environment
 
+### Database Setup
+- PostgreSQL database created and connected via DATABASE_URL
+- All 9 migrations applied successfully (auth, admin, contenttypes, invoices, sessions)
+
 ### Production Secrets Required
 | Secret | Purpose | Status |
 |--------|---------|--------|
 | SECRET_KEY | Django secret key | Required |
-| SENDGRID_API_KEY | Email service | Required |
-| DATABASE_URL | PostgreSQL connection | Required |
+| SENDGRID_API_KEY | Email service | Manual setup needed (see below) |
+| DATABASE_URL | PostgreSQL connection | Configured |
 | ENCRYPTION_SALT | Field encryption | Required |
 | PAYSTACK_SECRET_KEY | Payment processing | Optional |
 | SENTRY_DSN | Error tracking | Optional |
+
+### SendGrid Email Setup (Manual)
+The Replit SendGrid connector was not configured. To enable email functionality:
+1. Create a SendGrid account at https://sendgrid.com
+2. Generate an API key with "Mail Send" permissions
+3. Add the API key as a secret named `SENDGRID_API_KEY`
+4. Optionally configure SendGrid template IDs in secrets for branded emails
 
 ## December 4, 2025 - Production Audit & Template Fixes
 
