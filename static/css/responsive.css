@@ -972,3 +972,265 @@ body.keyboard-nav textarea:focus {
   outline: 3px solid var(--color-primary-500);
   outline-offset: 3px;
 }
+
+/* Container Query Support */
+.cq-container {
+  container-type: inline-size;
+}
+
+.cq-container-normal {
+  container-type: normal;
+}
+
+@container (min-width: 320px) {
+  .cq\:flex-row { flex-direction: row; }
+  .cq\:gap-4 { gap: var(--spacing-4); }
+  .cq\:text-base { font-size: var(--font-size-base); }
+}
+
+@container (min-width: 480px) {
+  .cq-sm\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .cq-sm\:flex-row { flex-direction: row; }
+  .cq-sm\:gap-6 { gap: var(--spacing-6); }
+  .cq-sm\:p-6 { padding: var(--spacing-6); }
+  .cq-sm\:text-lg { font-size: var(--font-size-lg); }
+}
+
+@container (min-width: 640px) {
+  .cq-md\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .cq-md\:gap-8 { gap: var(--spacing-8); }
+  .cq-md\:p-8 { padding: var(--spacing-8); }
+  .cq-md\:text-xl { font-size: var(--font-size-xl); }
+}
+
+@container (min-width: 768px) {
+  .cq-lg\:grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .cq-lg\:gap-10 { gap: var(--spacing-10); }
+  .cq-lg\:text-2xl { font-size: var(--font-size-2xl); }
+}
+
+/* Fluid Typography */
+.text-fluid-sm {
+  font-size: clamp(0.875rem, 0.8rem + 0.25vw, 1rem);
+}
+
+.text-fluid-base {
+  font-size: clamp(1rem, 0.9rem + 0.35vw, 1.125rem);
+}
+
+.text-fluid-lg {
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.25rem);
+}
+
+.text-fluid-xl {
+  font-size: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+}
+
+.text-fluid-2xl {
+  font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+}
+
+.text-fluid-3xl {
+  font-size: clamp(1.875rem, 1.5rem + 1.5vw, 2.5rem);
+}
+
+.text-fluid-4xl {
+  font-size: clamp(2.25rem, 1.75rem + 2vw, 3.5rem);
+}
+
+.text-fluid-5xl {
+  font-size: clamp(3rem, 2rem + 3vw, 4.5rem);
+}
+
+/* Safe Area Insets (notch support) */
+.safe-area-inset-top { padding-top: env(safe-area-inset-top, 0); }
+.safe-area-inset-bottom { padding-bottom: env(safe-area-inset-bottom, 0); }
+.safe-area-inset-left { padding-left: env(safe-area-inset-left, 0); }
+.safe-area-inset-right { padding-right: env(safe-area-inset-right, 0); }
+
+.safe-area-inset-x {
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
+}
+
+.safe-area-inset-y {
+  padding-top: env(safe-area-inset-top, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Responsive Grid Utilities */
+.auto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: var(--spacing-6);
+}
+
+.auto-grid-sm {
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+}
+
+.auto-grid-lg {
+  grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr));
+}
+
+/* Responsive Flex Utilities */
+.flex-wrap-responsive {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-col-mobile {
+  flex-direction: column;
+}
+
+@media (min-width: 640px) {
+  .flex-col-mobile {
+    flex-direction: row;
+  }
+}
+
+/* Stack Utilities (Vertical spacing) */
+.stack-sm > * + * { margin-top: var(--spacing-2); }
+.stack-md > * + * { margin-top: var(--spacing-4); }
+.stack-lg > * + * { margin-top: var(--spacing-6); }
+.stack-xl > * + * { margin-top: var(--spacing-8); }
+
+/* Cluster Utilities (Horizontal wrapping) */
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.cluster-center { justify-content: center; }
+.cluster-end { justify-content: flex-end; }
+.cluster-between { justify-content: space-between; }
+
+/* Responsive Visibility */
+.hide-mobile { display: none; }
+.show-mobile { display: block; }
+
+@media (min-width: 640px) {
+  .hide-mobile { display: block; }
+  .show-mobile { display: none; }
+}
+
+.hide-tablet { display: block; }
+.show-tablet { display: none; }
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hide-tablet { display: none; }
+  .show-tablet { display: block; }
+}
+
+.hide-desktop { display: block; }
+.show-desktop { display: none; }
+
+@media (min-width: 1024px) {
+  .hide-desktop { display: none; }
+  .show-desktop { display: block; }
+}
+
+/* Touch-friendly interactive states */
+@media (hover: hover) and (pointer: fine) {
+  .hover-lift:hover {
+    transform: var(--hover-lift);
+  }
+  
+  .hover-scale:hover {
+    transform: var(--hover-scale);
+  }
+  
+  .hover-glow:hover {
+    box-shadow: var(--glow-primary);
+  }
+}
+
+/* Orientation-specific styles */
+@media (orientation: landscape) and (max-height: 500px) {
+  .hero-section {
+    min-height: auto;
+    padding-top: 80px;
+    padding-bottom: 40px;
+  }
+  
+  .hero-content-wrapper {
+    gap: var(--spacing-8);
+  }
+}
+
+/* Dynamic viewport height */
+.min-h-dvh {
+  min-height: 100dvh;
+}
+
+.h-dvh {
+  height: 100dvh;
+}
+
+/* Logical Properties for RTL support */
+.ms-auto { margin-inline-start: auto; }
+.me-auto { margin-inline-end: auto; }
+.ps-4 { padding-inline-start: var(--spacing-4); }
+.pe-4 { padding-inline-end: var(--spacing-4); }
+
+/* Scroll snap containers */
+.snap-x {
+  scroll-snap-type: x mandatory;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.snap-y {
+  scroll-snap-type: y mandatory;
+  overflow-y: auto;
+}
+
+.snap-start { scroll-snap-align: start; }
+.snap-center { scroll-snap-align: center; }
+.snap-end { scroll-snap-align: end; }
+
+/* Scrollbar styling */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--color-slate-100);
+  border-radius: var(--radius-full);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-slate-300);
+  border-radius: var(--radius-full);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-slate-400);
+}
+
+/* Hide scrollbar but allow scrolling */
+.scrollbar-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}

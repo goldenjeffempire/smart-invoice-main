@@ -414,7 +414,23 @@ module.exports = {
         'landscape': '4 / 3',
         'ultrawide': '21 / 9',
       },
+      containers: {
+        'xs': '320px',
+        'sm': '480px',
+        'md': '640px',
+        'lg': '768px',
+        'xl': '1024px',
+        '2xl': '1280px',
+      },
+      supports: {
+        'container-queries': 'container-type: inline-size',
+        'has': 'selector(:has(*))',
+        'subgrid': 'grid-template-columns: subgrid',
+      },
     },
   },
   plugins: [],
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
 }
