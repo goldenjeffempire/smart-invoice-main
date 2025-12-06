@@ -313,7 +313,9 @@ def generate_pdf(request, invoice_id):
 def send_invoice_email(request, invoice_id: int):
     from .email_service import EmailService
 
-    invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)
+    invoice = get_object_or_404(
+        Invoice.objects.prefetch_related("line_items"), id=invoice_id, user=request.user
+    )
 
     if request.method == "POST":
         recipient_email = request.POST.get("email", invoice.client_email)
@@ -332,7 +334,9 @@ def send_invoice_email(request, invoice_id: int):
 
 @login_required
 def whatsapp_share(request, invoice_id):
-    invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)
+    invoice = get_object_or_404(
+        Invoice.objects.prefetch_related("line_items"), id=invoice_id, user=request.user
+    )
 
     # Enhanced WhatsApp message with emojis and better formatting
     phone_line = f"📞 {invoice.business_phone}" if invoice.business_phone else ""
