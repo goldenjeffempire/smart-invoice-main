@@ -134,16 +134,46 @@ class UnifiedMiddleware:
         return request.META.get("REMOTE_ADDR", "unknown")
 
 
-class OptimizedRateLimitMiddleware:
+class SlidingWindowRateLimiter:
     """
-    Efficient rate limiting with sliding window.
-    Uses cache for O(1) lookups.
+    Advanced rate limiting with true sliding window algorithm.
+    
+    Features:
+    - Sliding window for accurate rate limiting (not fixed windows)
+    - Per-endpoint rate limits
+    - User-tier based limits (anonymous, authenticated, premium)
+    - Proper rate limit headers including reset time
+    - Efficient O(1) cache operations
     """
     
-    DEFAULT_LIMIT = 200
-    DEFAULT_WINDOW = 3600
+    WINDOW_SIZE = 60
     
-    EXEMPT_PATHS = HEALTH_CHECK_PATHS | {'/static/'}
+    TIER_LIMITS: dict[str, dict[str, int]] = {
+        "anonymous": {
+            "requests_per_minute": 30,
+            "requests_per_hour": 200,
+        },
+        "authenticated": {
+            "requests_per_minute": 60,
+            "requests_per_hour": 500,
+        },
+        "premium": {
+            "requests_per_minute": 120,
+            "requests_per_hour": 2000,
+        },
+    }
+    
+    ENDPOINT_LIMITS: dict[str, dict[str, int]] = {
+        "/api/": {"per_minute": 60, "per_hour": 300},
+        "/api/v1/invoices/": {"per_minute": 30, "per_hour": 200},
+        "/api/v1/invoices/generate-pdf/": {"per_minute": 10, "per_hour": 50},
+        "/api/v1/invoices/send-email/": {"per_minute": 5, "per_hour": 30},
+        "/login/": {"per_minute": 10, "per_hour": 30},
+        "/signup/": {"per_minute": 5, "per_hour": 20},
+        "/password-reset/": {"per_minute": 3, "per_hour": 10},
+    }
+    
+    EXEMPT_PATHS = HEALTH_CHECK_PATHS | {'/static/', '/favicon.ico'}
     
     def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]):
         self.get_response = get_response
@@ -152,25 +182,226 @@ class OptimizedRateLimitMiddleware:
         if self._is_exempt(request.path):
             return self.get_response(request)
         
-        client_ip = self._get_client_ip(request)
-        cache_key = f"ratelimit:{client_ip}"
+        client_key = self._get_client_key(request)
+        user_tier = self._get_user_tier(request)
+        endpoint_key = self._get_endpoint_key(request.path)
         
-        current_count = cache.get(cache_key, 0)
+        current_time = int(time.time())
+        minute_window = current_time // 60
+        hour_window = current_time // 3600
         
-        if current_count >= self.DEFAULT_LIMIT:
-            logger.warning(f"Rate limit exceeded for IP: {client_ip}")
-            return JsonResponse(
-                {"error": "Rate limit exceeded. Please try again later."},
+        is_limited, limit_info = self._check_rate_limit(
+            client_key, user_tier, endpoint_key, minute_window, hour_window
+        )
+        
+        if is_limited:
+            logger.warning(
+                f"Rate limit exceeded: client={client_key[:16]}..., "
+                f"tier={user_tier}, endpoint={endpoint_key}, "
+                f"type={limit_info['type']}"
+            )
+            response = JsonResponse(
+                {
+                    "success": False,
+                    "error": {
+                        "code": "RATE_LIMIT_EXCEEDED",
+                        "message": f"Rate limit exceeded. Try again in {limit_info['retry_after']} seconds.",
+                        "retry_after": limit_info["retry_after"],
+                    }
+                },
                 status=429
             )
+            self._add_rate_limit_headers(response, limit_info)
+            return response
         
-        cache.set(cache_key, current_count + 1, self.DEFAULT_WINDOW)
+        self._increment_counters(client_key, endpoint_key, minute_window, hour_window)
         
         response = self.get_response(request)
-        response["X-RateLimit-Limit"] = str(self.DEFAULT_LIMIT)
-        response["X-RateLimit-Remaining"] = str(max(0, self.DEFAULT_LIMIT - current_count - 1))
+        self._add_rate_limit_headers(response, limit_info)
         
         return response
+    
+    def _get_client_key(self, request: HttpRequest) -> str:
+        """Generate a unique client key combining IP and user ID if authenticated."""
+        ip = self._get_client_ip(request)
+        if hasattr(request, 'user') and request.user.is_authenticated:
+            return f"user:{request.user.id}:{ip}"
+        return f"ip:{ip}"
+    
+    def _get_user_tier(self, request: HttpRequest) -> str:
+        """Determine user tier for rate limiting."""
+        if not hasattr(request, 'user') or not request.user.is_authenticated:
+            return "anonymous"
+        
+        if hasattr(request.user, 'profile'):
+            profile = request.user.profile
+            if hasattr(profile, 'subscription_tier'):
+                if profile.subscription_tier in ('premium', 'enterprise'):
+                    return "premium"
+        
+        if request.user.is_staff or request.user.is_superuser:
+            return "premium"
+        
+        return "authenticated"
+    
+    def _get_endpoint_key(self, path: str) -> str:
+        """Match path to endpoint rate limit key."""
+        for endpoint in sorted(self.ENDPOINT_LIMITS.keys(), key=len, reverse=True):
+            if path.startswith(endpoint):
+                return endpoint
+        return "default"
+    
+    def _check_rate_limit(
+        self, 
+        client_key: str, 
+        user_tier: str, 
+        endpoint_key: str,
+        minute_window: int,
+        hour_window: int
+    ) -> tuple[bool, dict[str, Any]]:
+        """
+        Check if request should be rate limited using sliding window.
+        Returns (is_limited, limit_info).
+        
+        Uses separate counters for:
+        - Global tier-based limits (all endpoints combined)
+        - Per-endpoint specific limits (if endpoint has custom limits)
+        """
+        tier_limits = self.TIER_LIMITS.get(user_tier, self.TIER_LIMITS["anonymous"])
+        endpoint_limits = self.ENDPOINT_LIMITS.get(endpoint_key, {})
+        has_endpoint_limits = bool(endpoint_limits)
+        
+        tier_minute_limit = tier_limits["requests_per_minute"]
+        tier_hour_limit = tier_limits["requests_per_hour"]
+        
+        endpoint_minute_limit = endpoint_limits.get("per_minute", tier_minute_limit)
+        endpoint_hour_limit = endpoint_limits.get("per_hour", tier_hour_limit)
+        
+        current_time = int(time.time())
+        seconds_into_window = current_time % 60
+        weight = (60 - seconds_into_window) / 60
+        
+        global_minute_key = f"rl:m:g:{client_key}:{minute_window}"
+        global_hour_key = f"rl:h:g:{client_key}:{hour_window}"
+        global_prev_minute_key = f"rl:m:g:{client_key}:{minute_window - 1}"
+        
+        global_minute_count = cache.get(global_minute_key, 0)
+        global_prev_minute_count = cache.get(global_prev_minute_key, 0)
+        global_sliding_minute = global_minute_count + (global_prev_minute_count * weight)
+        global_hour_count = cache.get(global_hour_key, 0)
+        
+        endpoint_sliding_minute = 0.0
+        endpoint_hour_count = 0
+        
+        if has_endpoint_limits:
+            ep_safe_key = endpoint_key.replace("/", "_")
+            endpoint_minute_key = f"rl:m:e:{ep_safe_key}:{client_key}:{minute_window}"
+            endpoint_hour_key = f"rl:h:e:{ep_safe_key}:{client_key}:{hour_window}"
+            endpoint_prev_minute_key = f"rl:m:e:{ep_safe_key}:{client_key}:{minute_window - 1}"
+            
+            ep_minute_count = cache.get(endpoint_minute_key, 0)
+            ep_prev_minute_count = cache.get(endpoint_prev_minute_key, 0)
+            endpoint_sliding_minute = ep_minute_count + (ep_prev_minute_count * weight)
+            endpoint_hour_count = cache.get(endpoint_hour_key, 0)
+        
+        global_remaining_minute = max(0, tier_minute_limit - int(global_sliding_minute) - 1)
+        global_remaining_hour = max(0, tier_hour_limit - global_hour_count - 1)
+        
+        if has_endpoint_limits:
+            endpoint_remaining_minute = max(0, endpoint_minute_limit - int(endpoint_sliding_minute) - 1)
+            endpoint_remaining_hour = max(0, endpoint_hour_limit - endpoint_hour_count - 1)
+            effective_remaining_minute = min(global_remaining_minute, endpoint_remaining_minute)
+            effective_remaining_hour = min(global_remaining_hour, endpoint_remaining_hour)
+            effective_minute_limit = min(tier_minute_limit, endpoint_minute_limit)
+            effective_hour_limit = min(tier_hour_limit, endpoint_hour_limit)
+        else:
+            effective_remaining_minute = global_remaining_minute
+            effective_remaining_hour = global_remaining_hour
+            effective_minute_limit = tier_minute_limit
+            effective_hour_limit = tier_hour_limit
+        
+        limit_info = {
+            "limit_minute": effective_minute_limit,
+            "limit_hour": effective_hour_limit,
+            "remaining_minute": effective_remaining_minute,
+            "remaining_hour": effective_remaining_hour,
+            "reset_minute": (minute_window + 1) * 60,
+            "reset_hour": (hour_window + 1) * 3600,
+            "type": None,
+            "retry_after": 0,
+            "endpoint_key": endpoint_key,
+        }
+        
+        if has_endpoint_limits and endpoint_sliding_minute >= endpoint_minute_limit:
+            limit_info["type"] = "endpoint_minute"
+            limit_info["retry_after"] = 60 - seconds_into_window
+            return True, limit_info
+        
+        if global_sliding_minute >= tier_minute_limit:
+            limit_info["type"] = "global_minute"
+            limit_info["retry_after"] = 60 - seconds_into_window
+            return True, limit_info
+        
+        if has_endpoint_limits and endpoint_hour_count >= endpoint_hour_limit:
+            limit_info["type"] = "endpoint_hour"
+            limit_info["retry_after"] = 3600 - (current_time % 3600)
+            return True, limit_info
+        
+        if global_hour_count >= tier_hour_limit:
+            limit_info["type"] = "global_hour"
+            limit_info["retry_after"] = 3600 - (current_time % 3600)
+            return True, limit_info
+        
+        return False, limit_info
+    
+    def _increment_counters(
+        self, 
+        client_key: str, 
+        endpoint_key: str,
+        minute_window: int, 
+        hour_window: int
+    ) -> None:
+        """Increment rate limit counters for both global and endpoint-specific buckets."""
+        global_minute_key = f"rl:m:g:{client_key}:{minute_window}"
+        global_hour_key = f"rl:h:g:{client_key}:{hour_window}"
+        
+        try:
+            cache.incr(global_minute_key)
+        except ValueError:
+            cache.set(global_minute_key, 1, 120)
+        
+        try:
+            cache.incr(global_hour_key)
+        except ValueError:
+            cache.set(global_hour_key, 1, 7200)
+        
+        if endpoint_key in self.ENDPOINT_LIMITS:
+            ep_safe_key = endpoint_key.replace("/", "_")
+            endpoint_minute_key = f"rl:m:e:{ep_safe_key}:{client_key}:{minute_window}"
+            endpoint_hour_key = f"rl:h:e:{ep_safe_key}:{client_key}:{hour_window}"
+            
+            try:
+                cache.incr(endpoint_minute_key)
+            except ValueError:
+                cache.set(endpoint_minute_key, 1, 120)
+            
+            try:
+                cache.incr(endpoint_hour_key)
+            except ValueError:
+                cache.set(endpoint_hour_key, 1, 7200)
+    
+    def _add_rate_limit_headers(self, response: HttpResponse, limit_info: dict[str, Any]) -> None:
+        """Add standard rate limit headers to response."""
+        response["X-RateLimit-Limit"] = str(limit_info["limit_minute"])
+        response["X-RateLimit-Remaining"] = str(limit_info["remaining_minute"])
+        response["X-RateLimit-Reset"] = str(limit_info["reset_minute"])
+        
+        response["X-RateLimit-Limit-Hour"] = str(limit_info["limit_hour"])
+        response["X-RateLimit-Remaining-Hour"] = str(limit_info["remaining_hour"])
+        response["X-RateLimit-Reset-Hour"] = str(limit_info["reset_hour"])
+        
+        if limit_info.get("retry_after"):
+            response["Retry-After"] = str(limit_info["retry_after"])
     
     def _is_exempt(self, path: str) -> bool:
         """Check if path is exempt from rate limiting."""
@@ -184,6 +415,14 @@ class OptimizedRateLimitMiddleware:
         if x_forwarded_for:
             return x_forwarded_for.split(",")[0].strip()
         return request.META.get("REMOTE_ADDR", "unknown")
+
+
+class OptimizedRateLimitMiddleware(SlidingWindowRateLimiter):
+    """
+    Backward-compatible alias for SlidingWindowRateLimiter.
+    Keeps existing middleware references working.
+    """
+    pass
 
 
 class CookieConsentMiddleware:
