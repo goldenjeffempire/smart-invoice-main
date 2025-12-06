@@ -1844,3 +1844,478 @@
   white-space: nowrap;
   border: 0;
 }
+
+/* ============================================
+   FOCUS STATES & ACCESSIBILITY ENHANCEMENTS
+   ============================================ */
+
+/* Base Focus Ring Utility */
+.focus-ring:focus {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-offset);
+}
+
+.focus-ring-inset:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--color-primary-500);
+}
+
+/* Button Focus States */
+.btn:focus {
+  outline: none;
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-offset);
+}
+
+.btn-primary:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-primary-600);
+}
+
+.btn-secondary:focus-visible {
+  box-shadow: var(--focus-ring-offset);
+}
+
+.btn-outline:focus-visible {
+  box-shadow: var(--focus-ring-offset);
+  border-color: var(--color-primary-500);
+}
+
+.btn-ghost:focus-visible {
+  box-shadow: var(--focus-ring);
+  background: var(--color-slate-50);
+}
+
+.btn-danger:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-error);
+}
+
+.btn-success:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-success);
+}
+
+/* Link Focus States */
+a:focus {
+  outline: none;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Card Focus States for Interactive Cards */
+.card-interactive:focus {
+  outline: none;
+}
+
+.card-interactive:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-offset), var(--shadow-card);
+  border-color: var(--color-primary-400);
+}
+
+/* Keyboard navigation for card grids */
+.card[tabindex="0"]:focus {
+  outline: none;
+}
+
+.card[tabindex="0"]:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-offset), var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+/* Sidebar Link Focus States */
+.sidebar-link:focus {
+  outline: none;
+}
+
+.sidebar-link:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--color-primary-400);
+  background: var(--color-slate-50);
+}
+
+/* Tab Focus States */
+.tab:focus {
+  outline: none;
+}
+
+.tab:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--color-primary-400);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.tabs-pills .tab:focus-visible {
+  border-radius: var(--radius-lg);
+}
+
+/* Dropdown Focus States */
+.dropdown-trigger:focus {
+  outline: none;
+}
+
+.dropdown-trigger:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-offset);
+  border-radius: var(--radius-lg);
+}
+
+.dropdown-item:focus {
+  outline: none;
+}
+
+.dropdown-item:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--color-primary-400);
+  background: var(--color-slate-50);
+}
+
+/* Pagination Focus States */
+.pagination-link:focus {
+  outline: none;
+}
+
+.pagination-link:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-offset);
+  z-index: 1;
+  position: relative;
+}
+
+/* Modal Focus States */
+.modal:focus {
+  outline: none;
+}
+
+.modal-close:focus {
+  outline: none;
+}
+
+.modal-close:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  background: var(--color-slate-100);
+}
+
+/* Form Input Enhanced Focus */
+.form-input:focus-visible {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: var(--focus-ring);
+}
+
+.form-select:focus-visible {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: var(--focus-ring);
+}
+
+/* Checkbox and Radio Focus */
+input[type="checkbox"]:focus-visible,
+input[type="radio"]:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* Table Sortable Header Focus */
+.sortable:focus {
+  outline: none;
+}
+
+.sortable:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--color-primary-400);
+  border-radius: var(--radius-sm);
+}
+
+/* Table Row Focus for Keyboard Navigation */
+.data-table tbody tr:focus {
+  outline: none;
+}
+
+.data-table tbody tr:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--color-primary-400);
+}
+
+.data-table tbody tr[tabindex="0"]:focus-visible td {
+  background: var(--color-primary-50);
+}
+
+/* Alert Dismiss Button Focus */
+.alert-dismiss:focus {
+  outline: none;
+}
+
+.alert-dismiss:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  opacity: 1;
+}
+
+/* Badge Remove Button Focus */
+.badge-remove:focus {
+  outline: none;
+}
+
+.badge-remove:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px currentColor;
+  opacity: 1;
+}
+
+/* Toast Close Focus */
+.toast-close:focus {
+  outline: none;
+}
+
+.toast-close:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+  opacity: 1;
+}
+
+/* Avatar Link Focus */
+a.avatar:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-primary-500);
+}
+
+/* Footer Social Link Focus */
+.footer-social-link:focus {
+  outline: none;
+}
+
+.footer-social-link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 0 0 4px var(--color-primary-400);
+}
+
+/* Breadcrumb Link Focus */
+.breadcrumb-link:focus {
+  outline: none;
+}
+
+.breadcrumb-link:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Skip to Content Link (Accessibility) */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--spacing-4);
+  z-index: var(--z-max);
+  padding: var(--spacing-3) var(--spacing-4);
+  background: var(--color-primary-600);
+  color: var(--color-white);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: var(--spacing-4);
+}
+
+/* ============================================
+   ARIA & ACCESSIBILITY HELPERS
+   ============================================ */
+
+/* Hidden but accessible */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Focus visible polyfill fallback */
+.js-focus-visible :focus:not(.focus-visible) {
+  outline: none;
+}
+
+.js-focus-visible .focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (forced-colors: active) {
+  .btn:focus-visible,
+  .card-interactive:focus-visible,
+  .sidebar-link:focus-visible,
+  .tab:focus-visible,
+  .dropdown-item:focus-visible,
+  .pagination-link:focus-visible {
+    outline: 2px solid CanvasText;
+    outline-offset: 2px;
+  }
+  
+  .form-input:focus-visible,
+  .form-select:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 0;
+  }
+}
+
+/* Reduced motion: ensure focus states remain visible */
+@media (prefers-reduced-motion: reduce) {
+  .skip-link:focus {
+    transition: none;
+    top: var(--spacing-4);
+  }
+}
+
+/* ============================================
+   TABLE ARIA ENHANCEMENTS
+   ============================================ */
+
+/* Table with role="grid" support */
+.data-table[role="grid"] {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.data-table[role="grid"] th[role="columnheader"] {
+  cursor: default;
+}
+
+.data-table[role="grid"] th[role="columnheader"][aria-sort] {
+  cursor: pointer;
+}
+
+.data-table[role="grid"] th[aria-sort="ascending"]::after {
+  content: " ▲";
+  font-size: var(--font-size-xs);
+  color: var(--color-primary-600);
+}
+
+.data-table[role="grid"] th[aria-sort="descending"]::after {
+  content: " ▼";
+  font-size: var(--font-size-xs);
+  color: var(--color-primary-600);
+}
+
+.data-table[role="grid"] td[role="gridcell"] {
+  position: relative;
+}
+
+/* Row selection indicator */
+.data-table tbody tr[aria-selected="true"] td {
+  background: var(--color-primary-50);
+}
+
+.data-table tbody tr[aria-selected="true"] td:first-child::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--color-primary-500);
+}
+
+/* ============================================
+   INTERACTIVE STATE UTILITIES
+   ============================================ */
+
+/* Disabled state utility */
+.is-disabled,
+[aria-disabled="true"] {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* Loading state utility */
+.is-loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.is-loading::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Pressed state for buttons */
+.btn[aria-pressed="true"] {
+  background: var(--color-primary-700);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Expanded state for disclosure widgets */
+[aria-expanded="true"] .expand-icon {
+  transform: rotate(180deg);
+}
+
+[aria-expanded="false"] .expand-icon {
+  transform: rotate(0deg);
+}
+
+.expand-icon {
+  transition: transform var(--transition-fast) var(--ease-out);
+}
+
+/* Current page indicator */
+[aria-current="page"] {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary-600);
+}
+
+/* Active descendant highlight for composite widgets */
+[aria-activedescendant] [id].is-active-descendant {
+  background: var(--color-primary-50);
+  outline: 2px solid var(--color-primary-400);
+  outline-offset: -2px;
+}
+
+/* ============================================
+   TOUCH TARGET SIZING
+   ============================================ */
+
+/* Ensure minimum touch target size for mobile */
+@media (pointer: coarse) {
+  .btn,
+  .pagination-link,
+  .tab,
+  .dropdown-item,
+  .sidebar-link {
+    min-height: var(--touch-target-min);
+  }
+  
+  .btn-sm {
+    min-height: 36px;
+  }
+  
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+}
