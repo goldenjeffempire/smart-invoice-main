@@ -57,6 +57,7 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     ordering_fields = ["created_at", "invoice_date", "due_date", "total", "status"]
     ordering = ["-created_at"]
     lookup_field = "pk"
+    lookup_url_kwarg = "pk"
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -161,6 +162,7 @@ class InvoiceTemplateViewSet(viewsets.ModelViewSet):
     serializer_class = InvoiceTemplateSerializer
     permission_classes = [IsAuthenticated]
     lookup_field = "pk"
+    lookup_url_kwarg = "pk"
 
     def get_queryset(self):
         return InvoiceTemplate.objects.filter(user=self.request.user)

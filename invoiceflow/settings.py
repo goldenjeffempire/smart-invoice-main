@@ -180,8 +180,9 @@ SPECTACULAR_SETTINGS = {
         "persistAuthorization": True,
     },
     "ENUM_NAME_OVERRIDES": {
-        "InvoiceStatusEnum": "invoices.models.Invoice.status",
-        "RecurringStatusEnum": "invoices.models.RecurringInvoice.status",
+        "InvoiceStatusEnum": [("unpaid", "unpaid"), ("paid", "paid")],
+        "RecurringInvoiceStatusEnum": [("active", "active"), ("paused", "paused"), ("ended", "ended")],
+        "ContactSubmissionStatusEnum": [("new", "new"), ("in_progress", "in_progress"), ("resolved", "resolved"), ("closed", "closed")],
     },
 }
 
