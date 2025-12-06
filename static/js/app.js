@@ -9,6 +9,7 @@
       this.initAppSidebar();
       this.initScrollReveal();
       this.initMicroInteractions();
+      this.initHeroInteractions();
       this.initSmoothScroll();
       this.initLazyLoading();
       this.initAccessibility();
@@ -16,7 +17,7 @@
       this.initCounterAnimations();
       this.initEnhancedForms();
       this.initModalSystem();
-      console.log('InvoiceFlow v8.5 - Premium Edition initialized');
+      console.log('InvoiceFlow v8.6 - Premium Edition initialized');
     },
 
     initPageTransitions() {
@@ -338,6 +339,103 @@
         row.addEventListener('mouseleave', () => {
           row.style.background = '';
         });
+      });
+    },
+
+    initHeroInteractions() {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) return;
+
+      const heroSection = document.querySelector('.hero-section');
+      if (!heroSection) return;
+
+      let spotlight = heroSection.querySelector('.hero-spotlight');
+      if (!spotlight) {
+        spotlight = document.createElement('div');
+        spotlight.className = 'hero-spotlight';
+        const bgEffects = heroSection.querySelector('.hero-bg-effects');
+        if (bgEffects) {
+          bgEffects.appendChild(spotlight);
+        }
+      }
+
+      heroSection.addEventListener('mousemove', (e) => {
+        const rect = heroSection.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        spotlight.style.left = x + 'px';
+        spotlight.style.top = y + 'px';
+      });
+
+      const magneticButtons = document.querySelectorAll('.magnetic-btn');
+      magneticButtons.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+        });
+
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transform = 'translate(0, 0)';
+        });
+      });
+
+      const tiltElement = document.querySelector('.tilt-element');
+      if (tiltElement) {
+        const container = tiltElement.closest('.perspective-container');
+        if (container) {
+          container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
+            const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
+            const rotateX = y * -8;
+            const rotateY = x * 8;
+            tiltElement.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+          });
+
+          container.addEventListener('mouseleave', () => {
+            tiltElement.style.transform = 'rotateX(2deg) rotateY(-2deg)';
+          });
+        }
+      }
+
+      const counters = document.querySelectorAll('.floating-card-value.counter');
+      counters.forEach(counter => {
+        const value = parseInt(counter.dataset.value) || 0;
+        let hasAnimated = false;
+
+        const animateCounter = () => {
+          if (hasAnimated) return;
+          hasAnimated = true;
+          
+          const duration = 2000;
+          const start = performance.now();
+          const prefix = counter.textContent.charAt(0);
+          const suffix = counter.textContent.slice(-3);
+
+          const animate = (currentTime) => {
+            const elapsed = currentTime - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            const current = Math.floor(value * easeOut);
+            counter.textContent = `${prefix}${current.toLocaleString()}${suffix}`;
+            
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            }
+          };
+          requestAnimationFrame(animate);
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) {
+            setTimeout(animateCounter, 800);
+            observer.disconnect();
+          }
+        }, { threshold: 0.5 });
+
+        observer.observe(counter);
       });
     },
 
