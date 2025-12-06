@@ -5,6 +5,7 @@ packages = ["awsebcli", "cairo", "cargo", "fontconfig", "freetype", "gdk-pixbuf"
 
 [agent]
 expertMode = true
+integrations = ["sendgrid:1.0.0"]
 
 [workflows]
 runButton = "Project"

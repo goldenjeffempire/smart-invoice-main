@@ -58,9 +58,9 @@ class SendGridEmailService:
             self.is_configured = bool(self.api_key)
 
         if self.is_configured and self.api_key:
-            self.client = SendGridAPIClient(self.api_key)
+            self.client: SendGridAPIClient | None = SendGridAPIClient(self.api_key)
         else:
-            self.client = None
+            self.client: SendGridAPIClient | None = None
 
     def _try_replit_integration(self) -> bool:
         """Try to get SendGrid credentials from Replit integration connector."""
@@ -327,6 +327,8 @@ class SendGridEmailService:
                     message.attachment = attachment
 
             # Send email
+            if self.client is None:
+                return {"status": "error", "message": "SendGrid client not initialized"}
             response = self.client.send(message)
             print("✅ Email sent successfully!")
             print(f"   From: {self.from_email} (verified platform email)")
@@ -364,6 +366,8 @@ class SendGridEmailService:
                 plain_text_content=plain_text,
             )
 
+            if self.client is None:
+                return {"status": "error", "message": "SendGrid client not initialized"}
             response = self.client.send(message)
             return {"status": "sent", "response": response.status_code}
 
@@ -504,6 +508,8 @@ class SendGridEmailService:
                 ),
             ]
 
+            if self.client is None:
+                return {"status": "error", "message": "SendGrid client not initialized"}
             response = self.client.send(message)
 
             return {
