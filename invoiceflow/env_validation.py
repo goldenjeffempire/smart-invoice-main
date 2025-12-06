@@ -23,11 +23,15 @@ REQUIRED_ENV_VARS = [
 OPTIONAL_ENV_VARS = [
     EnvVar("DEBUG", False, "Enable debug mode", "False"),
     EnvVar("ALLOWED_HOSTS", False, "Comma-separated list of allowed hosts", "*"),
-    EnvVar("SENDGRID_API_KEY", False, "SendGrid API key for email delivery"),
-    EnvVar("SENDGRID_FROM_EMAIL", False, "Default sender email address"),
     EnvVar("PAYSTACK_SECRET_KEY", False, "Paystack API key for payments"),
     EnvVar("SENTRY_DSN", False, "Sentry DSN for error tracking"),
     EnvVar("MFA_ENABLED", False, "Enable multi-factor authentication", "True"),
+]
+
+# These are managed by Replit connectors and should not trigger warnings
+CONNECTOR_MANAGED_VARS = [
+    EnvVar("SENDGRID_API_KEY", False, "SendGrid API key (managed by Replit connector)"),
+    EnvVar("SENDGRID_FROM_EMAIL", False, "Default sender email (managed by Replit connector)"),
 ]
 
 
@@ -84,11 +88,39 @@ def validate_environment(exit_on_error: bool = True) -> dict[str, list[str]]:
     return results
 
 
+def _check_replit_sendgrid_connector() -> bool:
+    """Check if SendGrid is available via Replit connector."""
+    try:
+        import urllib.request
+        import json
+        
+        hostname = os.environ.get("REPLIT_CONNECTORS_HOSTNAME")
+        token = os.environ.get("REPL_IDENTITY") or os.environ.get("WEB_REPL_RENEWAL")
+        
+        if not hostname or not token:
+            return False
+        
+        token_header = f"repl {token}" if "REPL_IDENTITY" in os.environ else f"depl {token}"
+        url = f"https://{hostname}/api/v2/connection?include_secrets=true&connector_names=sendgrid"
+        req = urllib.request.Request(url)
+        req.add_header("Accept", "application/json")
+        req.add_header("X_REPLIT_TOKEN", token_header)
+        
+        with urllib.request.urlopen(req, timeout=2) as response:
+            data = json.loads(response.read().decode())
+            connection = data.get("items", [{}])[0]
+            settings = connection.get("settings", {})
+            return bool(settings.get("api_key") and settings.get("from_email"))
+    except Exception:
+        return False
+
+
 def get_env_status() -> dict:
     """Get current environment configuration status for health checks."""
     status = {
         "required": {},
         "optional": {},
+        "connector_managed": {},
     }
     
     for env_var in REQUIRED_ENV_VARS:
@@ -104,6 +136,16 @@ def get_env_status() -> dict:
             "configured": bool(value),
             "description": env_var.description,
             "has_default": env_var.default is not None
+        }
+    
+    # Check connector-managed variables
+    sendgrid_connected = _check_replit_sendgrid_connector()
+    for env_var in CONNECTOR_MANAGED_VARS:
+        env_value = os.environ.get(env_var.name)
+        status["connector_managed"][env_var.name] = {
+            "configured": sendgrid_connected or bool(env_value),
+            "description": env_var.description,
+            "via_connector": sendgrid_connected
         }
     
     return status
