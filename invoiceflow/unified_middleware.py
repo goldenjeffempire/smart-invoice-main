@@ -86,7 +86,7 @@ class UnifiedMiddleware:
         """Optimized cache control."""
         if is_static:
             patch_cache_control(response, public=True, max_age=31536000, immutable=True)
-        elif is_marketing and not request.user.is_authenticated:
+        elif is_marketing and not getattr(request, 'user', None) or (is_marketing and hasattr(request, 'user') and not request.user.is_authenticated):
             patch_cache_control(response, public=True, max_age=300, stale_while_revalidate=60)
         elif response.get("Content-Type", "").startswith("text/html"):
             add_never_cache_headers(response)
@@ -101,12 +101,13 @@ class UnifiedMiddleware:
     def _log_request(self, request: HttpRequest, response: HttpResponse, 
                      duration_ms: float) -> None:
         """Log request with appropriate level based on duration and status."""
+        user = getattr(request, 'user', None)
         log_data = {
             "method": request.method,
             "path": request.path,
             "status": response.status_code,
             "duration_ms": round(duration_ms, 2),
-            "user": request.user.username if request.user.is_authenticated else "anonymous",
+            "user": user.username if user and user.is_authenticated else "anonymous",
             "ip": self._get_client_ip(request),
         }
         
@@ -285,10 +286,16 @@ class SlidingWindowRateLimiter:
         global_hour_key = f"rl:h:g:{client_key}:{hour_window}"
         global_prev_minute_key = f"rl:m:g:{client_key}:{minute_window - 1}"
         
-        global_minute_count = cache.get(global_minute_key, 0)
-        global_prev_minute_count = cache.get(global_prev_minute_key, 0)
-        global_sliding_minute = global_minute_count + (global_prev_minute_count * weight)
-        global_hour_count = cache.get(global_hour_key, 0)
+        try:
+            global_minute_count = cache.get(global_minute_key, 0)
+            global_prev_minute_count = cache.get(global_prev_minute_key, 0)
+            global_sliding_minute = global_minute_count + (global_prev_minute_count * weight)
+            global_hour_count = cache.get(global_hour_key, 0)
+        except Exception:
+            global_minute_count = 0
+            global_prev_minute_count = 0
+            global_sliding_minute = 0
+            global_hour_count = 0
         
         endpoint_sliding_minute = 0.0
         endpoint_hour_count = 0
@@ -299,10 +306,16 @@ class SlidingWindowRateLimiter:
             endpoint_hour_key = f"rl:h:e:{ep_safe_key}:{client_key}:{hour_window}"
             endpoint_prev_minute_key = f"rl:m:e:{ep_safe_key}:{client_key}:{minute_window - 1}"
             
-            ep_minute_count = cache.get(endpoint_minute_key, 0)
-            ep_prev_minute_count = cache.get(endpoint_prev_minute_key, 0)
-            endpoint_sliding_minute = ep_minute_count + (ep_prev_minute_count * weight)
-            endpoint_hour_count = cache.get(endpoint_hour_key, 0)
+            try:
+                ep_minute_count = cache.get(endpoint_minute_key, 0)
+                ep_prev_minute_count = cache.get(endpoint_prev_minute_key, 0)
+                endpoint_sliding_minute = ep_minute_count + (ep_prev_minute_count * weight)
+                endpoint_hour_count = cache.get(endpoint_hour_key, 0)
+            except Exception:
+                ep_minute_count = 0
+                ep_prev_minute_count = 0
+                endpoint_sliding_minute = 0.0
+                endpoint_hour_count = 0
         
         global_remaining_minute = max(0, tier_minute_limit - int(global_sliding_minute) - 1)
         global_remaining_hour = max(0, tier_hour_limit - global_hour_count - 1)
@@ -366,29 +379,32 @@ class SlidingWindowRateLimiter:
         global_hour_key = f"rl:h:g:{client_key}:{hour_window}"
         
         try:
-            cache.incr(global_minute_key)
-        except ValueError:
-            cache.set(global_minute_key, 1, 120)
-        
-        try:
-            cache.incr(global_hour_key)
-        except ValueError:
-            cache.set(global_hour_key, 1, 7200)
-        
-        if endpoint_key in self.ENDPOINT_LIMITS:
-            ep_safe_key = endpoint_key.replace("/", "_")
-            endpoint_minute_key = f"rl:m:e:{ep_safe_key}:{client_key}:{minute_window}"
-            endpoint_hour_key = f"rl:h:e:{ep_safe_key}:{client_key}:{hour_window}"
+            try:
+                cache.incr(global_minute_key)
+            except ValueError:
+                cache.set(global_minute_key, 1, 120)
             
             try:
-                cache.incr(endpoint_minute_key)
+                cache.incr(global_hour_key)
             except ValueError:
-                cache.set(endpoint_minute_key, 1, 120)
+                cache.set(global_hour_key, 1, 7200)
             
-            try:
-                cache.incr(endpoint_hour_key)
-            except ValueError:
-                cache.set(endpoint_hour_key, 1, 7200)
+            if endpoint_key in self.ENDPOINT_LIMITS:
+                ep_safe_key = endpoint_key.replace("/", "_")
+                endpoint_minute_key = f"rl:m:e:{ep_safe_key}:{client_key}:{minute_window}"
+                endpoint_hour_key = f"rl:h:e:{ep_safe_key}:{client_key}:{hour_window}"
+                
+                try:
+                    cache.incr(endpoint_minute_key)
+                except ValueError:
+                    cache.set(endpoint_minute_key, 1, 120)
+                
+                try:
+                    cache.incr(endpoint_hour_key)
+                except ValueError:
+                    cache.set(endpoint_hour_key, 1, 7200)
+        except Exception:
+            pass
     
     def _add_rate_limit_headers(self, response: HttpResponse, limit_info: dict[str, Any]) -> None:
         """Add standard rate limit headers to response."""
