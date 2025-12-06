@@ -3,6 +3,7 @@
 
   const InvoiceFlow = {
     init() {
+      this.initPageTransitions();
       this.initNavigation();
       this.initMobileMenu();
       this.initAppSidebar();
@@ -15,7 +16,55 @@
       this.initCounterAnimations();
       this.initEnhancedForms();
       this.initModalSystem();
-      console.log('InvoiceFlow v8.0 - Premium Edition initialized');
+      console.log('InvoiceFlow v8.5 - Premium Edition initialized');
+    },
+
+    initPageTransitions() {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      const mainContent = document.getElementById('main-content');
+      if (!mainContent) return;
+
+      mainContent.classList.add('page-transition-wrapper');
+      
+      if (!prefersReducedMotion) {
+        mainContent.classList.add('page-enter');
+        
+        mainContent.addEventListener('animationend', function handler() {
+          mainContent.classList.remove('page-enter');
+          mainContent.removeEventListener('animationend', handler);
+        });
+      }
+
+      if (prefersReducedMotion) return;
+
+      const internalLinks = document.querySelectorAll('a[href^="/"]');
+      
+      internalLinks.forEach(link => {
+        if (link.hasAttribute('data-no-transition')) return;
+        if (link.getAttribute('target') === '_blank') return;
+        if (link.getAttribute('href').startsWith('#')) return;
+        
+        link.addEventListener('click', (e) => {
+          const href = link.getAttribute('href');
+          
+          if (href === window.location.pathname) return;
+          if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+          
+          e.preventDefault();
+          
+          mainContent.classList.add('page-exit');
+          
+          mainContent.addEventListener('animationend', function exitHandler() {
+            mainContent.removeEventListener('animationend', exitHandler);
+            window.location.href = href;
+          });
+          
+          setTimeout(() => {
+            window.location.href = href;
+          }, 350);
+        });
+      });
     },
 
     initAppSidebar() {
@@ -203,17 +252,20 @@
     },
 
     initScrollReveal() {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
       const revealElements = document.querySelectorAll('[data-reveal]');
-      if (!revealElements.length) return;
-
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const animateElements = document.querySelectorAll('.section-animate, .card-animate, .widget-animate, .row-animate, .form-animate, .hero-animate');
+      
+      if (prefersReducedMotion) {
         revealElements.forEach(el => el.classList.add('revealed'));
+        animateElements.forEach(el => el.classList.add('visible'));
         return;
       }
 
       const observerOptions = {
         root: null,
-        rootMargin: '0px 0px -80px 0px',
+        rootMargin: '0px 0px -60px 0px',
         threshold: 0.1
       };
 
@@ -221,10 +273,11 @@
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const el = entry.target;
-            const delay = el.dataset.revealDelay || 0;
+            const delay = el.dataset.revealDelay || el.dataset.delay || 0;
 
             setTimeout(() => {
               el.classList.add('revealed');
+              el.classList.add('visible');
             }, parseInt(delay));
 
             observer.unobserve(el);
@@ -233,6 +286,22 @@
       }, observerOptions);
 
       revealElements.forEach(el => observer.observe(el));
+      animateElements.forEach(el => observer.observe(el));
+      
+      this.initStaggeredAnimations();
+    },
+
+    initStaggeredAnimations() {
+      const staggerContainers = document.querySelectorAll('[data-stagger]');
+      
+      staggerContainers.forEach(container => {
+        const children = container.children;
+        const baseDelay = parseInt(container.dataset.staggerDelay) || 50;
+        
+        Array.from(children).forEach((child, index) => {
+          child.style.transitionDelay = `${index * baseDelay}ms`;
+        });
+      });
     },
 
     initMicroInteractions() {
