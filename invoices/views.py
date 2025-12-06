@@ -274,7 +274,10 @@ def edit_invoice(request, invoice_id):
 def delete_invoice(request, invoice_id):
     invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)
     if request.method == "POST":
+        user_id = request.user.id
         invoice.delete()
+        from invoices.services import AnalyticsService
+        AnalyticsService.invalidate_user_cache(user_id)
         messages.success(request, "Invoice deleted successfully!")
         return redirect("dashboard")
     return render(request, "invoices/delete_invoice.html", {"invoice": invoice})
@@ -288,6 +291,8 @@ def update_invoice_status(request, invoice_id):
         if new_status in ["paid", "unpaid"]:
             invoice.status = new_status
             invoice.save()
+            from invoices.services import AnalyticsService
+            AnalyticsService.invalidate_user_cache(request.user.id)
             messages.success(request, f"Invoice status updated to {new_status}!")
         return redirect("invoice_detail", invoice_id=invoice.id)
     return redirect("dashboard")
@@ -1047,6 +1052,9 @@ def bulk_delete(request):
         invoice_ids = request.POST.getlist("invoice_ids")
         if invoice_ids:
             deleted_count, _ = Invoice.objects.filter(id__in=invoice_ids, user=request.user).delete()  # type: ignore
+            if deleted_count > 0:
+                from invoices.services import AnalyticsService
+                AnalyticsService.invalidate_user_cache(request.user.id)
             messages.success(request, f"Deleted {deleted_count} invoice(s).")
         return redirect("dashboard")
     return redirect("dashboard")

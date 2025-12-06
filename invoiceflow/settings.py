@@ -409,13 +409,27 @@ RATELIMIT_VIEW = "django_ratelimit.decorators.ratelimit"
 # =============================================================================
 # CACHE CONFIGURATION
 # =============================================================================
+# Use database cache for multi-worker support (Gunicorn with 2 workers)
+# Database cache is shared across workers unlike LocMemCache
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "invoiceflow-cache",
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "django_cache",
         "OPTIONS": {"MAX_ENTRIES": 10000},
-    }
+        "TIMEOUT": 300,  # 5 minutes default
+    },
+    "analytics": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "django_cache_analytics",
+        "OPTIONS": {"MAX_ENTRIES": 5000},
+        "TIMEOUT": 60,  # 1 minute for analytics (balance freshness vs performance)
+    },
 }
+
+# Cache timeout settings (in seconds)
+CACHE_TIMEOUT_DASHBOARD = 60  # Dashboard stats: 1 minute
+CACHE_TIMEOUT_ANALYTICS = 120  # Analytics page: 2 minutes
+CACHE_TIMEOUT_TOP_CLIENTS = 300  # Top clients: 5 minutes
 
 # =============================================================================
 # SESSION SECURITY (Phase 1 requirements)

@@ -4,8 +4,12 @@ Extracts logic from views into reusable service classes.
 """
 from __future__ import annotations
 
+import hashlib
+import logging
 from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
 
+from django.conf import settings
+from django.core.cache import caches
 from django.db import transaction
 from django.db.models import Count, Sum, F, DecimalField, Value, Q
 from django.db.models.functions import Coalesce
@@ -17,6 +21,8 @@ from django.template.loader import render_to_string
 
 if TYPE_CHECKING:
     from .forms import InvoiceForm
+
+logger = logging.getLogger(__name__)
 
 
 class InvoiceService:
@@ -50,6 +56,7 @@ class InvoiceService:
                 unit_price=Decimal(item_data["unit_price"]),
             )
 
+        AnalyticsService.invalidate_user_cache(user.id)
         return invoice, invoice_form
 
     @staticmethod
@@ -71,6 +78,7 @@ class InvoiceService:
         if not invoice_form.is_valid():
             return None, invoice_form
 
+        user_id = invoice.user_id
         invoice = invoice_form.save()
         invoice.line_items.all().delete()  # type: ignore[attr-defined]
 
@@ -82,6 +90,7 @@ class InvoiceService:
                 unit_price=Decimal(item_data["unit_price"]),
             )
 
+        AnalyticsService.invalidate_user_cache(user_id)
         return invoice, invoice_form
 
 
@@ -107,8 +116,45 @@ class AnalyticsService:
     - Uses Django's annotate() for database-level aggregations
     - Calculates invoice totals using SUM(quantity * unit_price) at DB level
     - Reduces N+1 queries by aggregating in single queries
+    - Implements database caching for multi-worker environments
     - Target: Sub-250ms dashboard load time
     """
+
+    # Cache key prefixes
+    CACHE_PREFIX_DASHBOARD = "analytics:dashboard"
+    CACHE_PREFIX_STATS = "analytics:stats"
+    CACHE_PREFIX_TOP_CLIENTS = "analytics:top_clients"
+
+    @staticmethod
+    def _get_cache():
+        """Get the analytics cache backend."""
+        try:
+            return caches['analytics']
+        except Exception:
+            return caches['default']
+
+    @staticmethod
+    def _make_cache_key(prefix: str, user_id: int) -> str:
+        """Generate a cache key for a user's analytics data."""
+        return f"{prefix}:{user_id}"
+
+    @classmethod
+    def invalidate_user_cache(cls, user_id: int) -> None:
+        """Invalidate all cached analytics data for a user.
+        
+        Call this when invoices are created, updated, or deleted.
+        """
+        cache = cls._get_cache()
+        keys = [
+            cls._make_cache_key(cls.CACHE_PREFIX_DASHBOARD, user_id),
+            cls._make_cache_key(cls.CACHE_PREFIX_STATS, user_id),
+            cls._make_cache_key(cls.CACHE_PREFIX_TOP_CLIENTS, user_id),
+        ]
+        for key in keys:
+            try:
+                cache.delete(key)
+            except Exception as e:
+                logger.warning(f"Failed to invalidate cache key {key}: {e}")
 
     @staticmethod
     def _get_invoice_total_annotation():
@@ -119,13 +165,22 @@ class AnalyticsService:
             output_field=DecimalField(max_digits=15, decimal_places=2)
         )
 
-    @staticmethod
-    def get_user_dashboard_stats(user: Any) -> Dict[str, Any]:
+    @classmethod
+    def get_user_dashboard_stats(cls, user: Any) -> Dict[str, Any]:
         """Calculate dashboard statistics using optimized database-level aggregations.
 
         Performance: Single query for counts, single query for revenue aggregation.
-        Target response time: <100ms
+        Caching: 60 seconds (CACHE_TIMEOUT_DASHBOARD)
+        Target response time: <100ms (cached), <250ms (uncached)
         """
+        cache = cls._get_cache()
+        cache_key = cls._make_cache_key(cls.CACHE_PREFIX_DASHBOARD, user.id)
+        timeout = getattr(settings, 'CACHE_TIMEOUT_DASHBOARD', 60)
+
+        cached_stats = cache.get(cache_key)
+        if cached_stats is not None:
+            return cached_stats
+
         invoices = Invoice.objects.filter(user=user)
 
         stats = invoices.aggregate(
@@ -146,7 +201,7 @@ class AnalyticsService:
             )
         )['total']
 
-        return {
+        result = {
             "total_invoices": stats['total_invoices'] or 0,
             "paid_count": stats['paid_count'] or 0,
             "unpaid_count": stats['unpaid_count'] or 0,
@@ -154,16 +209,36 @@ class AnalyticsService:
             "unique_clients": stats['unique_clients'] or 0,
         }
 
-    @staticmethod
-    def get_user_analytics_stats(user: Any) -> Dict[str, Any]:
+        try:
+            cache.set(cache_key, result, timeout)
+        except Exception as e:
+            logger.warning(f"Failed to cache dashboard stats: {e}")
+
+        return result
+
+    @classmethod
+    def get_user_analytics_stats(cls, user: Any) -> Dict[str, Any]:
         """Calculate comprehensive analytics using database-level aggregations.
 
         Performance: Uses aggregate() for all metrics, single query for invoice list.
-        Target response time: <200ms
+        Caching: 120 seconds for numeric stats (all_invoices always fresh)
+        Target response time: <100ms (cached), <200ms (uncached)
         """
         from datetime import datetime
 
+        cache = cls._get_cache()
+        cache_key = cls._make_cache_key(cls.CACHE_PREFIX_STATS, user.id)
+        timeout = getattr(settings, 'CACHE_TIMEOUT_ANALYTICS', 120)
+
+        cached_stats = cache.get(cache_key)
         invoices = Invoice.objects.filter(user=user)
+
+        if cached_stats is not None:
+            all_invoices_list = list(
+                invoices.prefetch_related('line_items').order_by('-created_at')
+            )
+            cached_stats["all_invoices"] = all_invoices_list
+            return cached_stats
 
         stats = invoices.aggregate(
             total_invoices=Count('id'),
@@ -208,11 +283,7 @@ class AnalyticsService:
             invoice_date__month=now.month
         ).count()
 
-        all_invoices_list = list(
-            invoices.prefetch_related('line_items').order_by('-created_at')
-        )
-
-        return {
+        cacheable_stats = {
             "total_invoices": total_invoices,
             "paid_invoices": paid_count,
             "unpaid_invoices": unpaid_count,
@@ -221,17 +292,37 @@ class AnalyticsService:
             "average_invoice": average_invoice,
             "payment_rate": payment_rate,
             "current_month_invoices": current_month_invoices,
+        }
+
+        try:
+            cache.set(cache_key, cacheable_stats, timeout)
+        except Exception as e:
+            logger.warning(f"Failed to cache analytics stats: {e}")
+
+        all_invoices_list = list(
+            invoices.prefetch_related('line_items').order_by('-created_at')
+        )
+
+        return {
+            **cacheable_stats,
             "all_invoices": all_invoices_list,
         }
 
-    @staticmethod
-    def get_top_clients(user: Any, limit: int = 10) -> List[Dict[str, Any]]:
+    @classmethod
+    def get_top_clients(cls, user: Any, limit: int = 10) -> List[Dict[str, Any]]:
         """Calculate top clients with database-level aggregations.
 
         Performance: Uses annotate() and aggregate() at database level.
+        Caching: 300 seconds (5 minutes) - less frequently accessed
         Groups by client_name with revenue and count calculations in SQL.
         """
-        from django.db.models import Avg
+        cache = cls._get_cache()
+        cache_key = f"{cls._make_cache_key(cls.CACHE_PREFIX_TOP_CLIENTS, user.id)}:{limit}"
+        timeout = getattr(settings, 'CACHE_TIMEOUT_TOP_CLIENTS', 300)
+
+        cached_result = cache.get(cache_key)
+        if cached_result is not None:
+            return cached_result
 
         clients = Invoice.objects.filter(user=user).values('client_name').annotate(
             invoice_count=Count('id'),
@@ -292,5 +383,10 @@ class AnalyticsService:
             key=lambda x: x['total_revenue'],
             reverse=True
         )[:limit]
+
+        try:
+            cache.set(cache_key, top_clients, timeout)
+        except Exception as e:
+            logger.warning(f"Failed to cache top clients: {e}")
 
         return top_clients
