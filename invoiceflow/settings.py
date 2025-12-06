@@ -179,6 +179,10 @@ SPECTACULAR_SETTINGS = {
         "deepLinking": True,
         "persistAuthorization": True,
     },
+    "ENUM_NAME_OVERRIDES": {
+        "InvoiceStatusEnum": "invoices.models.Invoice.status",
+        "RecurringStatusEnum": "invoices.models.RecurringInvoice.status",
+    },
 }
 
 # =============================================================================

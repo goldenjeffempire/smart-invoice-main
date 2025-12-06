@@ -4,7 +4,7 @@ from rest_framework import viewsets, status, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiTypes
 from django.db.models import Prefetch
 from django.http import FileResponse
 
@@ -56,6 +56,7 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     search_fields = ["invoice_id", "client_name", "client_email"]
     ordering_fields = ["created_at", "invoice_date", "due_date", "total", "status"]
     ordering = ["-created_at"]
+    lookup_field = "pk"
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -159,6 +160,7 @@ class InvoiceViewSet(viewsets.ModelViewSet):
 class InvoiceTemplateViewSet(viewsets.ModelViewSet):
     serializer_class = InvoiceTemplateSerializer
     permission_classes = [IsAuthenticated]
+    lookup_field = "pk"
 
     def get_queryset(self):
         return InvoiceTemplate.objects.filter(user=self.request.user)
