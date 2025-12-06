@@ -52,3 +52,7 @@ sqlparse==0.5.3
 requests==2.32.3
 djangorestframework
 drf-spectacular
+factory-boy
+pytest
+pytest-cov
+pytest-django
