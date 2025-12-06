@@ -6,11 +6,13 @@ from __future__ import annotations
 
 import hashlib
 import logging
+import threading
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
 
 from django.conf import settings
 from django.core.cache import caches
-from django.db import transaction
+from django.db import transaction, connection
 from django.db.models import Count, Sum, F, DecimalField, Value, Q
 from django.db.models.functions import Coalesce
 from decimal import Decimal
@@ -390,3 +392,177 @@ class AnalyticsService:
             logger.warning(f"Failed to cache top clients: {e}")
 
         return top_clients
+
+
+class CacheWarmingService:
+    """
+    Service for proactive cache warming and smart cache management.
+    
+    Features:
+    - Async cache warming on user login (non-blocking)
+    - Startup cache warming for active users
+    - Cache versioning for deployment cache busting
+    - Efficient background warming with thread pool
+    """
+    
+    CACHE_VERSION_KEY = "cache:version"
+    ACTIVE_USERS_KEY = "cache:active_users"
+    MAX_STARTUP_USERS = 50
+    
+    _executor: Optional[ThreadPoolExecutor] = None
+    _executor_lock = threading.Lock()
+    
+    @classmethod
+    def _get_executor(cls) -> ThreadPoolExecutor:
+        """Get or create the thread pool executor (lazy initialization)."""
+        if cls._executor is None:
+            with cls._executor_lock:
+                if cls._executor is None:
+                    cls._executor = ThreadPoolExecutor(
+                        max_workers=2,
+                        thread_name_prefix="cache_warmer"
+                    )
+        return cls._executor
+    
+    @classmethod
+    def shutdown_executor(cls) -> None:
+        """Shutdown the thread pool executor gracefully."""
+        if cls._executor is not None:
+            cls._executor.shutdown(wait=False)
+            cls._executor = None
+    
+    @classmethod
+    def warm_user_cache_async(cls, user: Any) -> None:
+        """
+        Warm user cache asynchronously (non-blocking).
+        Called on user login to pre-populate dashboard caches.
+        """
+        try:
+            executor = cls._get_executor()
+            executor.submit(cls._warm_user_cache_sync, user.id)
+        except Exception as e:
+            logger.warning(f"Failed to submit cache warming task: {e}")
+    
+    @classmethod
+    def _warm_user_cache_sync(cls, user_id: int) -> None:
+        """
+        Synchronously warm cache for a user (runs in background thread).
+        Properly manages database connections for threaded execution.
+        """
+        from django.db import close_old_connections
+        
+        try:
+            close_old_connections()
+            
+            from django.contrib.auth import get_user_model
+            User = get_user_model()
+            
+            user = User.objects.get(id=user_id)
+            
+            AnalyticsService.get_user_dashboard_stats(user)
+            AnalyticsService.get_user_analytics_stats(user)
+            AnalyticsService.get_top_clients(user)
+            
+            cls._track_active_user(user_id)
+            
+            logger.info(f"Cache warmed for user {user_id}")
+        except Exception as e:
+            logger.warning(f"Failed to warm cache for user {user_id}: {e}")
+        finally:
+            close_old_connections()
+    
+    @classmethod
+    def _track_active_user(cls, user_id: int) -> None:
+        """Track user as active for startup cache warming."""
+        try:
+            cache = AnalyticsService._get_cache()
+            active_users = cache.get(cls.ACTIVE_USERS_KEY, set())
+            if not isinstance(active_users, set):
+                active_users = set(active_users) if active_users else set()
+            active_users.add(user_id)
+            if len(active_users) > cls.MAX_STARTUP_USERS * 2:
+                active_users = set(list(active_users)[-cls.MAX_STARTUP_USERS:])
+            cache.set(cls.ACTIVE_USERS_KEY, active_users, 86400 * 7)
+        except Exception as e:
+            logger.debug(f"Failed to track active user: {e}")
+    
+    @classmethod
+    def warm_active_users_cache(cls) -> int:
+        """
+        Warm cache for recently active users on startup.
+        Returns number of users warmed.
+        """
+        try:
+            from django.contrib.auth import get_user_model
+            User = get_user_model()
+            
+            cache = AnalyticsService._get_cache()
+            active_users = cache.get(cls.ACTIVE_USERS_KEY, set())
+            
+            if not active_users:
+                recent_users = User.objects.filter(
+                    is_active=True
+                ).order_by('-last_login')[:cls.MAX_STARTUP_USERS]
+                active_user_ids = [u.id for u in recent_users if u.last_login]
+            else:
+                active_user_ids = list(active_users)[:cls.MAX_STARTUP_USERS]
+            
+            warmed_count = 0
+            for user_id in active_user_ids:
+                try:
+                    cls._warm_user_cache_sync(user_id)
+                    warmed_count += 1
+                except Exception as e:
+                    logger.debug(f"Failed to warm cache for user {user_id}: {e}")
+            
+            logger.info(f"Startup cache warming completed: {warmed_count} users")
+            return warmed_count
+        except Exception as e:
+            logger.warning(f"Startup cache warming failed: {e}")
+            return 0
+    
+    @classmethod
+    def get_cache_version(cls) -> str:
+        """Get current cache version for cache busting."""
+        cache = AnalyticsService._get_cache()
+        version = cache.get(cls.CACHE_VERSION_KEY)
+        if not version:
+            version = cls._generate_version()
+            cache.set(cls.CACHE_VERSION_KEY, version, None)
+        return version
+    
+    @classmethod
+    def bump_cache_version(cls) -> str:
+        """
+        Bump cache version to invalidate all caches.
+        Call this during deployments or major changes.
+        """
+        version = cls._generate_version()
+        cache = AnalyticsService._get_cache()
+        cache.set(cls.CACHE_VERSION_KEY, version, None)
+        logger.info(f"Cache version bumped to {version}")
+        return version
+    
+    @staticmethod
+    def _generate_version() -> str:
+        """Generate a new cache version string."""
+        import time
+        return hashlib.md5(str(time.time()).encode()).hexdigest()[:8]
+    
+    @classmethod
+    def get_cache_stats(cls) -> Dict[str, Any]:
+        """Get cache statistics for monitoring."""
+        try:
+            cache = AnalyticsService._get_cache()
+            active_users = cache.get(cls.ACTIVE_USERS_KEY, set())
+            version = cache.get(cls.CACHE_VERSION_KEY, "unknown")
+            
+            return {
+                "cache_version": version,
+                "tracked_active_users": len(active_users) if active_users else 0,
+                "max_startup_users": cls.MAX_STARTUP_USERS,
+                "executor_active": cls._executor is not None,
+            }
+        except Exception as e:
+            logger.warning(f"Failed to get cache stats: {e}")
+            return {"error": str(e)}

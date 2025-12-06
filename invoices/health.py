@@ -122,6 +122,7 @@ def detailed_health(request):
     import platform
     import sys
     from invoiceflow.env_validation import get_env_status
+    from invoices.services import CacheWarmingService
     
     checks = {
         "database": False,
@@ -188,5 +189,6 @@ def detailed_health(request):
             "debug": settings.DEBUG,
             "mfa_enabled": getattr(settings, 'MFA_ENABLED', False),
             "database_engine": settings.DATABASES.get("default", {}).get("ENGINE", "unknown"),
-        }
+        },
+        "cache_warming": CacheWarmingService.get_cache_stats(),
     })
