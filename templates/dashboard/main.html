@@ -5,10 +5,10 @@
 
 {% block content %}
 <div class="dashboard">
-    <aside class="dashboard-sidebar">
+    <aside class="dashboard-sidebar" id="dashboard-sidebar" role="complementary" aria-label="Dashboard sidebar">
         <div class="sidebar-header">
-            <a href="{% url 'home' %}" class="nav-logo">
-                <div class="nav-logo-icon">
+            <a href="{% url 'home' %}" class="nav-logo" aria-label="InvoiceFlow - Home">
+                <div class="nav-logo-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                         <polyline points="14 2 14 8 20 8"/>
@@ -20,9 +20,9 @@
             </a>
         </div>
         
-        <nav class="sidebar-nav">
+        <nav class="sidebar-nav" role="navigation" aria-label="Dashboard navigation">
             <a href="{% url 'dashboard' %}" class="sidebar-link active">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <rect x="3" y="3" width="7" height="7"/>
                     <rect x="14" y="3" width="7" height="7"/>
                     <rect x="14" y="14" width="7" height="7"/>
@@ -31,7 +31,7 @@
                 Dashboard
             </a>
             <a href="{% url 'invoice_list' %}" class="sidebar-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                     <polyline points="14 2 14 8 20 8"/>
                     <line x1="16" y1="13" x2="8" y2="13"/>
@@ -40,7 +40,7 @@
                 Invoices
             </a>
             <a href="{% url 'create_invoice' %}" class="sidebar-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <circle cx="12" cy="12" r="10"/>
                     <line x1="12" y1="8" x2="12" y2="16"/>
                     <line x1="8" y1="12" x2="16" y2="12"/>
@@ -48,13 +48,13 @@
                 New Invoice
             </a>
             <a href="{% url 'analytics' %}" class="sidebar-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
                 </svg>
                 Analytics
             </a>
             <a href="{% url 'settings' %}" class="sidebar-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <circle cx="12" cy="12" r="3"/>
                     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                 </svg>
@@ -64,7 +64,7 @@
         
         <div class="sidebar-footer">
             <a href="{% url 'logout' %}" class="sidebar-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
                     <polyline points="16 17 21 12 16 7"/>
                     <line x1="21" y1="12" x2="9" y2="12"/>
@@ -74,8 +74,8 @@
         </div>
     </aside>
     
-    <button class="mobile-menu-toggle" aria-label="Toggle sidebar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <button class="mobile-menu-toggle" aria-label="Toggle sidebar" aria-expanded="false" aria-controls="dashboard-sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <line x1="3" y1="12" x2="21" y2="12"/>
             <line x1="3" y1="6" x2="21" y2="6"/>
             <line x1="3" y1="18" x2="21" y2="18"/>
@@ -90,7 +90,7 @@
             </div>
             <div class="dashboard-actions">
                 <a href="{% url 'create_invoice' %}" class="btn btn-primary">
-                    <svg class="btn-icon" style="transform: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg class="btn-icon" style="transform: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <line x1="12" y1="5" x2="12" y2="19"/>
                         <line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
@@ -101,8 +101,8 @@
         
         <div class="dashboard-stats">
             <div class="stat-card glass-card card-enhanced" data-reveal data-reveal-delay="0">
-                <div class="card-glow"></div>
-                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--color-accent-500);">
+                <div class="card-glow" aria-hidden="true"></div>
+                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--color-accent-500);" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="1" x2="12" y2="23"/>
                         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
@@ -115,8 +115,8 @@
             </div>
             
             <div class="stat-card glass-card card-enhanced" data-reveal data-reveal-delay="100">
-                <div class="card-glow"></div>
-                <div class="stat-icon" style="background: rgba(99, 102, 241, 0.1); color: var(--color-primary-400);">
+                <div class="card-glow" aria-hidden="true"></div>
+                <div class="stat-icon" style="background: rgba(99, 102, 241, 0.1); color: var(--color-primary-400);" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                         <polyline points="14 2 14 8 20 8"/>
@@ -129,8 +129,8 @@
             </div>
             
             <div class="stat-card glass-card card-enhanced" data-reveal data-reveal-delay="200">
-                <div class="card-glow"></div>
-                <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--color-warning);">
+                <div class="card-glow" aria-hidden="true"></div>
+                <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--color-warning);" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"/>
                         <polyline points="12 6 12 12 16 14"/>
@@ -143,8 +143,8 @@
             </div>
             
             <div class="stat-card glass-card card-enhanced" data-reveal data-reveal-delay="300">
-                <div class="card-glow"></div>
-                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--color-accent-500);">
+                <div class="card-glow" aria-hidden="true"></div>
+                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--color-accent-500);" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="20 6 9 17 4 12"/>
                     </svg>
@@ -168,12 +168,12 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Invoice</th>
-                                <th>Client</th>
-                                <th>Amount</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                                <th></th>
+                                <th scope="col">Invoice</th>
+                                <th scope="col">Client</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Date</th>
+                                <th scope="col"><span class="sr-only">Actions</span></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -198,7 +198,7 @@
                 </div>
                 {% else %}
                 <div class="empty-state-enhanced" data-reveal>
-                    <div class="empty-state-icon">
+                    <div class="empty-state-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                             <polyline points="14 2 14 8 20 8"/>
@@ -210,7 +210,7 @@
                     <p class="empty-state-description">Create your first professional invoice and start getting paid faster. It only takes 60 seconds.</p>
                     <div class="empty-state-actions">
                         <a href="{% url 'create_invoice' %}" class="btn btn-primary btn-enhanced">
-                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                 <line x1="12" y1="5" x2="12" y2="19"/>
                                 <line x1="5" y1="12" x2="19" y2="12"/>
                             </svg>
