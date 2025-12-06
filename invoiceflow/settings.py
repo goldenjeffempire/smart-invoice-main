@@ -166,6 +166,7 @@ REST_FRAMEWORK = {
         "anon": "100/hour",
         "user": "1000/hour",
     },
+    "EXCEPTION_HANDLER": "invoices.api.exception_handlers.custom_exception_handler",
 }
 
 SPECTACULAR_SETTINGS = {
