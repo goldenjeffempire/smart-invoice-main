@@ -78,7 +78,7 @@ img {
   display: block;
 }
 
-h1, h2, h3, h4, h5, h6 {
+:where(h1, h2, h3, h4, h5, h6) {
   font-family: var(--font-family-display);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
@@ -91,7 +91,7 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); }
 h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
 h4 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); }
 
-p {
+:where(p) {
   color: var(--color-text-secondary);
   line-height: var(--line-height-relaxed);
 }
