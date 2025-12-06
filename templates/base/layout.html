@@ -160,18 +160,46 @@
                 </button>
             </div>
             
-            <div class="nav-mobile-menu" id="mobile-menu" aria-hidden="true">
-                <div class="nav-mobile-links">
-                    <a href="{% url 'features' %}" class="nav-mobile-link">Features</a>
-                    <a href="{% url 'about' %}" class="nav-mobile-link">About</a>
-                    <a href="{% url 'contact' %}" class="nav-mobile-link">Contact</a>
+            <div class="nav-mobile-menu" id="mobile-menu" aria-hidden="true" role="dialog" aria-label="Mobile navigation menu">
+                <div class="nav-mobile-links" role="menu">
+                    <a href="{% url 'features' %}" class="nav-mobile-link" role="menuitem">
+                        Features
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </a>
+                    <a href="{% url 'about' %}" class="nav-mobile-link" role="menuitem">
+                        About
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </a>
+                    <a href="{% url 'contact' %}" class="nav-mobile-link" role="menuitem">
+                        Contact
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </a>
                 </div>
+                <div class="nav-mobile-divider" aria-hidden="true"></div>
                 <div class="nav-mobile-actions">
                     {% if user.is_authenticated %}
-                    <a href="{% url 'dashboard' %}" class="btn btn-primary btn-block">Dashboard</a>
+                    <a href="{% url 'dashboard' %}" class="btn btn-primary btn-block">
+                        Go to Dashboard
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                    </a>
                     {% else %}
                     <a href="{% url 'login' %}" class="btn btn-secondary btn-block">Log in</a>
-                    <a href="{% url 'signup' %}" class="btn btn-primary btn-block">Get Started</a>
+                    <a href="{% url 'signup' %}" class="btn btn-primary btn-block">
+                        Get Started Free
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                    </a>
                     {% endif %}
                 </div>
             </div>
