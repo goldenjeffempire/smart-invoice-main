@@ -46,12 +46,19 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
     <noscript>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
     </noscript>
     
+    <link rel="preload" href="/static/css/critical.css" as="style">
+    <link rel="stylesheet" href="/static/css/critical.css">
+    
+    <link rel="preload" href="/static/css/design-tokens.css" as="style">
     <link rel="stylesheet" href="/static/css/design-tokens.css">
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/components.css">
@@ -104,7 +111,8 @@
     
     {% block head_extra %}{% endblock %}
 </head>
-<body class="{% block body_class %}{% endblock %}">
+<body class="no-js {% block body_class %}{% endblock %}">
+    <script>document.body.classList.remove('no-js');</script>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     
     {% block nav %}
@@ -422,6 +430,8 @@
     })();
     </script>
     
+    <script src="/static/js/lazy-images.js" defer></script>
+    <script src="/static/js/performance.js" defer></script>
     <script src="/static/js/landing.js" defer></script>
     {% block extra_js %}{% endblock %}
 </body>
