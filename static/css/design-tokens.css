@@ -282,3 +282,33 @@
     color-scheme: dark;
   }
 }
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-bg-dark: rgba(15, 23, 42, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-border-light: rgba(255, 255, 255, 0.5);
+  --glass-blur: blur(20px) saturate(180%);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  
+  --glow-primary: 0 0 20px rgba(99, 102, 241, 0.3);
+  --glow-primary-lg: 0 0 40px rgba(99, 102, 241, 0.4);
+  --glow-success: 0 0 20px rgba(16, 185, 129, 0.3);
+  --glow-error: 0 0 20px rgba(239, 68, 68, 0.3);
+  
+  --gradient-shine: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+  --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 100%);
+  --gradient-glass-border: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.2));
+  
+  --animation-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --animation-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --animation-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  --hover-lift: translateY(-4px);
+  --hover-lift-sm: translateY(-2px);
+  --hover-scale: scale(1.02);
+  --hover-scale-sm: scale(1.01);
+  
+  --focus-ring: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  --focus-ring-offset: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-primary-500);
+}
