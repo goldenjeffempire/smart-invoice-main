@@ -123,6 +123,7 @@ def detailed_health(request):
     import sys
     from invoiceflow.env_validation import get_env_status
     from invoices.services import CacheWarmingService
+    from invoices.async_tasks import AsyncTaskService
     
     checks = {
         "database": False,
@@ -191,4 +192,5 @@ def detailed_health(request):
             "database_engine": settings.DATABASES.get("default", {}).get("ENGINE", "unknown"),
         },
         "cache_warming": CacheWarmingService.get_cache_stats(),
+        "async_tasks": AsyncTaskService.get_task_stats(),
     })
