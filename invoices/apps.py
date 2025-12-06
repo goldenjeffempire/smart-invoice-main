@@ -20,22 +20,25 @@ class InvoicesConfig(AppConfig):
         run_once_key = "_invoiceflow_cache_init_done"
         if not hasattr(self.__class__, run_once_key):
             setattr(self.__class__, run_once_key, True)
-            CacheWarmingService.bump_cache_version()
-            
-            def delayed_warmup():
-                import time
-                time.sleep(2)
-                try:
-                    CacheWarmingService.warm_active_users_cache()
-                except Exception:
-                    pass
-            
-            warmup_thread = threading.Thread(
-                target=delayed_warmup, 
-                daemon=True,
-                name="cache_warmup_startup"
-            )
-            warmup_thread.start()
+            try:
+                CacheWarmingService.bump_cache_version()
+                
+                def delayed_warmup():
+                    import time
+                    time.sleep(2)
+                    try:
+                        CacheWarmingService.warm_active_users_cache()
+                    except Exception:
+                        pass
+                
+                warmup_thread = threading.Thread(
+                    target=delayed_warmup, 
+                    daemon=True,
+                    name="cache_warmup_startup"
+                )
+                warmup_thread.start()
+            except Exception:
+                pass
 
         if os.environ.get("RENDER"):
             from invoices.keep_alive import start_keep_alive
