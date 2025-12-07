@@ -578,6 +578,11 @@ def privacy(request):
     return render(request, "pages/privacy.html")
 
 
+def security(request):
+    """Security & Trust page showcasing security practices and compliance."""
+    return render(request, "pages/security.html")
+
+
 def components_showcase(request):
     """Phase 1 Design System - Component showcase page."""
     return render(request, "components-showcase.html")
