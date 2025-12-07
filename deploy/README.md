@@ -23,33 +23,50 @@
 
 ### Docker Deployment
 ```bash
-# Build and run
+# Build and run with docker-compose (recommended)
+# This uses the bundled PostgreSQL service with auto-configured DATABASE_URL
 docker-compose up -d
 
-# Or with custom environment
+# Or with custom environment for standalone container
 docker build -t invoiceflow .
 docker run -p 5000:5000 --env-file .env invoiceflow
 ```
 
+**Note:** When using `docker-compose`, the `DATABASE_URL` is automatically configured to connect to the bundled PostgreSQL service. The password uses the `DB_PASSWORD` environment variable (defaults to `changeme`).
+
+To use an external database, override `DATABASE_URL` in your `.env` file or environment.
+
 ## Environment Variables
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `SECRET_KEY` | Yes | Django secret key |
-| `DATABASE_URL` | Yes | PostgreSQL connection URL |
-| `SENDGRID_API_KEY` | Yes | SendGrid API key for emails |
-| `ENCRYPTION_SALT` | Yes | 64-byte encryption salt |
-| `ALLOWED_HOSTS` | Yes | Comma-separated allowed domains |
-| `DEBUG` | No | Set to False in production |
-| `SENTRY_DSN` | No | Sentry error tracking |
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `SECRET_KEY` | Yes | - | Django secret key |
+| `DATABASE_URL` | No* | Bundled Postgres | PostgreSQL connection URL (auto-configured in docker-compose) |
+| `DB_PASSWORD` | No | changeme | PostgreSQL password (used by docker-compose for bundled database) |
+| `SENDGRID_API_KEY` | Yes | - | SendGrid API key for emails |
+| `ENCRYPTION_SALT` | Yes | - | 64-byte encryption salt |
+| `ALLOWED_HOSTS` | No | localhost,127.0.0.1 | Comma-separated allowed domains |
+| `DEBUG` | No | False | Set to False in production |
+| `SENTRY_DSN` | No | - | Sentry error tracking |
+
+*When using `docker-compose`, `DATABASE_URL` is automatically configured to use the bundled PostgreSQL service.
+
+## Security Features
+
+The Docker image includes:
+- Non-root user execution (appuser)
+- Health checks for both web and database services
+- Proper service dependency ordering
+- Start period for graceful startup
 
 ## Production Checklist
 
 - [ ] Set `DEBUG=False`
 - [ ] Generate secure `SECRET_KEY`
 - [ ] Generate secure `ENCRYPTION_SALT`
+- [ ] Set secure `DB_PASSWORD` (not the default)
 - [ ] Configure `ALLOWED_HOSTS`
-- [ ] Set up PostgreSQL database
+- [ ] Set up PostgreSQL database (or use bundled service)
 - [ ] Configure SendGrid for emails
 - [ ] Enable HTTPS/SSL
 - [ ] Set up Sentry for error monitoring
@@ -63,6 +80,8 @@ The application exposes a health check endpoint at `/api/health/` that returns:
 - Database connectivity status
 - Cache availability
 - Email service status
+
+Both the web and database services have health checks configured in docker-compose.
 
 ## Gunicorn Configuration
 
