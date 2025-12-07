@@ -2,33 +2,34 @@ FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV PORT=5000
+ENV PIP_NO_CACHE_DIR=1
 
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libpq-dev \
-    libpango1.0-0 \
+    libpango-1.0-0 \
     libpangocairo-1.0-0 \
     libgdk-pixbuf2.0-0 \
     libffi-dev \
+    libcairo2 \
     shared-mime-info \
-    curl \
     && rm -rf /var/lib/apt/lists/*
 
-RUN groupadd --gid 1000 appgroup && \
-    useradd --uid 1000 --gid appgroup --shell /bin/bash --create-home appuser
-
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-COPY --chown=appuser:appgroup . .
+COPY . .
 
-RUN python manage.py collectstatic --noinput
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
+RUN adduser --disabled-password --gecos '' appuser
+RUN chown -R appuser:appuser /app
 USER appuser
 
 EXPOSE 5000
 
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--timeout", "120", "invoiceflow.wsgi:application"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["gunicorn", "--bind=0.0.0.0:5000", "--workers=2", "--threads=4", "--worker-class=gthread", "--timeout=120", "invoiceflow.wsgi:application"]
