@@ -24,13 +24,13 @@ class TestInvoiceViews:
 
     def test_invoice_detail_own_invoice(self, authenticated_client, user):
         invoice = InvoiceFactory(user=user)
-        response = authenticated_client.get(f"/invoices/view/{invoice.pk}/")
+        response = authenticated_client.get(f"/invoices/invoice/{invoice.pk}/")
         assert response.status_code == 200
 
     def test_invoice_detail_other_user(self, authenticated_client, user):
         other_user = UserFactory()
         invoice = InvoiceFactory(user=other_user)
-        response = authenticated_client.get(f"/invoices/view/{invoice.pk}/")
+        response = authenticated_client.get(f"/invoices/invoice/{invoice.pk}/")
         assert response.status_code == 404
 
 

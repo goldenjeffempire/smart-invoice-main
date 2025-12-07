@@ -95,7 +95,7 @@ class BreachedPasswordValidator:
         try:
             import requests
 
-            sha1_password = hashlib.sha1(password.encode("utf-8")).hexdigest().upper()
+            sha1_password = hashlib.sha1(password.encode("utf-8"), usedforsecurity=False).hexdigest().upper()
             prefix = sha1_password[:5]
             suffix = sha1_password[5:]
 

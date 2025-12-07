@@ -10,7 +10,7 @@ from tests.factories import InvoiceFactory, LineItemFactory, UserFactory
 class TestInvoiceAPI:
     def test_list_invoices_unauthenticated(self, api_client):
         response = api_client.get("/api/v1/invoices/")
-        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_list_invoices(self, authenticated_api_client, user):
         InvoiceFactory(user=user)
