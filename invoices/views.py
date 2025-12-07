@@ -3,6 +3,7 @@ import json
 import urllib.parse
 from datetime import datetime
 from decimal import Decimal
+from functools import wraps
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -1147,7 +1148,6 @@ def analytics(request):
 
 
 # Admin Views (Production-ready admin dashboard for platform management)
-from functools import wraps
 
 
 def staff_member_required(view_func):

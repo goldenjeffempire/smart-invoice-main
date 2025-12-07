@@ -335,7 +335,7 @@ class AsyncTaskService:
 
         task_id = str(uuid.uuid4())[:12]
         name = task_name or func.__name__
-        task_result = tracker.register_task(task_id, name)
+        tracker.register_task(task_id, name)
 
         def task_wrapper():
             try:

@@ -17,6 +17,6 @@ from invoiceflow.env_validation import validate_environment
 
 validate_environment(exit_on_error=not getattr(settings, "DEBUG", False))
 
-from django.core.wsgi import get_wsgi_application
+from django.core.wsgi import get_wsgi_application  # noqa: E402
 
 application = get_wsgi_application()
