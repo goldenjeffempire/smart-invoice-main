@@ -8,11 +8,14 @@ import time
 import json
 import uuid
 import logging
-from typing import Callable, Any
+from typing import Callable, Any, TYPE_CHECKING
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.conf import settings
 from django.core.cache import cache
 from django.utils.cache import add_never_cache_headers, patch_cache_control
+
+if TYPE_CHECKING:
+    from django.contrib.auth.models import AbstractBaseUser
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +48,7 @@ class UnifiedMiddleware:
         self.is_replit = getattr(settings, 'IS_REPLIT', False)
     
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        request.request_id = str(uuid.uuid4())[:8]
+        request.request_id = str(uuid.uuid4())[:8]  # type: ignore[attr-defined]
         start_time = time.perf_counter()
         
         is_health_check = request.path in HEALTH_CHECK_PATHS
@@ -59,7 +62,7 @@ class UnifiedMiddleware:
         
         self._add_security_headers(request, response)
         self._add_cache_headers(request, response, is_static, is_marketing)
-        self._add_timing_headers(response, duration_ms, request.request_id)
+        self._add_timing_headers(response, duration_ms, request.request_id)  # type: ignore[attr-defined]
         
         if not is_health_check and not is_static:
             self._log_request(request, response, duration_ms)
@@ -86,9 +89,11 @@ class UnifiedMiddleware:
         """Optimized cache control."""
         if is_static:
             patch_cache_control(response, public=True, max_age=31536000, immutable=True)
-        elif is_marketing and not getattr(request, 'user', None) or (is_marketing and hasattr(request, 'user') and not request.user.is_authenticated):
-            patch_cache_control(response, public=True, max_age=300, stale_while_revalidate=60)
-        elif response.get("Content-Type", "").startswith("text/html"):
+        elif is_marketing:
+            user = getattr(request, 'user', None)
+            if not user or not user.is_authenticated:
+                patch_cache_control(response, public=True, max_age=300, stale_while_revalidate=60)
+        elif (response.get("Content-Type") or "").startswith("text/html"):
             add_never_cache_headers(response)
     
     def _add_timing_headers(self, response: HttpResponse, duration_ms: float, 
@@ -223,24 +228,32 @@ class SlidingWindowRateLimiter:
         return response
     
     def _get_client_key(self, request: HttpRequest) -> str:
-        """Generate a unique client key combining IP and user ID if authenticated."""
+        """Generate a unique client key combining IP, User-Agent hash, and user ID if authenticated.
+        
+        For anonymous users, includes a hash of the User-Agent to make IP rotation
+        attacks less effective while still allowing legitimate users behind NAT.
+        """
         ip = self._get_client_ip(request)
-        if hasattr(request, 'user') and request.user.is_authenticated:
-            return f"user:{request.user.id}:{ip}"
-        return f"ip:{ip}"
+        if hasattr(request, 'user') and request.user.is_authenticated:  # type: ignore[union-attr]
+            return f"user:{request.user.id}:{ip}"  # type: ignore[union-attr]
+        
+        user_agent = request.META.get("HTTP_USER_AGENT", "")[:100]
+        ua_hash = hash(user_agent) & 0xFFFFFFFF
+        return f"ip:{ip}:{ua_hash:08x}"
     
     def _get_user_tier(self, request: HttpRequest) -> str:
         """Determine user tier for rate limiting."""
-        if not hasattr(request, 'user') or not request.user.is_authenticated:
+        if not hasattr(request, 'user') or not request.user.is_authenticated:  # type: ignore[union-attr]
             return "anonymous"
         
-        if hasattr(request.user, 'profile'):
-            profile = request.user.profile
+        user = request.user  # type: ignore[union-attr]
+        if hasattr(user, 'profile'):
+            profile = user.profile
             if hasattr(profile, 'subscription_tier'):
                 if profile.subscription_tier in ('premium', 'enterprise'):
                     return "premium"
         
-        if request.user.is_staff or request.user.is_superuser:
+        if user.is_staff or user.is_superuser:
             return "premium"
         
         return "authenticated"
@@ -455,11 +468,12 @@ class CookieConsentMiddleware:
     
     def __call__(self, request: HttpRequest) -> HttpResponse:
         consent = self._parse_consent(request.COOKIES.get(self.CONSENT_COOKIE, ""))
-        request.cookie_consent = consent
+        request.cookie_consent = consent  # type: ignore[attr-defined]
         
         response = self.get_response(request)
         
-        if "text/html" not in response.get("Content-Type", ""):
+        content_type = response.get("Content-Type") or ""
+        if "text/html" not in content_type:
             return response
         
         if not consent.get("analytics", False):
