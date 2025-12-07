@@ -583,6 +583,237 @@ def security(request):
     return render(request, "pages/security.html")
 
 
+def blog(request):
+    """Blog listing page with articles for company credibility."""
+    return render(request, "pages/blog.html")
+
+
+def blog_article(request, slug):
+    """Individual blog article page with static content."""
+    articles = {
+        "get-paid-faster": {
+            "title": "7 Proven Strategies to Get Paid Faster by Your Clients",
+            "description": "Discover actionable techniques to reduce payment delays and improve your cash flow, from invoice best practices to smart follow-up strategies.",
+            "date": "December 5, 2025",
+            "read_time": "8 min",
+            "author": "Sarah Mitchell",
+            "author_bio": "Business finance consultant with 12+ years helping freelancers and small businesses optimize their cash flow.",
+            "tags": ["Cash Flow", "Tips"],
+            "content": """
+<p>Getting paid on time is one of the biggest challenges facing freelancers and small business owners. Late payments can seriously impact your cash flow, making it difficult to cover expenses and grow your business. Here are seven proven strategies to help you get paid faster.</p>
+
+<h2>1. Set Clear Payment Terms Upfront</h2>
+<p>Before starting any project, clearly communicate your payment terms. Include these in your contract and reiterate them on every invoice. Specify:</p>
+<ul>
+<li>Payment due date (e.g., Net 15 or Net 30)</li>
+<li>Accepted payment methods</li>
+<li>Late payment fees or interest charges</li>
+<li>Any early payment discounts you offer</li>
+</ul>
+
+<h2>2. Invoice Immediately After Delivery</h2>
+<p>Don't wait to send your invoice. The longer you delay, the longer you'll wait for payment. Send your invoice as soon as you complete the work or deliver the product. With InvoiceFlow, you can create and send professional invoices in under 60 seconds.</p>
+
+<h2>3. Make It Easy to Pay</h2>
+<p>Offer multiple payment options to remove friction from the payment process. Accept credit cards, bank transfers, PayPal, and other popular payment methods. The easier you make it to pay, the faster you'll receive payment.</p>
+
+<h2>4. Send Friendly Payment Reminders</h2>
+<p>Automate your follow-up process with payment reminders. Send a gentle reminder a few days before the due date, on the due date, and a follow-up if payment is late. InvoiceFlow's automated reminder feature handles this for you.</p>
+
+<h2>5. Offer Early Payment Incentives</h2>
+<p>Consider offering a small discount (2-5%) for early payment. A client who pays within 10 days instead of 30 can significantly improve your cash flow. Frame it as a benefit: "Save 2% when you pay within 10 days."</p>
+
+<h2>6. Require Deposits for Larger Projects</h2>
+<p>For substantial projects, request a deposit upfront (typically 25-50% of the total). This reduces your risk, ensures client commitment, and provides working capital to cover project costs.</p>
+
+<h2>7. Build Strong Client Relationships</h2>
+<p>Clients who value your relationship are more likely to prioritize your invoices. Provide excellent service, communicate proactively, and be professional in all interactions. Happy clients pay faster.</p>
+
+<blockquote>The key to getting paid faster isn't just about chasing payments—it's about setting up systems that make timely payment the natural outcome.</blockquote>
+
+<h2>Implementing These Strategies</h2>
+<p>Start by reviewing your current invoicing process and identify where improvements can be made. InvoiceFlow makes it easy to implement all these strategies with professional invoice templates, automated reminders, and multiple payment options—all designed to help you get paid faster.</p>
+"""
+        },
+        "professional-invoice-guide": {
+            "title": "The Complete Guide to Creating Professional Invoices",
+            "description": "Learn what makes an invoice professional, the essential elements every invoice needs, and common mistakes that can delay your payments.",
+            "date": "December 1, 2025",
+            "read_time": "10 min",
+            "author": "James Rodriguez",
+            "author_bio": "Small business advisor specializing in financial operations and bookkeeping best practices.",
+            "tags": ["Invoicing", "Best Practices"],
+            "content": """
+<p>A professional invoice does more than request payment—it reflects your brand, builds trust, and can actually speed up how quickly you get paid. Here's everything you need to know about creating invoices that impress clients and encourage prompt payment.</p>
+
+<h2>Essential Elements of a Professional Invoice</h2>
+<p>Every invoice should include these core elements:</p>
+
+<h3>Your Business Information</h3>
+<ul>
+<li><strong>Business name and logo</strong> - Consistent branding builds recognition</li>
+<li><strong>Contact information</strong> - Email, phone, and address</li>
+<li><strong>Tax identification number</strong> - Required in many jurisdictions</li>
+</ul>
+
+<h3>Client Information</h3>
+<ul>
+<li>Client's business name or individual name</li>
+<li>Billing address</li>
+<li>Contact person (if applicable)</li>
+</ul>
+
+<h3>Invoice Details</h3>
+<ul>
+<li><strong>Unique invoice number</strong> - Essential for record-keeping</li>
+<li><strong>Invoice date</strong> - When the invoice was issued</li>
+<li><strong>Due date</strong> - When payment is expected</li>
+<li><strong>Payment terms</strong> - Net 15, Net 30, etc.</li>
+</ul>
+
+<h3>Line Items</h3>
+<p>Clearly describe each product or service with:</p>
+<ul>
+<li>Description of work or items</li>
+<li>Quantity</li>
+<li>Unit price</li>
+<li>Line total</li>
+</ul>
+
+<h2>Design Matters: Making Your Invoice Look Professional</h2>
+<p>The visual design of your invoice communicates professionalism. Key design principles include:</p>
+<ul>
+<li><strong>Clean layout</strong> with clear visual hierarchy</li>
+<li><strong>Consistent branding</strong> - Use your brand colors and fonts</li>
+<li><strong>Readable fonts</strong> - Avoid decorative fonts for financial documents</li>
+<li><strong>White space</strong> - Don't crowd information together</li>
+</ul>
+
+<h2>Common Invoice Mistakes to Avoid</h2>
+<p>These mistakes can delay payment or create confusion:</p>
+<ol>
+<li><strong>Missing or unclear payment terms</strong> - Always specify when and how to pay</li>
+<li><strong>Vague descriptions</strong> - Be specific about what you're billing for</li>
+<li><strong>Math errors</strong> - Double-check all calculations</li>
+<li><strong>Wrong client details</strong> - Verify names and addresses</li>
+<li><strong>No payment instructions</strong> - Make it clear how to pay you</li>
+</ol>
+
+<h2>Adding Personal Touches</h2>
+<p>Small details can make a big difference:</p>
+<ul>
+<li>Include a brief thank you note</li>
+<li>Reference the specific project or purchase</li>
+<li>Add your signature for a personal touch</li>
+</ul>
+
+<blockquote>A professional invoice isn't just a payment request—it's a representation of your brand and attention to detail.</blockquote>
+
+<h2>Streamline Your Invoicing with InvoiceFlow</h2>
+<p>Creating professional invoices doesn't have to be time-consuming. InvoiceFlow provides beautifully designed templates that include all essential elements, automatic calculations, and easy customization options. Spend less time on paperwork and more time on what you do best.</p>
+"""
+        },
+        "freelance-pricing-strategies": {
+            "title": "How to Set Your Freelance Rates Without Undervaluing Your Work",
+            "description": "A comprehensive guide to pricing your services competitively while ensuring you're paid what you're worth in today's market.",
+            "date": "November 28, 2025",
+            "read_time": "12 min",
+            "author": "Emma Chen",
+            "author_bio": "Career coach and pricing strategist who has helped over 500 freelancers increase their income.",
+            "tags": ["Business Growth", "Strategy"],
+            "content": """
+<p>Pricing is one of the most challenging aspects of freelancing. Set your rates too low, and you'll burn out while barely covering expenses. Set them too high without proper positioning, and you might struggle to find clients. Here's how to find the sweet spot.</p>
+
+<h2>Understanding Your True Costs</h2>
+<p>Before setting rates, you need to understand what you actually need to earn. Consider:</p>
+<ul>
+<li><strong>Living expenses</strong> - Rent, utilities, food, transportation</li>
+<li><strong>Business expenses</strong> - Software, equipment, marketing, insurance</li>
+<li><strong>Taxes</strong> - Self-employment taxes can be 25-35% of income</li>
+<li><strong>Time off</strong> - Vacation, sick days, holidays (you're not billing 52 weeks/year)</li>
+<li><strong>Non-billable time</strong> - Admin, marketing, learning (typically 30-50% of work time)</li>
+</ul>
+
+<h2>Calculating Your Minimum Rate</h2>
+<p>Here's a simple formula to find your baseline hourly rate:</p>
+<ol>
+<li>Total annual income needed: $75,000</li>
+<li>Add business expenses: +$15,000 = $90,000</li>
+<li>Account for taxes (30%): $90,000 ÷ 0.70 = $128,571</li>
+<li>Billable hours per year (20 hrs/week × 48 weeks): 960 hours</li>
+<li>Minimum hourly rate: $128,571 ÷ 960 = $134/hour</li>
+</ol>
+
+<h2>Moving Beyond Hourly Rates</h2>
+<p>While hourly rates are a good starting point, consider project-based or value-based pricing:</p>
+
+<h3>Project-Based Pricing</h3>
+<ul>
+<li>Easier for clients to budget</li>
+<li>Rewards efficiency—the faster you work, the more you earn per hour</li>
+<li>Reduces scope creep concerns</li>
+</ul>
+
+<h3>Value-Based Pricing</h3>
+<ul>
+<li>Price based on the value you deliver to the client</li>
+<li>If your work generates $100K for a client, charging $10K is reasonable</li>
+<li>Requires understanding client's business and goals</li>
+</ul>
+
+<h2>Researching Market Rates</h2>
+<p>Understand what others in your field charge:</p>
+<ul>
+<li>Join freelancer communities and forums</li>
+<li>Check job postings for comparable positions</li>
+<li>Use salary comparison websites</li>
+<li>Ask fellow freelancers (many are willing to share)</li>
+</ul>
+
+<h2>Positioning Yourself for Higher Rates</h2>
+<p>To command premium rates, focus on:</p>
+<ol>
+<li><strong>Specialization</strong> - Specialists earn more than generalists</li>
+<li><strong>Portfolio quality</strong> - Showcase your best work prominently</li>
+<li><strong>Testimonials</strong> - Social proof builds confidence</li>
+<li><strong>Clear communication</strong> - Professional interactions justify professional rates</li>
+<li><strong>Continuous learning</strong> - Stay current in your field</li>
+</ol>
+
+<h2>Having the Rate Conversation</h2>
+<p>When discussing rates with potential clients:</p>
+<ul>
+<li>Be confident—don't apologize for your rates</li>
+<li>Focus on value, not time</li>
+<li>Have a range ready (e.g., "Projects like this typically run $5,000-8,000")</li>
+<li>Be willing to walk away from poor-fit clients</li>
+</ul>
+
+<blockquote>Your rates aren't just about paying bills—they're about building a sustainable business that allows you to do your best work.</blockquote>
+
+<h2>Raising Your Rates</h2>
+<p>As you gain experience and build your reputation, gradually increase your rates:</p>
+<ul>
+<li>Raise rates for new clients first</li>
+<li>Give existing clients advance notice (30-60 days)</li>
+<li>Aim for 10-20% increases annually</li>
+<li>Base increases on the value you now provide</li>
+</ul>
+
+<h2>Track Everything with InvoiceFlow</h2>
+<p>Understanding your business finances is crucial for pricing decisions. InvoiceFlow helps you track revenue, analyze which services are most profitable, and ensure you're billing for all your work. Professional invoicing also reinforces your professional image—supporting your premium rates.</p>
+"""
+        }
+    }
+    
+    article = articles.get(slug)
+    if not article:
+        from django.http import Http404
+        raise Http404("Article not found")
+    
+    return render(request, "pages/blog_article.html", {"article": article})
+
+
 def components_showcase(request):
     """Phase 1 Design System - Component showcase page."""
     return render(request, "components-showcase.html")

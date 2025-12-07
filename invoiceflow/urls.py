@@ -72,6 +72,8 @@ urlpatterns = [
     path("terms/", views.terms, name="terms"),
     path("privacy/", views.privacy, name="privacy"),
     path("security/", views.security, name="security"),
+    path("blog/", views.blog, name="blog"),
+    path("blog/<slug:slug>/", views.blog_article, name="blog_article"),
     path("newsletter/signup/", views.newsletter_signup, name="newsletter_signup"),
     path("newsletter/subscribe/", views.newsletter_signup, name="newsletter_subscribe"),
     # User features
