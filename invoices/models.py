@@ -1,16 +1,16 @@
 from __future__ import annotations
 
-from decimal import Decimal
-from datetime import date, timedelta
-from typing import Any, TYPE_CHECKING
-
-from django.db import models
-from django.conf import settings
-from django.utils import timezone
 import secrets
+from datetime import date, timedelta
+from decimal import Decimal
+from typing import TYPE_CHECKING, Any
+
+from django.conf import settings
+from django.db import models
+from django.utils import timezone
 
 if TYPE_CHECKING:
-    from django.contrib.auth.models import User
+    pass
 
 
 class Waitlist(models.Model):
@@ -83,9 +83,7 @@ class UserProfile(models.Model):
     objects: "models.Manager[UserProfile]"
 
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="profile"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
     )
     company_name = models.CharField(max_length=200, blank=True)
     company_logo = models.ImageField(upload_to="company_logos/", null=True, blank=True)
@@ -129,9 +127,7 @@ class InvoiceTemplate(models.Model):
     objects: "models.Manager[InvoiceTemplate]"
 
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="invoice_templates"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="invoice_templates"
     )
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
@@ -173,9 +169,7 @@ class RecurringInvoice(models.Model):
     ]
 
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="recurring_invoices"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="recurring_invoices"
     )
     client_name = models.CharField(max_length=200)
     client_email = models.EmailField()
@@ -242,9 +236,7 @@ class Invoice(models.Model):
     ]
 
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="invoices"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="invoices"
     )
     invoice_id = models.CharField(max_length=20, unique=True, editable=False)
     recurring_invoice = models.ForeignKey(
@@ -364,9 +356,7 @@ class MFAProfile(models.Model):
     objects: "models.Manager[MFAProfile]"
 
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="mfa_profile"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="mfa_profile"
     )
     is_enabled = models.BooleanField(default=False)
     secret_key = models.CharField(max_length=64, blank=True)

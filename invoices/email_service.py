@@ -1,6 +1,7 @@
 """Email service using AsyncTaskService for background processing."""
 
 import logging
+
 from .async_tasks import AsyncTaskService
 
 logger = logging.getLogger(__name__)
@@ -12,7 +13,7 @@ class EmailService:
     @staticmethod
     def send_invoice_email_async(invoice_id: int, recipient_email: str) -> None:
         """Send invoice email in background using thread pool.
-        
+
         Uses AsyncTaskService for proper thread pool management.
         """
         AsyncTaskService.send_invoice_email_async(invoice_id, recipient_email)

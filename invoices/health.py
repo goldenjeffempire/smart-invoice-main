@@ -1,15 +1,16 @@
 """Health check endpoints for production monitoring."""
 
-from django.http import JsonResponse
-from django.db import connections, connection
-from django.db.utils import OperationalError
-from django.conf import settings
-from django.utils import timezone
-from django.core.cache import cache
-import time
 import os
+import time
+from typing import Any, Dict
+
 import psutil
-from typing import Dict, Any
+from django.conf import settings
+from django.core.cache import cache
+from django.db import connection, connections
+from django.db.utils import OperationalError
+from django.http import JsonResponse
+from django.utils import timezone
 
 APP_VERSION = os.environ.get("APP_VERSION", "1.0.0")
 APP_START_TIME = time.time()
@@ -21,7 +22,7 @@ def _get_uptime_formatted() -> Dict[str, Any]:
     days, remainder = divmod(uptime_seconds, 86400)
     hours, remainder = divmod(remainder, 3600)
     minutes, seconds = divmod(remainder, 60)
-    
+
     parts = []
     if days > 0:
         parts.append(f"{days}d")
@@ -30,11 +31,8 @@ def _get_uptime_formatted() -> Dict[str, Any]:
     if minutes > 0:
         parts.append(f"{minutes}m")
     parts.append(f"{seconds}s")
-    
-    return {
-        "seconds": uptime_seconds,
-        "formatted": " ".join(parts)
-    }
+
+    return {"seconds": uptime_seconds, "formatted": " ".join(parts)}
 
 
 def _get_system_metrics() -> Dict[str, Any]:
@@ -42,7 +40,7 @@ def _get_system_metrics() -> Dict[str, Any]:
     try:
         process = psutil.Process()
         memory_info = process.memory_info()
-        
+
         return {
             "memory": {
                 "rss_mb": round(memory_info.rss / 1024 / 1024, 2),
@@ -53,8 +51,8 @@ def _get_system_metrics() -> Dict[str, Any]:
                 "percent": round(process.cpu_percent(interval=0.1), 2),
                 "num_threads": process.num_threads(),
             },
-            "open_files": len(process.open_files()) if hasattr(process, 'open_files') else 0,
-            "connections": len(process.connections()) if hasattr(process, 'connections') else 0,
+            "open_files": len(process.open_files()) if hasattr(process, "open_files") else 0,
+            "connections": len(process.connections()) if hasattr(process, "connections") else 0,
         }
     except Exception as e:
         return {"error": str(e)}
@@ -65,28 +63,28 @@ def _get_db_pool_stats() -> Dict[str, Any]:
     try:
         db_conn = connections["default"]
         db_settings = settings.DATABASES.get("default", {})
-        
+
         host = db_settings.get("HOST") or "localhost"
         host_display = host[:20] + "..." if len(host) > 20 else host
-        
+
         stats = {
             "engine": db_settings.get("ENGINE", "unknown"),
             "host": host_display,
             "name": db_settings.get("NAME") or "unknown",
         }
-        
-        if hasattr(db_conn, 'connection') and db_conn.connection:
+
+        if hasattr(db_conn, "connection") and db_conn.connection:
             conn = db_conn.connection
-            if hasattr(conn, 'info'):
+            if hasattr(conn, "info"):
                 info = conn.info
-                stats["server_version"] = getattr(info, 'server_version', None)
-                stats["protocol_version"] = getattr(info, 'protocol_version', None)
-            if hasattr(conn, 'status'):
+                stats["server_version"] = getattr(info, "server_version", None)
+                stats["protocol_version"] = getattr(info, "protocol_version", None)
+            if hasattr(conn, "status"):
                 stats["connection_status"] = conn.status
             stats["is_usable"] = db_conn.is_usable()
         else:
             stats["connection_status"] = "not_connected"
-            
+
         return stats
     except Exception as e:
         return {"error": str(e)}
@@ -95,7 +93,7 @@ def _get_db_pool_stats() -> Dict[str, Any]:
 def _get_rate_limiter_config() -> Dict[str, Any]:
     """Get rate limiter configuration."""
     from invoiceflow.unified_middleware import SlidingWindowRateLimiter
-    
+
     return {
         "window_size_seconds": SlidingWindowRateLimiter.WINDOW_SIZE,
         "tier_limits": SlidingWindowRateLimiter.TIER_LIMITS,
@@ -110,13 +108,15 @@ def health_check(request):
     Returns 200 if the application is running.
     """
     uptime = _get_uptime_formatted()
-    return JsonResponse({
-        "status": "healthy",
-        "version": APP_VERSION,
-        "environment": "production" if not settings.DEBUG else "development",
-        "timestamp": timezone.now().isoformat(),
-        "uptime": uptime,
-    })
+    return JsonResponse(
+        {
+            "status": "healthy",
+            "version": APP_VERSION,
+            "environment": "production" if not settings.DEBUG else "development",
+            "timestamp": timezone.now().isoformat(),
+            "uptime": uptime,
+        }
+    )
 
 
 def readiness_check(request):
@@ -147,6 +147,7 @@ def readiness_check(request):
 
     try:
         from django.db.migrations.executor import MigrationExecutor
+
         executor = MigrationExecutor(connection)
         targets = executor.loader.graph.leaf_nodes()
         pending = executor.migration_plan(targets)
@@ -172,19 +173,22 @@ def readiness_check(request):
         status = 503
 
     all_ready = checks["database"] and checks["migrations"] and checks["cache"]
-    
+
     if not checks["migrations"]:
         status = 503
     if not checks["cache"]:
         status = 503
 
-    return JsonResponse({
-        "status": "ready" if all_ready else "not_ready",
-        "checks": checks,
-        "details": details,
-        "version": APP_VERSION,
-        "timestamp": timezone.now().isoformat(),
-    }, status=status)
+    return JsonResponse(
+        {
+            "status": "ready" if all_ready else "not_ready",
+            "checks": checks,
+            "details": details,
+            "version": APP_VERSION,
+            "timestamp": timezone.now().isoformat(),
+        },
+        status=status,
+    )
 
 
 def liveness_check(request):
@@ -214,18 +218,20 @@ def detailed_health(request):
     """
     import platform
     import sys
+
     import django
+
     from invoiceflow.env_validation import get_env_status
-    from invoices.services import CacheWarmingService
     from invoices.async_tasks import AsyncTaskService
-    
+    from invoices.services import CacheWarmingService
+
     checks = {
         "database": False,
         "migrations": False,
         "cache": False,
     }
     details = {}
-    
+
     db_start = time.perf_counter()
     try:
         connections["default"].ensure_connection()
@@ -237,9 +243,10 @@ def detailed_health(request):
     except Exception as e:
         checks["database"] = False
         details["database_error"] = str(e)
-    
+
     try:
         from django.db.migrations.executor import MigrationExecutor
+
         executor = MigrationExecutor(connection)
         targets = executor.loader.graph.leaf_nodes()
         pending = executor.migration_plan(targets)
@@ -248,7 +255,7 @@ def detailed_health(request):
             details["pending_migrations"] = len(pending)
     except Exception:
         checks["migrations"] = True
-    
+
     cache_start = time.perf_counter()
     try:
         cache_key = "_detailed_health_test"
@@ -260,42 +267,44 @@ def detailed_health(request):
     except Exception:
         checks["cache"] = True
         details["cache_note"] = "Using default LocMem cache"
-    
+
     env_status = get_env_status()
     required_configured = all(v["configured"] for v in env_status["required"].values())
-    
+
     all_healthy = all(checks.values()) and required_configured
     uptime = _get_uptime_formatted()
     system_metrics = _get_system_metrics()
     db_pool_stats = _get_db_pool_stats()
     rate_limiter_config = _get_rate_limiter_config()
-    
-    return JsonResponse({
-        "status": "healthy" if all_healthy else "degraded",
-        "version": APP_VERSION,
-        "environment": "production" if not settings.DEBUG else "development",
-        "timestamp": timezone.now().isoformat(),
-        "uptime": uptime,
-        "checks": checks,
-        "details": details,
-        "environment_status": env_status,
-        "system": {
-            "python_version": sys.version.split()[0],
-            "python_implementation": platform.python_implementation(),
-            "platform": platform.platform(),
-            "django_version": django.get_version(),
-            "os": platform.system(),
-            "machine": platform.machine(),
-        },
-        "metrics": system_metrics,
-        "database": db_pool_stats,
-        "rate_limiting": rate_limiter_config,
-        "config": {
-            "debug": settings.DEBUG,
-            "mfa_enabled": getattr(settings, 'MFA_ENABLED', False),
-            "allowed_hosts": settings.ALLOWED_HOSTS[:3] if settings.ALLOWED_HOSTS else [],
-            "time_zone": settings.TIME_ZONE,
-        },
-        "cache_warming": CacheWarmingService.get_cache_stats(),
-        "async_tasks": AsyncTaskService.get_task_stats(),
-    })
+
+    return JsonResponse(
+        {
+            "status": "healthy" if all_healthy else "degraded",
+            "version": APP_VERSION,
+            "environment": "production" if not settings.DEBUG else "development",
+            "timestamp": timezone.now().isoformat(),
+            "uptime": uptime,
+            "checks": checks,
+            "details": details,
+            "environment_status": env_status,
+            "system": {
+                "python_version": sys.version.split()[0],
+                "python_implementation": platform.python_implementation(),
+                "platform": platform.platform(),
+                "django_version": django.get_version(),
+                "os": platform.system(),
+                "machine": platform.machine(),
+            },
+            "metrics": system_metrics,
+            "database": db_pool_stats,
+            "rate_limiting": rate_limiter_config,
+            "config": {
+                "debug": settings.DEBUG,
+                "mfa_enabled": getattr(settings, "MFA_ENABLED", False),
+                "allowed_hosts": settings.ALLOWED_HOSTS[:3] if settings.ALLOWED_HOSTS else [],
+                "time_zone": settings.TIME_ZONE,
+            },
+            "cache_warming": CacheWarmingService.get_cache_stats(),
+            "async_tasks": AsyncTaskService.get_task_stats(),
+        }
+    )

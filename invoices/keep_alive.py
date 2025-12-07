@@ -1,8 +1,8 @@
 import os
 import threading
 import time
-import urllib.request
 import urllib.error
+import urllib.request
 
 
 def start_keep_alive():
@@ -11,10 +11,10 @@ def start_keep_alive():
     to prevent Render's free tier from spinning down.
     """
     render_external_url = os.environ.get("RENDER_EXTERNAL_URL")
-    
+
     if not render_external_url:
         return
-    
+
     def ping():
         while True:
             try:
@@ -25,6 +25,6 @@ def start_keep_alive():
             except Exception:
                 pass
             time.sleep(600)
-    
+
     thread = threading.Thread(target=ping, daemon=True)
     thread.start()

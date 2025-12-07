@@ -1,287 +1,310 @@
 {% extends "base/layout.html" %}
-
 {% block title %}Edit Invoice {{ invoice.invoice_id }} - InvoiceFlow{% endblock %}
 {% block body_class %}app-page{% endblock %}
-
 {% block nav %}{% endblock %}
 {% block footer %}{% endblock %}
-
 {% block content %}
-<div class="app-layout">
-    <aside class="app-sidebar">
-        <div class="sidebar-header">
-            <a href="{% url 'home' %}" class="nav-logo">
-                <div class="nav-logo-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                        <line x1="16" y1="13" x2="8" y2="13"/>
-                        <line x1="16" y1="17" x2="8" y2="17"/>
-                    </svg>
-                </div>
-                <span class="nav-logo-text">InvoiceFlow</span>
-            </a>
-        </div>
-        
-        <nav class="sidebar-nav">
-            <a href="{% url 'dashboard' %}" class="sidebar-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="3" width="7" height="7"/>
-                    <rect x="14" y="3" width="7" height="7"/>
-                    <rect x="14" y="14" width="7" height="7"/>
-                    <rect x="3" y="14" width="7" height="7"/>
-                </svg>
-                Dashboard
-            </a>
-            <a href="{% url 'create_invoice' %}" class="sidebar-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="12" y1="8" x2="12" y2="16"/>
-                    <line x1="8" y1="12" x2="16" y2="12"/>
-                </svg>
-                New Invoice
-            </a>
-            <a href="{% url 'analytics' %}" class="sidebar-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                </svg>
-                Analytics
-            </a>
-            <a href="{% url 'settings' %}" class="sidebar-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="3"/>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                </svg>
-                Settings
-            </a>
-        </nav>
-        
-        <div class="sidebar-footer">
-            <a href="{% url 'logout' %}" class="sidebar-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                    <polyline points="16 17 21 12 16 7"/>
-                    <line x1="21" y1="12" x2="9" y2="12"/>
-                </svg>
-                Log out
-            </a>
-        </div>
-    </aside>
-    
-    <button class="mobile-menu-toggle" aria-label="Toggle sidebar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
-        </svg>
-    </button>
-    
-    <main class="app-main">
-        <header class="page-header">
-            <div class="page-header-content">
-                <a href="{% url 'invoice_detail' invoice.id %}" class="back-link">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="19" y1="12" x2="5" y2="12"/>
-                        <polyline points="12 19 5 12 12 5"/>
-                    </svg>
-                    Back to Invoice
+    <div class="app-layout">
+        <aside class="app-sidebar">
+            <div class="sidebar-header">
+                <a href="{% url 'home' %}" class="nav-logo">
+                    <div class="nav-logo-icon">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                        </svg>
+                    </div>
+                    <span class="nav-logo-text">InvoiceFlow</span>
                 </a>
-                <h1 class="page-title">Edit Invoice {{ invoice.invoice_id }}</h1>
-                <p class="page-subtitle">Update the invoice details below</p>
             </div>
-        </header>
-        
-        <script type="application/json" id="existing-line-items">{{ line_items_json|safe }}</script>
-        
-        <form method="post" class="invoice-form" id="invoice-form">
-            {% csrf_token %}
-            <input type="hidden" name="line_items" id="line_items_data" value="[]">
-            
-            <div class="form-sections">
+            <nav class="sidebar-nav">
+                <a href="{% url 'dashboard' %}" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" />
+                        <rect x="14" y="3" width="7" height="7" />
+                        <rect x="14" y="14" width="7" height="7" />
+                        <rect x="3" y="14" width="7" height="7" />
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="{% url 'create_invoice' %}" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="16" />
+                        <line x1="8" y1="12" x2="16" y2="12" />
+                    </svg>
+                    New Invoice
+                </a>
+                <a href="{% url 'analytics' %}" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                    </svg>
+                    Analytics
+                </a>
+                <a href="{% url 'settings' %}" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <circle cx="12" cy="12" r="3" />
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                    </svg>
+                    Settings
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="{% url 'logout' %}" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                    Log out
+                </a>
+            </div>
+        </aside>
+        <button class="mobile-menu-toggle" aria-label="Toggle sidebar">
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+        </button>
+        <main class="app-main">
+            <header class="page-header">
+                <div class="page-header-content">
+                    <a href="{% url 'invoice_detail' invoice.id %}" class="back-link">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2">
+                            <line x1="19" y1="12" x2="5" y2="12" />
+                            <polyline points="12 19 5 12 12 5" />
+                        </svg>
+                        Back to Invoice
+                    </a>
+                    <h1 class="page-title">Edit Invoice {{ invoice.invoice_id }}</h1>
+                    <p class="page-subtitle">Update the invoice details below</p>
+                </div>
+            </header>
+            <script type="application/json" id="existing-line-items">{{ line_items_json|safe }}</script>
+            <form method="post" class="invoice-form" id="invoice-form">
+                {% csrf_token %}
+                <input type="hidden" name="line_items" id="line_items_data" value="[]">
+                <div class="form-sections">
+                    <div class="form-section glass-card">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <svg viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2">
+                                    <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                </svg>
+                            </div>
+                            <h2 class="section-title">Your Business</h2>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label for="id_business_name" class="form-label">
+                                    Business Name <span class="required">*</span>
+                                </label>
+                                {{ invoice_form.business_name }}
+                                {% if invoice_form.business_name.errors %}
+                                    <p class="form-error">{{ invoice_form.business_name.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_business_email" class="form-label">Business Email</label>
+                                {{ invoice_form.business_email }}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_business_phone" class="form-label">Phone Number</label>
+                                {{ invoice_form.business_phone }}
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="id_business_address" class="form-label">Address</label>
+                                {{ invoice_form.business_address }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-section glass-card">
+                        <div class="section-header">
+                            <div class="section-icon client-icon">
+                                <svg viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                            </div>
+                            <h2 class="section-title">Client Details</h2>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label for="id_client_name" class="form-label">
+                                    Client Name <span class="required">*</span>
+                                </label>
+                                {{ invoice_form.client_name }}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_client_email" class="form-label">Client Email</label>
+                                {{ invoice_form.client_email }}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_client_phone" class="form-label">Client Phone</label>
+                                {{ invoice_form.client_phone }}
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="id_client_address" class="form-label">Client Address</label>
+                                {{ invoice_form.client_address }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-section glass-card">
                     <div class="section-header">
-                        <div class="section-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        <div class="section-icon invoice-icon">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <line x1="16" y1="13" x2="8" y2="13" />
+                                <line x1="16" y1="17" x2="8" y2="17" />
                             </svg>
                         </div>
-                        <h2 class="section-title">Your Business</h2>
+                        <h2 class="section-title">Invoice Details</h2>
                     </div>
-                    
+                    <div class="form-grid form-grid-3">
+                        <div class="form-group">
+                            <label for="id_invoice_date" class="form-label">
+                                Invoice Date <span class="required">*</span>
+                            </label>
+                            {{ invoice_form.invoice_date }}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_due_date" class="form-label">
+                                Due Date <span class="required">*</span>
+                            </label>
+                            {{ invoice_form.due_date }}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_currency" class="form-label">Currency</label>
+                            {{ invoice_form.currency }}
+                        </div>
+                    </div>
                     <div class="form-grid">
-                        <div class="form-group full-width">
-                            <label for="id_business_name" class="form-label">Business Name <span class="required">*</span></label>
-                            {{ invoice_form.business_name }}
-                            {% if invoice_form.business_name.errors %}
-                                <p class="form-error">{{ invoice_form.business_name.errors.0 }}</p>
-                            {% endif %}
-                        </div>
-                        
                         <div class="form-group">
-                            <label for="id_business_email" class="form-label">Business Email</label>
-                            {{ invoice_form.business_email }}
+                            <label for="id_tax_rate" class="form-label">Tax Rate (%)</label>
+                            {{ invoice_form.tax_rate }}
                         </div>
-                        
                         <div class="form-group">
-                            <label for="id_business_phone" class="form-label">Phone Number</label>
-                            {{ invoice_form.business_phone }}
-                        </div>
-                        
-                        <div class="form-group full-width">
-                            <label for="id_business_address" class="form-label">Address</label>
-                            {{ invoice_form.business_address }}
+                            <label for="id_notes" class="form-label">Notes</label>
+                            {{ invoice_form.notes }}
                         </div>
                     </div>
                 </div>
-                
                 <div class="form-section glass-card">
                     <div class="section-header">
-                        <div class="section-icon client-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                <circle cx="12" cy="7" r="4"/>
+                        <div class="section-icon items-icon">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2">
+                                <line x1="8" y1="6" x2="21" y2="6" />
+                                <line x1="8" y1="12" x2="21" y2="12" />
+                                <line x1="8" y1="18" x2="21" y2="18" />
+                                <line x1="3" y1="6" x2="3.01" y2="6" />
+                                <line x1="3" y1="12" x2="3.01" y2="12" />
+                                <line x1="3" y1="18" x2="3.01" y2="18" />
                             </svg>
                         </div>
-                        <h2 class="section-title">Client Details</h2>
+                        <h2 class="section-title">Line Items</h2>
                     </div>
-                    
-                    <div class="form-grid">
-                        <div class="form-group full-width">
-                            <label for="id_client_name" class="form-label">Client Name <span class="required">*</span></label>
-                            {{ invoice_form.client_name }}
+                    <div class="line-items-container">
+                        <div class="line-items-header">
+                            <span class="col-description">Description</span>
+                            <span class="col-quantity">Qty</span>
+                            <span class="col-price">Unit Price</span>
+                            <span class="col-total">Total</span>
+                            <span class="col-actions"></span>
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="id_client_email" class="form-label">Client Email</label>
-                            {{ invoice_form.client_email }}
+                        <div id="line-items-list" class="line-items-list"></div>
+                        <button type="button" id="add-line-item" class="add-item-btn">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="16" />
+                                <line x1="8" y1="12" x2="16" y2="12" />
+                            </svg>
+                            Add Line Item
+                        </button>
+                    </div>
+                    <div class="invoice-totals">
+                        <div class="totals-row">
+                            <span class="totals-label">Subtotal</span>
+                            <span class="totals-value" id="subtotal">$0.00</span>
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="id_client_phone" class="form-label">Client Phone</label>
-                            {{ invoice_form.client_phone }}
+                        <div class="totals-row">
+                            <span class="totals-label">Tax (<span id="tax-rate-display">0</span>%)</span>
+                            <span class="totals-value" id="tax-amount">$0.00</span>
                         </div>
-                        
-                        <div class="form-group full-width">
-                            <label for="id_client_address" class="form-label">Client Address</label>
-                            {{ invoice_form.client_address }}
+                        <div class="totals-row total-row">
+                            <span class="totals-label">Total</span>
+                            <span class="totals-value" id="grand-total">$0.00</span>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="form-section glass-card">
-                <div class="section-header">
-                    <div class="section-icon invoice-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                            <line x1="16" y1="13" x2="8" y2="13"/>
-                            <line x1="16" y1="17" x2="8" y2="17"/>
+                <div class="form-actions">
+                    <a href="{% url 'invoice_detail' invoice.id %}"
+                       class="btn btn-secondary btn-lg">Cancel</a>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <svg class="btn-icon"
+                             style="transform: none"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                            <polyline points="17 21 17 13 7 13 7 21" />
+                            <polyline points="7 3 7 8 15 8" />
                         </svg>
-                    </div>
-                    <h2 class="section-title">Invoice Details</h2>
-                </div>
-                
-                <div class="form-grid form-grid-3">
-                    <div class="form-group">
-                        <label for="id_invoice_date" class="form-label">Invoice Date <span class="required">*</span></label>
-                        {{ invoice_form.invoice_date }}
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="id_due_date" class="form-label">Due Date <span class="required">*</span></label>
-                        {{ invoice_form.due_date }}
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="id_currency" class="form-label">Currency</label>
-                        {{ invoice_form.currency }}
-                    </div>
-                </div>
-                
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="id_tax_rate" class="form-label">Tax Rate (%)</label>
-                        {{ invoice_form.tax_rate }}
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="id_notes" class="form-label">Notes</label>
-                        {{ invoice_form.notes }}
-                    </div>
-                </div>
-            </div>
-            
-            <div class="form-section glass-card">
-                <div class="section-header">
-                    <div class="section-icon items-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="8" y1="6" x2="21" y2="6"/>
-                            <line x1="8" y1="12" x2="21" y2="12"/>
-                            <line x1="8" y1="18" x2="21" y2="18"/>
-                            <line x1="3" y1="6" x2="3.01" y2="6"/>
-                            <line x1="3" y1="12" x2="3.01" y2="12"/>
-                            <line x1="3" y1="18" x2="3.01" y2="18"/>
-                        </svg>
-                    </div>
-                    <h2 class="section-title">Line Items</h2>
-                </div>
-                
-                <div class="line-items-container">
-                    <div class="line-items-header">
-                        <span class="col-description">Description</span>
-                        <span class="col-quantity">Qty</span>
-                        <span class="col-price">Unit Price</span>
-                        <span class="col-total">Total</span>
-                        <span class="col-actions"></span>
-                    </div>
-                    
-                    <div id="line-items-list" class="line-items-list"></div>
-                    
-                    <button type="button" id="add-line-item" class="add-item-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="12" y1="8" x2="12" y2="16"/>
-                            <line x1="8" y1="12" x2="16" y2="12"/>
-                        </svg>
-                        Add Line Item
+                        Update Invoice
                     </button>
                 </div>
-                
-                <div class="invoice-totals">
-                    <div class="totals-row">
-                        <span class="totals-label">Subtotal</span>
-                        <span class="totals-value" id="subtotal">$0.00</span>
-                    </div>
-                    <div class="totals-row">
-                        <span class="totals-label">Tax (<span id="tax-rate-display">0</span>%)</span>
-                        <span class="totals-value" id="tax-amount">$0.00</span>
-                    </div>
-                    <div class="totals-row total-row">
-                        <span class="totals-label">Total</span>
-                        <span class="totals-value" id="grand-total">$0.00</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="form-actions">
-                <a href="{% url 'invoice_detail' invoice.id %}" class="btn btn-secondary btn-lg">Cancel</a>
-                <button type="submit" class="btn btn-primary btn-lg">
-                    <svg class="btn-icon" style="transform: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                        <polyline points="17 21 17 13 7 13 7 21"/>
-                        <polyline points="7 3 7 8 15 8"/>
-                    </svg>
-                    Update Invoice
-                </button>
-            </div>
-        </form>
-    </main>
-</div>
+            </form>
+        </main>
+    </div>
 {% endblock %}
-
 {% block extra_css %}
-<style>
+    <style>
 .app-page {
     background: var(--gradient-dark);
 }
@@ -763,11 +786,10 @@
         width: 100%;
     }
 }
-</style>
+    </style>
 {% endblock %}
-
 {% block extra_js %}
-<script>
+    <script>
 document.addEventListener('DOMContentLoaded', function() {
     const lineItemsList = document.getElementById('line-items-list');
     const addItemBtn = document.getElementById('add-line-item');
@@ -834,8 +856,8 @@ document.addEventListener('DOMContentLoaded', function() {
             <span class="line-item-total">${formatCurrency(itemData.quantity * itemData.unit_price)}</span>
             <button type="button" class="remove-item-btn" title="Remove item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18"/>
-                    <line x1="6" y1="6" x2="18" y2="18"/>
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
             </button>
         `;
@@ -914,5 +936,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-</script>
+    </script>
 {% endblock %}

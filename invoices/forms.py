@@ -1,22 +1,32 @@
 from typing import Any, Dict, Optional
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
-from .models import Invoice, UserProfile, InvoiceTemplate, RecurringInvoice, Waitlist, ContactSubmission
+
+from .models import (
+    ContactSubmission,
+    Invoice,
+    InvoiceTemplate,
+    RecurringInvoice,
+    UserProfile,
+    Waitlist,
+)
 from .validators import (
+    InvoiceBusinessRules,
+    validate_email_domain,
+    validate_invoice_date,
     validate_phone_number,
     validate_tax_rate,
-    validate_invoice_date,
-    validate_email_domain,
-    InvoiceBusinessRules,
 )
 
 try:
     import pytz
+
     TIMEZONE_CHOICES = [(tz, tz) for tz in pytz.common_timezones]
 except ImportError:
     from zoneinfo import available_timezones
+
     TIMEZONE_CHOICES = [(tz, tz) for tz in sorted(available_timezones())]
 
 
@@ -173,9 +183,11 @@ class InvoiceForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     timezone = forms.ChoiceField(
         choices=TIMEZONE_CHOICES,
-        widget=forms.Select(attrs={
-            "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
-        }),
+        widget=forms.Select(
+            attrs={
+                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+            }
+        ),
     )
 
     class Meta:
@@ -192,39 +204,55 @@ class UserProfileForm(forms.ModelForm):
             "timezone",
         ]
         widgets = {
-            "company_name": forms.TextInput(attrs={
-                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
-                "placeholder": "Your Company Name",
-            }),
-            "company_logo": forms.FileInput(attrs={
-                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
-                "accept": "image/*",
-            }),
-            "business_email": forms.EmailInput(attrs={
-                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
-                "placeholder": "business@example.com",
-            }),
-            "business_phone": forms.TextInput(attrs={
-                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
-                "placeholder": "+1 (555) 123-4567",
-            }),
-            "business_address": forms.Textarea(attrs={
-                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
-                "rows": 3,
-                "placeholder": "123 Business Street, City, State, ZIP",
-            }),
-            "default_currency": forms.Select(attrs={
-                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
-            }),
-            "default_tax_rate": forms.NumberInput(attrs={
-                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
-                "step": "0.01",
-                "placeholder": "0.00",
-            }),
-            "invoice_prefix": forms.TextInput(attrs={
-                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
-                "placeholder": "INV-",
-            }),
+            "company_name": forms.TextInput(
+                attrs={
+                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "placeholder": "Your Company Name",
+                }
+            ),
+            "company_logo": forms.FileInput(
+                attrs={
+                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "accept": "image/*",
+                }
+            ),
+            "business_email": forms.EmailInput(
+                attrs={
+                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "placeholder": "business@example.com",
+                }
+            ),
+            "business_phone": forms.TextInput(
+                attrs={
+                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "placeholder": "+1 (555) 123-4567",
+                }
+            ),
+            "business_address": forms.Textarea(
+                attrs={
+                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "rows": 3,
+                    "placeholder": "123 Business Street, City, State, ZIP",
+                }
+            ),
+            "default_currency": forms.Select(
+                attrs={
+                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                }
+            ),
+            "default_tax_rate": forms.NumberInput(
+                attrs={
+                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "step": "0.01",
+                    "placeholder": "0.00",
+                }
+            ),
+            "invoice_prefix": forms.TextInput(
+                attrs={
+                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "placeholder": "INV-",
+                }
+            ),
         }
 
 
@@ -241,13 +269,27 @@ class NotificationPreferencesForm(forms.ModelForm):
             "notify_password_changes",
         ]
         widgets = {
-            "notify_invoice_created": forms.CheckboxInput(attrs={"class": "w-5 h-5 rounded text-purple-600"}),
-            "notify_payment_received": forms.CheckboxInput(attrs={"class": "w-5 h-5 rounded text-purple-600"}),
-            "notify_invoice_viewed": forms.CheckboxInput(attrs={"class": "w-5 h-5 rounded text-purple-600"}),
-            "notify_invoice_overdue": forms.CheckboxInput(attrs={"class": "w-5 h-5 rounded text-purple-600"}),
-            "notify_weekly_summary": forms.CheckboxInput(attrs={"class": "w-5 h-5 rounded text-purple-600"}),
-            "notify_security_alerts": forms.CheckboxInput(attrs={"class": "w-5 h-5 rounded text-purple-600"}),
-            "notify_password_changes": forms.CheckboxInput(attrs={"class": "w-5 h-5 rounded text-purple-600"}),
+            "notify_invoice_created": forms.CheckboxInput(
+                attrs={"class": "w-5 h-5 rounded text-purple-600"}
+            ),
+            "notify_payment_received": forms.CheckboxInput(
+                attrs={"class": "w-5 h-5 rounded text-purple-600"}
+            ),
+            "notify_invoice_viewed": forms.CheckboxInput(
+                attrs={"class": "w-5 h-5 rounded text-purple-600"}
+            ),
+            "notify_invoice_overdue": forms.CheckboxInput(
+                attrs={"class": "w-5 h-5 rounded text-purple-600"}
+            ),
+            "notify_weekly_summary": forms.CheckboxInput(
+                attrs={"class": "w-5 h-5 rounded text-purple-600"}
+            ),
+            "notify_security_alerts": forms.CheckboxInput(
+                attrs={"class": "w-5 h-5 rounded text-purple-600"}
+            ),
+            "notify_password_changes": forms.CheckboxInput(
+                attrs={"class": "w-5 h-5 rounded text-purple-600"}
+            ),
         }
 
 
@@ -441,7 +483,9 @@ class InvoiceSearchForm(forms.Form):
             raise forms.ValidationError("Start date must be before or equal to end date.")
 
         if min_amount is not None and max_amount is not None and min_amount > max_amount:
-            raise forms.ValidationError("Minimum amount must be less than or equal to maximum amount.")
+            raise forms.ValidationError(
+                "Minimum amount must be less than or equal to maximum amount."
+            )
 
         return cleaned_data
 
@@ -520,7 +564,9 @@ class ContactForm(forms.ModelForm):
 
     honeypot = forms.CharField(
         required=False,
-        widget=forms.TextInput(attrs={"style": "display:none", "tabindex": "-1", "autocomplete": "off"}),
+        widget=forms.TextInput(
+            attrs={"style": "display:none", "tabindex": "-1", "autocomplete": "off"}
+        ),
     )
 
     class Meta:

@@ -1,6 +1,7 @@
 """Management command to guide SendGrid email verification setup."""
 
 from django.core.management.base import BaseCommand
+
 from invoices.models import Invoice
 
 

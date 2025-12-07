@@ -1,9 +1,8 @@
-import pytest
 from decimal import Decimal
-from datetime import date, timedelta
 
-from invoices.models import Invoice, LineItem, InvoiceTemplate
-from tests.factories import UserFactory, InvoiceFactory, LineItemFactory, InvoiceTemplateFactory
+import pytest
+
+from tests.factories import InvoiceFactory, InvoiceTemplateFactory, LineItemFactory
 
 
 @pytest.mark.django_db
@@ -22,20 +21,20 @@ class TestInvoiceModel:
         invoice = InvoiceFactory()
         LineItemFactory(invoice=invoice, quantity=Decimal("2"), unit_price=Decimal("50.00"))
         LineItemFactory(invoice=invoice, quantity=Decimal("1"), unit_price=Decimal("25.00"))
-        
+
         assert invoice.line_items.count() == 2
 
     def test_invoice_subtotal_calculation(self):
         invoice = InvoiceFactory()
         LineItemFactory(invoice=invoice, quantity=Decimal("2"), unit_price=Decimal("50.00"))
         LineItemFactory(invoice=invoice, quantity=Decimal("1"), unit_price=Decimal("25.00"))
-        
+
         assert invoice.subtotal == Decimal("125.00")
 
     def test_invoice_status_choices(self):
         invoice = InvoiceFactory(status="paid")
         assert invoice.status == "paid"
-        
+
         invoice.status = "unpaid"
         invoice.save()
         invoice.refresh_from_db()

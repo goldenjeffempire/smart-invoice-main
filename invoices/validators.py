@@ -5,6 +5,7 @@ Provides real-time validation for invoice forms.
 
 import re
 from decimal import Decimal, InvalidOperation
+
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 

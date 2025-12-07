@@ -1,65 +1,67 @@
 {% extends "base/layout.html" %}
-
 {% block title %}Two-Factor Authentication Enabled{% endblock %}
 {% block meta_description %}Your account is now protected with two-factor authentication.{% endblock %}
-
 {% block content %}
-<section class="section">
-    <div class="container">
-        <div class="auth-container">
-            <div class="glass-card auth-card">
-                <div class="auth-header">
-                    <div class="success-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                            <polyline points="22 4 12 14.01 9 11.01"/>
-                        </svg>
-                    </div>
-                    <h1 class="auth-title">Two-Factor Authentication Enabled</h1>
-                    <p class="auth-subtitle">Your account is now more secure</p>
-                </div>
-
-                <div class="recovery-codes-section">
-                    <h2>Recovery Codes</h2>
-                    <p class="recovery-warning">
-                        Save these recovery codes in a safe place. You can use them to access your 
-                        account if you lose access to your authenticator app.
-                    </p>
-                    
-                    <div class="recovery-codes-grid">
-                        {% for code in recovery_codes %}
-                        <div class="recovery-code">{{ code }}</div>
-                        {% endfor %}
-                    </div>
-                    
-                    <div class="recovery-actions">
-                        <button type="button" class="btn btn-secondary" onclick="downloadCodes()">
-                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                <polyline points="7 10 12 15 17 10"/>
-                                <line x1="12" y1="15" x2="12" y2="3"/>
+    <section class="section">
+        <div class="container">
+            <div class="auth-container">
+                <div class="glass-card auth-card">
+                    <div class="auth-header">
+                        <div class="success-icon">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                <polyline points="22 4 12 14.01 9 11.01" />
                             </svg>
-                            Download Codes
-                        </button>
-                        <button type="button" class="btn btn-secondary" onclick="copyCodes()">
-                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                            </svg>
-                            Copy Codes
-                        </button>
+                        </div>
+                        <h1 class="auth-title">Two-Factor Authentication Enabled</h1>
+                        <p class="auth-subtitle">Your account is now more secure</p>
                     </div>
-                </div>
-
-                <div class="auth-footer">
-                    <a href="{% url 'dashboard' %}" class="btn btn-primary btn-full">Continue to Dashboard</a>
+                    <div class="recovery-codes-section">
+                        <h2>Recovery Codes</h2>
+                        <p class="recovery-warning">
+                            Save these recovery codes in a safe place. You can use them to access your
+                            account if you lose access to your authenticator app.
+                        </p>
+                        <div class="recovery-codes-grid">
+                            {% for code in recovery_codes %}<div class="recovery-code">{{ code }}</div>{% endfor %}
+                        </div>
+                        <div class="recovery-actions">
+                            <button type="button" class="btn btn-secondary" onclick="downloadCodes()">
+                                <svg class="btn-icon"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <polyline points="7 10 12 15 17 10" />
+                                    <line x1="12" y1="15" x2="12" y2="3" />
+                                </svg>
+                                Download Codes
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="copyCodes()">
+                                <svg class="btn-icon"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                </svg>
+                                Copy Codes
+                            </button>
+                        </div>
+                    </div>
+                    <div class="auth-footer">
+                        <a href="{% url 'dashboard' %}" class="btn btn-primary btn-full">Continue to Dashboard</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
-<script>
+    </section>
+    <script>
 const recoveryCodes = [{% for code in recovery_codes %}"{{ code }}"{% if not forloop.last %}, {% endif %}{% endfor %}];
 
 function downloadCodes() {
@@ -90,11 +92,10 @@ function copyCodes() {
         }, 2000);
     });
 }
-</script>
+    </script>
 {% endblock %}
-
 {% block extra_css %}
-<style>
+    <style>
 .auth-container {
     max-width: 500px;
     margin: 0 auto;
@@ -190,5 +191,5 @@ function copyCodes() {
     padding-top: var(--spacing-6);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
-</style>
+    </style>
 {% endblock %}

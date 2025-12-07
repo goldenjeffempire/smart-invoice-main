@@ -1,85 +1,76 @@
 {% extends "base/layout.html" %}
-
 {% block title %}Verify Two-Factor Authentication{% endblock %}
 {% block meta_description %}Enter your 2FA code to continue logging in.{% endblock %}
-
 {% block content %}
-<section class="section">
-    <div class="container">
-        <div class="auth-container">
-            <div class="glass-card auth-card">
-                <div class="auth-header">
-                    <div class="mfa-lock-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        </svg>
+    <section class="section">
+        <div class="container">
+            <div class="auth-container">
+                <div class="glass-card auth-card">
+                    <div class="auth-header">
+                        <div class="mfa-lock-icon">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                        </div>
+                        <h1 class="auth-title">Two-Factor Authentication</h1>
+                        <p class="auth-subtitle">Enter the 6-digit code from your authenticator app</p>
                     </div>
-                    <h1 class="auth-title">Two-Factor Authentication</h1>
-                    <p class="auth-subtitle">Enter the 6-digit code from your authenticator app</p>
-                </div>
-
-                {% if error %}
-                <div class="alert alert-error">
-                    {{ error }}
-                </div>
-                {% endif %}
-
-                <form method="post" class="mfa-form">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <input type="text" 
-                               name="token" 
-                               class="form-control mfa-code-input" 
-                               placeholder="000000"
-                               pattern="[0-9]{6}" 
-                               maxlength="6"
-                               inputmode="numeric"
-                               autocomplete="one-time-code"
-                               autofocus
-                               required>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-full">Verify</button>
-                </form>
-
-                <div class="recovery-section">
-                    <button type="button" class="link-button" onclick="toggleRecovery()">
-                        Use a recovery code instead
-                    </button>
-                    
-                    <form method="post" class="recovery-form" id="recoveryForm" style="display: none;">
+                    {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+                    <form method="post" class="mfa-form">
                         {% csrf_token %}
                         <div class="form-group">
-                            <label for="recovery_code">Recovery Code</label>
-                            <input type="text" 
-                                   name="recovery_code" 
-                                   id="recovery_code"
-                                   class="form-control" 
-                                   placeholder="XXXX-XXXX"
-                                   pattern="[A-Z0-9]{4}-[A-Z0-9]{4}"
-                                   maxlength="9">
+                            <input type="text"
+                                   name="token"
+                                   class="form-control mfa-code-input"
+                                   placeholder="000000"
+                                   pattern="[0-9]{6}"
+                                   maxlength="6"
+                                   inputmode="numeric"
+                                   autocomplete="one-time-code"
+                                   autofocus
+                                   required>
                         </div>
-                        <button type="submit" class="btn btn-secondary btn-full">Use Recovery Code</button>
+                        <button type="submit" class="btn btn-primary btn-full">Verify</button>
                     </form>
-                </div>
-
-                <div class="auth-footer">
-                    <a href="{% url 'logout' %}" class="link-secondary">Cancel and log out</a>
+                    <div class="recovery-section">
+                        <button type="button" class="link-button" onclick="toggleRecovery()">Use a recovery code instead</button>
+                        <form method="post"
+                              class="recovery-form"
+                              id="recoveryForm"
+                              style="display: none">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="recovery_code">Recovery Code</label>
+                                <input type="text"
+                                       name="recovery_code"
+                                       id="recovery_code"
+                                       class="form-control"
+                                       placeholder="XXXX-XXXX"
+                                       pattern="[A-Z0-9]{4}-[A-Z0-9]{4}"
+                                       maxlength="9">
+                            </div>
+                            <button type="submit" class="btn btn-secondary btn-full">Use Recovery Code</button>
+                        </form>
+                    </div>
+                    <div class="auth-footer">
+                        <a href="{% url 'logout' %}" class="link-secondary">Cancel and log out</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
-<script>
+    </section>
+    <script>
 function toggleRecovery() {
     const form = document.getElementById('recoveryForm');
     form.style.display = form.style.display === 'none' ? 'block' : 'none';
 }
-</script>
+    </script>
 {% endblock %}
-
 {% block extra_css %}
-<style>
+    <style>
 .auth-container {
     max-width: 400px;
     margin: 0 auto;
@@ -169,5 +160,5 @@ function toggleRecovery() {
     margin-bottom: var(--spacing-6);
     text-align: center;
 }
-</style>
+    </style>
 {% endblock %}

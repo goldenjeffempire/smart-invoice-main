@@ -7,18 +7,21 @@ import logging
 import traceback
 from typing import Any
 
-from django.core.exceptions import PermissionDenied, ValidationError as DjangoValidationError
+from django.core.exceptions import PermissionDenied
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.http import Http404
 from rest_framework import status
 from rest_framework.exceptions import (
     APIException,
     AuthenticationFailed,
-    NotAuthenticated,
-    PermissionDenied as DRFPermissionDenied,
-    ValidationError,
-    NotFound,
     MethodNotAllowed,
+    NotAuthenticated,
+    NotFound,
+)
+from rest_framework.exceptions import PermissionDenied as DRFPermissionDenied
+from rest_framework.exceptions import (
     Throttled,
+    ValidationError,
 )
 from rest_framework.response import Response
 from rest_framework.views import exception_handler as drf_exception_handler
@@ -28,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 class APIError:
     """Standardized API error codes."""
-    
+
     VALIDATION_ERROR = "VALIDATION_ERROR"
     AUTHENTICATION_REQUIRED = "AUTHENTICATION_REQUIRED"
     AUTHENTICATION_FAILED = "AUTHENTICATION_FAILED"
@@ -85,13 +88,13 @@ def create_error_response(
             "message": message,
         },
     }
-    
+
     if details:
         error_data["error"]["details"] = details
-    
+
     if request_id:
         error_data["error"]["request_id"] = request_id
-    
+
     return Response(error_data, status=status_code)
 
 
@@ -114,7 +117,7 @@ def format_validation_errors(detail: Any) -> dict[str, Any]:
 def custom_exception_handler(exc: Exception, context: dict[str, Any]) -> Response | None:
     """
     Custom exception handler for DRF that provides standardized error responses.
-    
+
     All API errors follow this format:
     {
         "success": false,
@@ -128,9 +131,9 @@ def custom_exception_handler(exc: Exception, context: dict[str, Any]) -> Respons
     """
     request = context.get("request")
     request_id = getattr(request, "request_id", None) if request else None
-    
+
     response = drf_exception_handler(exc, context)
-    
+
     if isinstance(exc, ValidationError):
         details = format_validation_errors(exc.detail)
         return create_error_response(
@@ -140,7 +143,7 @@ def custom_exception_handler(exc: Exception, context: dict[str, Any]) -> Respons
             status_code=status.HTTP_400_BAD_REQUEST,
             request_id=request_id,
         )
-    
+
     if isinstance(exc, NotAuthenticated):
         return create_error_response(
             code=APIError.AUTHENTICATION_REQUIRED,
@@ -148,7 +151,7 @@ def custom_exception_handler(exc: Exception, context: dict[str, Any]) -> Respons
             status_code=status.HTTP_401_UNAUTHORIZED,
             request_id=request_id,
         )
-    
+
     if isinstance(exc, AuthenticationFailed):
         return create_error_response(
             code=APIError.AUTHENTICATION_FAILED,
@@ -156,7 +159,7 @@ def custom_exception_handler(exc: Exception, context: dict[str, Any]) -> Respons
             status_code=status.HTTP_401_UNAUTHORIZED,
             request_id=request_id,
         )
-    
+
     if isinstance(exc, (PermissionDenied, DRFPermissionDenied)):
         return create_error_response(
             code=APIError.PERMISSION_DENIED,
@@ -164,7 +167,7 @@ def custom_exception_handler(exc: Exception, context: dict[str, Any]) -> Respons
             status_code=status.HTTP_403_FORBIDDEN,
             request_id=request_id,
         )
-    
+
     if isinstance(exc, (NotFound, Http404)):
         return create_error_response(
             code=APIError.NOT_FOUND,
@@ -172,7 +175,7 @@ def custom_exception_handler(exc: Exception, context: dict[str, Any]) -> Respons
             status_code=status.HTTP_404_NOT_FOUND,
             request_id=request_id,
         )
-    
+
     if isinstance(exc, MethodNotAllowed):
         method = request.method if request else "Unknown"
         return create_error_response(
@@ -181,7 +184,7 @@ def custom_exception_handler(exc: Exception, context: dict[str, Any]) -> Respons
             status_code=status.HTTP_405_METHOD_NOT_ALLOWED,
             request_id=request_id,
         )
-    
+
     if isinstance(exc, Throttled):
         wait_seconds = exc.wait
         message = "Request rate limit exceeded."
@@ -194,10 +197,12 @@ def custom_exception_handler(exc: Exception, context: dict[str, Any]) -> Respons
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
             request_id=request_id,
         )
-    
+
     if isinstance(exc, DjangoValidationError):
         if hasattr(exc, "message_dict"):
-            details: dict[str, Any] = {str(k): [str(m) for m in v] for k, v in exc.message_dict.items()}
+            details: dict[str, Any] = {
+                str(k): [str(m) for m in v] for k, v in exc.message_dict.items()
+            }
         else:
             details = {"non_field_errors": [str(m) for m in exc.messages]}
         return create_error_response(
@@ -207,7 +212,7 @@ def custom_exception_handler(exc: Exception, context: dict[str, Any]) -> Respons
             status_code=status.HTTP_400_BAD_REQUEST,
             request_id=request_id,
         )
-    
+
     if isinstance(exc, APIException):
         code = _get_error_code_for_status(exc.status_code)
         return create_error_response(
@@ -216,10 +221,10 @@ def custom_exception_handler(exc: Exception, context: dict[str, Any]) -> Respons
             status_code=exc.status_code,
             request_id=request_id,
         )
-    
+
     if response is not None:
         return response
-    
+
     logger.exception(
         "Unhandled API exception",
         extra={
@@ -230,7 +235,7 @@ def custom_exception_handler(exc: Exception, context: dict[str, Any]) -> Respons
             "traceback": traceback.format_exc(),
         },
     )
-    
+
     return create_error_response(
         code=APIError.SERVER_ERROR,
         message="An unexpected error occurred. Please try again later.",
@@ -241,7 +246,7 @@ def custom_exception_handler(exc: Exception, context: dict[str, Any]) -> Respons
 
 class ServiceError(APIException):
     """Base exception for service layer errors."""
-    
+
     status_code = status.HTTP_400_BAD_REQUEST
     default_detail = "A service error occurred."
     default_code = "service_error"
@@ -249,7 +254,7 @@ class ServiceError(APIException):
 
 class InvoiceNotFoundError(ServiceError):
     """Raised when an invoice is not found."""
-    
+
     status_code = status.HTTP_404_NOT_FOUND
     default_detail = "Invoice not found."
     default_code = "invoice_not_found"
@@ -257,7 +262,7 @@ class InvoiceNotFoundError(ServiceError):
 
 class InvoiceValidationError(ServiceError):
     """Raised when invoice data validation fails."""
-    
+
     status_code = status.HTTP_400_BAD_REQUEST
     default_detail = "Invalid invoice data."
     default_code = "invoice_validation_error"
@@ -265,7 +270,7 @@ class InvoiceValidationError(ServiceError):
 
 class PaymentProcessingError(ServiceError):
     """Raised when payment processing fails."""
-    
+
     status_code = status.HTTP_402_PAYMENT_REQUIRED
     default_detail = "Payment processing failed."
     default_code = "payment_error"
@@ -273,7 +278,7 @@ class PaymentProcessingError(ServiceError):
 
 class PDFGenerationError(ServiceError):
     """Raised when PDF generation fails."""
-    
+
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
     default_detail = "Failed to generate PDF."
     default_code = "pdf_generation_error"
@@ -281,7 +286,7 @@ class PDFGenerationError(ServiceError):
 
 class EmailDeliveryError(ServiceError):
     """Raised when email delivery fails."""
-    
+
     status_code = status.HTTP_502_BAD_GATEWAY
     default_detail = "Failed to send email."
     default_code = "email_delivery_error"

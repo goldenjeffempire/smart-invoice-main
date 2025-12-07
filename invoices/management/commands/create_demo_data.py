@@ -1,10 +1,12 @@
 """Management command to create demo data for testing."""
 
-from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User
-from invoices.models import Invoice, UserProfile
-from decimal import Decimal
 from datetime import date, timedelta
+from decimal import Decimal
+
+from django.contrib.auth.models import User
+from django.core.management.base import BaseCommand
+
+from invoices.models import Invoice, UserProfile
 
 
 class Command(BaseCommand):
@@ -14,7 +16,11 @@ class Command(BaseCommand):
         # Create demo user
         user, created = User.objects.get_or_create(
             username="demo_user",
-            defaults={"email": "demo@invoiceflow.com.ng", "first_name": "Demo", "last_name": "User"},
+            defaults={
+                "email": "demo@invoiceflow.com.ng",
+                "first_name": "Demo",
+                "last_name": "User",
+            },
         )
 
         if created:

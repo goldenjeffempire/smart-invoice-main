@@ -3,6 +3,7 @@ Dynamic sitemap for SEO.
 """
 
 from typing import List
+
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 

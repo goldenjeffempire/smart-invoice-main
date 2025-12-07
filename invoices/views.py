@@ -1,24 +1,25 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.http import HttpResponse
-from django.db.models import Count, Q
-from django.db.models.functions import TruncMonth
-from datetime import datetime
 import calendar
 import json
 import urllib.parse
+from datetime import datetime
 from decimal import Decimal
 
-from .models import Invoice, UserProfile, InvoiceTemplate, RecurringInvoice, LineItem
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Q
+from django.db.models.functions import TruncMonth
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
+
 from .forms import (
-    SignUpForm,
     InvoiceForm,
-    UserProfileForm,
     InvoiceTemplateForm,
     RecurringInvoiceForm,
+    SignUpForm,
+    UserProfileForm,
 )
+from .models import Invoice, InvoiceTemplate, LineItem, RecurringInvoice, UserProfile
 from .search_filters import InvoiceExport
 
 
@@ -53,8 +54,9 @@ def signup(request):
 
 def login_view(request):
     """Authenticate user credentials and establish session with rate limiting and MFA support."""
-    from django.core.cache import cache
     from django.conf import settings
+    from django.core.cache import cache
+
     from .middleware import RequestResponseLoggingMiddleware
     from .models import LoginAttempt, MFAProfile
 
@@ -64,8 +66,8 @@ def login_view(request):
         username = request.POST.get("username", "")
         password = request.POST.get("password")
 
-        lockout_threshold = getattr(settings, 'ACCOUNT_LOCKOUT_THRESHOLD', 5)
-        lockout_duration = getattr(settings, 'ACCOUNT_LOCKOUT_DURATION', 900)
+        lockout_threshold = getattr(settings, "ACCOUNT_LOCKOUT_THRESHOLD", 5)
+        lockout_duration = getattr(settings, "ACCOUNT_LOCKOUT_DURATION", 900)
 
         ip_cache_key = f"login_attempt:ip:{client_ip}"
         user_cache_key = f"login_attempt:user:{username.lower()}" if username else None
@@ -74,60 +76,63 @@ def login_view(request):
         user_attempts = cache.get(user_cache_key, 0) if user_cache_key else 0
 
         if ip_attempts >= lockout_threshold:
-            messages.error(request, "Too many login attempts from this location. Please try again in 15 minutes.")
+            messages.error(
+                request,
+                "Too many login attempts from this location. Please try again in 15 minutes.",
+            )
             return render(request, "auth/login.html")
 
         if user_attempts >= lockout_threshold:
-            messages.error(request, "This account is temporarily locked due to too many failed attempts. Please try again in 15 minutes.")
+            messages.error(
+                request,
+                "This account is temporarily locked due to too many failed attempts. Please try again in 15 minutes.",
+            )
             return render(request, "auth/login.html")
 
         user = authenticate(request, username=username, password=password)
-        
+
         if user is not None:
             cache.delete(ip_cache_key)
             if user_cache_key:
                 cache.delete(user_cache_key)
-            
+
             LoginAttempt.objects.create(
-                username=username,
-                ip_address=client_ip,
-                user_agent=user_agent,
-                success=True
+                username=username, ip_address=client_ip, user_agent=user_agent, success=True
             )
-            
+
             login(request, user)
-            
-            if getattr(settings, 'MFA_ENABLED', False):
+
+            if getattr(settings, "MFA_ENABLED", False):
                 try:
                     mfa_profile = MFAProfile.objects.get(user=user)
                     if mfa_profile.is_enabled:
-                        request.session['mfa_verified'] = False
+                        request.session["mfa_verified"] = False
                         return redirect("mfa_verify")
                 except MFAProfile.DoesNotExist:
                     pass
-            
-            request.session['mfa_verified'] = True
+
+            request.session["mfa_verified"] = True
             return redirect("dashboard")
         else:
             cache.set(ip_cache_key, ip_attempts + 1, lockout_duration)
             if user_cache_key:
                 cache.set(user_cache_key, user_attempts + 1, lockout_duration)
-            
+
             LoginAttempt.objects.create(
                 username=username or "unknown",
                 ip_address=client_ip,
                 user_agent=user_agent,
                 success=False,
-                failure_reason="Invalid credentials"
+                failure_reason="Invalid credentials",
             )
-            
+
             messages.error(request, "Invalid username or password.")
     return render(request, "auth/login.html")
 
 
 def logout_view(request):
     """End user session, clear MFA verification, and redirect to home page."""
-    request.session.pop('mfa_verified', None)
+    request.session.pop("mfa_verified", None)
     logout(request)
     return redirect("home")
 
@@ -277,6 +282,7 @@ def delete_invoice(request, invoice_id):
         user_id = request.user.id
         invoice.delete()
         from invoices.services import AnalyticsService
+
         AnalyticsService.invalidate_user_cache(user_id)
         messages.success(request, "Invoice deleted successfully!")
         return redirect("dashboard")
@@ -292,6 +298,7 @@ def update_invoice_status(request, invoice_id):
             invoice.status = new_status
             invoice.save()
             from invoices.services import AnalyticsService
+
             AnalyticsService.invalidate_user_cache(request.user.id)
             messages.success(request, f"Invoice status updated to {new_status}!")
         return redirect("invoice_detail", invoice_id=invoice.id)
@@ -432,16 +439,17 @@ def careers(request):
 
 def contact(request):
     """Contact page with contact form - handles form submission with rate limiting and CAPTCHA."""
-    from django.core.mail import send_mail
-    from django.core.cache import cache
-    from django.conf import settings
-    from .forms import ContactForm
-    from .middleware import RequestResponseLoggingMiddleware
     import logging
+
     import requests
+    from django.conf import settings
+    from django.core.cache import cache
+    from django.core.mail import send_mail
+
+    from .forms import ContactForm
 
     logger = logging.getLogger(__name__)
-    
+
     # Rate limiting for contact form (5 submissions per hour per IP)
     client_ip = get_client_ip(request)
     rate_limit_key = f"contact_form:{client_ip}"
@@ -455,37 +463,39 @@ def contact(request):
                 "Too many submissions. Please try again later.",
             )
             logger.warning(f"Contact form rate limit exceeded for IP: {client_ip}")
-            return render(request, "pages/contact.html", {"form": ContactForm(), "rate_limited": True})
-        
+            return render(
+                request, "pages/contact.html", {"form": ContactForm(), "rate_limited": True}
+            )
+
         form = ContactForm(request.POST)
-        
+
         # Verify hCaptcha if enabled
         hcaptcha_valid = True
-        if getattr(settings, 'HCAPTCHA_ENABLED', False):
-            hcaptcha_response = request.POST.get('h-captcha-response', '')
+        if getattr(settings, "HCAPTCHA_ENABLED", False):
+            hcaptcha_response = request.POST.get("h-captcha-response", "")
             if not hcaptcha_response:
                 hcaptcha_valid = False
                 messages.error(request, "Please complete the CAPTCHA verification.")
             else:
                 try:
                     verify_response = requests.post(
-                        'https://api.hcaptcha.com/siteverify',
+                        "https://api.hcaptcha.com/siteverify",
                         data={
-                            'secret': settings.HCAPTCHA_SECRET,
-                            'response': hcaptcha_response,
-                            'remoteip': client_ip,
+                            "secret": settings.HCAPTCHA_SECRET,
+                            "response": hcaptcha_response,
+                            "remoteip": client_ip,
                         },
-                        timeout=10
+                        timeout=10,
                     )
                     result = verify_response.json()
-                    hcaptcha_valid = result.get('success', False)
+                    hcaptcha_valid = result.get("success", False)
                     if not hcaptcha_valid:
                         messages.error(request, "CAPTCHA verification failed. Please try again.")
                         logger.warning(f"hCaptcha verification failed for IP: {client_ip}")
                 except Exception as e:
                     logger.error(f"hCaptcha verification error: {e}")
                     hcaptcha_valid = True  # Fail open to not block legitimate users
-        
+
         if form.is_valid() and hcaptcha_valid:
             try:
                 submission = form.save(commit=False)
@@ -519,10 +529,10 @@ Submitted: {submission.submitted_at}
                     "Thank you for your message! We'll get back to you within 24 hours.",
                 )
                 logger.info(f"Contact form submitted by {submission.email}")
-                
+
                 # Increment rate limit counter
                 cache.set(rate_limit_key, submission_count + 1, 3600)  # 1 hour
-                
+
                 return redirect("contact")
             except Exception as e:
                 logger.error(f"Contact form submission failed: {e}")
@@ -541,11 +551,15 @@ Submitted: {submission.submitted_at}
     else:
         form = ContactForm()
 
-    return render(request, "pages/contact.html", {
-        "form": form,
-        "hcaptcha_enabled": getattr(settings, 'HCAPTCHA_ENABLED', False),
-        "hcaptcha_sitekey": getattr(settings, 'HCAPTCHA_SITEKEY', ''),
-    })
+    return render(
+        request,
+        "pages/contact.html",
+        {
+            "form": form,
+            "hcaptcha_enabled": getattr(settings, "HCAPTCHA_ENABLED", False),
+            "hcaptcha_sitekey": getattr(settings, "HCAPTCHA_SITEKEY", ""),
+        },
+    )
 
 
 def changelog(request):
@@ -633,7 +647,7 @@ def blog_article(request, slug):
 
 <h2>Implementing These Strategies</h2>
 <p>Start by reviewing your current invoicing process and identify where improvements can be made. InvoiceFlow makes it easy to implement all these strategies with professional invoice templates, automated reminders, and multiple payment options—all designed to help you get paid faster.</p>
-"""
+""",
         },
         "professional-invoice-guide": {
             "title": "The Complete Guide to Creating Professional Invoices",
@@ -711,7 +725,7 @@ def blog_article(request, slug):
 
 <h2>Streamline Your Invoicing with InvoiceFlow</h2>
 <p>Creating professional invoices doesn't have to be time-consuming. InvoiceFlow provides beautifully designed templates that include all essential elements, automatic calculations, and easy customization options. Spend less time on paperwork and more time on what you do best.</p>
-"""
+""",
         },
         "freelance-pricing-strategies": {
             "title": "How to Set Your Freelance Rates Without Undervaluing Your Work",
@@ -802,15 +816,16 @@ def blog_article(request, slug):
 
 <h2>Track Everything with InvoiceFlow</h2>
 <p>Understanding your business finances is crucial for pricing decisions. InvoiceFlow helps you track revenue, analyze which services are most profitable, and ensure you're billing for all your work. Professional invoicing also reinforces your professional image—supporting your premium rates.</p>
-"""
-        }
+""",
+        },
     }
-    
+
     article = articles.get(slug)
     if not article:
         from django.http import Http404
+
         raise Http404("Article not found")
-    
+
     return render(request, "pages/blog_article.html", {"article": article})
 
 
@@ -821,8 +836,9 @@ def components_showcase(request):
 
 def newsletter_signup(request):
     """Handle newsletter signup form submissions."""
-    from .models import Waitlist
     import logging
+
+    from .models import Waitlist
 
     logger = logging.getLogger(__name__)
 
@@ -832,8 +848,7 @@ def newsletter_signup(request):
         if email:
             try:
                 waitlist_entry, created = Waitlist.objects.get_or_create(
-                    email=email,
-                    defaults={"feature": "general"}
+                    email=email, defaults={"feature": "general"}
                 )
                 if created:
                     messages.success(
@@ -941,10 +956,11 @@ def settings_business(request):
 @login_required
 def settings_security(request):
     """Security & Password settings page with rate limiting on password changes."""
-    from .forms import PasswordChangeForm
-    from django.contrib.auth.hashers import check_password
     from django.contrib.auth import update_session_auth_hash
+    from django.contrib.auth.hashers import check_password
     from django.core.cache import cache
+
+    from .forms import PasswordChangeForm
     from .middleware import RequestResponseLoggingMiddleware
 
     message = None
@@ -1031,32 +1047,37 @@ def settings_notifications(request):
 @login_required
 def settings_billing(request):
     """Billing & Account settings page with optimized database queries."""
-    from django.db.models import Sum, F, DecimalField, Value
+    from django.db.models import DecimalField, F, Sum, Value
     from django.db.models.functions import Coalesce
 
     now = datetime.now()
     invoices = Invoice.objects.filter(user=request.user)
 
     stats = invoices.aggregate(
-        invoice_count=Count('id', filter=Q(invoice_date__month=now.month, invoice_date__year=now.year)),
-        paid_invoices=Count('id', filter=Q(status='paid')),
+        invoice_count=Count(
+            "id", filter=Q(invoice_date__month=now.month, invoice_date__year=now.year)
+        ),
+        paid_invoices=Count("id", filter=Q(status="paid")),
     )
 
     pending_amount = LineItem.objects.filter(
-        invoice__user=request.user,
-        invoice__status='unpaid'
+        invoice__user=request.user, invoice__status="unpaid"
     ).aggregate(
         total=Coalesce(
-            Sum(F('quantity') * F('unit_price')),
-            Value(Decimal('0')),
-            output_field=DecimalField(max_digits=15, decimal_places=2)
+            Sum(F("quantity") * F("unit_price")),
+            Value(Decimal("0")),
+            output_field=DecimalField(max_digits=15, decimal_places=2),
         )
-    )['total'] or Decimal('0')
+    )[
+        "total"
+    ] or Decimal(
+        "0"
+    )
 
     context = {
         "active_tab": "billing",
-        "invoice_count": stats['invoice_count'] or 0,
-        "paid_invoices": stats['paid_invoices'] or 0,
+        "invoice_count": stats["invoice_count"] or 0,
+        "paid_invoices": stats["paid_invoices"] or 0,
         "pending_amount": f"${pending_amount:,.2f}" if pending_amount > 0 else "$0.00",
     }
 
@@ -1128,8 +1149,10 @@ def analytics(request):
 # Admin Views (Production-ready admin dashboard for platform management)
 from functools import wraps
 
+
 def staff_member_required(view_func):
     """Decorator requiring user to be logged in and have staff access (is_active and is_staff)."""
+
     @wraps(view_func)
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -1139,6 +1162,7 @@ def staff_member_required(view_func):
             messages.error(request, "You do not have permission to access this page.")
             return redirect("home")
         return view_func(request, *args, **kwargs)
+
     return wrapper
 
 
@@ -1290,6 +1314,7 @@ def bulk_delete(request):
             deleted_count, _ = Invoice.objects.filter(id__in=invoice_ids, user=request.user).delete()  # type: ignore
             if deleted_count > 0:
                 from invoices.services import AnalyticsService
+
                 AnalyticsService.invalidate_user_cache(request.user.id)
             messages.success(request, f"Deleted {deleted_count} invoice(s).")
         return redirect("dashboard")
@@ -1307,7 +1332,11 @@ def waitlist_subscribe(request):
             messages.success(request, "You're on the list! We'll notify you soon.")
             return redirect(request.META.get("HTTP_REFERER", "home"))
         else:
-            if form.errors and "email" in form.errors and "already" in str(form.errors["email"][0]).lower():
+            if (
+                form.errors
+                and "email" in form.errors
+                and "already" in str(form.errors["email"][0]).lower()
+            ):
                 messages.info(request, "This email is already on our waitlist!")
             else:
                 messages.error(request, "Please enter a valid email address.")
@@ -1331,7 +1360,7 @@ def robots_txt(request):
     scheme = request.scheme
     host = request.get_host()
     base_url = f"{scheme}://{host}"
-    
+
     content = f"""User-agent: *
 Allow: /
 Allow: /features/

@@ -1,25 +1,26 @@
 """SendGrid dynamic template email service for all email types."""
 
-import os
 import base64
 import json
+import os
+
+from django.template.loader import render_to_string
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (
-    Mail,
-    From,
-    To,
-    ReplyTo,
-    TemplateId,
-    Personalization,
     Attachment,
+    Content,
     FileContent,
     FileName,
     FileType,
-    Content,
+    From,
+    Mail,
+    Personalization,
+    ReplyTo,
+    TemplateId,
+    To,
 )
 from weasyprint import HTML
 from weasyprint.text.fonts import FontConfiguration
-from django.template.loader import render_to_string
 
 
 class SendGridEmailService:
@@ -76,8 +77,8 @@ class SendGridEmailService:
             token_header = f"repl {token}" if "REPL_IDENTITY" in os.environ else f"depl {token}"
 
             # For synchronous operation, we'll try async operations
-            import urllib.request
             import json
+            import urllib.request
 
             url = f"https://{hostname}/api/v2/connection?include_secrets=true&connector_names=sendgrid"
             req = urllib.request.Request(url)

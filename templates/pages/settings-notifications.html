@@ -1,101 +1,90 @@
 {% extends "base/layout.html" %}
-
 {% block title %}Notification Settings - InvoiceFlow{% endblock %}
-
 {% block content %}
-<div class="min-h-screen bg-gray-50 py-8">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">Notification Settings</h1>
-            <p class="mt-2 text-gray-600">Control how and when you receive notifications.</p>
-        </div>
-
-        {% include "components/settings-nav.html" with active="notifications" %}
-
-        <div class="bg-white shadow-lg rounded-2xl p-8">
-            <form method="post">
-                {% csrf_token %}
-                
-                <div class="space-y-8">
-                    <div>
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Invoice Notifications</h3>
-                        <div class="space-y-4">
-                            <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
-                                <div>
-                                    <p class="font-medium text-gray-900">Invoice Created</p>
-                                    <p class="text-sm text-gray-500">Get notified when a new invoice is created.</p>
-                                </div>
-                                {{ notification_form.notify_invoice_created }}
-                            </label>
-                            
-                            <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
-                                <div>
-                                    <p class="font-medium text-gray-900">Payment Received</p>
-                                    <p class="text-sm text-gray-500">Get notified when a payment is received.</p>
-                                </div>
-                                {{ notification_form.notify_payment_received }}
-                            </label>
-                            
-                            <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
-                                <div>
-                                    <p class="font-medium text-gray-900">Invoice Viewed</p>
-                                    <p class="text-sm text-gray-500">Get notified when a client views your invoice.</p>
-                                </div>
-                                {{ notification_form.notify_invoice_viewed }}
-                            </label>
-                            
-                            <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
-                                <div>
-                                    <p class="font-medium text-gray-900">Invoice Overdue</p>
-                                    <p class="text-sm text-gray-500">Get notified when an invoice becomes overdue.</p>
-                                </div>
-                                {{ notification_form.notify_invoice_overdue }}
-                            </label>
+    <div class="min-h-screen bg-gray-50 py-8">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900">Notification Settings</h1>
+                <p class="mt-2 text-gray-600">Control how and when you receive notifications.</p>
+            </div>
+            {% include "components/settings-nav.html" with active="notifications" %}
+            <div class="bg-white shadow-lg rounded-2xl p-8">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Invoice Notifications</h3>
+                            <div class="space-y-4">
+                                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
+                                    <div>
+                                        <p class="font-medium text-gray-900">Invoice Created</p>
+                                        <p class="text-sm text-gray-500">Get notified when a new invoice is created.</p>
+                                    </div>
+                                    {{ notification_form.notify_invoice_created }}
+                                </label>
+                                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
+                                    <div>
+                                        <p class="font-medium text-gray-900">Payment Received</p>
+                                        <p class="text-sm text-gray-500">Get notified when a payment is received.</p>
+                                    </div>
+                                    {{ notification_form.notify_payment_received }}
+                                </label>
+                                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
+                                    <div>
+                                        <p class="font-medium text-gray-900">Invoice Viewed</p>
+                                        <p class="text-sm text-gray-500">Get notified when a client views your invoice.</p>
+                                    </div>
+                                    {{ notification_form.notify_invoice_viewed }}
+                                </label>
+                                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
+                                    <div>
+                                        <p class="font-medium text-gray-900">Invoice Overdue</p>
+                                        <p class="text-sm text-gray-500">Get notified when an invoice becomes overdue.</p>
+                                    </div>
+                                    {{ notification_form.notify_invoice_overdue }}
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Summary & Reports</h3>
+                            <div class="space-y-4">
+                                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
+                                    <div>
+                                        <p class="font-medium text-gray-900">Weekly Summary</p>
+                                        <p class="text-sm text-gray-500">Receive a weekly summary of your invoicing activity.</p>
+                                    </div>
+                                    {{ notification_form.notify_weekly_summary }}
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Security Alerts</h3>
+                            <div class="space-y-4">
+                                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
+                                    <div>
+                                        <p class="font-medium text-gray-900">Security Alerts</p>
+                                        <p class="text-sm text-gray-500">Get notified about security-related events.</p>
+                                    </div>
+                                    {{ notification_form.notify_security_alerts }}
+                                </label>
+                                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
+                                    <div>
+                                        <p class="font-medium text-gray-900">Password Changes</p>
+                                        <p class="text-sm text-gray-500">Get notified when your password is changed.</p>
+                                    </div>
+                                    {{ notification_form.notify_password_changes }}
+                                </label>
+                            </div>
                         </div>
                     </div>
-
-                    <div>
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Summary & Reports</h3>
-                        <div class="space-y-4">
-                            <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
-                                <div>
-                                    <p class="font-medium text-gray-900">Weekly Summary</p>
-                                    <p class="text-sm text-gray-500">Receive a weekly summary of your invoicing activity.</p>
-                                </div>
-                                {{ notification_form.notify_weekly_summary }}
-                            </label>
-                        </div>
+                    <div class="mt-8 flex justify-end">
+                        <button type="submit"
+                                class="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
+                            Save Preferences
+                        </button>
                     </div>
-
-                    <div>
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Security Alerts</h3>
-                        <div class="space-y-4">
-                            <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
-                                <div>
-                                    <p class="font-medium text-gray-900">Security Alerts</p>
-                                    <p class="text-sm text-gray-500">Get notified about security-related events.</p>
-                                </div>
-                                {{ notification_form.notify_security_alerts }}
-                            </label>
-                            
-                            <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
-                                <div>
-                                    <p class="font-medium text-gray-900">Password Changes</p>
-                                    <p class="text-sm text-gray-500">Get notified when your password is changed.</p>
-                                </div>
-                                {{ notification_form.notify_password_changes }}
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-8 flex justify-end">
-                    <button type="submit" class="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
-                        Save Preferences
-                    </button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}

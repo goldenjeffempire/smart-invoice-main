@@ -1,155 +1,180 @@
 {% extends "base/layout.html" %}
-
 {% block title %}Contact Us{% endblock %}
-{% block meta_description %}Get in touch with InvoiceFlow. We're here to help with any questions about our invoicing platform.{% endblock %}
-
+{% block meta_description %}
+    Get in touch with InvoiceFlow. We're here to help with any questions about our invoicing platform.
+{% endblock %}
 {% block content %}
-<section class="page-hero">
-    <div class="hero-bg"></div>
-    <div class="hero-glow hero-glow-1"></div>
-    <div class="container">
-        <div class="page-hero-content">
-            <span class="badge">
-                <span class="badge-dot"></span>
-                Contact Us
-            </span>
-            <h1 class="page-hero-title text-gradient">
-                We're Here to Help
-            </h1>
-            <p class="page-hero-subtitle">
-                Have questions? We'd love to hear from you. Send us a message 
-                and we'll respond as soon as possible.
-            </p>
-        </div>
-    </div>
-</section>
-
-<section class="section">
-    <div class="container">
-        <div class="contact-grid">
-            <div class="contact-form-wrapper glass-card" data-animate="slide-up">
-                <h2 class="contact-form-title">Send Us a Message</h2>
-                
-                <form method="post" class="contact-form" novalidate>
-                    {% csrf_token %}
-                    
-                    {% if messages %}
-                    {% for message in messages %}
-                    <div class="form-message {% if message.tags %}{{ message.tags }}{% endif %}" role="alert">
-                        {{ message }}
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-                    
-                    {% if rate_limited %}
-                    <div class="form-message error" role="alert">
-                        You have reached the submission limit. Please try again in an hour.
-                    </div>
-                    {% endif %}
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="name" class="form-label">Your Name</label>
-                            <input type="text" name="name" id="name" class="form-input" placeholder="John Doe" required aria-required="true">
-                        </div>
-                        <div class="form-group">
-                            <label for="email" class="form-label">Email Address</label>
-                            <input type="email" name="email" id="email" class="form-input" placeholder="you@example.com" required aria-required="true">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="subject" class="form-label">Subject</label>
-                        <select name="subject" id="subject" class="form-input">
-                            <option value="general">General Inquiry</option>
-                            <option value="sales">Sales Question</option>
-                            <option value="support">Technical Support</option>
-                            <option value="billing">Billing Question</option>
-                            <option value="feature">Feature Request</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="message" class="form-label">Message</label>
-                        <textarea name="message" id="message" class="form-input form-textarea" placeholder="How can we help you?" rows="5" required aria-required="true"></textarea>
-                    </div>
-                    
-                    <!-- Honeypot field for spam protection (hidden) -->
-                    <div style="position: absolute; left: -9999px; opacity: 0; height: 0; overflow: hidden;" aria-hidden="true">
-                        <label for="honeypot">Leave this field empty</label>
-                        <input type="text" name="honeypot" id="honeypot" tabindex="-1" autocomplete="off">
-                    </div>
-                    
-                    {% if hcaptcha_enabled %}
-                    <!-- hCaptcha widget -->
-                    <div class="form-group">
-                        <div class="h-captcha" data-sitekey="{{ hcaptcha_sitekey }}" data-theme="dark"></div>
-                    </div>
-                    {% endif %}
-                    
-                    <button type="submit" class="btn btn-primary btn-lg" {% if rate_limited %}disabled{% endif %}>
-                        Send Message
-                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <line x1="22" y1="2" x2="11" y2="13"/>
-                            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                        </svg>
-                    </button>
-                    
-                    <p class="form-privacy-notice">
-                        By submitting this form, you agree to our 
-                        <a href="{% url 'privacy' %}">Privacy Policy</a>. 
-                        We'll only use your information to respond to your inquiry.
-                    </p>
-                </form>
-            </div>
-            
-            <div class="contact-info" data-animate="slide-up" data-delay="200">
-                <div class="contact-info-card glass-card">
-                    <div class="contact-info-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                            <polyline points="22,6 12,13 2,6"/>
-                        </svg>
-                    </div>
-                    <h3>Email Us</h3>
-                    <p>Use the form for secure communication</p>
-                </div>
-                
-                <div class="contact-info-card glass-card">
-                    <div class="contact-info-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <circle cx="12" cy="12" r="10"/>
-                            <polyline points="12 6 12 12 16 14"/>
-                        </svg>
-                    </div>
-                    <h3>Response Time</h3>
-                    <p>We typically respond within 24 hours</p>
-                </div>
-                
-                <div class="contact-info-card glass-card">
-                    <div class="contact-info-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>
-                            <circle cx="12" cy="10" r="3"/>
-                        </svg>
-                    </div>
-                    <h3>Office Hours</h3>
-                    <p>Monday - Friday, 9am - 5pm WAT</p>
-                </div>
+    <section class="page-hero">
+        <div class="hero-bg"></div>
+        <div class="hero-glow hero-glow-1"></div>
+        <div class="container">
+            <div class="page-hero-content">
+                <span class="badge">
+                    <span class="badge-dot"></span>
+                    Contact Us
+                </span>
+                <h1 class="page-hero-title text-gradient">We're Here to Help</h1>
+                <p class="page-hero-subtitle">
+                    Have questions? We'd love to hear from you. Send us a message
+                    and we'll respond as soon as possible.
+                </p>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+    <section class="section">
+        <div class="container">
+            <div class="contact-grid">
+                <div class="contact-form-wrapper glass-card" data-animate="slide-up">
+                    <h2 class="contact-form-title">Send Us a Message</h2>
+                    <form method="post" class="contact-form" novalidate>
+                        {% csrf_token %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="form-message {% if message.tags %}{{ message.tags }}{% endif %}"
+                                     role="alert">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                        {% if rate_limited %}
+                            <div class="form-message error" role="alert">You have reached the submission limit. Please try again in an hour.</div>
+                        {% endif %}
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name" class="form-label">Your Name</label>
+                                <input type="text"
+                                       name="name"
+                                       id="name"
+                                       class="form-input"
+                                       placeholder="John Doe"
+                                       required
+                                       aria-required="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email"
+                                       name="email"
+                                       id="email"
+                                       class="form-input"
+                                       placeholder="you@example.com"
+                                       required
+                                       aria-required="true">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject" class="form-label">Subject</label>
+                            <select name="subject" id="subject" class="form-input">
+                                <option value="general">General Inquiry</option>
+                                <option value="sales">Sales Question</option>
+                                <option value="support">Technical Support</option>
+                                <option value="billing">Billing Question</option>
+                                <option value="feature">Feature Request</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea name="message"
+                                      id="message"
+                                      class="form-input form-textarea"
+                                      placeholder="How can we help you?"
+                                      rows="5"
+                                      required
+                                      aria-required="true"></textarea>
+                        </div>
+                        <!-- Honeypot field for spam protection (hidden) -->
+                        <div style="position: absolute;
+                                    left: -9999px;
+                                    opacity: 0;
+                                    height: 0;
+                                    overflow: hidden"
+                             aria-hidden="true">
+                            <label for="honeypot">Leave this field empty</label>
+                            <input type="text"
+                                   name="honeypot"
+                                   id="honeypot"
+                                   tabindex="-1"
+                                   autocomplete="off">
+                        </div>
+                        {% if hcaptcha_enabled %}
+                            <!-- hCaptcha widget -->
+                            <div class="form-group">
+                                <div class="h-captcha"
+                                     data-sitekey="{{ hcaptcha_sitekey }}"
+                                     data-theme="dark"></div>
+                            </div>
+                        {% endif %}
+                        <button type="submit"
+                                class="btn btn-primary btn-lg"
+                                {% if rate_limited %}disabled{% endif %}>
+                            Send Message
+                            <svg class="btn-icon"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <line x1="22" y1="2" x2="11" y2="13" />
+                                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                            </svg>
+                        </button>
+                        <p class="form-privacy-notice">
+                            By submitting this form, you agree to our
+                            <a href="{% url 'privacy' %}">Privacy Policy</a>.
+                            We'll only use your information to respond to your inquiry.
+                        </p>
+                    </form>
+                </div>
+                <div class="contact-info" data-animate="slide-up" data-delay="200">
+                    <div class="contact-info-card glass-card">
+                        <div class="contact-info-icon">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                <polyline points="22,6 12,13 2,6" />
+                            </svg>
+                        </div>
+                        <h3>Email Us</h3>
+                        <p>Use the form for secure communication</p>
+                    </div>
+                    <div class="contact-info-card glass-card">
+                        <div class="contact-info-icon">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                        </div>
+                        <h3>Response Time</h3>
+                        <p>We typically respond within 24 hours</p>
+                    </div>
+                    <div class="contact-info-card glass-card">
+                        <div class="contact-info-icon">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z" />
+                                <circle cx="12" cy="10" r="3" />
+                            </svg>
+                        </div>
+                        <h3>Office Hours</h3>
+                        <p>Monday - Friday, 9am - 5pm WAT</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}
-
 {% if hcaptcha_enabled %}
-{% block head_extra %}
-<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
-{% endblock %}
+    {% block head_extra %}<script src="https://js.hcaptcha.com/1/api.js" async defer></script>{% endblock %}
 {% endif %}
-
 {% block extra_css %}
-<style>
+    <style>
 .page-hero {
     padding: var(--spacing-40) 0 var(--spacing-20);
     text-align: center;
@@ -326,5 +351,5 @@
     font-size: var(--font-size-sm);
     color: var(--color-neutral-400);
 }
-</style>
+    </style>
 {% endblock %}

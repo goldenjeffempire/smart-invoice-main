@@ -1,465 +1,642 @@
 {% extends "base/layout.html" %}
 {% load static %}
-
 {% block title %}Pricing - Simple, Transparent Plans | InvoiceFlow{% endblock %}
-{% block meta_description %}Choose the InvoiceFlow plan that fits your business. From free starter to enterprise - transparent pricing with no hidden fees. Start free today.{% endblock %}
-
-{% block content %}
-<section class="page-hero pricing-hero">
-    <div class="hero-bg"></div>
-    <div class="hero-glow hero-glow-1"></div>
-    <div class="container">
-        <div class="page-hero-content">
-            <span class="badge">
-                <span class="badge-dot"></span>
-                Pricing
-            </span>
-            <h1 class="page-hero-title text-gradient">
-                Simple, Transparent Pricing
-            </h1>
-            <p class="page-hero-subtitle">
-                Choose the plan that fits your business. No hidden fees, no surprises.<br>
-                Start free and upgrade as you grow.
-            </p>
-        </div>
-    </div>
-</section>
-
-<section class="section pricing-section">
-    <div class="container">
-        <div class="pricing-grid">
-            <div class="pricing-card glass-card" data-animate="slide-up">
-                <div class="pricing-card-header">
-                    <h3 class="pricing-plan-name">Starter</h3>
-                    <p class="pricing-plan-desc">Perfect for freelancers and solo entrepreneurs</p>
-                </div>
-                <div class="pricing-card-price">
-                    <span class="pricing-amount">Free</span>
-                    <span class="pricing-period">forever</span>
-                </div>
-                <ul class="pricing-features" role="list">
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>5 invoices per month</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>1 user account</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>PDF downloads</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>Email invoice delivery</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>3 invoice templates</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>Basic analytics</span>
-                    </li>
-                    <li class="pricing-feature not-included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <line x1="18" y1="6" x2="6" y2="18"/>
-                            <line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
-                        <span>Recurring invoices</span>
-                    </li>
-                    <li class="pricing-feature not-included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <line x1="18" y1="6" x2="6" y2="18"/>
-                            <line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
-                        <span>Custom branding</span>
-                    </li>
-                </ul>
-                <a href="{% url 'signup' %}" class="btn btn-secondary btn-block pricing-btn">
-                    Get Started Free
-                </a>
-            </div>
-
-            <div class="pricing-card pricing-card-featured glass-card" data-animate="slide-up" data-delay="100">
-                <div class="pricing-badge">Most Popular</div>
-                <div class="pricing-card-header">
-                    <h3 class="pricing-plan-name">Professional</h3>
-                    <p class="pricing-plan-desc">For growing businesses and agencies</p>
-                </div>
-                <div class="pricing-card-price">
-                    <span class="pricing-amount">$19</span>
-                    <span class="pricing-period">/month</span>
-                </div>
-                <p class="pricing-annual-note">or $190/year (save 17%)</p>
-                <ul class="pricing-features" role="list">
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span><strong>Unlimited</strong> invoices</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>Up to 3 user accounts</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>Custom branding & logo</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>Recurring invoices</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>15+ invoice templates</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>Advanced analytics</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>Priority email support</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>Multi-currency support</span>
-                    </li>
-                </ul>
-                <a href="{% url 'signup' %}" class="btn btn-primary btn-block pricing-btn">
-                    Start 14-Day Free Trial
-                </a>
-                <p class="pricing-trial-note">No credit card required</p>
-            </div>
-
-            <div class="pricing-card glass-card" data-animate="slide-up" data-delay="200">
-                <div class="pricing-card-header">
-                    <h3 class="pricing-plan-name">Enterprise</h3>
-                    <p class="pricing-plan-desc">For large teams and organizations</p>
-                </div>
-                <div class="pricing-card-price">
-                    <span class="pricing-amount">$49</span>
-                    <span class="pricing-period">/month</span>
-                </div>
-                <p class="pricing-annual-note">or $490/year (save 17%)</p>
-                <ul class="pricing-features" role="list">
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span><strong>Everything in Professional</strong></span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span><strong>Unlimited</strong> user accounts</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>Team collaboration</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>API access</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>Custom integrations</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>Dedicated account manager</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>SLA guarantee</span>
-                    </li>
-                    <li class="pricing-feature included">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>Phone & chat support</span>
-                    </li>
-                </ul>
-                <a href="{% url 'contact' %}" class="btn btn-secondary btn-block pricing-btn">
-                    Contact Sales
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="section pricing-comparison-section">
-    <div class="container">
-        <div class="section-header text-center" data-animate="slide-up">
-            <h2 class="section-title text-gradient">Feature Comparison</h2>
-            <p class="section-subtitle">See what's included in each plan</p>
-        </div>
-        
-        <div class="comparison-table-wrapper glass-card" data-animate="slide-up" data-delay="100">
-            <table class="comparison-table" role="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Feature</th>
-                        <th scope="col">Starter</th>
-                        <th scope="col" class="featured-col">Professional</th>
-                        <th scope="col">Enterprise</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">Monthly Invoices</th>
-                        <td>5</td>
-                        <td class="featured-col">Unlimited</td>
-                        <td>Unlimited</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">User Accounts</th>
-                        <td>1</td>
-                        <td class="featured-col">3</td>
-                        <td>Unlimited</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Invoice Templates</th>
-                        <td>3</td>
-                        <td class="featured-col">15+</td>
-                        <td>Unlimited</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Custom Branding</th>
-                        <td><span class="feature-no" aria-label="Not included">-</span></td>
-                        <td class="featured-col"><span class="feature-yes" aria-label="Included">Yes</span></td>
-                        <td><span class="feature-yes" aria-label="Included">Yes</span></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Recurring Invoices</th>
-                        <td><span class="feature-no" aria-label="Not included">-</span></td>
-                        <td class="featured-col"><span class="feature-yes" aria-label="Included">Yes</span></td>
-                        <td><span class="feature-yes" aria-label="Included">Yes</span></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Multi-Currency</th>
-                        <td><span class="feature-no" aria-label="Not included">-</span></td>
-                        <td class="featured-col"><span class="feature-yes" aria-label="Included">Yes</span></td>
-                        <td><span class="feature-yes" aria-label="Included">Yes</span></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Analytics Dashboard</th>
-                        <td>Basic</td>
-                        <td class="featured-col">Advanced</td>
-                        <td>Advanced</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">API Access</th>
-                        <td><span class="feature-no" aria-label="Not included">-</span></td>
-                        <td class="featured-col"><span class="feature-no" aria-label="Not included">-</span></td>
-                        <td><span class="feature-yes" aria-label="Included">Yes</span></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Team Collaboration</th>
-                        <td><span class="feature-no" aria-label="Not included">-</span></td>
-                        <td class="featured-col"><span class="feature-no" aria-label="Not included">-</span></td>
-                        <td><span class="feature-yes" aria-label="Included">Yes</span></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Support</th>
-                        <td>Email</td>
-                        <td class="featured-col">Priority Email</td>
-                        <td>Phone, Chat & Email</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">SLA Guarantee</th>
-                        <td><span class="feature-no" aria-label="Not included">-</span></td>
-                        <td class="featured-col"><span class="feature-no" aria-label="Not included">-</span></td>
-                        <td>99.9% Uptime</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</section>
-
-<section class="section pricing-faq-section">
-    <div class="container">
-        <div class="section-header text-center" data-animate="slide-up">
-            <h2 class="section-title text-gradient">Frequently Asked Questions</h2>
-            <p class="section-subtitle">Have questions? We have answers.</p>
-        </div>
-        
-        <div class="pricing-faq-grid" data-animate="slide-up" data-delay="100">
-            <div class="faq-item glass-card">
-                <details open>
-                    <summary>
-                        <h3>Can I change plans later?</h3>
-                        <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="6 9 12 15 18 9"/>
-                        </svg>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>Yes! You can upgrade or downgrade your plan at any time. When you upgrade, you'll get immediate access to new features. If you downgrade, the change takes effect at your next billing cycle.</p>
-                    </div>
-                </details>
-            </div>
-            
-            <div class="faq-item glass-card">
-                <details>
-                    <summary>
-                        <h3>Is there a free trial?</h3>
-                        <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="6 9 12 15 18 9"/>
-                        </svg>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>Absolutely! The Professional plan comes with a 14-day free trial. No credit card required. You can explore all features before deciding to subscribe.</p>
-                    </div>
-                </details>
-            </div>
-            
-            <div class="faq-item glass-card">
-                <details>
-                    <summary>
-                        <h3>What payment methods do you accept?</h3>
-                        <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="6 9 12 15 18 9"/>
-                        </svg>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers for Enterprise plans. All payments are processed securely.</p>
-                    </div>
-                </details>
-            </div>
-            
-            <div class="faq-item glass-card">
-                <details>
-                    <summary>
-                        <h3>Can I cancel anytime?</h3>
-                        <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="6 9 12 15 18 9"/>
-                        </svg>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>Yes, you can cancel your subscription at any time with no cancellation fees. Your account will remain active until the end of your current billing period.</p>
-                    </div>
-                </details>
-            </div>
-            
-            <div class="faq-item glass-card">
-                <details>
-                    <summary>
-                        <h3>Do you offer discounts for non-profits?</h3>
-                        <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="6 9 12 15 18 9"/>
-                        </svg>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>Yes! We offer 50% off for registered non-profit organizations and educational institutions. Contact our sales team with your credentials to get your discount.</p>
-                    </div>
-                </details>
-            </div>
-            
-            <div class="faq-item glass-card">
-                <details>
-                    <summary>
-                        <h3>What happens to my data if I cancel?</h3>
-                        <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="6 9 12 15 18 9"/>
-                        </svg>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>Your data remains safe for 30 days after cancellation. You can export all your invoices and data at any time. After 30 days, data is permanently deleted per our privacy policy.</p>
-                    </div>
-                </details>
-            </div>
-        </div>
-        
-        <div class="pricing-faq-cta text-center" data-animate="slide-up" data-delay="200">
-            <p>Still have questions?</p>
-            <a href="{% url 'contact' %}" class="btn btn-primary">Contact Our Team</a>
-        </div>
-    </div>
-</section>
-
-<section class="section pricing-guarantee-section">
-    <div class="container">
-        <div class="guarantee-card glass-card" data-animate="scale-in">
-            <div class="guarantee-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    <polyline points="9 12 11 14 15 10"/>
-                </svg>
-            </div>
-            <h2 class="guarantee-title">30-Day Money-Back Guarantee</h2>
-            <p class="guarantee-desc">
-                We're confident you'll love InvoiceFlow. If you're not completely satisfied within 
-                the first 30 days, we'll refund your payment in full. No questions asked.
-            </p>
-            <div class="guarantee-features">
-                <div class="guarantee-feature">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    <span>No questions asked refund</span>
-                </div>
-                <div class="guarantee-feature">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    <span>Full refund within 30 days</span>
-                </div>
-                <div class="guarantee-feature">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    <span>Cancel anytime</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+{% block meta_description %}
+    Choose the InvoiceFlow plan that fits your business. From free starter to enterprise - transparent pricing with no hidden fees. Start free today.
 {% endblock %}
-
+{% block content %}
+    <section class="page-hero pricing-hero">
+        <div class="hero-bg"></div>
+        <div class="hero-glow hero-glow-1"></div>
+        <div class="container">
+            <div class="page-hero-content">
+                <span class="badge">
+                    <span class="badge-dot"></span>
+                    Pricing
+                </span>
+                <h1 class="page-hero-title text-gradient">Simple, Transparent Pricing</h1>
+                <p class="page-hero-subtitle">
+                    Choose the plan that fits your business. No hidden fees, no surprises.
+                    <br>
+                    Start free and upgrade as you grow.
+                </p>
+            </div>
+        </div>
+    </section>
+    <section class="section pricing-section">
+        <div class="container">
+            <div class="pricing-grid">
+                <div class="pricing-card glass-card" data-animate="slide-up">
+                    <div class="pricing-card-header">
+                        <h3 class="pricing-plan-name">Starter</h3>
+                        <p class="pricing-plan-desc">Perfect for freelancers and solo entrepreneurs</p>
+                    </div>
+                    <div class="pricing-card-price">
+                        <span class="pricing-amount">Free</span>
+                        <span class="pricing-period">forever</span>
+                    </div>
+                    <ul class="pricing-features" role="list">
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>5 invoices per month</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>1 user account</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>PDF downloads</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>Email invoice delivery</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>3 invoice templates</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>Basic analytics</span>
+                        </li>
+                        <li class="pricing-feature not-included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                            <span>Recurring invoices</span>
+                        </li>
+                        <li class="pricing-feature not-included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                            <span>Custom branding</span>
+                        </li>
+                    </ul>
+                    <a href="{% url 'signup' %}"
+                       class="btn btn-secondary btn-block pricing-btn">Get Started Free</a>
+                </div>
+                <div class="pricing-card pricing-card-featured glass-card"
+                     data-animate="slide-up"
+                     data-delay="100">
+                    <div class="pricing-badge">Most Popular</div>
+                    <div class="pricing-card-header">
+                        <h3 class="pricing-plan-name">Professional</h3>
+                        <p class="pricing-plan-desc">For growing businesses and agencies</p>
+                    </div>
+                    <div class="pricing-card-price">
+                        <span class="pricing-amount">$19</span>
+                        <span class="pricing-period">/month</span>
+                    </div>
+                    <p class="pricing-annual-note">or $190/year (save 17%)</p>
+                    <ul class="pricing-features" role="list">
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span><strong>Unlimited</strong> invoices</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>Up to 3 user accounts</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>Custom branding & logo</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>Recurring invoices</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>15+ invoice templates</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>Advanced analytics</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>Priority email support</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>Multi-currency support</span>
+                        </li>
+                    </ul>
+                    <a href="{% url 'signup' %}"
+                       class="btn btn-primary btn-block pricing-btn">Start 14-Day Free Trial</a>
+                    <p class="pricing-trial-note">No credit card required</p>
+                </div>
+                <div class="pricing-card glass-card"
+                     data-animate="slide-up"
+                     data-delay="200">
+                    <div class="pricing-card-header">
+                        <h3 class="pricing-plan-name">Enterprise</h3>
+                        <p class="pricing-plan-desc">For large teams and organizations</p>
+                    </div>
+                    <div class="pricing-card-price">
+                        <span class="pricing-amount">$49</span>
+                        <span class="pricing-period">/month</span>
+                    </div>
+                    <p class="pricing-annual-note">or $490/year (save 17%)</p>
+                    <ul class="pricing-features" role="list">
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span><strong>Everything in Professional</strong></span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span><strong>Unlimited</strong> user accounts</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>Team collaboration</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>API access</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>Custom integrations</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>Dedicated account manager</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>SLA guarantee</span>
+                        </li>
+                        <li class="pricing-feature included">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>Phone & chat support</span>
+                        </li>
+                    </ul>
+                    <a href="{% url 'contact' %}"
+                       class="btn btn-secondary btn-block pricing-btn">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section pricing-comparison-section">
+        <div class="container">
+            <div class="section-header text-center" data-animate="slide-up">
+                <h2 class="section-title text-gradient">Feature Comparison</h2>
+                <p class="section-subtitle">See what's included in each plan</p>
+            </div>
+            <div class="comparison-table-wrapper glass-card"
+                 data-animate="slide-up"
+                 data-delay="100">
+                <table class="comparison-table" role="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Feature</th>
+                            <th scope="col">Starter</th>
+                            <th scope="col" class="featured-col">Professional</th>
+                            <th scope="col">Enterprise</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Monthly Invoices</th>
+                            <td>5</td>
+                            <td class="featured-col">Unlimited</td>
+                            <td>Unlimited</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">User Accounts</th>
+                            <td>1</td>
+                            <td class="featured-col">3</td>
+                            <td>Unlimited</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Invoice Templates</th>
+                            <td>3</td>
+                            <td class="featured-col">15+</td>
+                            <td>Unlimited</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Custom Branding</th>
+                            <td>
+                                <span class="feature-no" aria-label="Not included">-</span>
+                            </td>
+                            <td class="featured-col">
+                                <span class="feature-yes" aria-label="Included">Yes</span>
+                            </td>
+                            <td>
+                                <span class="feature-yes" aria-label="Included">Yes</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Recurring Invoices</th>
+                            <td>
+                                <span class="feature-no" aria-label="Not included">-</span>
+                            </td>
+                            <td class="featured-col">
+                                <span class="feature-yes" aria-label="Included">Yes</span>
+                            </td>
+                            <td>
+                                <span class="feature-yes" aria-label="Included">Yes</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Multi-Currency</th>
+                            <td>
+                                <span class="feature-no" aria-label="Not included">-</span>
+                            </td>
+                            <td class="featured-col">
+                                <span class="feature-yes" aria-label="Included">Yes</span>
+                            </td>
+                            <td>
+                                <span class="feature-yes" aria-label="Included">Yes</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Analytics Dashboard</th>
+                            <td>Basic</td>
+                            <td class="featured-col">Advanced</td>
+                            <td>Advanced</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">API Access</th>
+                            <td>
+                                <span class="feature-no" aria-label="Not included">-</span>
+                            </td>
+                            <td class="featured-col">
+                                <span class="feature-no" aria-label="Not included">-</span>
+                            </td>
+                            <td>
+                                <span class="feature-yes" aria-label="Included">Yes</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Team Collaboration</th>
+                            <td>
+                                <span class="feature-no" aria-label="Not included">-</span>
+                            </td>
+                            <td class="featured-col">
+                                <span class="feature-no" aria-label="Not included">-</span>
+                            </td>
+                            <td>
+                                <span class="feature-yes" aria-label="Included">Yes</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Support</th>
+                            <td>Email</td>
+                            <td class="featured-col">Priority Email</td>
+                            <td>Phone, Chat & Email</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">SLA Guarantee</th>
+                            <td>
+                                <span class="feature-no" aria-label="Not included">-</span>
+                            </td>
+                            <td class="featured-col">
+                                <span class="feature-no" aria-label="Not included">-</span>
+                            </td>
+                            <td>99.9% Uptime</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <section class="section pricing-faq-section">
+        <div class="container">
+            <div class="section-header text-center" data-animate="slide-up">
+                <h2 class="section-title text-gradient">Frequently Asked Questions</h2>
+                <p class="section-subtitle">Have questions? We have answers.</p>
+            </div>
+            <div class="pricing-faq-grid" data-animate="slide-up" data-delay="100">
+                <div class="faq-item glass-card">
+                    <details open>
+                        <summary>
+                            <h3>Can I change plans later?</h3>
+                            <svg class="faq-icon"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </summary>
+                        <div class="faq-answer">
+                            <p>
+                                Yes! You can upgrade or downgrade your plan at any time. When you upgrade, you'll get immediate access to new features. If you downgrade, the change takes effect at your next billing cycle.
+                            </p>
+                        </div>
+                    </details>
+                </div>
+                <div class="faq-item glass-card">
+                    <details>
+                        <summary>
+                            <h3>Is there a free trial?</h3>
+                            <svg class="faq-icon"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </summary>
+                        <div class="faq-answer">
+                            <p>
+                                Absolutely! The Professional plan comes with a 14-day free trial. No credit card required. You can explore all features before deciding to subscribe.
+                            </p>
+                        </div>
+                    </details>
+                </div>
+                <div class="faq-item glass-card">
+                    <details>
+                        <summary>
+                            <h3>What payment methods do you accept?</h3>
+                            <svg class="faq-icon"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </summary>
+                        <div class="faq-answer">
+                            <p>
+                                We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers for Enterprise plans. All payments are processed securely.
+                            </p>
+                        </div>
+                    </details>
+                </div>
+                <div class="faq-item glass-card">
+                    <details>
+                        <summary>
+                            <h3>Can I cancel anytime?</h3>
+                            <svg class="faq-icon"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </summary>
+                        <div class="faq-answer">
+                            <p>
+                                Yes, you can cancel your subscription at any time with no cancellation fees. Your account will remain active until the end of your current billing period.
+                            </p>
+                        </div>
+                    </details>
+                </div>
+                <div class="faq-item glass-card">
+                    <details>
+                        <summary>
+                            <h3>Do you offer discounts for non-profits?</h3>
+                            <svg class="faq-icon"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </summary>
+                        <div class="faq-answer">
+                            <p>
+                                Yes! We offer 50% off for registered non-profit organizations and educational institutions. Contact our sales team with your credentials to get your discount.
+                            </p>
+                        </div>
+                    </details>
+                </div>
+                <div class="faq-item glass-card">
+                    <details>
+                        <summary>
+                            <h3>What happens to my data if I cancel?</h3>
+                            <svg class="faq-icon"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 aria-hidden="true">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </summary>
+                        <div class="faq-answer">
+                            <p>
+                                Your data remains safe for 30 days after cancellation. You can export all your invoices and data at any time. After 30 days, data is permanently deleted per our privacy policy.
+                            </p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+            <div class="pricing-faq-cta text-center"
+                 data-animate="slide-up"
+                 data-delay="200">
+                <p>Still have questions?</p>
+                <a href="{% url 'contact' %}" class="btn btn-primary">Contact Our Team</a>
+            </div>
+        </div>
+    </section>
+    <section class="section pricing-guarantee-section">
+        <div class="container">
+            <div class="guarantee-card glass-card" data-animate="scale-in">
+                <div class="guarantee-icon">
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         aria-hidden="true">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        <polyline points="9 12 11 14 15 10" />
+                    </svg>
+                </div>
+                <h2 class="guarantee-title">30-Day Money-Back Guarantee</h2>
+                <p class="guarantee-desc">
+                    We're confident you'll love InvoiceFlow. If you're not completely satisfied within
+                    the first 30 days, we'll refund your payment in full. No questions asked.
+                </p>
+                <div class="guarantee-features">
+                    <div class="guarantee-feature">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             aria-hidden="true">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <span>No questions asked refund</span>
+                    </div>
+                    <div class="guarantee-feature">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             aria-hidden="true">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <span>Full refund within 30 days</span>
+                    </div>
+                    <div class="guarantee-feature">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             aria-hidden="true">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <span>Cancel anytime</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
 {% block extra_css %}
-<style>
+    <style>
 .pricing-hero {
     padding: var(--spacing-40) 0 var(--spacing-20);
     text-align: center;
@@ -808,5 +985,5 @@ details[open] .faq-icon {
     height: 18px;
     color: #22c55e;
 }
-</style>
+    </style>
 {% endblock %}

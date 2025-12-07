@@ -12,9 +12,10 @@ import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "invoiceflow.settings")
 
 from django.conf import settings
+
 from invoiceflow.env_validation import validate_environment
 
-validate_environment(exit_on_error=not getattr(settings, 'DEBUG', False))
+validate_environment(exit_on_error=not getattr(settings, "DEBUG", False))
 
 from django.core.wsgi import get_wsgi_application
 

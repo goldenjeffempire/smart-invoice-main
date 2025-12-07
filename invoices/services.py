@@ -2,24 +2,26 @@
 Business logic services for InvoiceFlow platform.
 Extracts logic from views into reusable service classes.
 """
+
 from __future__ import annotations
 
 import hashlib
 import logging
 import threading
 from concurrent.futures import ThreadPoolExecutor
-from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
+from decimal import Decimal
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
 from django.conf import settings
 from django.core.cache import caches
-from django.db import transaction, connection
-from django.db.models import Count, Sum, F, DecimalField, Value, Q
+from django.db import transaction
+from django.db.models import Count, DecimalField, F, Q, Sum, Value
 from django.db.models.functions import Coalesce
-from decimal import Decimal
-from .models import Invoice, LineItem
+from django.template.loader import render_to_string
 from weasyprint import HTML
 from weasyprint.text.fonts import FontConfiguration
-from django.template.loader import render_to_string
+
+from .models import Invoice, LineItem
 
 if TYPE_CHECKING:
     from .forms import InvoiceForm
@@ -113,7 +115,7 @@ class PDFService:
 
 class AnalyticsService:
     """Handles analytics calculations with optimized database-level SQL aggregations.
-    
+
     Performance Optimizations:
     - Uses Django's annotate() for database-level aggregations
     - Calculates invoice totals using SUM(quantity * unit_price) at DB level
@@ -131,9 +133,9 @@ class AnalyticsService:
     def _get_cache():
         """Get the analytics cache backend."""
         try:
-            return caches['analytics']
+            return caches["analytics"]
         except Exception:
-            return caches['default']
+            return caches["default"]
 
     @staticmethod
     def _make_cache_key(prefix: str, user_id: int) -> str:
@@ -143,7 +145,7 @@ class AnalyticsService:
     @classmethod
     def invalidate_user_cache(cls, user_id: int) -> None:
         """Invalidate all cached analytics data for a user.
-        
+
         Call this when invoices are created, updated, or deleted.
         """
         cache = cls._get_cache()
@@ -162,9 +164,9 @@ class AnalyticsService:
     def _get_invoice_total_annotation():
         """Returns annotation for calculating invoice total at database level."""
         return Coalesce(
-            Sum(F('line_items__quantity') * F('line_items__unit_price')),
-            Value(Decimal('0')),
-            output_field=DecimalField(max_digits=15, decimal_places=2)
+            Sum(F("line_items__quantity") * F("line_items__unit_price")),
+            Value(Decimal("0")),
+            output_field=DecimalField(max_digits=15, decimal_places=2),
         )
 
     @classmethod
@@ -177,7 +179,7 @@ class AnalyticsService:
         """
         cache = cls._get_cache()
         cache_key = cls._make_cache_key(cls.CACHE_PREFIX_DASHBOARD, user.id)
-        timeout = getattr(settings, 'CACHE_TIMEOUT_DASHBOARD', 60)
+        timeout = getattr(settings, "CACHE_TIMEOUT_DASHBOARD", 60)
 
         cached_stats = cache.get(cache_key)
         if cached_stats is not None:
@@ -186,29 +188,30 @@ class AnalyticsService:
         invoices = Invoice.objects.filter(user=user)
 
         stats = invoices.aggregate(
-            total_invoices=Count('id'),
-            paid_count=Count('id', filter=Q(status='paid')),
-            unpaid_count=Count('id', filter=Q(status='unpaid')),
-            unique_clients=Count('client_email', distinct=True),
+            total_invoices=Count("id"),
+            paid_count=Count("id", filter=Q(status="paid")),
+            unpaid_count=Count("id", filter=Q(status="unpaid")),
+            unique_clients=Count("client_email", distinct=True),
         )
 
         total_revenue = LineItem.objects.filter(
-            invoice__user=user,
-            invoice__status='paid'
+            invoice__user=user, invoice__status="paid"
         ).aggregate(
             total=Coalesce(
-                Sum(F('quantity') * F('unit_price')),
-                Value(Decimal('0')),
-                output_field=DecimalField(max_digits=15, decimal_places=2)
+                Sum(F("quantity") * F("unit_price")),
+                Value(Decimal("0")),
+                output_field=DecimalField(max_digits=15, decimal_places=2),
             )
-        )['total']
+        )[
+            "total"
+        ]
 
         result = {
-            "total_invoices": stats['total_invoices'] or 0,
-            "paid_count": stats['paid_count'] or 0,
-            "unpaid_count": stats['unpaid_count'] or 0,
-            "total_revenue": total_revenue or Decimal('0'),
-            "unique_clients": stats['unique_clients'] or 0,
+            "total_invoices": stats["total_invoices"] or 0,
+            "paid_count": stats["paid_count"] or 0,
+            "unpaid_count": stats["unpaid_count"] or 0,
+            "total_revenue": total_revenue or Decimal("0"),
+            "unique_clients": stats["unique_clients"] or 0,
         }
 
         try:
@@ -230,59 +233,56 @@ class AnalyticsService:
 
         cache = cls._get_cache()
         cache_key = cls._make_cache_key(cls.CACHE_PREFIX_STATS, user.id)
-        timeout = getattr(settings, 'CACHE_TIMEOUT_ANALYTICS', 120)
+        timeout = getattr(settings, "CACHE_TIMEOUT_ANALYTICS", 120)
 
         cached_stats = cache.get(cache_key)
         invoices = Invoice.objects.filter(user=user)
 
         if cached_stats is not None:
             all_invoices_list = list(
-                invoices.prefetch_related('line_items').order_by('-created_at')
+                invoices.prefetch_related("line_items").order_by("-created_at")
             )
             cached_stats["all_invoices"] = all_invoices_list
             return cached_stats
 
         stats = invoices.aggregate(
-            total_invoices=Count('id'),
-            paid_count=Count('id', filter=Q(status='paid')),
-            unpaid_count=Count('id', filter=Q(status='unpaid')),
+            total_invoices=Count("id"),
+            paid_count=Count("id", filter=Q(status="paid")),
+            unpaid_count=Count("id", filter=Q(status="unpaid")),
         )
 
-        total_invoices = stats['total_invoices'] or 0
-        paid_count = stats['paid_count'] or 0
-        unpaid_count = stats['unpaid_count'] or 0
+        total_invoices = stats["total_invoices"] or 0
+        paid_count = stats["paid_count"] or 0
+        unpaid_count = stats["unpaid_count"] or 0
 
-        revenue_stats = LineItem.objects.filter(
-            invoice__user=user
-        ).aggregate(
+        revenue_stats = LineItem.objects.filter(invoice__user=user).aggregate(
             total_revenue=Coalesce(
-                Sum(F('quantity') * F('unit_price'), filter=Q(invoice__status='paid')),
-                Value(Decimal('0')),
-                output_field=DecimalField(max_digits=15, decimal_places=2)
+                Sum(F("quantity") * F("unit_price"), filter=Q(invoice__status="paid")),
+                Value(Decimal("0")),
+                output_field=DecimalField(max_digits=15, decimal_places=2),
             ),
             outstanding_amount=Coalesce(
-                Sum(F('quantity') * F('unit_price'), filter=Q(invoice__status='unpaid')),
-                Value(Decimal('0')),
-                output_field=DecimalField(max_digits=15, decimal_places=2)
+                Sum(F("quantity") * F("unit_price"), filter=Q(invoice__status="unpaid")),
+                Value(Decimal("0")),
+                output_field=DecimalField(max_digits=15, decimal_places=2),
             ),
             total_all=Coalesce(
-                Sum(F('quantity') * F('unit_price')),
-                Value(Decimal('0')),
-                output_field=DecimalField(max_digits=15, decimal_places=2)
+                Sum(F("quantity") * F("unit_price")),
+                Value(Decimal("0")),
+                output_field=DecimalField(max_digits=15, decimal_places=2),
             ),
         )
 
-        total_revenue = revenue_stats['total_revenue'] or Decimal('0')
-        outstanding_amount = revenue_stats['outstanding_amount'] or Decimal('0')
-        total_all = revenue_stats['total_all'] or Decimal('0')
+        total_revenue = revenue_stats["total_revenue"] or Decimal("0")
+        outstanding_amount = revenue_stats["outstanding_amount"] or Decimal("0")
+        total_all = revenue_stats["total_all"] or Decimal("0")
 
-        average_invoice = (total_all / total_invoices) if total_invoices > 0 else Decimal('0')
+        average_invoice = (total_all / total_invoices) if total_invoices > 0 else Decimal("0")
         payment_rate = (paid_count / total_invoices * 100) if total_invoices > 0 else 0
 
         now = datetime.now()
         current_month_invoices = invoices.filter(
-            invoice_date__year=now.year,
-            invoice_date__month=now.month
+            invoice_date__year=now.year, invoice_date__month=now.month
         ).count()
 
         cacheable_stats = {
@@ -301,9 +301,7 @@ class AnalyticsService:
         except Exception as e:
             logger.warning(f"Failed to cache analytics stats: {e}")
 
-        all_invoices_list = list(
-            invoices.prefetch_related('line_items').order_by('-created_at')
-        )
+        all_invoices_list = list(invoices.prefetch_related("line_items").order_by("-created_at"))
 
         return {
             **cacheable_stats,
@@ -320,70 +318,77 @@ class AnalyticsService:
         """
         cache = cls._get_cache()
         cache_key = f"{cls._make_cache_key(cls.CACHE_PREFIX_TOP_CLIENTS, user.id)}:{limit}"
-        timeout = getattr(settings, 'CACHE_TIMEOUT_TOP_CLIENTS', 300)
+        timeout = getattr(settings, "CACHE_TIMEOUT_TOP_CLIENTS", 300)
 
         cached_result = cache.get(cache_key)
         if cached_result is not None:
             return cached_result
 
-        clients = Invoice.objects.filter(user=user).values('client_name').annotate(
-            invoice_count=Count('id'),
-            paid_count=Count('id', filter=Q(status='paid')),
-        ).order_by('client_name')
+        clients = (
+            Invoice.objects.filter(user=user)
+            .values("client_name")
+            .annotate(
+                invoice_count=Count("id"),
+                paid_count=Count("id", filter=Q(status="paid")),
+            )
+            .order_by("client_name")
+        )
 
         client_data: Dict[str, Dict[str, Any]] = {}
         for c in clients:
-            client_data[c['client_name']] = {
-                'client_name': c['client_name'],
-                'invoice_count': c['invoice_count'],
-                'paid_count': c['paid_count'],
-                'total_revenue': Decimal('0'),
-                'total_all': Decimal('0'),
+            client_data[c["client_name"]] = {
+                "client_name": c["client_name"],
+                "invoice_count": c["invoice_count"],
+                "paid_count": c["paid_count"],
+                "total_revenue": Decimal("0"),
+                "total_all": Decimal("0"),
             }
 
-        revenue_by_client = LineItem.objects.filter(
-            invoice__user=user
-        ).values('invoice__client_name').annotate(
-            paid_revenue=Coalesce(
-                Sum(F('quantity') * F('unit_price'), filter=Q(invoice__status='paid')),
-                Value(Decimal('0')),
-                output_field=DecimalField(max_digits=15, decimal_places=2)
-            ),
-            total_revenue=Coalesce(
-                Sum(F('quantity') * F('unit_price')),
-                Value(Decimal('0')),
-                output_field=DecimalField(max_digits=15, decimal_places=2)
-            ),
+        revenue_by_client = (
+            LineItem.objects.filter(invoice__user=user)
+            .values("invoice__client_name")
+            .annotate(
+                paid_revenue=Coalesce(
+                    Sum(F("quantity") * F("unit_price"), filter=Q(invoice__status="paid")),
+                    Value(Decimal("0")),
+                    output_field=DecimalField(max_digits=15, decimal_places=2),
+                ),
+                total_revenue=Coalesce(
+                    Sum(F("quantity") * F("unit_price")),
+                    Value(Decimal("0")),
+                    output_field=DecimalField(max_digits=15, decimal_places=2),
+                ),
+            )
         )
 
         for r in revenue_by_client:
-            client_name = r['invoice__client_name']
+            client_name = r["invoice__client_name"]
             if client_name in client_data:
-                client_data[client_name]['total_revenue'] = r['paid_revenue']
-                client_data[client_name]['total_all'] = r['total_revenue']
+                client_data[client_name]["total_revenue"] = r["paid_revenue"]
+                client_data[client_name]["total_all"] = r["total_revenue"]
 
         top_clients = sorted(
             [
                 {
-                    'client_name': data['client_name'],
-                    'invoice_count': data['invoice_count'],
-                    'total_revenue': data['total_revenue'],
-                    'paid_count': data['paid_count'],
-                    'avg_invoice': (
-                        data['total_all'] / data['invoice_count']
-                        if data['invoice_count'] > 0
-                        else Decimal('0')
+                    "client_name": data["client_name"],
+                    "invoice_count": data["invoice_count"],
+                    "total_revenue": data["total_revenue"],
+                    "paid_count": data["paid_count"],
+                    "avg_invoice": (
+                        data["total_all"] / data["invoice_count"]
+                        if data["invoice_count"] > 0
+                        else Decimal("0")
                     ),
-                    'payment_rate': (
-                        (data['paid_count'] / data['invoice_count'] * 100)
-                        if data['invoice_count'] > 0
+                    "payment_rate": (
+                        (data["paid_count"] / data["invoice_count"] * 100)
+                        if data["invoice_count"] > 0
                         else 0
                     ),
                 }
                 for data in client_data.values()
             ],
-            key=lambda x: x['total_revenue'],
-            reverse=True
+            key=lambda x: x["total_revenue"],
+            reverse=True,
         )[:limit]
 
         try:
@@ -397,21 +402,21 @@ class AnalyticsService:
 class CacheWarmingService:
     """
     Service for proactive cache warming and smart cache management.
-    
+
     Features:
     - Async cache warming on user login (non-blocking)
     - Startup cache warming for active users
     - Cache versioning for deployment cache busting
     - Efficient background warming with thread pool
     """
-    
+
     CACHE_VERSION_KEY = "cache:version"
     ACTIVE_USERS_KEY = "cache:active_users"
     MAX_STARTUP_USERS = 50
-    
+
     _executor: Optional[ThreadPoolExecutor] = None
     _executor_lock = threading.Lock()
-    
+
     @classmethod
     def _get_executor(cls) -> ThreadPoolExecutor:
         """Get or create the thread pool executor (lazy initialization)."""
@@ -419,18 +424,17 @@ class CacheWarmingService:
             with cls._executor_lock:
                 if cls._executor is None:
                     cls._executor = ThreadPoolExecutor(
-                        max_workers=2,
-                        thread_name_prefix="cache_warmer"
+                        max_workers=2, thread_name_prefix="cache_warmer"
                     )
         return cls._executor
-    
+
     @classmethod
     def shutdown_executor(cls) -> None:
         """Shutdown the thread pool executor gracefully."""
         if cls._executor is not None:
             cls._executor.shutdown(wait=False)
             cls._executor = None
-    
+
     @classmethod
     def warm_user_cache_async(cls, user: Any) -> None:
         """
@@ -442,7 +446,7 @@ class CacheWarmingService:
             executor.submit(cls._warm_user_cache_sync, user.id)
         except Exception as e:
             logger.warning(f"Failed to submit cache warming task: {e}")
-    
+
     @classmethod
     def _warm_user_cache_sync(cls, user_id: int) -> None:
         """
@@ -450,27 +454,28 @@ class CacheWarmingService:
         Properly manages database connections for threaded execution.
         """
         from django.db import close_old_connections
-        
+
         try:
             close_old_connections()
-            
+
             from django.contrib.auth import get_user_model
+
             User = get_user_model()
-            
+
             user = User.objects.get(id=user_id)
-            
+
             AnalyticsService.get_user_dashboard_stats(user)
             AnalyticsService.get_user_analytics_stats(user)
             AnalyticsService.get_top_clients(user)
-            
+
             cls._track_active_user(user_id)
-            
+
             logger.info(f"Cache warmed for user {user_id}")
         except Exception as e:
             logger.warning(f"Failed to warm cache for user {user_id}: {e}")
         finally:
             close_old_connections()
-    
+
     @classmethod
     def _track_active_user(cls, user_id: int) -> None:
         """Track user as active for startup cache warming."""
@@ -481,11 +486,11 @@ class CacheWarmingService:
                 active_users = set(active_users) if active_users else set()
             active_users.add(user_id)
             if len(active_users) > cls.MAX_STARTUP_USERS * 2:
-                active_users = set(list(active_users)[-cls.MAX_STARTUP_USERS:])
+                active_users = set(list(active_users)[-cls.MAX_STARTUP_USERS :])
             cache.set(cls.ACTIVE_USERS_KEY, active_users, 86400 * 7)
         except Exception as e:
             logger.debug(f"Failed to track active user: {e}")
-    
+
     @classmethod
     def warm_active_users_cache(cls) -> int:
         """
@@ -494,19 +499,20 @@ class CacheWarmingService:
         """
         try:
             from django.contrib.auth import get_user_model
+
             User = get_user_model()
-            
+
             cache = AnalyticsService._get_cache()
             active_users = cache.get(cls.ACTIVE_USERS_KEY, set())
-            
+
             if not active_users:
-                recent_users = User.objects.filter(
-                    is_active=True
-                ).order_by('-last_login')[:cls.MAX_STARTUP_USERS]
+                recent_users = User.objects.filter(is_active=True).order_by("-last_login")[
+                    : cls.MAX_STARTUP_USERS
+                ]
                 active_user_ids = [u.id for u in recent_users if u.last_login]
             else:
-                active_user_ids = list(active_users)[:cls.MAX_STARTUP_USERS]
-            
+                active_user_ids = list(active_users)[: cls.MAX_STARTUP_USERS]
+
             warmed_count = 0
             for user_id in active_user_ids:
                 try:
@@ -514,13 +520,13 @@ class CacheWarmingService:
                     warmed_count += 1
                 except Exception as e:
                     logger.debug(f"Failed to warm cache for user {user_id}: {e}")
-            
+
             logger.info(f"Startup cache warming completed: {warmed_count} users")
             return warmed_count
         except Exception as e:
             logger.warning(f"Startup cache warming failed: {e}")
             return 0
-    
+
     @classmethod
     def get_cache_version(cls) -> str:
         """Get current cache version for cache busting."""
@@ -530,7 +536,7 @@ class CacheWarmingService:
             version = cls._generate_version()
             cache.set(cls.CACHE_VERSION_KEY, version, None)
         return version
-    
+
     @classmethod
     def bump_cache_version(cls) -> str:
         """
@@ -542,13 +548,14 @@ class CacheWarmingService:
         cache.set(cls.CACHE_VERSION_KEY, version, None)
         logger.info(f"Cache version bumped to {version}")
         return version
-    
+
     @staticmethod
     def _generate_version() -> str:
         """Generate a new cache version string."""
         import time
+
         return hashlib.md5(str(time.time()).encode()).hexdigest()[:8]
-    
+
     @classmethod
     def get_cache_stats(cls) -> Dict[str, Any]:
         """Get cache statistics for monitoring."""
@@ -556,7 +563,7 @@ class CacheWarmingService:
             cache = AnalyticsService._get_cache()
             active_users = cache.get(cls.ACTIVE_USERS_KEY, set())
             version = cache.get(cls.CACHE_VERSION_KEY, "unknown")
-            
+
             return {
                 "cache_version": version,
                 "tracked_active_users": len(active_users) if active_users else 0,

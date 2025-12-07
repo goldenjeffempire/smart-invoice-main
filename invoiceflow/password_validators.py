@@ -6,6 +6,7 @@ Implements enterprise-grade password security with breach detection.
 import hashlib
 import logging
 import re
+
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
@@ -27,18 +28,29 @@ class ComplexityValidator:
     def validate(self, password, user=None):
         errors = []
 
-        if len(re.findall(r'[A-Z]', password)) < self.min_uppercase:
-            errors.append(_("Password must contain at least %(count)d uppercase letter(s).") % {"count": self.min_uppercase})
+        if len(re.findall(r"[A-Z]", password)) < self.min_uppercase:
+            errors.append(
+                _("Password must contain at least %(count)d uppercase letter(s).")
+                % {"count": self.min_uppercase}
+            )
 
-        if len(re.findall(r'[a-z]', password)) < self.min_lowercase:
-            errors.append(_("Password must contain at least %(count)d lowercase letter(s).") % {"count": self.min_lowercase})
+        if len(re.findall(r"[a-z]", password)) < self.min_lowercase:
+            errors.append(
+                _("Password must contain at least %(count)d lowercase letter(s).")
+                % {"count": self.min_lowercase}
+            )
 
-        if len(re.findall(r'\d', password)) < self.min_digits:
-            errors.append(_("Password must contain at least %(count)d digit(s).") % {"count": self.min_digits})
+        if len(re.findall(r"\d", password)) < self.min_digits:
+            errors.append(
+                _("Password must contain at least %(count)d digit(s).") % {"count": self.min_digits}
+            )
 
         special_chars = r'[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\/`~;\']'
         if len(re.findall(special_chars, password)) < self.min_special:
-            errors.append(_("Password must contain at least %(count)d special character(s).") % {"count": self.min_special})
+            errors.append(
+                _("Password must contain at least %(count)d special character(s).")
+                % {"count": self.min_special}
+            )
 
         if errors:
             raise ValidationError(errors)
@@ -83,7 +95,7 @@ class BreachedPasswordValidator:
         try:
             import requests
 
-            sha1_password = hashlib.sha1(password.encode('utf-8')).hexdigest().upper()
+            sha1_password = hashlib.sha1(password.encode("utf-8")).hexdigest().upper()
             prefix = sha1_password[:5]
             suffix = sha1_password[5:]
 
@@ -121,7 +133,8 @@ class BreachedPasswordValidator:
                 _(
                     "This password has appeared in %(count)d data breaches and cannot be used. "
                     "Please choose a different password."
-                ) % {"count": pwned_count},
+                )
+                % {"count": pwned_count},
                 code="password_breached",
             )
 
@@ -129,9 +142,7 @@ class BreachedPasswordValidator:
             logger.info(f"Password found in {pwned_count} breach(es) but below threshold")
 
     def get_help_text(self):
-        return _(
-            "Your password cannot be one that has been exposed in known data breaches."
-        )
+        return _("Your password cannot be one that has been exposed in known data breaches.")
 
 
 class NoPersonalInfoValidator:
@@ -152,22 +163,22 @@ class NoPersonalInfoValidator:
                     code="password_contains_username",
                 )
 
-        if hasattr(user, 'email') and user.email:
-            email_local = user.email.split('@')[0].lower()
+        if hasattr(user, "email") and user.email:
+            email_local = user.email.split("@")[0].lower()
             if len(email_local) >= 4 and email_local in password_lower:
                 raise ValidationError(
                     _("Your password cannot contain parts of your email address."),
                     code="password_contains_email",
                 )
 
-        if hasattr(user, 'first_name') and user.first_name:
+        if hasattr(user, "first_name") and user.first_name:
             if len(user.first_name) >= 3 and user.first_name.lower() in password_lower:
                 raise ValidationError(
                     _("Your password cannot contain your first name."),
                     code="password_contains_first_name",
                 )
 
-        if hasattr(user, 'last_name') and user.last_name:
+        if hasattr(user, "last_name") and user.last_name:
             if len(user.last_name) >= 3 and user.last_name.lower() in password_lower:
                 raise ValidationError(
                     _("Your password cannot contain your last name."),

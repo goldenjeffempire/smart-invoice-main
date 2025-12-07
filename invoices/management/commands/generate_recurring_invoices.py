@@ -1,8 +1,10 @@
+import logging
+
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from invoices.models import RecurringInvoice, Invoice, LineItem
+
+from invoices.models import Invoice, LineItem, RecurringInvoice
 from invoices.sendgrid_service import SendGridEmailService
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +68,9 @@ class Command(BaseCommand):
                     generated_count += 1
 
                     self.stdout.write(
-                        self.style.SUCCESS(f"Generated invoice {invoice.invoice_id} for {recurring.client_name}")
+                        self.style.SUCCESS(
+                            f"Generated invoice {invoice.invoice_id} for {recurring.client_name}"
+                        )
                     )
 
             except Exception as e:
@@ -91,7 +95,9 @@ class Command(BaseCommand):
                     f"SendGrid not configured. Skipping email for invoice {invoice.invoice_id}"
                 )
                 self.stdout.write(
-                    self.style.WARNING(f"Email skipped for {invoice.invoice_id} - SendGrid not configured")
+                    self.style.WARNING(
+                        f"Email skipped for {invoice.invoice_id} - SendGrid not configured"
+                    )
                 )
                 return False
 
@@ -105,13 +111,13 @@ class Command(BaseCommand):
                     f"Failed to send email for invoice {invoice.invoice_id}: {result.get('message')}"
                 )
                 self.stdout.write(
-                    self.style.ERROR(f"Email failed for {invoice.invoice_id}: {result.get('message')}")
+                    self.style.ERROR(
+                        f"Email failed for {invoice.invoice_id}: {result.get('message')}"
+                    )
                 )
                 return False
 
         except Exception as e:
             logger.exception(f"Error sending email for invoice {invoice.invoice_id}")
-            self.stdout.write(
-                self.style.ERROR(f"Email error for {invoice.invoice_id}: {str(e)}")
-            )
+            self.stdout.write(self.style.ERROR(f"Email error for {invoice.invoice_id}: {str(e)}"))
             return False

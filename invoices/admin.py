@@ -1,5 +1,14 @@
 from django.contrib import admin
-from .models import Invoice, LineItem, UserProfile, InvoiceTemplate, RecurringInvoice, Waitlist, ContactSubmission
+
+from .models import (
+    ContactSubmission,
+    Invoice,
+    InvoiceTemplate,
+    LineItem,
+    RecurringInvoice,
+    UserProfile,
+    Waitlist,
+)
 
 
 class LineItemInline(admin.TabularInline):
@@ -119,6 +128,7 @@ class ContactSubmissionAdmin(admin.ModelAdmin):
     @admin.action(description="Mark selected as resolved")
     def mark_as_resolved(self, request, queryset):
         from django.utils import timezone
+
         updated = queryset.update(status="resolved", resolved_at=timezone.now())
         self.message_user(request, f"{updated} submissions marked as resolved.")
 

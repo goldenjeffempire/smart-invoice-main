@@ -1,8 +1,8 @@
 """Environment variable validation for application startup."""
 
+import logging
 import os
 import sys
-import logging
 from typing import NamedTuple
 
 logger = logging.getLogger(__name__)
@@ -38,10 +38,10 @@ CONNECTOR_MANAGED_VARS = [
 def validate_environment(exit_on_error: bool = True) -> dict[str, list[str]]:
     """
     Validate required environment variables on startup.
-    
+
     Args:
         exit_on_error: If True, exit the application on missing required vars
-        
+
     Returns:
         Dictionary with 'missing' and 'warnings' lists
     """
@@ -50,7 +50,7 @@ def validate_environment(exit_on_error: bool = True) -> dict[str, list[str]]:
         "warnings": [],
         "configured": [],
     }
-    
+
     for env_var in REQUIRED_ENV_VARS:
         value = os.environ.get(env_var.name)
         if not value:
@@ -58,7 +58,7 @@ def validate_environment(exit_on_error: bool = True) -> dict[str, list[str]]:
             logger.error(f"Missing required environment variable: {env_var.name}")
         else:
             results["configured"].append(env_var.name)
-    
+
     for env_var in OPTIONAL_ENV_VARS:
         value = os.environ.get(env_var.name)
         if not value and env_var.default is None:
@@ -66,46 +66,46 @@ def validate_environment(exit_on_error: bool = True) -> dict[str, list[str]]:
             logger.warning(f"Optional environment variable not set: {env_var.name}")
         elif value:
             results["configured"].append(env_var.name)
-    
+
     if results["missing"]:
         error_msg = (
             f"\n{'='*60}\n"
             f"CRITICAL: Missing required environment variables!\n"
-            f"{'='*60}\n"
-            + "\n".join(f"  - {var}" for var in results["missing"])
-            + f"\n{'='*60}\n"
+            f"{'='*60}\n" + "\n".join(f"  - {var}" for var in results["missing"]) + f"\n{'='*60}\n"
             f"Please configure these variables before starting the application.\n"
         )
         logger.critical(error_msg)
-        
+
         if exit_on_error:
             print(error_msg, file=sys.stderr)
             sys.exit(1)
-    
+
     if results["configured"]:
-        logger.info(f"Environment validation passed. Configured: {len(results['configured'])} variables")
-    
+        logger.info(
+            f"Environment validation passed. Configured: {len(results['configured'])} variables"
+        )
+
     return results
 
 
 def _check_replit_sendgrid_connector() -> bool:
     """Check if SendGrid is available via Replit connector."""
     try:
-        import urllib.request
         import json
-        
+        import urllib.request
+
         hostname = os.environ.get("REPLIT_CONNECTORS_HOSTNAME")
         token = os.environ.get("REPL_IDENTITY") or os.environ.get("WEB_REPL_RENEWAL")
-        
+
         if not hostname or not token:
             return False
-        
+
         token_header = f"repl {token}" if "REPL_IDENTITY" in os.environ else f"depl {token}"
         url = f"https://{hostname}/api/v2/connection?include_secrets=true&connector_names=sendgrid"
         req = urllib.request.Request(url)
         req.add_header("Accept", "application/json")
         req.add_header("X_REPLIT_TOKEN", token_header)
-        
+
         with urllib.request.urlopen(req, timeout=2) as response:
             data = json.loads(response.read().decode())
             connection = data.get("items", [{}])[0]
@@ -122,22 +122,22 @@ def get_env_status() -> dict:
         "optional": {},
         "connector_managed": {},
     }
-    
+
     for env_var in REQUIRED_ENV_VARS:
         value = os.environ.get(env_var.name)
         status["required"][env_var.name] = {
             "configured": bool(value),
-            "description": env_var.description
+            "description": env_var.description,
         }
-    
+
     for env_var in OPTIONAL_ENV_VARS:
         value = os.environ.get(env_var.name)
         status["optional"][env_var.name] = {
             "configured": bool(value),
             "description": env_var.description,
-            "has_default": env_var.default is not None
+            "has_default": env_var.default is not None,
         }
-    
+
     # Check connector-managed variables
     sendgrid_connected = _check_replit_sendgrid_connector()
     for env_var in CONNECTOR_MANAGED_VARS:
@@ -145,7 +145,7 @@ def get_env_status() -> dict:
         status["connector_managed"][env_var.name] = {
             "configured": sendgrid_connected or bool(env_value),
             "description": env_var.description,
-            "via_connector": sendgrid_connected
+            "via_connector": sendgrid_connected,
         }
-    
+
     return status

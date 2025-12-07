@@ -6,13 +6,14 @@ Implements Subject Access Request (SAR), data export, and deletion.
 import json
 import logging
 from datetime import datetime
-from django.http import JsonResponse, HttpResponse
-from django.views.decorators.http import require_POST, require_GET
-from django.views.decorators.csrf import csrf_protect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
-from django.core.mail import send_mail
+
 from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.http import require_GET, require_POST
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -27,7 +28,7 @@ def export_user_data(request):
     """
     try:
         user = request.user
-        
+
         # Collect user profile data
         user_data = {
             "personal_information": {
@@ -44,11 +45,11 @@ def export_user_data(request):
                 "platform": "InvoiceFlow",
             },
         }
-        
+
         # Get user profile if exists
         try:
-            from invoices.models import UserProfile, Invoice
-            
+            from invoices.models import Invoice, UserProfile
+
             profile = UserProfile.objects.filter(user=user).first()
             if profile:
                 user_data["business_profile"] = {
@@ -58,7 +59,7 @@ def export_user_data(request):
                     "website": profile.website or "",
                     "tax_number": profile.tax_number or "",
                 }
-            
+
             # Get invoice data
             invoices = Invoice.objects.filter(user=user)
             user_data["invoices"] = [
@@ -66,33 +67,38 @@ def export_user_data(request):
                     "invoice_number": inv.invoice_number,
                     "client_name": inv.client_name,
                     "client_email": inv.client_email,
-                    "amount": str(inv.total_amount) if hasattr(inv, 'total_amount') else "0",
+                    "amount": str(inv.total_amount) if hasattr(inv, "total_amount") else "0",
                     "status": inv.status,
                     "created_at": inv.created_at.isoformat(),
                 }
                 for inv in invoices
             ]
-            
+
         except ImportError:
             pass
-        
+
         # Create downloadable JSON file
         response = HttpResponse(
-            json.dumps(user_data, indent=2).encode('utf-8'),
+            json.dumps(user_data, indent=2).encode("utf-8"),
             content_type="application/json; charset=utf-8",
         )
-        response["Content-Disposition"] = f'attachment; filename="invoiceflow_data_export_{user.username}_{datetime.now().strftime("%Y%m%d")}.json"'
-        
+        response["Content-Disposition"] = (
+            f'attachment; filename="invoiceflow_data_export_{user.username}_{datetime.now().strftime("%Y%m%d")}.json"'
+        )
+
         logger.info(f"Data export requested by user: {user.username}")
-        
+
         return response
-        
+
     except Exception as e:
         logger.error(f"Data export error: {e}")
-        return JsonResponse({
-            "success": False,
-            "error": "An error occurred exporting your data.",
-        }, status=500)
+        return JsonResponse(
+            {
+                "success": False,
+                "error": "An error occurred exporting your data.",
+            },
+            status=500,
+        )
 
 
 @login_required
@@ -105,7 +111,7 @@ def request_data_deletion(request):
     """
     try:
         user = request.user
-        
+
         # Send confirmation email to user
         send_mail(
             subject="[InvoiceFlow] Data Deletion Request Received",
@@ -129,7 +135,7 @@ The InvoiceFlow Team
             recipient_list=[user.email],
             fail_silently=True,
         )
-        
+
         # Send notification to admin
         send_mail(
             subject=f"[InvoiceFlow Admin] Data Deletion Request - {user.username}",
@@ -146,20 +152,25 @@ Please process this request within 30 days as required by GDPR.
             recipient_list=["privacy@invoiceflow.com.ng"],
             fail_silently=True,
         )
-        
+
         logger.info(f"Data deletion requested by user: {user.username}")
-        
-        return JsonResponse({
-            "success": True,
-            "message": "Your data deletion request has been submitted. You will receive a confirmation email shortly.",
-        })
-        
+
+        return JsonResponse(
+            {
+                "success": True,
+                "message": "Your data deletion request has been submitted. You will receive a confirmation email shortly.",
+            }
+        )
+
     except Exception as e:
         logger.error(f"Data deletion request error: {e}")
-        return JsonResponse({
-            "success": False,
-            "error": "An error occurred submitting your request.",
-        }, status=500)
+        return JsonResponse(
+            {
+                "success": False,
+                "error": "An error occurred submitting your request.",
+            },
+            status=500,
+        )
 
 
 @login_required
@@ -173,9 +184,9 @@ def submit_sar(request):
     try:
         user = request.user
         data = json.loads(request.body) if request.body else {}
-        
+
         request_details = data.get("details", "Full data access request")
-        
+
         # Send confirmation to user
         send_mail(
             subject="[InvoiceFlow] Subject Access Request Received",
@@ -198,7 +209,7 @@ The InvoiceFlow Team
             recipient_list=[user.email],
             fail_silently=True,
         )
-        
+
         # Notify privacy team
         send_mail(
             subject=f"[InvoiceFlow Admin] SAR Request - {user.username}",
@@ -216,17 +227,22 @@ Please respond within 30 days as required by GDPR Article 15.
             recipient_list=["privacy@invoiceflow.com.ng"],
             fail_silently=True,
         )
-        
+
         logger.info(f"SAR submitted by user: {user.username}")
-        
-        return JsonResponse({
-            "success": True,
-            "message": "Your Subject Access Request has been submitted. You will receive a response within 30 days.",
-        })
-        
+
+        return JsonResponse(
+            {
+                "success": True,
+                "message": "Your Subject Access Request has been submitted. You will receive a response within 30 days.",
+            }
+        )
+
     except Exception as e:
         logger.error(f"SAR submission error: {e}")
-        return JsonResponse({
-            "success": False,
-            "error": "An error occurred submitting your request.",
-        }, status=500)
+        return JsonResponse(
+            {
+                "success": False,
+                "error": "An error occurred submitting your request.",
+            },
+            status=500,
+        )

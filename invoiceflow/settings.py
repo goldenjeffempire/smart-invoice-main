@@ -4,8 +4,9 @@ Production-ready configuration for https://invoiceflow.com.ng
 """
 
 import os
-import environ
 from pathlib import Path
+
+import environ
 
 env = environ.Env(DEBUG=(bool, False))
 
@@ -75,16 +76,20 @@ CSRF_TRUSTED_ORIGINS = [
 
 # Add development origins if in dev mode
 if DEBUG or IS_REPLIT:
-    CSRF_TRUSTED_ORIGINS.extend([
-        "https://*.replit.dev",
-        "https://*.repl.co",
-    ])
+    CSRF_TRUSTED_ORIGINS.extend(
+        [
+            "https://*.replit.dev",
+            "https://*.repl.co",
+        ]
+    )
 
 if IS_RENDER:
-    CSRF_TRUSTED_ORIGINS.extend([
-        "https://*.onrender.com",
-        "https://*.render.com",
-    ])
+    CSRF_TRUSTED_ORIGINS.extend(
+        [
+            "https://*.onrender.com",
+            "https://*.render.com",
+        ]
+    )
 
 # Override from environment if provided
 _csrf_env = os.environ.get("CSRF_TRUSTED_ORIGINS", "")
@@ -95,9 +100,8 @@ if _csrf_env:
 # SSL & SECURITY HEADERS
 # =============================================================================
 # Check for SSL certificate files
-HAS_SSL_CERTS = (
-    os.path.exists("/tmp/invoiceflow-certs/certificate.pem") and
-    os.path.exists("/tmp/invoiceflow-certs/private-key-rsa.pem")
+HAS_SSL_CERTS = os.path.exists("/tmp/invoiceflow-certs/certificate.pem") and os.path.exists(
+    "/tmp/invoiceflow-certs/private-key-rsa.pem"
 )
 
 if not DEBUG and not IS_REPLIT:
@@ -181,8 +185,17 @@ SPECTACULAR_SETTINGS = {
     },
     "ENUM_NAME_OVERRIDES": {
         "InvoiceStatusEnum": [("unpaid", "unpaid"), ("paid", "paid")],
-        "RecurringInvoiceStatusEnum": [("active", "active"), ("paused", "paused"), ("ended", "ended")],
-        "ContactSubmissionStatusEnum": [("new", "new"), ("in_progress", "in_progress"), ("resolved", "resolved"), ("closed", "closed")],
+        "RecurringInvoiceStatusEnum": [
+            ("active", "active"),
+            ("paused", "paused"),
+            ("ended", "ended"),
+        ],
+        "ContactSubmissionStatusEnum": [
+            ("new", "new"),
+            ("in_progress", "in_progress"),
+            ("resolved", "resolved"),
+            ("closed", "closed"),
+        ],
     },
 }
 
@@ -431,11 +444,26 @@ LOGGING = {
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
         "default-src": ("'self'",),
-        "script-src": ("'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://js.hcaptcha.com"),
-        "style-src": ("'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://hcaptcha.com"),
+        "script-src": (
+            "'self'",
+            "'unsafe-inline'",
+            "https://fonts.googleapis.com",
+            "https://js.hcaptcha.com",
+        ),
+        "style-src": (
+            "'self'",
+            "'unsafe-inline'",
+            "https://fonts.googleapis.com",
+            "https://hcaptcha.com",
+        ),
         "img-src": ("'self'", "data:", "https:", "https://ui-avatars.com"),
         "font-src": ("'self'", "https://fonts.gstatic.com", "data:"),
-        "connect-src": ("'self'", PRODUCTION_URL, "https://hcaptcha.com", "https://api.hcaptcha.com"),
+        "connect-src": (
+            "'self'",
+            PRODUCTION_URL,
+            "https://hcaptcha.com",
+            "https://api.hcaptcha.com",
+        ),
         "frame-src": ("https://hcaptcha.com", "https://newassets.hcaptcha.com"),
         "frame-ancestors": ("'none'",),
         "base-uri": ("'self'",),

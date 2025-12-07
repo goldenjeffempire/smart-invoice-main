@@ -1,278 +1,315 @@
 {% extends "base/layout.html" %}
-
 {% block title %}Invoice {{ invoice.invoice_id }} - InvoiceFlow{% endblock %}
 {% block body_class %}app-page{% endblock %}
-
 {% block nav %}{% endblock %}
 {% block footer %}{% endblock %}
-
 {% block content %}
-<div class="app-layout">
-    <aside class="app-sidebar">
-        <div class="sidebar-header">
-            <a href="{% url 'home' %}" class="nav-logo">
-                <div class="nav-logo-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                        <line x1="16" y1="13" x2="8" y2="13"/>
-                        <line x1="16" y1="17" x2="8" y2="17"/>
-                    </svg>
-                </div>
-                <span class="nav-logo-text">InvoiceFlow</span>
-            </a>
-        </div>
-        
-        <nav class="sidebar-nav">
-            <a href="{% url 'dashboard' %}" class="sidebar-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="3" width="7" height="7"/>
-                    <rect x="14" y="3" width="7" height="7"/>
-                    <rect x="14" y="14" width="7" height="7"/>
-                    <rect x="3" y="14" width="7" height="7"/>
-                </svg>
-                Dashboard
-            </a>
-            <a href="{% url 'create_invoice' %}" class="sidebar-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="12" y1="8" x2="12" y2="16"/>
-                    <line x1="8" y1="12" x2="16" y2="12"/>
-                </svg>
-                New Invoice
-            </a>
-            <a href="{% url 'analytics' %}" class="sidebar-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                </svg>
-                Analytics
-            </a>
-            <a href="{% url 'settings' %}" class="sidebar-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="3"/>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                </svg>
-                Settings
-            </a>
-        </nav>
-        
-        <div class="sidebar-footer">
-            <a href="{% url 'logout' %}" class="sidebar-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                    <polyline points="16 17 21 12 16 7"/>
-                    <line x1="21" y1="12" x2="9" y2="12"/>
-                </svg>
-                Log out
-            </a>
-        </div>
-    </aside>
-    
-    <button class="mobile-menu-toggle" aria-label="Toggle sidebar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
-        </svg>
-    </button>
-    
-    <main class="app-main">
-        <header class="page-header">
-            <div class="page-header-top">
-                <a href="{% url 'dashboard' %}" class="back-link">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="19" y1="12" x2="5" y2="12"/>
-                        <polyline points="12 19 5 12 12 5"/>
-                    </svg>
-                    Back to Dashboard
+    <div class="app-layout">
+        <aside class="app-sidebar">
+            <div class="sidebar-header">
+                <a href="{% url 'home' %}" class="nav-logo">
+                    <div class="nav-logo-icon">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                        </svg>
+                    </div>
+                    <span class="nav-logo-text">InvoiceFlow</span>
                 </a>
             </div>
-            <div class="page-header-content">
-                <div class="page-header-info">
-                    <div class="invoice-id-wrapper">
-                        <h1 class="page-title">{{ invoice.invoice_id }}</h1>
-                        <span class="status-badge status-{{ invoice.status }}">
-                            {{ invoice.get_status_display }}
-                        </span>
-                    </div>
-                    <p class="page-subtitle">Created on {{ invoice.created_at|date:"F d, Y" }}</p>
-                </div>
-                <div class="page-header-actions">
-                    <a href="{% url 'edit_invoice' invoice.id %}" class="btn btn-secondary">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            <nav class="sidebar-nav">
+                <a href="{% url 'dashboard' %}" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" />
+                        <rect x="14" y="3" width="7" height="7" />
+                        <rect x="14" y="14" width="7" height="7" />
+                        <rect x="3" y="14" width="7" height="7" />
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="{% url 'create_invoice' %}" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="16" />
+                        <line x1="8" y1="12" x2="16" y2="12" />
+                    </svg>
+                    New Invoice
+                </a>
+                <a href="{% url 'analytics' %}" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                    </svg>
+                    Analytics
+                </a>
+                <a href="{% url 'settings' %}" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <circle cx="12" cy="12" r="3" />
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                    </svg>
+                    Settings
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="{% url 'logout' %}" class="sidebar-link">
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                    Log out
+                </a>
+            </div>
+        </aside>
+        <button class="mobile-menu-toggle" aria-label="Toggle sidebar">
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+        </button>
+        <main class="app-main">
+            <header class="page-header">
+                <div class="page-header-top">
+                    <a href="{% url 'dashboard' %}" class="back-link">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2">
+                            <line x1="19" y1="12" x2="5" y2="12" />
+                            <polyline points="12 19 5 12 12 5" />
                         </svg>
-                        Edit
-                    </a>
-                    <a href="{% url 'generate_pdf' invoice.id %}" class="btn btn-primary">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="7 10 12 15 17 10"/>
-                            <line x1="12" y1="15" x2="12" y2="3"/>
-                        </svg>
-                        Download PDF
+                        Back to Dashboard
                     </a>
                 </div>
-            </div>
-        </header>
-        
-        <div class="invoice-detail glass-card">
-            <div class="invoice-meta">
-                <div class="meta-row">
-                    <div class="meta-item">
-                        <span class="meta-label">Invoice Date</span>
-                        <span class="meta-value">{{ invoice.invoice_date|date:"F d, Y" }}</span>
+                <div class="page-header-content">
+                    <div class="page-header-info">
+                        <div class="invoice-id-wrapper">
+                            <h1 class="page-title">{{ invoice.invoice_id }}</h1>
+                            <span class="status-badge status-{{ invoice.status }}">{{ invoice.get_status_display }}</span>
+                        </div>
+                        <p class="page-subtitle">Created on {{ invoice.created_at|date:"F d, Y" }}</p>
                     </div>
-                    <div class="meta-item">
-                        <span class="meta-label">Due Date</span>
-                        <span class="meta-value {% if invoice.is_overdue %}overdue{% endif %}">
-                            {{ invoice.due_date|date:"F d, Y" }}
-                            {% if invoice.is_overdue %}<span class="overdue-badge">Overdue</span>{% endif %}
-                        </span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="meta-label">Currency</span>
-                        <span class="meta-value">{{ invoice.currency }}</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="invoice-parties">
-                <div class="party-card">
-                    <div class="party-header">
-                        <div class="party-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    <div class="page-header-actions">
+                        <a href="{% url 'edit_invoice' invoice.id %}" class="btn btn-secondary">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                             </svg>
-                        </div>
-                        <span class="party-label">From</span>
-                    </div>
-                    <div class="party-content">
-                        <h3 class="party-name">{{ invoice.business_name }}</h3>
-                        {% if invoice.business_email %}<p class="party-detail">{{ invoice.business_email }}</p>{% endif %}
-                        {% if invoice.business_phone %}<p class="party-detail">{{ invoice.business_phone }}</p>{% endif %}
-                        {% if invoice.business_address %}<p class="party-detail party-address">{{ invoice.business_address|linebreaksbr }}</p>{% endif %}
-                    </div>
-                </div>
-                
-                <div class="party-arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="5" y1="12" x2="19" y2="12"/>
-                        <polyline points="12 5 19 12 12 19"/>
-                    </svg>
-                </div>
-                
-                <div class="party-card">
-                    <div class="party-header">
-                        <div class="party-icon client">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                <circle cx="12" cy="7" r="4"/>
+                            Edit
+                        </a>
+                        <a href="{% url 'generate_pdf' invoice.id %}" class="btn btn-primary">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
                             </svg>
+                            Download PDF
+                        </a>
+                    </div>
+                </div>
+            </header>
+            <div class="invoice-detail glass-card">
+                <div class="invoice-meta">
+                    <div class="meta-row">
+                        <div class="meta-item">
+                            <span class="meta-label">Invoice Date</span>
+                            <span class="meta-value">{{ invoice.invoice_date|date:"F d, Y" }}</span>
                         </div>
-                        <span class="party-label">To</span>
-                    </div>
-                    <div class="party-content">
-                        <h3 class="party-name">{{ invoice.client_name }}</h3>
-                        {% if invoice.client_email %}<p class="party-detail">{{ invoice.client_email }}</p>{% endif %}
-                        {% if invoice.client_phone %}<p class="party-detail">{{ invoice.client_phone }}</p>{% endif %}
-                        {% if invoice.client_address %}<p class="party-detail party-address">{{ invoice.client_address|linebreaksbr }}</p>{% endif %}
-                    </div>
-                </div>
-            </div>
-            
-            <div class="invoice-items">
-                <h3 class="items-title">Line Items</h3>
-                <div class="items-table">
-                    <div class="items-header">
-                        <span class="col-description">Description</span>
-                        <span class="col-quantity">Qty</span>
-                        <span class="col-price">Unit Price</span>
-                        <span class="col-total">Total</span>
-                    </div>
-                    <div class="items-body">
-                        {% for item in invoice.line_items.all %}
-                        <div class="item-row">
-                            <span class="col-description">{{ item.description }}</span>
-                            <span class="col-quantity">{{ item.quantity }}</span>
-                            <span class="col-price">{{ invoice.currency }} {{ item.unit_price }}</span>
-                            <span class="col-total">{{ invoice.currency }} {{ item.total }}</span>
+                        <div class="meta-item">
+                            <span class="meta-label">Due Date</span>
+                            <span class="meta-value {% if invoice.is_overdue %}overdue{% endif %}">
+                                {{ invoice.due_date|date:"F d, Y" }}
+                                {% if invoice.is_overdue %}<span class="overdue-badge">Overdue</span>{% endif %}
+                            </span>
                         </div>
-                        {% empty %}
-                        <div class="item-row empty">
-                            <span>No line items</span>
+                        <div class="meta-item">
+                            <span class="meta-label">Currency</span>
+                            <span class="meta-value">{{ invoice.currency }}</span>
                         </div>
-                        {% endfor %}
                     </div>
                 </div>
-            </div>
-            
-            <div class="invoice-summary">
-                <div class="summary-row">
-                    <span class="summary-label">Subtotal</span>
-                    <span class="summary-value">{{ invoice.currency }} {{ invoice.subtotal }}</span>
+                <div class="invoice-parties">
+                    <div class="party-card">
+                        <div class="party-header">
+                            <div class="party-icon">
+                                <svg viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2">
+                                    <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                </svg>
+                            </div>
+                            <span class="party-label">From</span>
+                        </div>
+                        <div class="party-content">
+                            <h3 class="party-name">{{ invoice.business_name }}</h3>
+                            {% if invoice.business_email %}<p class="party-detail">{{ invoice.business_email }}</p>{% endif %}
+                            {% if invoice.business_phone %}<p class="party-detail">{{ invoice.business_phone }}</p>{% endif %}
+                            {% if invoice.business_address %}
+                                <p class="party-detail party-address">{{ invoice.business_address|linebreaksbr }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="party-arrow">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                    </div>
+                    <div class="party-card">
+                        <div class="party-header">
+                            <div class="party-icon client">
+                                <svg viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                            </div>
+                            <span class="party-label">To</span>
+                        </div>
+                        <div class="party-content">
+                            <h3 class="party-name">{{ invoice.client_name }}</h3>
+                            {% if invoice.client_email %}<p class="party-detail">{{ invoice.client_email }}</p>{% endif %}
+                            {% if invoice.client_phone %}<p class="party-detail">{{ invoice.client_phone }}</p>{% endif %}
+                            {% if invoice.client_address %}
+                                <p class="party-detail party-address">{{ invoice.client_address|linebreaksbr }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-                <div class="summary-row">
-                    <span class="summary-label">Tax ({{ invoice.tax_rate }}%)</span>
-                    <span class="summary-value">{{ invoice.currency }} {{ invoice.tax_amount }}</span>
+                <div class="invoice-items">
+                    <h3 class="items-title">Line Items</h3>
+                    <div class="items-table">
+                        <div class="items-header">
+                            <span class="col-description">Description</span>
+                            <span class="col-quantity">Qty</span>
+                            <span class="col-price">Unit Price</span>
+                            <span class="col-total">Total</span>
+                        </div>
+                        <div class="items-body">
+                            {% for item in invoice.line_items.all %}
+                                <div class="item-row">
+                                    <span class="col-description">{{ item.description }}</span>
+                                    <span class="col-quantity">{{ item.quantity }}</span>
+                                    <span class="col-price">{{ invoice.currency }} {{ item.unit_price }}</span>
+                                    <span class="col-total">{{ invoice.currency }} {{ item.total }}</span>
+                                </div>
+                            {% empty %}
+                                <div class="item-row empty">
+                                    <span>No line items</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
-                <div class="summary-row total">
-                    <span class="summary-label">Total</span>
-                    <span class="summary-value">{{ invoice.currency }} {{ invoice.total }}</span>
+                <div class="invoice-summary">
+                    <div class="summary-row">
+                        <span class="summary-label">Subtotal</span>
+                        <span class="summary-value">{{ invoice.currency }} {{ invoice.subtotal }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Tax ({{ invoice.tax_rate }}%)</span>
+                        <span class="summary-value">{{ invoice.currency }} {{ invoice.tax_amount }}</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span class="summary-label">Total</span>
+                        <span class="summary-value">{{ invoice.currency }} {{ invoice.total }}</span>
+                    </div>
+                </div>
+                {% if invoice.notes %}
+                    <div class="invoice-notes">
+                        <h3 class="notes-title">Notes</h3>
+                        <p class="notes-content">{{ invoice.notes|linebreaksbr }}</p>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="invoice-actions">
+                <form method="post"
+                      action="{% url 'update_invoice_status' invoice.id %}"
+                      class="status-form">
+                    {% csrf_token %}
+                    <label class="status-label">Update Status:</label>
+                    <select name="status" class="status-select">
+                        <option value="unpaid" {% if invoice.status == 'unpaid' %}selected{% endif %}>Unpaid</option>
+                        <option value="paid" {% if invoice.status == 'paid' %}selected{% endif %}>Paid</option>
+                    </select>
+                    <button type="submit" class="btn btn-secondary btn-sm">Update</button>
+                </form>
+                <div class="action-links">
+                    <a href="{% url 'send_invoice_email' invoice.id %}" class="action-link">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" />
+                        </svg>
+                        Send via Email
+                    </a>
+                    <a href="{% url 'whatsapp_share' invoice.id %}"
+                       class="action-link"
+                       target="_blank">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                        </svg>
+                        Share on WhatsApp
+                    </a>
+                    <a href="{% url 'delete_invoice' invoice.id %}"
+                       class="action-link danger">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2">
+                            <polyline points="3 6 5 6 21 6" />
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                            <line x1="10" y1="11" x2="10" y2="17" />
+                            <line x1="14" y1="11" x2="14" y2="17" />
+                        </svg>
+                        Delete Invoice
+                    </a>
                 </div>
             </div>
-            
-            {% if invoice.notes %}
-            <div class="invoice-notes">
-                <h3 class="notes-title">Notes</h3>
-                <p class="notes-content">{{ invoice.notes|linebreaksbr }}</p>
-            </div>
-            {% endif %}
-        </div>
-        
-        <div class="invoice-actions">
-            <form method="post" action="{% url 'update_invoice_status' invoice.id %}" class="status-form">
-                {% csrf_token %}
-                <label class="status-label">Update Status:</label>
-                <select name="status" class="status-select">
-                    <option value="unpaid" {% if invoice.status == 'unpaid' %}selected{% endif %}>Unpaid</option>
-                    <option value="paid" {% if invoice.status == 'paid' %}selected{% endif %}>Paid</option>
-                </select>
-                <button type="submit" class="btn btn-secondary btn-sm">Update</button>
-            </form>
-            
-            <div class="action-links">
-                <a href="{% url 'send_invoice_email' invoice.id %}" class="action-link">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                        <polyline points="22,6 12,13 2,6"/>
-                    </svg>
-                    Send via Email
-                </a>
-                <a href="{% url 'whatsapp_share' invoice.id %}" class="action-link" target="_blank">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                    </svg>
-                    Share on WhatsApp
-                </a>
-                <a href="{% url 'delete_invoice' invoice.id %}" class="action-link danger">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="3 6 5 6 21 6"/>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                        <line x1="10" y1="11" x2="10" y2="17"/>
-                        <line x1="14" y1="11" x2="14" y2="17"/>
-                    </svg>
-                    Delete Invoice
-                </a>
-            </div>
-        </div>
-    </main>
-</div>
+        </main>
+    </div>
 {% endblock %}
-
 {% block extra_css %}
-<style>
+    <style>
 .app-page {
     background: var(--gradient-dark);
 }
@@ -867,11 +904,10 @@
 .action-link.danger:hover {
     color: #f87171;
 }
-</style>
+    </style>
 {% endblock %}
-
 {% block extra_js %}
-<script>
+    <script>
 document.addEventListener('DOMContentLoaded', function() {
     const mobileToggle = document.querySelector('.mobile-menu-toggle');
     const sidebar = document.querySelector('.app-sidebar');
@@ -882,5 +918,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-</script>
+    </script>
 {% endblock %}

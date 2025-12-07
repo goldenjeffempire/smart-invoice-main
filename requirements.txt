@@ -2,7 +2,7 @@
 # Pinned versions for reproducible builds
 
 # Core Django Framework
-Django==5.2.8
+Django==5.2.9
 django-environ==0.12.0
 django-csp==4.0
 django-ratelimit==4.1.0
@@ -66,7 +66,7 @@ brotli==1.2.0
 cffi==2.0.0
 cryptography==46.0.3
 cssselect2==0.8.0
-Django==5.2.8
+Django==5.2.9
 django-csp==4.0
 django-environ==0.12.0
 django-ratelimit==4.1.0
@@ -103,7 +103,7 @@ brotli==1.2.0
 cffi==2.0.0
 cryptography==46.0.3
 cssselect2==0.8.0
-Django==5.2.8
+Django==5.2.9
 django-csp==4.0
 django-environ==0.12.0
 django-ratelimit==4.1.0
@@ -135,3 +135,11 @@ weasyprint==66.0
 webencodings==0.5.1
 whitenoise==6.11.0
 zopfli==0.4.0
+bandit
+black
+djlint
+isort
+pip-audit
+ruff
+safety
+Django==5.2.9

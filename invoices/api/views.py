@@ -1,19 +1,19 @@
 from io import BytesIO
 
-from rest_framework import viewsets, status, filters
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiTypes
-from django.db.models import Prefetch
 from django.http import FileResponse
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
+from rest_framework import filters, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
-from invoices.models import Invoice, LineItem, InvoiceTemplate
+from invoices.models import Invoice, InvoiceTemplate
 from invoices.services import AnalyticsService, PDFService
+
 from .serializers import (
-    InvoiceListSerializer,
-    InvoiceDetailSerializer,
     InvoiceCreateSerializer,
+    InvoiceDetailSerializer,
+    InvoiceListSerializer,
     InvoiceStatusSerializer,
     InvoiceTemplateSerializer,
 )
@@ -24,9 +24,24 @@ from .serializers import (
         summary="List invoices",
         description="Retrieve a paginated list of invoices for the authenticated user.",
         parameters=[
-            OpenApiParameter(name="status", description="Filter by status (paid/unpaid)", required=False, type=str),
-            OpenApiParameter(name="search", description="Search by client name or invoice ID", required=False, type=str),
-            OpenApiParameter(name="ordering", description="Order by field (e.g., -created_at, due_date)", required=False, type=str),
+            OpenApiParameter(
+                name="status",
+                description="Filter by status (paid/unpaid)",
+                required=False,
+                type=str,
+            ),
+            OpenApiParameter(
+                name="search",
+                description="Search by client name or invoice ID",
+                required=False,
+                type=str,
+            ),
+            OpenApiParameter(
+                name="ordering",
+                description="Order by field (e.g., -created_at, due_date)",
+                required=False,
+                type=str,
+            ),
         ],
     ),
     retrieve=extend_schema(
@@ -70,11 +85,11 @@ class InvoiceViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Invoice.objects.filter(user=self.request.user).prefetch_related("line_items")
-        
+
         status_filter = self.request.query_params.get("status")
         if status_filter in ["paid", "unpaid"]:
             queryset = queryset.filter(status=status_filter)
-        
+
         return queryset
 
     def perform_create(self, serializer):
@@ -101,11 +116,11 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         invoice = self.get_object()
         serializer = InvoiceStatusSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
+
         invoice.status = serializer.validated_data["status"]
         invoice.save()
         AnalyticsService.invalidate_user_cache(request.user.id)
-        
+
         return Response(InvoiceDetailSerializer(invoice).data)
 
     @extend_schema(
@@ -117,7 +132,7 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     def generate_pdf(self, request, pk=None, version=None):
         invoice = self.get_object()
         pdf_bytes = PDFService.generate_pdf_bytes(invoice)
-        
+
         response = FileResponse(
             BytesIO(pdf_bytes),
             as_attachment=True,

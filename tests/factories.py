@@ -1,8 +1,10 @@
+from datetime import date, timedelta
+from decimal import Decimal
+
 import factory
 from django.contrib.auth import get_user_model
-from invoices.models import Invoice, LineItem, InvoiceTemplate
-from decimal import Decimal
-from datetime import date, timedelta
+
+from invoices.models import Invoice, InvoiceTemplate, LineItem
 
 User = get_user_model()
 

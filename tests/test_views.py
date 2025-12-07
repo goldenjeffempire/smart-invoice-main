@@ -1,7 +1,6 @@
 import pytest
-from django.urls import reverse
 
-from tests.factories import UserFactory, InvoiceFactory
+from tests.factories import InvoiceFactory, UserFactory
 
 
 @pytest.mark.django_db

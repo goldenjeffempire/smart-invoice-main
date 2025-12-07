@@ -3,10 +3,10 @@
 import logging
 from typing import Any, Type
 
-from django.db.models.signals import post_save, post_delete
-from django.dispatch import receiver
-from django.contrib.auth.models import User
 from django.contrib.auth import user_logged_in
+from django.contrib.auth.models import User
+from django.db.models.signals import post_delete, post_save
+from django.dispatch import receiver
 
 from .models import Invoice, LineItem
 from .sendgrid_service import SendGridEmailService
@@ -52,13 +52,11 @@ def handle_invoice_status_change(sender, instance, created, **kwargs):
 
 @receiver(post_delete, sender=Invoice)
 def invalidate_cache_on_invoice_delete(
-    sender: Type[Invoice], 
-    instance: Invoice, 
-    **kwargs: Any
+    sender: Type[Invoice], instance: Invoice, **kwargs: Any
 ) -> None:
     """Invalidate user analytics cache when invoice is deleted."""
     from .services import AnalyticsService
-    
+
     try:
         AnalyticsService.invalidate_user_cache(instance.user_id)
         logger.debug(f"Cache invalidated for user {instance.user_id} on invoice delete")
@@ -68,13 +66,11 @@ def invalidate_cache_on_invoice_delete(
 
 @receiver(post_delete, sender=LineItem)
 def invalidate_cache_on_lineitem_delete(
-    sender: Type[LineItem], 
-    instance: LineItem, 
-    **kwargs: Any
+    sender: Type[LineItem], instance: LineItem, **kwargs: Any
 ) -> None:
     """Invalidate user analytics cache when line item is deleted."""
     from .services import AnalyticsService
-    
+
     try:
         if instance.invoice_id:
             user_id = instance.invoice.user_id
@@ -85,15 +81,10 @@ def invalidate_cache_on_lineitem_delete(
 
 
 @receiver(user_logged_in)
-def warm_cache_on_login(
-    sender: Any, 
-    request: Any, 
-    user: Any, 
-    **kwargs: Any
-) -> None:
+def warm_cache_on_login(sender: Any, request: Any, user: Any, **kwargs: Any) -> None:
     """Pre-warm user analytics cache on login for faster dashboard loads."""
     from .services import CacheWarmingService
-    
+
     try:
         CacheWarmingService.warm_user_cache_async(user)
         logger.debug(f"Cache warming initiated for user {user.id} on login")

@@ -14,7 +14,6 @@ Features:
 
 import multiprocessing
 import os
-import sys
 
 # =============================================================================
 # SERVER BINDING
@@ -30,6 +29,7 @@ keyfile = os.getenv("SSL_KEYFILE", None)
 # WORKER CONFIGURATION
 # =============================================================================
 
+
 def calculate_workers():
     """Calculate optimal worker count based on CPU cores."""
     cpu_count = multiprocessing.cpu_count()
@@ -37,6 +37,7 @@ def calculate_workers():
     max_workers = 17
     min_workers = 2
     return max(min_workers, min(recommended, max_workers))
+
 
 workers = int(os.getenv("WEB_CONCURRENCY", calculate_workers()))
 worker_class = "gthread"
@@ -99,46 +100,57 @@ proc_name = "invoiceflow"
 # SERVER HOOKS
 # =============================================================================
 
+
 def on_starting(server):
     """Called just before the master process is initialized."""
-    print(f"[InvoiceFlow] Starting Gunicorn server...")
+    print("[InvoiceFlow] Starting Gunicorn server...")
     print(f"[InvoiceFlow] Workers: {workers} | Threads: {threads} | Worker Class: {worker_class}")
+
 
 def on_reload(server):
     """Called when receiving SIGHUP for reloading."""
     print("[InvoiceFlow] Reloading server configuration...")
 
+
 def worker_int(worker):
     """Called when a worker receives SIGINT or SIGQUIT."""
     print(f"[InvoiceFlow] Worker {worker.pid} interrupted")
+
 
 def worker_abort(worker):
     """Called when a worker receives SIGABRT."""
     print(f"[InvoiceFlow] Worker {worker.pid} aborted")
 
+
 def pre_fork(server, worker):
     """Called just before a worker is forked."""
     pass
+
 
 def post_fork(server, worker):
     """Called just after a worker is forked."""
     print(f"[InvoiceFlow] Worker {worker.pid} spawned")
 
+
 def post_worker_init(worker):
     """Called just after a worker has initialized."""
     pass
+
 
 def child_exit(server, worker):
     """Called when a worker exits."""
     print(f"[InvoiceFlow] Worker {worker.pid} exited")
 
+
 def worker_exit(server, worker):
     """Called when a worker has been exited from the master process."""
     pass
 
+
 def nworkers_changed(server, new_value, old_value):
     """Called when the number of workers is changed."""
     print(f"[InvoiceFlow] Worker count changed: {old_value} -> {new_value}")
+
 
 def on_exit(server):
     """Called just before exiting gunicorn."""

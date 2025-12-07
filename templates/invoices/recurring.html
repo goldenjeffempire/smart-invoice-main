@@ -1,9 +1,7 @@
 {% extends "base/layout.html" %}
-
 {% block title %}Recurring Invoices{% endblock %}
-
 {% block extra_css %}
-<style>
+    <style>
 .recurring-page {
     min-height: 100vh;
     background: linear-gradient(135deg, #0f0c29 0%, #1e1b4b 50%, #0f0c29 100%);
@@ -255,114 +253,123 @@
     color: rgba(255, 255, 255, 0.5);
     font-size: 15px;
 }
-</style>
+    </style>
 {% endblock %}
-
 {% block nav %}{% endblock %}
-
 {% block content %}
-<div class="recurring-page">
-    <div class="container">
-        <div class="page-header">
-            <h1 class="page-title">Recurring Invoices</h1>
-            <p class="page-subtitle">Automate your billing with scheduled invoices</p>
-        </div>
-
-        <div class="content-grid">
-            <div class="recurring-list">
-                {% if recurring_invoices %}
-                    {% for recurring in recurring_invoices %}
-                    <div class="recurring-card">
-                        <div class="recurring-header">
-                            <div>
-                                <div class="recurring-client">{{ recurring.client_name }}</div>
-                                <div class="recurring-schedule">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                                        <line x1="16" y1="2" x2="16" y2="6"/>
-                                        <line x1="8" y1="2" x2="8" y2="6"/>
-                                        <line x1="3" y1="10" x2="21" y2="10"/>
-                                    </svg>
-                                    {{ recurring.get_frequency_display }}
+    <div class="recurring-page">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Recurring Invoices</h1>
+                <p class="page-subtitle">Automate your billing with scheduled invoices</p>
+            </div>
+            <div class="content-grid">
+                <div class="recurring-list">
+                    {% if recurring_invoices %}
+                        {% for recurring in recurring_invoices %}
+                            <div class="recurring-card">
+                                <div class="recurring-header">
+                                    <div>
+                                        <div class="recurring-client">{{ recurring.client_name }}</div>
+                                        <div class="recurring-schedule">
+                                            <svg viewBox="0 0 24 24"
+                                                 fill="none"
+                                                 stroke="currentColor"
+                                                 stroke-width="2">
+                                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                                <line x1="16" y1="2" x2="16" y2="6" />
+                                                <line x1="8" y1="2" x2="8" y2="6" />
+                                                <line x1="3" y1="10" x2="21" y2="10" />
+                                            </svg>
+                                            {{ recurring.get_frequency_display }}
+                                        </div>
+                                    </div>
+                                    <div class="recurring-amount">{{ recurring.currency }} {{ recurring.amount }}</div>
+                                </div>
+                                <div class="recurring-details">
+                                    <div class="detail-item">
+                                        <div class="detail-label">Next Date</div>
+                                        <div class="detail-value">{{ recurring.next_invoice_date|date:"M d, Y" }}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Created</div>
+                                        <div class="detail-value">{{ recurring.created_at|date:"M d, Y" }}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Status</div>
+                                        <span class="status-badge {% if recurring.is_active %}status-active{% else %}status-paused{% endif %}">
+                                            {% if recurring.is_active %}
+                                                Active
+                                            {% else %}
+                                                Paused
+                                            {% endif %}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="recurring-amount">{{ recurring.currency }} {{ recurring.amount }}</div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <svg viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                    <line x1="16" y1="2" x2="16" y2="6" />
+                                    <line x1="8" y1="2" x2="8" y2="6" />
+                                    <line x1="3" y1="10" x2="21" y2="10" />
+                                    <path d="M12 14v4" />
+                                    <path d="M10 16h4" />
+                                </svg>
+                            </div>
+                            <h3 class="empty-title">No Recurring Invoices</h3>
+                            <p class="empty-description">Create your first recurring invoice to automate billing</p>
                         </div>
-
-                        <div class="recurring-details">
-                            <div class="detail-item">
-                                <div class="detail-label">Next Date</div>
-                                <div class="detail-value">{{ recurring.next_invoice_date|date:"M d, Y" }}</div>
+                    {% endif %}
+                </div>
+                <div class="create-form-card">
+                    <h2 class="form-title">Create Recurring Invoice</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form-group">
+                                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {% if field.field.widget.input_type == 'select' %}
+                                    <select class="form-select"
+                                            name="{{ field.name }}"
+                                            id="{{ field.id_for_label }}">
+                                        {% for choice in field.field.choices %}<option value="{{ choice.0 }}">{{ choice.1 }}</option>{% endfor %}
+                                    </select>
+                                {% else %}
+                                    <input type="{{ field.field.widget.input_type|default:'text' }}"
+                                           class="form-input"
+                                           name="{{ field.name }}"
+                                           id="{{ field.id_for_label }}"
+                                           value="{{ field.value|default:'' }}"
+                                           placeholder="{{ field.label }}">
+                                {% endif %}
+                                {% if field.errors %}
+                                    <div style="color: #ef4444; font-size: 13px; margin-top: 6px;">{{ field.errors.0 }}</div>
+                                {% endif %}
                             </div>
-                            <div class="detail-item">
-                                <div class="detail-label">Created</div>
-                                <div class="detail-value">{{ recurring.created_at|date:"M d, Y" }}</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-label">Status</div>
-                                <span class="status-badge {% if recurring.is_active %}status-active{% else %}status-paused{% endif %}">
-                                    {% if recurring.is_active %}Active{% else %}Paused{% endif %}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="empty-state">
-                        <div class="empty-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                                <line x1="16" y1="2" x2="16" y2="6"/>
-                                <line x1="8" y1="2" x2="8" y2="6"/>
-                                <line x1="3" y1="10" x2="21" y2="10"/>
-                                <path d="M12 14v4"/>
-                                <path d="M10 16h4"/>
+                        {% endfor %}
+                        <button type="submit" class="btn-create">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 width="20"
+                                 height="20">
+                                <line x1="12" y1="5" x2="12" y2="19" />
+                                <line x1="5" y1="12" x2="19" y2="12" />
                             </svg>
-                        </div>
-                        <h3 class="empty-title">No Recurring Invoices</h3>
-                        <p class="empty-description">Create your first recurring invoice to automate billing</p>
-                    </div>
-                {% endif %}
-            </div>
-
-            <div class="create-form-card">
-                <h2 class="form-title">Create Recurring Invoice</h2>
-                <form method="post">
-                    {% csrf_token %}
-                    {% for field in form %}
-                    <div class="form-group">
-                        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                        {% if field.field.widget.input_type == 'select' %}
-                            <select class="form-select" name="{{ field.name }}" id="{{ field.id_for_label }}">
-                                {% for choice in field.field.choices %}
-                                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
-                                {% endfor %}
-                            </select>
-                        {% else %}
-                            <input type="{{ field.field.widget.input_type|default:'text' }}" 
-                                   class="form-input" 
-                                   name="{{ field.name }}" 
-                                   id="{{ field.id_for_label }}"
-                                   value="{{ field.value|default:'' }}"
-                                   placeholder="{{ field.label }}">
-                        {% endif %}
-                        {% if field.errors %}
-                        <div style="color: #ef4444; font-size: 13px; margin-top: 6px;">{{ field.errors.0 }}</div>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                    <button type="submit" class="btn-create">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                            <line x1="12" y1="5" x2="12" y2="19"/>
-                            <line x1="5" y1="12" x2="19" y2="12"/>
-                        </svg>
-                        Create Recurring Invoice
-                    </button>
-                </form>
+                            Create Recurring Invoice
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
-
 {% block footer %}{% endblock %}

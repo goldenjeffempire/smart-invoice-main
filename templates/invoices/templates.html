@@ -1,95 +1,99 @@
 {% extends "base/layout.html" %}
-
 {% block title %}My Templates - InvoiceFlow{% endblock %}
-
 {% block content %}
-<div class="min-h-screen bg-gray-50 py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mb-8 flex justify-between items-center">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900">My Templates</h1>
-                <p class="mt-2 text-gray-600">Save and reuse invoice templates for faster invoicing.</p>
-            </div>
-            <button type="button" onclick="document.getElementById('template-form').classList.toggle('hidden')" class="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
-                Create Template
-            </button>
-        </div>
-
-        <div id="template-form" class="hidden bg-white shadow-lg rounded-2xl p-8 mb-8">
-            <h2 class="text-xl font-semibold text-gray-900 mb-6">Create New Template</h2>
-            <form method="post">
-                {% csrf_token %}
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Template Name</label>
-                        {{ form.name }}
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                        {{ form.description }}
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Business Name</label>
-                        {{ form.business_name }}
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Business Email</label>
-                        {{ form.business_email }}
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Currency</label>
-                        {{ form.currency }}
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Tax Rate (%)</label>
-                        {{ form.tax_rate }}
-                    </div>
+    <div class="min-h-screen bg-gray-50 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8 flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">My Templates</h1>
+                    <p class="mt-2 text-gray-600">Save and reuse invoice templates for faster invoicing.</p>
                 </div>
-                
-                <div class="mt-6 flex justify-end space-x-4">
-                    <button type="button" onclick="document.getElementById('template-form').classList.add('hidden')" class="px-6 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors">
-                        Cancel
-                    </button>
-                    <button type="submit" class="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
-                        Save Template
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {% for template in templates %}
-            <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-shadow">
-                <div class="flex items-start justify-between mb-4">
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">{{ template.name }}</h3>
-                        <p class="text-sm text-gray-500">{{ template.business_name }}</p>
-                    </div>
-                    {% if template.is_default %}
-                    <span class="px-2 py-1 bg-indigo-100 text-indigo-800 rounded text-xs font-medium">Default</span>
-                    {% endif %}
-                </div>
-                <p class="text-gray-600 text-sm mb-4">{{ template.description|default:"No description" }}</p>
-                <div class="flex items-center justify-between text-sm">
-                    <span class="text-gray-500">{{ template.currency }} | {{ template.tax_rate }}% tax</span>
-                    <div class="flex space-x-2">
-                        <a href="{% url 'delete_template' template.id %}" class="text-red-600 hover:text-red-800">Delete</a>
-                    </div>
-                </div>
-            </div>
-            {% empty %}
-            <div class="col-span-full text-center py-12">
-                <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path>
-                </svg>
-                <p class="text-gray-500 mb-4">No templates yet. Create your first template to speed up invoicing.</p>
-                <button onclick="document.getElementById('template-form').classList.remove('hidden')" class="text-indigo-600 hover:text-indigo-800 font-medium">
+                <button type="button"
+                        onclick="document.getElementById('template-form').classList.toggle('hidden')"
+                        class="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
                     Create Template
                 </button>
             </div>
-            {% endfor %}
+            <div id="template-form"
+                 class="hidden bg-white shadow-lg rounded-2xl p-8 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-6">Create New Template</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Template Name</label>
+                            {{ form.name }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                            {{ form.description }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Business Name</label>
+                            {{ form.business_name }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Business Email</label>
+                            {{ form.business_email }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Currency</label>
+                            {{ form.currency }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tax Rate (%)</label>
+                            {{ form.tax_rate }}
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-end space-x-4">
+                        <button type="button"
+                                onclick="document.getElementById('template-form').classList.add('hidden')"
+                                class="px-6 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                class="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
+                            Save Template
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for template in templates %}
+                    <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-shadow">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900">{{ template.name }}</h3>
+                                <p class="text-sm text-gray-500">{{ template.business_name }}</p>
+                            </div>
+                            {% if template.is_default %}
+                                <span class="px-2 py-1 bg-indigo-100 text-indigo-800 rounded text-xs font-medium">Default</span>
+                            {% endif %}
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">{{ template.description|default:"No description" }}</p>
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-500">{{ template.currency }} | {{ template.tax_rate }}% tax</span>
+                            <div class="flex space-x-2">
+                                <a href="{% url 'delete_template' template.id %}"
+                                   class="text-red-600 hover:text-red-800">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-span-full text-center py-12">
+                        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4"
+                             fill="none"
+                             stroke="currentColor"
+                             viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z">
+                            </path>
+                        </svg>
+                        <p class="text-gray-500 mb-4">No templates yet. Create your first template to speed up invoicing.</p>
+                        <button onclick="document.getElementById('template-form').classList.remove('hidden')"
+                                class="text-indigo-600 hover:text-indigo-800 font-medium">Create Template</button>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
