@@ -1,6 +1,6 @@
 """
 Multi-Factor Authentication (MFA/2FA) Module for InvoiceFlow.
-Implements TOTP (Time-based One-Time Password) support.
+Implements TOTP (Time-based One-Time Password) support with rate limiting.
 """
 
 import base64
@@ -12,11 +12,77 @@ from functools import wraps
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.views.decorators.http import require_http_methods, require_POST
 
 logger = logging.getLogger(__name__)
+
+MFA_MAX_ATTEMPTS = 5
+MFA_LOCKOUT_DURATION = 300
+MFA_ATTEMPT_WINDOW = 600
+
+
+def get_mfa_attempt_key(user_id):
+    """Get cache key for MFA attempt tracking."""
+    return f"mfa_attempts_{user_id}"
+
+
+def get_mfa_lockout_key(user_id):
+    """Get cache key for MFA lockout status."""
+    return f"mfa_lockout_{user_id}"
+
+
+def check_mfa_rate_limit(user_id):
+    """
+    Check if user is rate-limited for MFA verification.
+    Returns (is_allowed, attempts_remaining, lockout_seconds).
+    """
+    lockout_key = get_mfa_lockout_key(user_id)
+    attempt_key = get_mfa_attempt_key(user_id)
+    
+    lockout_until = cache.get(lockout_key)
+    if lockout_until:
+        remaining = int(lockout_until - timezone.now().timestamp())
+        if remaining > 0:
+            return False, 0, remaining
+        cache.delete(lockout_key)
+    
+    attempts = cache.get(attempt_key, 0)
+    remaining_attempts = max(0, MFA_MAX_ATTEMPTS - attempts)
+    
+    return True, remaining_attempts, 0
+
+
+def record_mfa_attempt(user_id, success=False):
+    """
+    Record an MFA verification attempt.
+    On success, clears the attempt counter.
+    On failure, increments counter and may trigger lockout.
+    """
+    attempt_key = get_mfa_attempt_key(user_id)
+    lockout_key = get_mfa_lockout_key(user_id)
+    
+    if success:
+        cache.delete(attempt_key)
+        cache.delete(lockout_key)
+        return True, MFA_MAX_ATTEMPTS, 0
+    
+    attempts = cache.get(attempt_key, 0) + 1
+    cache.set(attempt_key, attempts, MFA_ATTEMPT_WINDOW)
+    
+    if attempts >= MFA_MAX_ATTEMPTS:
+        lockout_multiplier = min(attempts - MFA_MAX_ATTEMPTS + 1, 4)
+        lockout_time = MFA_LOCKOUT_DURATION * lockout_multiplier
+        lockout_until = timezone.now().timestamp() + lockout_time
+        cache.set(lockout_key, lockout_until, lockout_time + 60)
+        logger.warning(f"MFA lockout triggered for user {user_id}: {lockout_time}s")
+        return False, 0, lockout_time
+    
+    remaining = MFA_MAX_ATTEMPTS - attempts
+    return True, remaining, 0
 
 
 def generate_secret_key():
@@ -121,10 +187,28 @@ def mfa_required(view_func):
 @login_required
 @require_http_methods(["GET", "POST"])
 def mfa_setup(request):
-    """Set up MFA for the current user."""
+    """Set up MFA for the current user with rate limiting."""
     from invoices.models import MFAProfile
 
     mfa_profile, created = MFAProfile.objects.get_or_create(user=request.user)
+    
+    is_allowed, attempts_remaining, lockout_seconds = check_mfa_rate_limit(request.user.id)
+    
+    if not is_allowed:
+        lockout_minutes = (lockout_seconds + 59) // 60
+        uri = get_totp_uri(mfa_profile.secret_key, request.user.email) if mfa_profile.secret_key else None
+        qr_code = generate_qr_code(uri) if uri else None
+        return render(
+            request,
+            "auth/mfa_setup.html",
+            {
+                "error": f"Too many failed attempts. Please try again in {lockout_minutes} minute{'s' if lockout_minutes != 1 else ''}.",
+                "qr_code": qr_code,
+                "secret_key": mfa_profile.secret_key,
+                "is_locked": True,
+                "lockout_seconds": lockout_seconds,
+            },
+        )
 
     if request.method == "POST":
         token = request.POST.get("token", "").strip()
@@ -133,6 +217,7 @@ def mfa_setup(request):
             return JsonResponse({"error": "MFA setup not initialized"}, status=400)
 
         if verify_totp(mfa_profile.secret_key, token):
+            record_mfa_attempt(request.user.id, success=True)
             mfa_profile.is_enabled = True
             mfa_profile.recovery_codes = generate_recovery_codes()
             mfa_profile.save()
@@ -146,15 +231,33 @@ def mfa_setup(request):
                 {"recovery_codes": mfa_profile.recovery_codes},
             )
         else:
+            can_continue, remaining, new_lockout = record_mfa_attempt(request.user.id, success=False)
+            
+            uri = get_totp_uri(mfa_profile.secret_key, request.user.email)
+            qr_code = generate_qr_code(uri)
+            
+            if not can_continue:
+                lockout_minutes = (new_lockout + 59) // 60
+                return render(
+                    request,
+                    "auth/mfa_setup.html",
+                    {
+                        "error": f"Too many failed attempts. Please try again in {lockout_minutes} minute{'s' if lockout_minutes != 1 else ''}.",
+                        "qr_code": qr_code,
+                        "secret_key": mfa_profile.secret_key,
+                        "is_locked": True,
+                        "lockout_seconds": new_lockout,
+                    },
+                )
+            
             return render(
                 request,
                 "auth/mfa_setup.html",
                 {
-                    "error": "Invalid verification code. Please try again.",
-                    "qr_code": generate_qr_code(
-                        get_totp_uri(mfa_profile.secret_key, request.user.email)
-                    ),
+                    "error": f"Invalid verification code. {remaining} attempt{'s' if remaining != 1 else ''} remaining.",
+                    "qr_code": qr_code,
                     "secret_key": mfa_profile.secret_key,
+                    "attempts_remaining": remaining,
                 },
             )
 
@@ -172,6 +275,7 @@ def mfa_setup(request):
             "qr_code": qr_code,
             "secret_key": mfa_profile.secret_key,
             "is_enabled": mfa_profile.is_enabled,
+            "attempts_remaining": attempts_remaining,
         },
     )
 
@@ -179,7 +283,7 @@ def mfa_setup(request):
 @login_required
 @require_http_methods(["GET", "POST"])
 def mfa_verify(request):
-    """Verify MFA token during login."""
+    """Verify MFA token during login with rate limiting."""
     from invoices.models import MFAProfile
 
     try:
@@ -190,30 +294,64 @@ def mfa_verify(request):
     if not mfa_profile.is_enabled:
         return redirect("dashboard")
 
-    if request.method == "POST":
-        token = request.POST.get("token", "").strip()
-
-        if verify_totp(mfa_profile.secret_key, token):
-            request.session["mfa_verified"] = True
-            logger.info(f"MFA verified for user: {request.user.username}")
-            return redirect("dashboard")
-
-        recovery_code = request.POST.get("recovery_code", "").strip().upper()
-        if recovery_code:
-            if mfa_profile.recovery_codes and recovery_code in mfa_profile.recovery_codes:
-                mfa_profile.recovery_codes.remove(recovery_code)
-                mfa_profile.save()
-                request.session["mfa_verified"] = True
-                logger.info(f"MFA verified via recovery code for user: {request.user.username}")
-                return redirect("dashboard")
-
+    is_allowed, attempts_remaining, lockout_seconds = check_mfa_rate_limit(request.user.id)
+    
+    if not is_allowed:
+        lockout_minutes = (lockout_seconds + 59) // 60
         return render(
             request,
             "auth/mfa_verify.html",
-            {"error": "Invalid verification code. Please try again."},
+            {
+                "error": f"Too many failed attempts. Please try again in {lockout_minutes} minute{'s' if lockout_minutes != 1 else ''}.",
+                "is_locked": True,
+                "lockout_seconds": lockout_seconds,
+            },
         )
 
-    return render(request, "auth/mfa_verify.html")
+    if request.method == "POST":
+        token = request.POST.get("token", "").strip()
+        recovery_code = request.POST.get("recovery_code", "").strip().upper()
+
+        verified = False
+        via_recovery = False
+
+        if token and verify_totp(mfa_profile.secret_key, token):
+            verified = True
+        elif recovery_code and mfa_profile.recovery_codes and recovery_code in mfa_profile.recovery_codes:
+            mfa_profile.recovery_codes.remove(recovery_code)
+            mfa_profile.save()
+            verified = True
+            via_recovery = True
+
+        if verified:
+            record_mfa_attempt(request.user.id, success=True)
+            request.session["mfa_verified"] = True
+            log_msg = "MFA verified via recovery code" if via_recovery else "MFA verified"
+            logger.info(f"{log_msg} for user: {request.user.username}")
+            return redirect("dashboard")
+
+        can_continue, remaining, new_lockout = record_mfa_attempt(request.user.id, success=False)
+        
+        if not can_continue:
+            lockout_minutes = (new_lockout + 59) // 60
+            return render(
+                request,
+                "auth/mfa_verify.html",
+                {
+                    "error": f"Too many failed attempts. Account locked for {lockout_minutes} minute{'s' if lockout_minutes != 1 else ''}.",
+                    "is_locked": True,
+                    "lockout_seconds": new_lockout,
+                },
+            )
+
+        error_msg = f"Invalid verification code. {remaining} attempt{'s' if remaining != 1 else ''} remaining."
+        return render(
+            request,
+            "auth/mfa_verify.html",
+            {"error": error_msg, "attempts_remaining": remaining},
+        )
+
+    return render(request, "auth/mfa_verify.html", {"attempts_remaining": attempts_remaining})
 
 
 @login_required

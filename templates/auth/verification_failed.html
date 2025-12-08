@@ -1,37 +1,100 @@
-{% extends "base.html" %}
+{% extends "base/layout.html" %}
 {% load static %}
-
 {% block title %}Verification Failed - InvoiceFlow{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+{% block nav %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full">
-        <div class="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-8">
-            <div class="text-center">
-                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-500/20 mb-6">
-                    <svg class="h-8 w-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                    </svg>
-                </div>
-                <h2 class="text-2xl font-bold text-white mb-3">Verification Failed</h2>
-                <p class="text-slate-300 mb-6">
-                    {{ message|default:"The verification link is invalid or has expired." }}
-                </p>
-                <div class="space-y-4">
-                    <a href="{% url 'resend_verification' %}" class="w-full inline-flex items-center justify-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors">
-                        Request New Verification Link
-                    </a>
-                    <a href="{% url 'login' %}" class="w-full inline-flex items-center justify-center px-6 py-3 border border-slate-600 text-slate-300 font-medium rounded-lg hover:bg-slate-800/50 transition-colors">
-                        Back to Login
-                    </a>
-                </div>
-                <div class="mt-8 pt-6 border-t border-white/10">
-                    <p class="text-sm text-slate-400">
-                        Need help? <a href="{% url 'contact' %}" class="text-indigo-400 hover:text-indigo-300">Contact support</a>
-                    </p>
+<div class="auth-wrapper">
+    <div class="auth-background">
+        <div class="auth-gradient-orb auth-gradient-orb-1"></div>
+        <div class="auth-gradient-orb auth-gradient-orb-2"></div>
+        <div class="auth-gradient-orb auth-gradient-orb-3"></div>
+        <div class="auth-grid-overlay"></div>
+    </div>
+
+    <div class="auth-split-container auth-split-centered">
+        <main class="auth-form-panel" role="main">
+            <div class="auth-form-container">
+                <div class="auth-card auth-card-centered" role="region" aria-labelledby="failed-title">
+                    <header class="auth-card-header">
+                        <a href="{% url 'home' %}" class="auth-mobile-brand" aria-label="InvoiceFlow Home">
+                            <div class="auth-mobile-brand-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/>
+                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                </svg>
+                            </div>
+                            <span>InvoiceFlow</span>
+                        </a>
+                        
+                        <div class="auth-error-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                        </div>
+                        
+                        <h2 id="failed-title" class="auth-card-title">Verification failed</h2>
+                        <p class="auth-card-subtitle">{{ message|default:"The verification link is invalid or has expired." }}</p>
+                    </header>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="auth-alert auth-alert-{{ message.tags|default:'info' }}" role="alert" aria-live="polite">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="8" x2="12" y2="12"/>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                                </svg>
+                                <span>{{ message }}</span>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="auth-info-box auth-info-warning">
+                        <div class="auth-info-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                        </div>
+                        <div class="auth-info-content">
+                            <p><strong>Why might this happen?</strong></p>
+                            <ul>
+                                <li>The verification link has expired (valid for 24 hours)</li>
+                                <li>The link has already been used</li>
+                                <li>The link was copied incorrectly from the email</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="auth-action-buttons">
+                        <a href="{% url 'resend_verification' %}" class="auth-btn auth-btn-primary auth-btn-full">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                                <path d="M3 3v5h5"/>
+                            </svg>
+                            <span>Request new verification link</span>
+                        </a>
+                    </div>
+
+                    <footer class="auth-card-footer">
+                        <p>Already verified? <a href="{% url 'login' %}" class="auth-link">Sign in</a></p>
+                        <p>Need help? <a href="{% url 'support' %}" class="auth-link">Contact support</a></p>
+                    </footer>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 </div>
 {% endblock %}
