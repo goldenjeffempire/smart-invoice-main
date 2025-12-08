@@ -1,4 +1,4 @@
-modules = ["web", "python-3.12", "nodejs-20"]
+modules = ["web", "python-3.12", "nodejs-20", "postgresql-16"]
 [nix]
 channel = "stable-25_05"
 packages = ["awsebcli", "cairo", "cargo", "fontconfig", "freetype", "gdk-pixbuf", "ghostscript", "glib", "harfbuzz", "lcms2", "libffi", "libiconv", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "libyaml", "openjpeg", "openssl", "pango", "pgadmin4", "pkg-config", "postgresql", "rustc", "shared-mime-info", "sqlite", "tcl", "tk", "unzip", "zlib"]
@@ -107,4 +107,4 @@ ENCRYPTION_SALT = "d23404b518e957b03bc7f23e1ee79de5b964e9feedc2ccdb1a4d4aa010275
 [deployment]
 deploymentTarget = "autoscale"
 run = ["python3.12", "-m", "gunicorn", "--bind=0.0.0.0:5000", "--workers=2", "--timeout=120", "invoiceflow.wsgi:application"]
-build = ["bash", "build.sh"]
+build = ["python3.12", "manage.py", "collectstatic", "--noinput"]

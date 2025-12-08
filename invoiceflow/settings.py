@@ -67,8 +67,9 @@ if IS_PRODUCTION:
     allowed_hosts = env.list("ALLOWED_HOSTS", default=[PRODUCTION_DOMAIN, f".{PRODUCTION_DOMAIN}", "www." + PRODUCTION_DOMAIN])  # type: ignore
     ALLOWED_HOSTS = allowed_hosts
 else:
-    # Development: allow configured hosts or wildcard
-    ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])  # type: ignore
+    # Development: allow configured hosts, Replit domains, and localhost
+    # Using explicit wildcard and common dev domains for reliability
+    ALLOWED_HOSTS = ["*", "localhost", "127.0.0.1", ".replit.dev", ".picard.replit.dev", ".repl.co"]  # type: ignore
 
 # CSRF Trusted Origins - Production domain first
 CSRF_TRUSTED_ORIGINS = [
