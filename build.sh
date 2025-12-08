@@ -31,6 +31,10 @@ fi
 echo "Running database migrations..."
 python manage.py migrate --noinput
 
+# Create cache table for database caching
+echo "Creating cache tables..."
+python manage.py createcachetable
+
 # Collect static files
 echo "Collecting static files..."
 python manage.py collectstatic --noinput --clear
