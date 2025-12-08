@@ -10,114 +10,220 @@
 {% endblock %}
 
 {% block content %}
-<div class="auth-bg"></div>
-<div class="auth-glow"></div>
-<div class="auth-container">
-    <div class="auth-card">
-        <div class="auth-header">
-            <a href="{% url 'home' %}" class="auth-logo" aria-label="InvoiceFlow - Return to home">
-                <div class="nav-logo-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                        <line x1="16" y1="13" x2="8" y2="13"/>
-                        <line x1="16" y1="17" x2="8" y2="17"/>
-                    </svg>
-                </div>
-                <span class="nav-logo-text">InvoiceFlow</span>
-            </a>
-            <h1 class="auth-title">Welcome back</h1>
-            <p class="auth-subtitle">Log in to continue to your dashboard</p>
-        </div>
+<div class="auth-mobile-bg"></div>
+<div class="auth-mobile-glow"></div>
 
-        {% if messages %}
-            {% for message in messages %}
-                <div class="auth-alert {% if message.tags %}{{ message.tags }}{% else %}info{% endif %}" role="alert">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        {% if 'error' in message.tags %}
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="12" y1="8" x2="12" y2="12"/>
-                            <line x1="12" y1="16" x2="12.01" y2="16"/>
-                        {% else %}
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M9 12l2 2 4-4"/>
-                        {% endif %}
-                    </svg>
-                    <span>{{ message }}</span>
-                </div>
-            {% endfor %}
-        {% endif %}
-
-        <form method="post" class="auth-form" id="loginForm" novalidate>
-            {% csrf_token %}
+<div class="auth-split-left">
+    <div class="auth-floating-shapes">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+    <div class="auth-grid-pattern"></div>
+    
+    <div class="auth-brand-section">
+        <a href="{% url 'home' %}" class="auth-brand-logo">
+            <div class="auth-brand-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+            </div>
+            <span class="auth-brand-name">InvoiceFlow</span>
+        </a>
+        
+        <div class="auth-tagline">
+            <h1 class="auth-tagline-main">
+                Professional invoicing <span class="gradient-text">made simple</span>
+            </h1>
+            <p class="auth-tagline-sub">
+                Join thousands of businesses streamlining their billing with our enterprise-grade platform.
+            </p>
             
-            <div class="form-group">
-                <label for="id_username" class="form-label">Email or Username</label>
-                <div class="form-input-wrapper">
-                    <input type="text" 
-                           name="username" 
-                           id="id_username" 
-                           class="form-input has-icon" 
-                           placeholder="you@example.com" 
-                           required 
-                           autocomplete="username"
-                           autofocus>
-                    <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                        <polyline points="22,6 12,13 2,6"/>
-                    </svg>
+            <div class="auth-features">
+                <div class="auth-feature">
+                    <div class="auth-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                        </svg>
+                    </div>
+                    <span class="auth-feature-text">Create invoices in under 60 seconds</span>
+                </div>
+                <div class="auth-feature">
+                    <div class="auth-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                    </div>
+                    <span class="auth-feature-text">Bank-level security & encryption</span>
+                </div>
+                <div class="auth-feature">
+                    <div class="auth-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="M9 12l2 2 4-4"/>
+                        </svg>
+                    </div>
+                    <span class="auth-feature-text">GDPR compliant data handling</span>
                 </div>
             </div>
-
-            <div class="form-group">
-                <div class="form-label-row">
-                    <label for="id_password" class="form-label">Password</label>
-                    <a href="{% url 'password_reset' %}" class="form-link">Forgot password?</a>
+        </div>
+    </div>
+    
+    <div class="auth-social-proof">
+        <div class="auth-testimonial">
+            <p class="auth-testimonial-text">
+                "InvoiceFlow transformed how we manage billing. We've reduced payment collection time by 40% and our clients love the professional invoices."
+            </p>
+            <div class="auth-testimonial-author">
+                <div class="auth-testimonial-avatar">AO</div>
+                <div class="auth-testimonial-info">
+                    <h4>Adaeze Okonkwo</h4>
+                    <p>CEO, TechBridge Solutions</p>
                 </div>
-                <div class="form-input-wrapper">
-                    <input type="password" 
-                           name="password" 
-                           id="id_password" 
-                           class="form-input has-icon has-toggle" 
-                           placeholder="Enter your password" 
-                           required 
-                           autocomplete="current-password">
-                    <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="auth-split-right">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <a href="{% url 'home' %}" class="auth-mobile-logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text">InvoiceFlow</span>
+                </a>
+                <h2 class="auth-title">Welcome back</h2>
+                <p class="auth-subtitle">Enter your credentials to access your dashboard</p>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="auth-alert {% if message.tags %}{{ message.tags }}{% else %}info{% endif %}" role="alert">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            {% if 'error' in message.tags %}
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            {% else %}
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M9 12l2 2 4-4"/>
+                            {% endif %}
+                        </svg>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" class="auth-form" id="loginForm" novalidate>
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="id_username" class="form-label">Email or Username</label>
+                    <div class="form-input-wrapper">
+                        <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                        <input type="text" 
+                               name="username" 
+                               id="id_username" 
+                               class="form-input has-icon" 
+                               placeholder="you@example.com" 
+                               required 
+                               autocomplete="username"
+                               autofocus>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-label-row">
+                        <label for="id_password" class="form-label">Password</label>
+                        <a href="{% url 'password_reset' %}" class="form-link">Forgot password?</a>
+                    </div>
+                    <div class="form-input-wrapper">
+                        <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        <input type="password" 
+                               name="password" 
+                               id="id_password" 
+                               class="form-input has-icon has-toggle" 
+                               placeholder="Enter your password" 
+                               required 
+                               autocomplete="current-password">
+                        <button type="button" class="password-toggle" aria-label="Toggle password visibility" data-target="id_password">
+                            <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                                <line x1="1" y1="1" x2="23" y2="23"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-checkbox">
+                        <input type="checkbox" name="remember" value="1">
+                        <span class="checkbox-custom">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="checkbox-label">Keep me signed in for 30 days</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-auth" id="submitBtn">
+                    <span class="btn-text">Sign in</span>
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="{% url 'signup' %}">Create free account</a></p>
+            </div>
+            
+            <div class="auth-trust-badges">
+                <div class="trust-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span>256-bit SSL</span>
+                </div>
+                <div class="trust-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                         <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                     </svg>
-                    <button type="button" class="password-toggle" aria-label="Toggle password visibility" data-target="id_password">
-                        <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                            <circle cx="12" cy="12" r="3"/>
-                        </svg>
-                        <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
-                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-                            <line x1="1" y1="1" x2="23" y2="23"/>
-                        </svg>
-                    </button>
+                    <span>Secure Login</span>
+                </div>
+                <div class="trust-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M9 12l2 2 4-4"/>
+                    </svg>
+                    <span>GDPR Ready</span>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label class="form-checkbox">
-                    <input type="checkbox" name="remember" value="1">
-                    <span class="checkbox-mark"></span>
-                    <span class="checkbox-label">Remember me for 30 days</span>
-                </label>
-            </div>
-
-            <button type="submit" class="btn-auth" id="submitBtn">
-                <span class="btn-text">Log in</span>
-                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <line x1="5" y1="12" x2="19" y2="12"/>
-                    <polyline points="12 5 19 12 12 19"/>
-                </svg>
-            </button>
-        </form>
-
-        <div class="auth-footer">
-            <p>Don't have an account? <a href="{% url 'signup' %}" class="auth-link">Sign up free</a></p>
         </div>
     </div>
 </div>
@@ -158,16 +264,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         submitBtn.classList.add('loading');
-        submitBtn.innerHTML = '<div class="spinner"></div><span>Logging in...</span>';
+        submitBtn.innerHTML = '<div class="spinner"></div><span>Signing in...</span>';
         submitBtn.disabled = true;
     });
     
     document.querySelectorAll('.form-input').forEach(input => {
         input.addEventListener('focus', function() {
-            this.closest('.form-group').classList.add('focused');
+            this.closest('.form-group')?.classList.add('focused');
         });
         input.addEventListener('blur', function() {
-            this.closest('.form-group').classList.remove('focused');
+            this.closest('.form-group')?.classList.remove('focused');
         });
     });
 });
