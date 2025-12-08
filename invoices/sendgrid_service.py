@@ -312,8 +312,9 @@ class SendGridEmailService:
                 message.add_personalization(personalization)
             else:
                 # Fallback to simple email if no template
+                # Use platform from_email (not user_business_email) for the sender
                 return self._send_simple_email(
-                    user_business_email, from_name, to_email, subject, template_data
+                    self.from_email, from_name, to_email, subject, template_data, user_business_email
                 )
 
             # Add PDF attachment for invoice emails
@@ -348,7 +349,7 @@ class SendGridEmailService:
             print(f"❌ SendGrid API Error: {error_detail}")
             return {"status": "error", "message": error_detail, "code": status_code}
 
-    def _send_simple_email(self, from_email, from_name, to_email, subject, data):
+    def _send_simple_email(self, from_email, from_name, to_email, subject, data, reply_to_email=None):
         """Fallback: Send simple HTML email without dynamic template."""
         # Check if SendGrid is configured
         if not self.is_configured:
@@ -366,6 +367,10 @@ class SendGridEmailService:
                 subject=subject,
                 plain_text_content=plain_text,
             )
+
+            # Set Reply-To if provided
+            if reply_to_email:
+                message.reply_to = ReplyTo(reply_to_email)
 
             if self.client is None:
                 return {"status": "error", "message": "SendGrid client not initialized"}
