@@ -184,19 +184,12 @@ SPECTACULAR_SETTINGS = {
         "persistAuthorization": True,
     },
     "ENUM_NAME_OVERRIDES": {
-        "InvoiceStatusEnum": [("unpaid", "unpaid"), ("paid", "paid")],
-        "RecurringInvoiceStatusEnum": [
-            ("active", "active"),
-            ("paused", "paused"),
-            ("ended", "ended"),
-        ],
-        "ContactSubmissionStatusEnum": [
-            ("new", "new"),
-            ("in_progress", "in_progress"),
-            ("resolved", "resolved"),
-            ("closed", "closed"),
-        ],
+        "InvoiceStatusEnum": "invoices.models.Invoice.STATUS_CHOICES",
+        "RecurringInvoiceStatusEnum": "invoices.models.RecurringInvoice.STATUS_CHOICES",
+        "ContactSubmissionStatusEnum": "invoices.models.ContactSubmission.STATUS_CHOICES",
+        "StatusE4aEnum": "invoices.models.Invoice.STATUS_CHOICES",
     },
+    "POSTPROCESSING_HOOKS": [],
 }
 
 # =============================================================================

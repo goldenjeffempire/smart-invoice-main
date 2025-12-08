@@ -1,345 +1,308 @@
 {% extends "base/layout.html" %}
-{% block title %}Create Your Account{% endblock %}
+{% load static %}
+{% block title %}Create Your Account - InvoiceFlow{% endblock %}
 {% block body_class %}auth-page{% endblock %}
 {% block nav %}{% endblock %}
 {% block footer %}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
 {% block content %}
-    <div class="auth-container">
-        <div class="auth-bg"></div>
-        <div class="auth-glow"></div>
-        <div class="auth-card glass-card">
-            <div class="auth-header">
-                <a href="{% url 'home' %}"
-                   class="auth-logo"
-                   aria-label="InvoiceFlow - Return to home">
-                    <div class="nav-logo-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="2"
-                             stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                            <polyline points="14 2 14 8 20 8" />
-                            <line x1="16" y1="13" x2="8" y2="13" />
-                            <line x1="16" y1="17" x2="8" y2="17" />
-                        </svg>
-                    </div>
-                    <span class="nav-logo-text">InvoiceFlow</span>
-                </a>
-                <h1 class="auth-title">Start your journey</h1>
-                <p class="auth-subtitle">Create your free account in seconds</p>
-            </div>
-            <form method="post" class="auth-form" novalidate>
-                {% csrf_token %}
-                {% if form.errors %}
-                    <div class="auth-error" role="alert" aria-live="assertive">
-                        <svg viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="2"
-                             aria-hidden="true">
-                            <circle cx="12" cy="12" r="10" />
-                            <line x1="12" y1="8" x2="12" y2="12" />
-                            <line x1="12" y1="16" x2="12.01" y2="16" />
-                        </svg>
-                        <span>
-                            {% for field in form %}
-                                {% for error in field.errors %}{{ error }}{% endfor %}
-                            {% endfor %}
-                            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
-                        </span>
-                    </div>
-                {% endif %}
-                <div class="form-group">
-                    <label for="id_username" class="form-label">Full name</label>
-                    <input type="text"
-                           name="username"
-                           id="id_username"
-                           class="form-input"
-                           placeholder="John Doe"
-                           value="{{ form.username.value|default:'' }}"
-                           required
-                           autocomplete="name">
-                </div>
-                <div class="form-group">
-                    <label for="id_email" class="form-label">Email address</label>
-                    <input type="email"
-                           name="email"
-                           id="id_email"
-                           class="form-input"
-                           placeholder="you@example.com"
-                           value="{{ form.email.value|default:'' }}"
-                           required
-                           autocomplete="email">
-                </div>
-                <div class="form-group">
-                    <label for="id_password1" class="form-label">Password</label>
-                    <input type="password"
-                           name="password1"
-                           id="id_password1"
-                           class="form-input"
-                           placeholder="Create a strong password"
-                           required
-                           autocomplete="new-password">
-                    <p class="form-hint">Must be at least 8 characters</p>
-                </div>
-                <div class="form-group">
-                    <label for="id_password2" class="form-label">Confirm password</label>
-                    <input type="password"
-                           name="password2"
-                           id="id_password2"
-                           class="form-input"
-                           placeholder="Confirm your password"
-                           required
-                           autocomplete="new-password">
-                </div>
-                <div class="form-group">
-                    <label class="form-checkbox">
-                        <input type="checkbox" name="terms" required>
-                        <span class="checkbox-mark"></span>
-                        <span class="checkbox-label">I agree to the <a href="{% url 'terms' %}" class="form-link">Terms of Service</a> and <a href="{% url 'privacy' %}" class="form-link">Privacy Policy</a></span>
-                    </label>
-                </div>
-                <button type="submit" class="btn btn-primary btn-lg btn-full">
-                    Create Account
-                    <svg class="btn-icon"
-                         viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2"
-                         aria-hidden="true">
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                        <polyline points="12 5 19 12 12 19" />
+<div class="auth-bg"></div>
+<div class="auth-glow"></div>
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <a href="{% url 'home' %}" class="auth-logo" aria-label="InvoiceFlow - Return to home">
+                <div class="nav-logo-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
                     </svg>
-                </button>
-            </form>
-            <div class="auth-footer">
-                <p>
-                    Already have an account? <a href="{% url 'login' %}" class="auth-link">Log in</a>
-                </p>
+                </div>
+                <span class="nav-logo-text">InvoiceFlow</span>
+            </a>
+            <h1 class="auth-title">Start your journey</h1>
+            <p class="auth-subtitle">Create your free account in seconds</p>
+        </div>
+
+        {% if form.errors %}
+            <div class="auth-alert error" role="alert" aria-live="assertive">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <div>
+                    {% for field in form %}
+                        {% for error in field.errors %}{{ error }} {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}{{ error }} {% endfor %}
+                </div>
             </div>
+        {% endif %}
+
+        <form method="post" class="auth-form" id="signupForm" novalidate>
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username" class="form-label">Username</label>
+                <div class="form-input-wrapper">
+                    <input type="text" 
+                           name="username" 
+                           id="id_username" 
+                           class="form-input has-icon" 
+                           placeholder="Choose a username" 
+                           value="{{ form.username.value|default:'' }}"
+                           required 
+                           autocomplete="username"
+                           autofocus
+                           minlength="3"
+                           maxlength="150">
+                    <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </div>
+                <p class="form-hint">Letters, digits and @/./+/-/_ only</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="id_first_name" class="form-label">First name</label>
+                    <div class="form-input-wrapper">
+                        <input type="text" 
+                               name="first_name" 
+                               id="id_first_name" 
+                               class="form-input" 
+                               placeholder="John" 
+                               value="{{ form.first_name.value|default:'' }}"
+                               required 
+                               autocomplete="given-name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="id_last_name" class="form-label">Last name</label>
+                    <div class="form-input-wrapper">
+                        <input type="text" 
+                               name="last_name" 
+                               id="id_last_name" 
+                               class="form-input" 
+                               placeholder="Doe" 
+                               value="{{ form.last_name.value|default:'' }}"
+                               required 
+                               autocomplete="family-name">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_email" class="form-label">Email address</label>
+                <div class="form-input-wrapper">
+                    <input type="email" 
+                           name="email" 
+                           id="id_email" 
+                           class="form-input has-icon" 
+                           placeholder="you@example.com" 
+                           value="{{ form.email.value|default:'' }}"
+                           required 
+                           autocomplete="email">
+                    <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_password1" class="form-label">Password</label>
+                <div class="form-input-wrapper">
+                    <input type="password" 
+                           name="password1" 
+                           id="id_password1" 
+                           class="form-input has-icon has-toggle" 
+                           placeholder="Create a strong password" 
+                           required 
+                           autocomplete="new-password"
+                           minlength="12">
+                    <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                    <button type="button" class="password-toggle" aria-label="Toggle password visibility" data-target="id_password1">
+                        <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                            <line x1="1" y1="1" x2="23" y2="23"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="password-strength" id="passwordStrength" style="display: none;">
+                    <div class="password-strength-bar">
+                        <div class="password-strength-fill" id="strengthFill"></div>
+                    </div>
+                    <p class="password-strength-text" id="strengthText"></p>
+                </div>
+                <p class="form-hint">Must be at least 12 characters with letters and numbers</p>
+            </div>
+
+            <div class="form-group">
+                <label for="id_password2" class="form-label">Confirm password</label>
+                <div class="form-input-wrapper">
+                    <input type="password" 
+                           name="password2" 
+                           id="id_password2" 
+                           class="form-input has-icon has-toggle" 
+                           placeholder="Confirm your password" 
+                           required 
+                           autocomplete="new-password">
+                    <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                    <button type="button" class="password-toggle" aria-label="Toggle password visibility" data-target="id_password2">
+                        <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                            <line x1="1" y1="1" x2="23" y2="23"/>
+                        </svg>
+                    </button>
+                </div>
+                <p class="form-error" id="passwordMatchError" style="display: none;">Passwords do not match</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-checkbox">
+                    <input type="checkbox" name="terms" required>
+                    <span class="checkbox-mark"></span>
+                    <span class="checkbox-label">
+                        I agree to the <a href="{% url 'terms' %}">Terms of Service</a> and <a href="{% url 'privacy' %}">Privacy Policy</a>
+                    </span>
+                </label>
+            </div>
+
+            <button type="submit" class="btn-auth" id="submitBtn">
+                <span class="btn-text">Create Account</span>
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                </svg>
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Already have an account? <a href="{% url 'login' %}" class="auth-link">Log in</a></p>
         </div>
     </div>
+</div>
 {% endblock %}
-{% block extra_css %}
-    <style>
-.auth-page {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--spacing-8);
-}
 
-.auth-container {
-    position: relative;
-    width: 100%;
-    max-width: 440px;
-}
-
-.auth-bg {
-    position: fixed;
-    inset: 0;
-    background: var(--gradient-hero);
-    z-index: -2;
-}
-
-.auth-glow {
-    position: fixed;
-    width: 600px;
-    height: 600px;
-    background: var(--gradient-glow);
-    border-radius: 50%;
-    filter: blur(100px);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: -1;
-}
-
-.auth-card {
-    padding: var(--spacing-10);
-}
-
-.auth-header {
-    text-align: center;
-    margin-bottom: var(--spacing-8);
-}
-
-.auth-logo {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-3);
-    margin-bottom: var(--spacing-6);
-}
-
-.auth-title {
-    font-size: var(--font-size-2xl);
-    color: var(--color-neutral-0);
-    margin-bottom: var(--spacing-2);
-}
-
-.auth-subtitle {
-    font-size: var(--font-size-base);
-    color: var(--color-neutral-400);
-}
-
-.auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-5);
-}
-
-.auth-error {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--spacing-3);
-    padding: var(--spacing-4);
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.2);
-    border-radius: var(--radius-xl);
-    color: #f87171;
-    font-size: var(--font-size-sm);
-}
-
-.auth-error svg {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-    margin-top: 2px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-2);
-}
-
-.form-label {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-neutral-300);
-}
-
-.form-hint {
-    font-size: var(--font-size-xs);
-    color: var(--color-neutral-500);
-}
-
-.form-link {
-    color: var(--color-primary-400);
-    transition: color var(--transition-fast);
-}
-
-.form-link:hover {
-    color: var(--color-primary-300);
-}
-
-.form-input {
-    width: 100%;
-    padding: var(--spacing-3) var(--spacing-4);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-xl);
-    color: var(--color-neutral-0);
-    font-size: var(--font-size-base);
-    font-family: inherit;
-    transition: all var(--transition-fast);
-}
-
-.form-input::placeholder {
-    color: var(--color-neutral-500);
-}
-
-.form-input:focus {
-    outline: none;
-    border-color: var(--color-primary-500);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-}
-
-.form-checkbox {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--spacing-3);
-    cursor: pointer;
-}
-
-.form-checkbox input {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-}
-
-.form-checkbox input:focus + .checkbox-mark {
-    outline: 2px solid var(--color-primary-500);
-    outline-offset: 2px;
-}
-
-.checkbox-mark {
-    width: 20px;
-    height: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all var(--transition-fast);
-    flex-shrink: 0;
-    margin-top: 2px;
-}
-
-.form-checkbox input:checked + .checkbox-mark {
-    background: var(--color-primary-500);
-    border-color: var(--color-primary-500);
-}
-
-.form-checkbox input:checked + .checkbox-mark::after {
-    content: '';
-    width: 6px;
-    height: 10px;
-    border: 2px solid white;
-    border-top: none;
-    border-left: none;
-    transform: rotate(45deg) translate(-1px, -1px);
-}
-
-.checkbox-label {
-    font-size: var(--font-size-sm);
-    color: var(--color-neutral-400);
-    line-height: 1.5;
-}
-
-.btn-full {
-    width: 100%;
-}
-
-.auth-footer {
-    text-align: center;
-    margin-top: var(--spacing-6);
-    padding-top: var(--spacing-6);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.auth-footer p {
-    font-size: var(--font-size-sm);
-    color: var(--color-neutral-400);
-}
-
-.auth-link {
-    color: var(--color-primary-400);
-    font-weight: var(--font-weight-medium);
-    transition: color var(--transition-fast);
-}
-
-.auth-link:hover {
-    color: var(--color-primary-300);
-}
-    </style>
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('signupForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const password1 = document.getElementById('id_password1');
+    const password2 = document.getElementById('id_password2');
+    const strengthContainer = document.getElementById('passwordStrength');
+    const strengthFill = document.getElementById('strengthFill');
+    const strengthText = document.getElementById('strengthText');
+    const matchError = document.getElementById('passwordMatchError');
+    
+    document.querySelectorAll('.password-toggle').forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            const eyeOpen = this.querySelector('.eye-open');
+            const eyeClosed = this.querySelector('.eye-closed');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                eyeOpen.style.display = 'none';
+                eyeClosed.style.display = 'block';
+            } else {
+                input.type = 'password';
+                eyeOpen.style.display = 'block';
+                eyeClosed.style.display = 'none';
+            }
+        });
+    });
+    
+    function checkPasswordStrength(password) {
+        let score = 0;
+        let feedback = [];
+        
+        if (password.length >= 12) score++;
+        if (password.length >= 16) score++;
+        if (/[a-z]/.test(password)) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[0-9]/.test(password)) score++;
+        if (/[^a-zA-Z0-9]/.test(password)) score++;
+        
+        if (score <= 2) return { level: 'weak', text: 'Weak password' };
+        if (score <= 3) return { level: 'fair', text: 'Fair password' };
+        if (score <= 4) return { level: 'good', text: 'Good password' };
+        return { level: 'strong', text: 'Strong password' };
+    }
+    
+    password1.addEventListener('input', function() {
+        const password = this.value;
+        
+        if (password.length > 0) {
+            strengthContainer.style.display = 'block';
+            const result = checkPasswordStrength(password);
+            
+            strengthFill.className = 'password-strength-fill ' + result.level;
+            strengthText.className = 'password-strength-text ' + result.level;
+            strengthText.textContent = result.text;
+        } else {
+            strengthContainer.style.display = 'none';
+        }
+        
+        if (password2.value) {
+            matchError.style.display = password !== password2.value ? 'block' : 'none';
+        }
+    });
+    
+    password2.addEventListener('input', function() {
+        if (this.value && password1.value !== this.value) {
+            matchError.style.display = 'block';
+        } else {
+            matchError.style.display = 'none';
+        }
+    });
+    
+    form.addEventListener('submit', function(e) {
+        if (password1.value !== password2.value) {
+            e.preventDefault();
+            matchError.style.display = 'block';
+            password2.focus();
+            return;
+        }
+        
+        submitBtn.classList.add('loading');
+        submitBtn.innerHTML = '<div class="spinner"></div><span>Creating account...</span>';
+        submitBtn.disabled = true;
+    });
+    
+    document.querySelectorAll('.form-input').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.closest('.form-group')?.classList.add('focused');
+        });
+        input.addEventListener('blur', function() {
+            this.closest('.form-group')?.classList.remove('focused');
+        });
+    });
+});
+</script>
 {% endblock %}

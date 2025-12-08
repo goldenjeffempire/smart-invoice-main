@@ -1,10 +1,13 @@
 from io import BytesIO
+from typing import Any
 
 from django.http import FileResponse
+from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import filters, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from invoices.models import Invoice, InvoiceTemplate
@@ -47,6 +50,9 @@ from .serializers import (
     retrieve=extend_schema(
         summary="Get invoice details",
         description="Retrieve detailed information about a specific invoice including line items.",
+        parameters=[
+            OpenApiParameter(name="pk", type=OpenApiTypes.INT, location=OpenApiParameter.PATH, description="Invoice ID"),
+        ],
     ),
     create=extend_schema(
         summary="Create invoice",
@@ -55,14 +61,23 @@ from .serializers import (
     update=extend_schema(
         summary="Update invoice",
         description="Update an existing invoice and its line items.",
+        parameters=[
+            OpenApiParameter(name="pk", type=OpenApiTypes.INT, location=OpenApiParameter.PATH, description="Invoice ID"),
+        ],
     ),
     partial_update=extend_schema(
         summary="Partial update invoice",
         description="Partially update an invoice.",
+        parameters=[
+            OpenApiParameter(name="pk", type=OpenApiTypes.INT, location=OpenApiParameter.PATH, description="Invoice ID"),
+        ],
     ),
     destroy=extend_schema(
         summary="Delete invoice",
         description="Delete an invoice.",
+        parameters=[
+            OpenApiParameter(name="pk", type=OpenApiTypes.INT, location=OpenApiParameter.PATH, description="Invoice ID"),
+        ],
     ),
 )
 class InvoiceViewSet(viewsets.ModelViewSet):
@@ -110,9 +125,12 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         description="Update the payment status of an invoice (paid/unpaid).",
         request=InvoiceStatusSerializer,
         responses={200: InvoiceDetailSerializer},
+        parameters=[
+            OpenApiParameter(name="pk", type=OpenApiTypes.INT, location=OpenApiParameter.PATH, description="Invoice ID"),
+        ],
     )
     @action(detail=True, methods=["post"], url_path="status")
-    def update_status(self, request, pk=None, version=None):
+    def update_status(self, request: Request, pk: int = None, version: str = None) -> Response:
         invoice = self.get_object()
         serializer = InvoiceStatusSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -127,9 +145,12 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         summary="Generate PDF",
         description="Generate and download PDF for an invoice.",
         responses={200: {"type": "string", "format": "binary"}},
+        parameters=[
+            OpenApiParameter(name="pk", type=OpenApiTypes.INT, location=OpenApiParameter.PATH, description="Invoice ID"),
+        ],
     )
     @action(detail=True, methods=["get"], url_path="pdf")
-    def generate_pdf(self, request, pk=None, version=None):
+    def generate_pdf(self, request: Request, pk: int = None, version: str = None) -> FileResponse:
         invoice = self.get_object()
         pdf_bytes = PDFService.generate_pdf_bytes(invoice)
 
@@ -146,7 +167,7 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         description="Get aggregated statistics for the authenticated user's invoices.",
     )
     @action(detail=False, methods=["get"], url_path="stats")
-    def stats(self, request, version=None):
+    def stats(self, request: Request, version: str = None) -> Response:
         stats = AnalyticsService.get_user_dashboard_stats(request.user)
         return Response(stats)
 
@@ -159,6 +180,9 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     retrieve=extend_schema(
         summary="Get template details",
         description="Retrieve a specific invoice template.",
+        parameters=[
+            OpenApiParameter(name="pk", type=OpenApiTypes.INT, location=OpenApiParameter.PATH, description="Template ID"),
+        ],
     ),
     create=extend_schema(
         summary="Create template",
@@ -167,10 +191,23 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     update=extend_schema(
         summary="Update template",
         description="Update an existing invoice template.",
+        parameters=[
+            OpenApiParameter(name="pk", type=OpenApiTypes.INT, location=OpenApiParameter.PATH, description="Template ID"),
+        ],
+    ),
+    partial_update=extend_schema(
+        summary="Partial update template",
+        description="Partially update an invoice template.",
+        parameters=[
+            OpenApiParameter(name="pk", type=OpenApiTypes.INT, location=OpenApiParameter.PATH, description="Template ID"),
+        ],
     ),
     destroy=extend_schema(
         summary="Delete template",
         description="Delete an invoice template.",
+        parameters=[
+            OpenApiParameter(name="pk", type=OpenApiTypes.INT, location=OpenApiParameter.PATH, description="Template ID"),
+        ],
     ),
 )
 class InvoiceTemplateViewSet(viewsets.ModelViewSet):
