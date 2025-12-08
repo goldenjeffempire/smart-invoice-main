@@ -788,7 +788,13 @@ def contact(request):
     # Rate limiting for contact form (5 submissions per hour per IP)
     client_ip = get_client_ip(request)
     rate_limit_key = f"contact_form:{client_ip}"
-    submission_count = cache.get(rate_limit_key, 0)
+    
+    # Gracefully handle cache errors (e.g., if cache table doesn't exist)
+    try:
+        submission_count = cache.get(rate_limit_key, 0)
+    except Exception as cache_error:
+        logger.warning(f"Cache error in contact form: {cache_error}")
+        submission_count = 0  # Fail open - allow submission if cache unavailable
 
     if request.method == "POST":
         # Check rate limit
@@ -865,8 +871,11 @@ Submitted: {submission.submitted_at}
                 )
                 logger.info(f"Contact form submitted by {submission.email}")
 
-                # Increment rate limit counter
-                cache.set(rate_limit_key, submission_count + 1, 3600)  # 1 hour
+                # Increment rate limit counter (gracefully handle cache errors)
+                try:
+                    cache.set(rate_limit_key, submission_count + 1, 3600)  # 1 hour
+                except Exception:
+                    pass  # Cache unavailable - continue without rate limiting
 
                 return redirect("contact")
             except Exception as e:
