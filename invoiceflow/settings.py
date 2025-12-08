@@ -210,6 +210,7 @@ MIDDLEWARE = [
     "invoiceflow.unified_middleware.CookieConsentMiddleware",
     "invoiceflow.mfa_middleware.MFAEnforcementMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 ROOT_URLCONF = "invoiceflow.urls"
