@@ -188,12 +188,16 @@ def dashboard(request):
     today = timezone.now().date()
     overdue_count = base_queryset.filter(status="unpaid", due_date__lt=today).count()
 
-    # Get recent activity (last 10 invoice changes)
-    recent_activity = list(
-        base_queryset.order_by("-updated_at").values(
+    # Get recent activity (last 10 invoice changes) with calculated total
+    # Use distinct to avoid duplicates from line_items join
+    recent_activity_qs = (
+        base_queryset.annotate(
+            total=Sum(F("line_items__quantity") * F("line_items__unit_price"))
+        ).order_by("-updated_at").values(
             "id", "invoice_id", "client_name", "status", "updated_at", "total"
-        )[:10]
+        ).distinct()[:10]
     )
+    recent_activity = list(recent_activity_qs)
 
     context = {
         "invoices": invoices,

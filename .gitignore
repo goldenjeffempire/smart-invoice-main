@@ -56,8 +56,8 @@ yarn-error.log
 .coverage
 htmlcov/
 
-# Tailwind
-/static/css/tailwind.output.css is NOT in .gitignore - it's built and committed
+# Tailwind (built output is committed)
+# /static/css/tailwind.output.css
 
 # Build artifacts - Generated during production build
 static/js/*.min.js
