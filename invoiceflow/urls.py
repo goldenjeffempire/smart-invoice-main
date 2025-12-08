@@ -53,8 +53,10 @@ urlpatterns = [
     path("signup/", views.signup, name="signup"),
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
-    # Dashboard
+    # Dashboard and Invoices
     path("dashboard/", views.dashboard, name="dashboard"),
+    path("invoices/", views.invoice_list, name="invoice_list"),
+    path("invoices/bulk-action/", views.bulk_invoice_action, name="bulk_invoice_action"),
     # Settings pages
     path("settings/", views.settings_view, name="settings"),
     path("settings/profile/", views.settings_profile, name="settings_profile"),

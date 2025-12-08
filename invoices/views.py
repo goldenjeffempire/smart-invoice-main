@@ -11,7 +11,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 from django.db.models.functions import TruncMonth
-from django.http import HttpResponse
+from django.core.paginator import Paginator
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import (
@@ -211,6 +212,135 @@ def dashboard(request):
         "recent_activity": recent_activity,
     }
     return render(request, "dashboard/main.html", context)
+
+
+@login_required
+def invoice_list(request):
+    """Display paginated invoice list with filtering, sorting, and bulk actions."""
+    from datetime import timedelta
+    from django.db.models import Sum, F
+
+    base_queryset = Invoice.objects.filter(user=request.user).prefetch_related("line_items")
+
+    # Get filter parameters
+    status_filter = request.GET.get("status", "all")
+    search_query = request.GET.get("search", "").strip()
+    date_filter = request.GET.get("date_range", "all")
+    sort_by = request.GET.get("sort", "-created_at")
+
+    # Apply status filter
+    if status_filter == "paid":
+        base_queryset = base_queryset.filter(status="paid")
+    elif status_filter == "unpaid":
+        base_queryset = base_queryset.filter(status="unpaid")
+    elif status_filter == "overdue":
+        today = timezone.now().date()
+        base_queryset = base_queryset.filter(status="unpaid", due_date__lt=today)
+
+    # Apply search filter
+    if search_query:
+        base_queryset = base_queryset.filter(
+            Q(invoice_id__icontains=search_query) |
+            Q(client_name__icontains=search_query) |
+            Q(client_email__icontains=search_query)
+        )
+
+    # Apply date range filter
+    today = timezone.now().date()
+    if date_filter == "7days":
+        start_date = today - timedelta(days=7)
+        base_queryset = base_queryset.filter(invoice_date__gte=start_date)
+    elif date_filter == "30days":
+        start_date = today - timedelta(days=30)
+        base_queryset = base_queryset.filter(invoice_date__gte=start_date)
+    elif date_filter == "90days":
+        start_date = today - timedelta(days=90)
+        base_queryset = base_queryset.filter(invoice_date__gte=start_date)
+    elif date_filter == "year":
+        start_date = today.replace(month=1, day=1)
+        base_queryset = base_queryset.filter(invoice_date__gte=start_date)
+
+    # Apply sorting
+    valid_sorts = {
+        "-created_at": "-created_at",
+        "created_at": "created_at",
+        "-invoice_date": "-invoice_date",
+        "invoice_date": "invoice_date",
+        "client_name": "client_name",
+        "-client_name": "-client_name",
+        "-total": "-total",
+        "total": "total",
+        "status": "status",
+        "-status": "-status",
+    }
+    order_by = valid_sorts.get(sort_by, "-created_at")
+    base_queryset = base_queryset.order_by(order_by)
+
+    # Get unique clients for filter dropdown
+    clients = Invoice.objects.filter(user=request.user).values_list("client_name", flat=True).distinct()[:50]
+
+    # Pagination
+    paginator = Paginator(base_queryset, 20)
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+
+    # Calculate stats
+    total_count = Invoice.objects.filter(user=request.user).count()
+    paid_count = Invoice.objects.filter(user=request.user, status="paid").count()
+    unpaid_count = Invoice.objects.filter(user=request.user, status="unpaid").count()
+    overdue_count = Invoice.objects.filter(user=request.user, status="unpaid", due_date__lt=today).count()
+
+    context = {
+        "page_obj": page_obj,
+        "invoices": page_obj.object_list,
+        "status_filter": status_filter,
+        "search_query": search_query,
+        "date_filter": date_filter,
+        "sort_by": sort_by,
+        "clients": list(clients),
+        "total_count": total_count,
+        "paid_count": paid_count,
+        "unpaid_count": unpaid_count,
+        "overdue_count": overdue_count,
+        "today": today,
+    }
+    return render(request, "invoices/invoice_list.html", context)
+
+
+@login_required
+def bulk_invoice_action(request):
+    """Handle bulk actions on invoices (mark paid, mark unpaid, delete, export)."""
+    if request.method != "POST":
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+
+    try:
+        data = json.loads(request.body)
+        invoice_ids = data.get("invoice_ids", [])
+        action = data.get("action", "")
+
+        if not invoice_ids:
+            return JsonResponse({"error": "No invoices selected"}, status=400)
+
+        invoices = Invoice.objects.filter(id__in=invoice_ids, user=request.user)
+
+        if action == "mark_paid":
+            count = invoices.update(status="paid")
+            return JsonResponse({"success": True, "message": f"{count} invoice(s) marked as paid"})
+        elif action == "mark_unpaid":
+            count = invoices.update(status="unpaid")
+            return JsonResponse({"success": True, "message": f"{count} invoice(s) marked as unpaid"})
+        elif action == "delete":
+            count = invoices.count()
+            invoices.delete()
+            from invoices.services import AnalyticsService
+            AnalyticsService.invalidate_user_cache(request.user.id)
+            return JsonResponse({"success": True, "message": f"{count} invoice(s) deleted"})
+        else:
+            return JsonResponse({"error": "Invalid action"}, status=400)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
 
 
 @login_required
