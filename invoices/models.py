@@ -574,3 +574,39 @@ class UserSession(models.Model):
         except Exception:
             pass
         self.delete()
+
+
+class SocialAccount(models.Model):
+    """Link social OAuth accounts (Google, GitHub) to user accounts."""
+
+    objects: "models.Manager[SocialAccount]"
+
+    PROVIDER_CHOICES = [
+        ("google", "Google"),
+        ("github", "GitHub"),
+    ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="social_accounts"
+    )
+    provider = models.CharField(max_length=20, choices=PROVIDER_CHOICES)
+    provider_id = models.CharField(max_length=255, db_index=True)
+    email = models.EmailField()
+    name = models.CharField(max_length=255, blank=True)
+    access_token = models.TextField(blank=True)
+    refresh_token = models.TextField(blank=True)
+    token_expires = models.DateTimeField(null=True, blank=True)
+    extra_data = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("provider", "provider_id")
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["provider", "provider_id"], name="idx_social_provider"),
+            models.Index(fields=["user", "provider"], name="idx_social_user_provider"),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.user.username} - {self.get_provider_display()} ({self.email})"

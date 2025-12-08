@@ -6,7 +6,7 @@ from django.contrib.sitemaps.views import sitemap as sitemap_view
 from django.urls import include, path
 
 from invoiceflow import cookie_consent, gdpr, mfa
-from invoices import views
+from invoices import oauth_views, views
 from invoices.health import detailed_health, health_check, liveness_check, readiness_check
 from invoices.sitemap import sitemaps
 
@@ -57,6 +57,9 @@ urlpatterns = [
     path("verify-email/<str:token>/", views.verify_email, name="verify_email"),
     path("verification-sent/", views.verification_sent, name="verification_sent"),
     path("resend-verification/", views.resend_verification, name="resend_verification"),
+    # OAuth routes (Google OAuth)
+    path("oauth/google/", oauth_views.google_login, name="google_login"),
+    path("oauth/google/callback/", oauth_views.google_callback, name="google_callback"),
     path("forgot-password/", views.forgot_password, name="forgot_password"),
     path("forgot-password/sent/", views.forgot_password_sent, name="forgot_password_sent"),
     path("reset-password/<str:token>/", views.reset_password, name="reset_password"),
