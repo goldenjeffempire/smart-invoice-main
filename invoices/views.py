@@ -42,17 +42,181 @@ def home(request):
 
 
 def signup(request):
-    """Handle user registration with form validation and auto-login."""
+    """Handle user registration with form validation and email verification."""
+    from django.conf import settings as django_settings
+    from .auth_services import RegistrationService
+    from .email_service import EmailService
+
+    if request.user.is_authenticated:
+        return redirect("dashboard")
+
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, "Account created successfully!")
-            return redirect("dashboard")
+            require_verification = getattr(django_settings, "REQUIRE_EMAIL_VERIFICATION", False)
+
+            user, error = RegistrationService.create_user(
+                username=form.cleaned_data["username"],
+                email=form.cleaned_data["email"],
+                password=form.cleaned_data["password1"],
+                first_name=form.cleaned_data.get("first_name", ""),
+                last_name=form.cleaned_data.get("last_name", ""),
+                require_email_verification=require_verification,
+            )
+
+            if error:
+                messages.error(request, error)
+            elif user:
+                if require_verification:
+                    from .models import EmailVerificationToken
+                    token = EmailVerificationToken.objects.filter(
+                        user=user, token_type="signup", is_used=False
+                    ).first()
+                    if token:
+                        try:
+                            EmailService.send_verification_email(user, token.token)
+                        except Exception:
+                            pass
+                    messages.success(
+                        request,
+                        "Account created! Please check your email to verify your account."
+                    )
+                    return redirect("verification_sent")
+                else:
+                    login(request, user)
+                    messages.success(request, "Account created successfully!")
+                    return redirect("dashboard")
     else:
         form = SignUpForm()
     return render(request, "auth/signup.html", {"form": form})
+
+
+def verify_email(request, token):
+    """Verify email address using token from email link."""
+    from .auth_services import RegistrationService
+
+    success, message = RegistrationService.verify_email(token)
+
+    if success:
+        messages.success(request, message)
+        return redirect("login")
+    else:
+        messages.error(request, message)
+        return render(request, "auth/verification_failed.html", {"message": message})
+
+
+def verification_sent(request):
+    """Display page after signup confirming verification email was sent."""
+    return render(request, "auth/verification_sent.html")
+
+
+def resend_verification(request):
+    """Resend verification email to user."""
+    from .auth_services import RegistrationService
+    from .email_service import EmailService
+    from .models import EmailVerificationToken
+
+    if request.method == "POST":
+        email = request.POST.get("email", "").strip()
+        if not email:
+            messages.error(request, "Please enter your email address.")
+            return render(request, "auth/resend_verification.html")
+
+        success, message = RegistrationService.resend_verification_email(email)
+
+        if success:
+            from django.contrib.auth.models import User
+            try:
+                user = User.objects.get(email__iexact=email, is_active=False)
+                token = EmailVerificationToken.objects.filter(
+                    user=user, token_type="signup", is_used=False
+                ).order_by("-created_at").first()
+                if token:
+                    try:
+                        EmailService.send_verification_email(user, token.token)
+                    except Exception:
+                        pass
+            except User.DoesNotExist:
+                pass
+
+        messages.success(request, "If an account with this email exists and is pending verification, a new verification email has been sent.")
+        return redirect("login")
+
+    return render(request, "auth/resend_verification.html")
+
+
+def forgot_password(request):
+    """Handle forgot password request - send reset email."""
+    from .auth_services import PasswordService
+    from .email_service import EmailService
+
+    if request.user.is_authenticated:
+        return redirect("dashboard")
+
+    if request.method == "POST":
+        email = request.POST.get("email", "").strip()
+        if not email:
+            messages.error(request, "Please enter your email address.")
+            return render(request, "auth/forgot_password.html")
+
+        success, message, token_obj = PasswordService.request_password_reset(email)
+
+        if token_obj:
+            try:
+                EmailService.send_password_reset_email(token_obj.user, token_obj.token)
+            except Exception:
+                pass
+
+        messages.success(request, message)
+        return redirect("forgot_password_sent")
+
+    return render(request, "auth/forgot_password.html")
+
+
+def forgot_password_sent(request):
+    """Display page confirming password reset email was sent."""
+    return render(request, "auth/forgot_password_sent.html")
+
+
+def reset_password(request, token):
+    """Handle password reset with token from email."""
+    from .auth_services import PasswordService
+
+    if request.user.is_authenticated:
+        return redirect("dashboard")
+
+    is_valid, user, error_msg = PasswordService.validate_reset_token(token)
+
+    if not is_valid:
+        messages.error(request, error_msg)
+        return render(request, "auth/reset_password_invalid.html", {"message": error_msg})
+
+    if request.method == "POST":
+        password1 = request.POST.get("password1", "")
+        password2 = request.POST.get("password2", "")
+
+        if not password1 or not password2:
+            messages.error(request, "Please enter and confirm your new password.")
+            return render(request, "auth/reset_password.html", {"token": token, "user": user})
+
+        if password1 != password2:
+            messages.error(request, "Passwords do not match.")
+            return render(request, "auth/reset_password.html", {"token": token, "user": user})
+
+        if len(password1) < 8:
+            messages.error(request, "Password must be at least 8 characters long.")
+            return render(request, "auth/reset_password.html", {"token": token, "user": user})
+
+        success, message = PasswordService.reset_password(token, password1)
+
+        if success:
+            messages.success(request, message)
+            return redirect("login")
+        else:
+            messages.error(request, message)
+            return render(request, "auth/reset_password.html", {"token": token, "user": user})
+
+    return render(request, "auth/reset_password.html", {"token": token, "user": user})
 
 
 def login_view(request):

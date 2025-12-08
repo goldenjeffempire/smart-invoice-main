@@ -402,3 +402,175 @@ class LoginAttempt(models.Model):
     def __str__(self) -> str:
         status = "success" if self.success else "failed"
         return f"{self.username} - {self.ip_address} ({status})"
+
+
+class EmailVerificationToken(models.Model):
+    """Secure email verification tokens for account activation and email changes."""
+
+    objects: "models.Manager[EmailVerificationToken]"
+
+    TOKEN_TYPE_CHOICES = [
+        ("signup", "Account Verification"),
+        ("email_change", "Email Change Verification"),
+        ("password_reset", "Password Reset"),
+    ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="email_tokens"
+    )
+    token = models.CharField(max_length=64, unique=True, db_index=True)
+    token_type = models.CharField(max_length=20, choices=TOKEN_TYPE_CHOICES, default="signup")
+    email = models.EmailField(help_text="Email address this token was sent to")
+    is_used = models.BooleanField(default=False)
+    expires_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    used_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["token"], name="idx_email_token"),
+            models.Index(fields=["user", "token_type"], name="idx_user_token_type"),
+            models.Index(fields=["expires_at"], name="idx_token_expires"),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.user.username} - {self.get_token_type_display()} ({self.email})"
+
+    @classmethod
+    def generate_token(cls) -> str:
+        """Generate a cryptographically secure token."""
+        return secrets.token_urlsafe(48)
+
+    @classmethod
+    def create_verification_token(
+        cls,
+        user: Any,
+        email: str,
+        token_type: str = "signup",
+        expires_hours: int = 24,
+    ) -> "EmailVerificationToken":
+        """Create a new verification token for a user."""
+        cls.objects.filter(user=user, token_type=token_type, is_used=False).update(is_used=True)
+
+        token = cls.generate_token()
+        expires_at = timezone.now() + timedelta(hours=expires_hours)
+
+        return cls.objects.create(
+            user=user,
+            token=token,
+            token_type=token_type,
+            email=email,
+            expires_at=expires_at,
+        )
+
+    @property
+    def is_valid(self) -> bool:
+        """Check if the token is still valid (not used and not expired)."""
+        return not self.is_used and self.expires_at > timezone.now()
+
+    def mark_used(self) -> None:
+        """Mark the token as used."""
+        self.is_used = True
+        self.used_at = timezone.now()
+        self.save(update_fields=["is_used", "used_at"])
+
+
+class UserSession(models.Model):
+    """Track user sessions for device management and security monitoring."""
+
+    objects: "models.Manager[UserSession]"
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user_sessions"
+    )
+    session_key = models.CharField(max_length=40, unique=True, db_index=True)
+    ip_address = models.GenericIPAddressField()
+    user_agent = models.TextField(blank=True)
+    device_type = models.CharField(max_length=50, blank=True)
+    browser = models.CharField(max_length=100, blank=True)
+    os = models.CharField(max_length=100, blank=True)
+    location = models.CharField(max_length=200, blank=True)
+    is_current = models.BooleanField(default=False)
+    last_activity = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-last_activity"]
+        indexes = [
+            models.Index(fields=["user", "-last_activity"], name="idx_user_session_activity"),
+            models.Index(fields=["session_key"], name="idx_session_key"),
+        ]
+
+    def __str__(self) -> str:
+        device = self.device_type or "Unknown device"
+        return f"{self.user.username} - {device} ({self.ip_address})"
+
+    @classmethod
+    def create_session(
+        cls,
+        user: Any,
+        session_key: str,
+        ip_address: str,
+        user_agent: str = "",
+    ) -> "UserSession":
+        """Create a new user session with parsed device info."""
+        device_info = cls.parse_user_agent(user_agent)
+
+        return cls.objects.create(
+            user=user,
+            session_key=session_key,
+            ip_address=ip_address,
+            user_agent=user_agent,
+            device_type=device_info.get("device_type", ""),
+            browser=device_info.get("browser", ""),
+            os=device_info.get("os", ""),
+        )
+
+    @staticmethod
+    def parse_user_agent(user_agent: str) -> dict[str, str]:
+        """Parse user agent string to extract device info."""
+        result: dict[str, str] = {
+            "device_type": "Desktop",
+            "browser": "Unknown",
+            "os": "Unknown",
+        }
+
+        ua_lower = user_agent.lower()
+
+        if "mobile" in ua_lower or "android" in ua_lower:
+            result["device_type"] = "Mobile"
+        elif "tablet" in ua_lower or "ipad" in ua_lower:
+            result["device_type"] = "Tablet"
+
+        if "chrome" in ua_lower and "edg" not in ua_lower:
+            result["browser"] = "Chrome"
+        elif "firefox" in ua_lower:
+            result["browser"] = "Firefox"
+        elif "safari" in ua_lower and "chrome" not in ua_lower:
+            result["browser"] = "Safari"
+        elif "edg" in ua_lower:
+            result["browser"] = "Edge"
+
+        if "windows" in ua_lower:
+            result["os"] = "Windows"
+        elif "mac os" in ua_lower or "macos" in ua_lower:
+            result["os"] = "macOS"
+        elif "linux" in ua_lower:
+            result["os"] = "Linux"
+        elif "android" in ua_lower:
+            result["os"] = "Android"
+        elif "iphone" in ua_lower or "ipad" in ua_lower:
+            result["os"] = "iOS"
+
+        return result
+
+    def revoke(self) -> None:
+        """Revoke this session by deleting the Django session."""
+        from django.contrib.sessions.models import Session
+
+        try:
+            Session.objects.filter(session_key=self.session_key).delete()
+        except Exception:
+            pass
+        self.delete()

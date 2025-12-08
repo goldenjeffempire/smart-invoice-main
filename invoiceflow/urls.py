@@ -2,7 +2,6 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
 from django.contrib.sitemaps.views import sitemap as sitemap_view
 from django.urls import include, path
 
@@ -55,6 +54,12 @@ urlpatterns = [
     path("signup/", views.signup, name="signup"),
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
+    path("verify-email/<str:token>/", views.verify_email, name="verify_email"),
+    path("verification-sent/", views.verification_sent, name="verification_sent"),
+    path("resend-verification/", views.resend_verification, name="resend_verification"),
+    path("forgot-password/", views.forgot_password, name="forgot_password"),
+    path("forgot-password/sent/", views.forgot_password_sent, name="forgot_password_sent"),
+    path("reset-password/<str:token>/", views.reset_password, name="reset_password"),
     # Dashboard and Invoices
     path("dashboard/", views.dashboard, name="dashboard"),
     path("invoices/", views.invoice_list, name="invoice_list"),
@@ -100,32 +105,6 @@ urlpatterns = [
     path("admin-users/", views.admin_users, name="admin_users"),
     path("admin-content/", views.admin_content, name="admin_content"),
     path("admin-settings/", views.admin_settings, name="admin_settings"),
-    path(
-        "password-reset/",
-        auth_views.PasswordResetView.as_view(template_name="registration/password_reset_form.html"),
-        name="password_reset",
-    ),
-    path(
-        "password-reset/done/",
-        auth_views.PasswordResetDoneView.as_view(
-            template_name="registration/password_reset_done.html"
-        ),
-        name="password_reset_done",
-    ),
-    path(
-        "password-reset-confirm/<uidb64>/<token>/",
-        auth_views.PasswordResetConfirmView.as_view(
-            template_name="registration/password_reset_confirm.html"
-        ),
-        name="password_reset_confirm",
-    ),
-    path(
-        "password-reset-complete/",
-        auth_views.PasswordResetCompleteView.as_view(
-            template_name="registration/password_reset_complete.html"
-        ),
-        name="password_reset_complete",
-    ),
     path("invoices/", include("invoices.urls")),
 ]
 
