@@ -46,6 +46,31 @@ The platform features a modern, professional UI/UX with a focus on clean light t
 - **Logging**: Structured JSON logging with request context propagation.
 - **Compliance**: GDPR compliance with cookie consent and comprehensive Privacy Policy/Terms of Service.
 
+## Recent Enhancements (December 2025)
+
+### Modern JavaScript Architecture
+- **ES6+ Modules**: Modular architecture with separate utility modules
+  - `static/js/modules/utils.js` - Utility functions (debounce, throttle, formatters)
+  - `static/js/modules/toast.js` - Modern toast notification system
+  - `static/js/modules/forms.js` - Real-time form validation with accessibility
+  - `static/js/modules/command-palette.js` - Quick navigation (Ctrl+K)
+
+### Progressive Web App (PWA) Support
+- **Service Worker**: `static/js/sw.js` with caching strategies
+- **Manifest**: `static/manifest.json` for installable app experience
+- **Offline Page**: `templates/pages/offline.html` fallback
+
+### Enhanced CSS Features
+- **Modern CSS**: `static/css/enhancements-v2.css` with container queries, `:has()` selector
+- **Skeleton Loading**: Built-in loading state styles
+- **Improved Animations**: Spring-based easing, reduced motion support
+- **Toast System**: Multi-position, accessible notifications
+
+### Command Palette
+- Trigger with `Ctrl+K` or `Cmd+K`
+- Quick navigation to all major sections
+- Keyboard-driven interface with arrow key navigation
+
 ## External Dependencies
 - **Database**: PostgreSQL
 - **Web Server**: Gunicorn
@@ -55,3 +80,21 @@ The platform features a modern, professional UI/UX with a focus on clean light t
 - **Payment Processing**: Paystack (optional)
 - **Error Tracking**: Sentry (optional)
 - **Frontend Frameworks/Libraries**: Tailwind CSS, PostCSS, Node.js (for asset compilation)
+
+## File Structure (Key Additions)
+```
+static/
+├── js/
+│   ├── modules/
+│   │   ├── utils.js          # ES6+ utilities
+│   │   ├── toast.js          # Toast notifications
+│   │   ├── forms.js          # Form validation
+│   │   └── command-palette.js # Quick navigation
+│   ├── sw.js                 # Service worker
+│   ├── app.js                # Main application
+│   └── landing.js            # Landing page interactions
+├── css/
+│   ├── enhancements-v2.css   # Modern CSS features
+│   └── ...                   # Existing CSS files
+└── manifest.json             # PWA manifest
+```

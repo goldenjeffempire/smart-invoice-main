@@ -1001,6 +1001,11 @@ def components_showcase(request):
     return render(request, "components-showcase.html")
 
 
+def offline(request):
+    """Offline page for PWA support."""
+    return render(request, "pages/offline.html")
+
+
 def newsletter_signup(request):
     """Handle newsletter signup form submissions."""
     import logging
@@ -1554,3 +1559,25 @@ Sitemap: {base_url}/sitemap.xml
 Crawl-delay: 1
 """
     return HttpResponse(content.encode("utf-8"), content_type="text/plain; charset=utf-8")
+
+
+def service_worker(request):
+    """Serve the service worker from root for proper PWA scope."""
+    import os
+    from django.conf import settings
+
+    sw_path = os.path.join(settings.STATIC_ROOT or settings.BASE_DIR / "static", "js", "sw.js")
+    
+    if not os.path.exists(sw_path):
+        sw_path = settings.BASE_DIR / "static" / "js" / "sw.js"
+    
+    try:
+        with open(sw_path, "r", encoding="utf-8") as f:
+            content = f.read()
+    except FileNotFoundError:
+        content = "// Service worker not found"
+    
+    response = HttpResponse(content, content_type="application/javascript; charset=utf-8")
+    response["Service-Worker-Allowed"] = "/"
+    response["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return response

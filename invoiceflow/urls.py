@@ -40,6 +40,8 @@ urlpatterns = [
     path("health/detailed/", detailed_health, name="detailed_health"),
     # Robots.txt (dynamic)
     path("robots.txt", views.robots_txt, name="robots_txt"),
+    # Service worker (served from root for proper scope)
+    path("sw.js", views.service_worker, name="service_worker"),
     # Sitemap for SEO
     path(
         "sitemap.xml",
@@ -83,6 +85,7 @@ urlpatterns = [
     path("security/", views.security, name="security"),
     path("blog/", views.blog, name="blog"),
     path("blog/<slug:slug>/", views.blog_article, name="blog_article"),
+    path("offline/", views.offline, name="offline"),
     path("newsletter/signup/", views.newsletter_signup, name="newsletter_signup"),
     path("newsletter/subscribe/", views.newsletter_signup, name="newsletter_subscribe"),
     # User features
