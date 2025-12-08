@@ -77,6 +77,7 @@ TEMPLATE_ID_PARAM = OpenApiParameter(
     ),
 )
 class InvoiceViewSet(viewsets.ModelViewSet):
+    queryset = Invoice.objects.all()
     permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ["invoice_id", "client_name", "client_email"]
@@ -192,6 +193,7 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     ),
 )
 class InvoiceTemplateViewSet(viewsets.ModelViewSet):
+    queryset = InvoiceTemplate.objects.all()
     serializer_class = InvoiceTemplateSerializer
     permission_classes = [IsAuthenticated]
     lookup_field = "pk"
