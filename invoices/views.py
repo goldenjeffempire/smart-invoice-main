@@ -6,6 +6,7 @@ from decimal import Decimal
 from functools import wraps
 
 from django.contrib import messages
+from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
@@ -142,6 +143,10 @@ def logout_view(request):
 def dashboard(request):
     """Display user dashboard with invoice statistics and filtered invoice list."""
     from invoices.services import AnalyticsService
+    from datetime import timedelta
+    from django.db.models.functions import TruncMonth
+    from django.db.models import Sum, F
+    from decimal import Decimal
 
     base_queryset = Invoice.objects.filter(user=request.user)  # type: ignore
 
@@ -155,11 +160,39 @@ def dashboard(request):
         invoices_queryset = base_queryset
 
     # Fetch filtered invoices with prefetched line_items (efficient join)
-    # Limit to recent 100 invoices for performance (pagination can be added later)
     invoices = list(invoices_queryset.prefetch_related("line_items").order_by("-created_at")[:100])
 
     # Use AnalyticsService for efficient stats calculation
     stats = AnalyticsService.get_user_dashboard_stats(request.user)
+
+    # Get monthly revenue data for chart (last 6 months)
+    six_months_ago = timezone.now() - timedelta(days=180)
+    monthly_revenue = (
+        base_queryset.filter(status="paid", invoice_date__gte=six_months_ago)
+        .annotate(month=TruncMonth("invoice_date"))
+        .values("month")
+        .annotate(total=Sum(F("line_items__quantity") * F("line_items__unit_price")))
+        .order_by("month")
+    )
+
+    # Format for Chart.js
+    chart_labels = []
+    chart_data = []
+    for item in monthly_revenue:
+        if item["month"]:
+            chart_labels.append(item["month"].strftime("%b %Y"))
+            chart_data.append(float(item["total"] or 0))
+
+    # Get overdue invoices (unpaid and past due date)
+    today = timezone.now().date()
+    overdue_count = base_queryset.filter(status="unpaid", due_date__lt=today).count()
+
+    # Get recent activity (last 10 invoice changes)
+    recent_activity = list(
+        base_queryset.order_by("-updated_at").values(
+            "id", "invoice_id", "client_name", "status", "updated_at", "total"
+        )[:10]
+    )
 
     context = {
         "invoices": invoices,
@@ -169,11 +202,14 @@ def dashboard(request):
         "total_revenue": stats["total_revenue"],
         "unique_clients": stats["unique_clients"],
         "filter_status": filter_status,
+        "recent_invoices": invoices[:5],
+        "pending_invoices": stats["unpaid_count"],
+        "paid_invoices": stats["paid_count"],
+        "overdue_count": overdue_count,
+        "chart_labels": json.dumps(chart_labels),
+        "chart_data": json.dumps(chart_data),
+        "recent_activity": recent_activity,
     }
-    context["recent_invoices"] = invoices[:5]
-    context["total_revenue"] = stats["total_revenue"]
-    context["pending_invoices"] = stats["unpaid_count"]
-    context["paid_invoices"] = stats["paid_count"]
     return render(request, "dashboard/main.html", context)
 
 

@@ -53,6 +53,8 @@ urlpatterns = [
     path("signup/", views.signup, name="signup"),
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
+    # Dashboard
+    path("dashboard/", views.dashboard, name="dashboard"),
     # Settings pages
     path("settings/", views.settings_view, name="settings"),
     path("settings/profile/", views.settings_profile, name="settings_profile"),
