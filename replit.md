@@ -20,7 +20,7 @@ The platform features a modern, professional UI/UX with a focus on clean light t
 - **Interactive Elements**: Hover effects, 3D tilt interactions, animated counters, floating labels, and live form validation.
 
 ### Technical Implementations
-- **Backend**: Django with PostgreSQL.
+- **Backend**: Django 5.2.9 with Python 3.12.11 and PostgreSQL.
 - **Frontend**: Primarily HTML/CSS with JavaScript for interactive elements. Tailwind CSS for utility-first styling.
 - **Email Service**: SendGrid integration.
 - **PDF Generation**: WeasyPrint.
