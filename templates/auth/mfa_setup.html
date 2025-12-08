@@ -1,257 +1,177 @@
 {% extends "base/layout.html" %}
-{% block title %}Set Up Two-Factor Authentication{% endblock %}
+{% load static %}
+{% block title %}Set Up Two-Factor Authentication - InvoiceFlow{% endblock %}
 {% block meta_description %}Enable two-factor authentication to secure your InvoiceFlow account.{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+{% block nav %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
 {% block content %}
-    <section class="section">
-        <div class="container">
-            <div class="auth-container">
-                <div class="glass-card auth-card">
-                    <div class="auth-header">
-                        <h1 class="auth-title">Two-Factor Authentication</h1>
-                        <p class="auth-subtitle">
-                            {% if is_enabled %}
-                                Your account is protected with 2FA
-                            {% else %}
-                                Secure your account with an authenticator app
-                            {% endif %}
-                        </p>
+<div class="auth-bg"></div>
+<div class="auth-glow"></div>
+<div class="auth-container" style="max-width: 520px;">
+    <div class="auth-card">
+        <div class="auth-header">
+            <a href="{% url 'home' %}" class="auth-logo" aria-label="InvoiceFlow - Return to home">
+                <div class="nav-logo-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                </div>
+                <span class="nav-logo-text">InvoiceFlow</span>
+            </a>
+            <h1 class="auth-title">Two-Factor Authentication</h1>
+            <p class="auth-subtitle">
+                {% if is_enabled %}
+                    Your account is protected with 2FA
+                {% else %}
+                    Secure your account with an authenticator app
+                {% endif %}
+            </p>
+        </div>
+
+        {% if error %}
+            <div class="auth-alert error" role="alert">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <span>{{ error }}</span>
+            </div>
+        {% endif %}
+
+        {% if is_enabled %}
+            <div class="mfa-status-section">
+                <div class="mfa-enabled-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="M9 12l2 2 4-4"/>
+                    </svg>
+                    <span>Two-Factor Authentication is Enabled</span>
+                </div>
+                <p class="mfa-info-text">Your account has an extra layer of security.</p>
+                <form method="post" action="{% url 'mfa_disable' %}" class="auth-form" id="mfaDisableForm">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="password" class="form-label">Enter your password to disable 2FA</label>
+                        <div class="form-input-wrapper">
+                            <input type="password" 
+                                   name="password" 
+                                   id="password" 
+                                   class="form-input has-icon" 
+                                   required 
+                                   placeholder="Your password"
+                                   autocomplete="current-password">
+                            <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                        </div>
                     </div>
-                    {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
-                    {% if is_enabled %}
-                        <div class="mfa-status">
-                            <div class="mfa-enabled-badge">
-                                <svg class="mfa-icon"
-                                     viewBox="0 0 24 24"
-                                     fill="none"
-                                     stroke="currentColor"
-                                     stroke-width="2">
-                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                                    <path d="M9 12l2 2 4-4" />
+                    <button type="submit" class="btn-auth btn-danger">
+                        <span class="btn-text">Disable 2FA</span>
+                    </button>
+                </form>
+            </div>
+        {% else %}
+            <div class="mfa-setup-steps">
+                <div class="setup-step">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <h3>Install an Authenticator App</h3>
+                        <p>Download Google Authenticator, Authy, or any TOTP-compatible app.</p>
+                    </div>
+                </div>
+                <div class="setup-step">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <h3>Scan the QR Code</h3>
+                        {% if qr_code %}
+                            <div class="mfa-qr-container">
+                                <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code for 2FA setup">
+                            </div>
+                            <p class="mfa-manual-key">Or enter this key manually:</p>
+                            <div class="mfa-secret-key">{{ secret_key }}</div>
+                        {% else %}
+                            <div class="auth-alert error" role="alert">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="8" x2="12" y2="12"/>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"/>
                                 </svg>
-                                <span>Two-Factor Authentication is Enabled</span>
+                                <span>Unable to generate QR code. Please try again.</span>
                             </div>
-                            <p class="mfa-info">Your account has an extra layer of security.</p>
-                            <form method="post"
-                                  action="{% url 'mfa_disable' %}"
-                                  class="mfa-disable-form"
-                                  id="mfaDisableForm">
-                                {% csrf_token %}
-                                <label for="password">Enter your password to disable 2FA:</label>
-                                <input type="password"
-                                       name="password"
-                                       id="password"
-                                       class="form-control"
-                                       required
-                                       placeholder="Your password">
-                                <button type="submit" class="btn btn-secondary btn-danger-outline">Disable 2FA</button>
-                            </form>
-                        </div>
-                    {% else %}
-                        <div class="mfa-setup-steps">
-                            <div class="setup-step">
-                                <span class="step-number">1</span>
-                                <div class="step-content">
-                                    <h3>Install an Authenticator App</h3>
-                                    <p>Download Google Authenticator, Authy, or any TOTP-compatible app.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="setup-step">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <h3>Enter Verification Code</h3>
+                        <form method="post" class="auth-form" id="mfaVerifyForm">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">
+                                    <input type="text" 
+                                           name="token" 
+                                           class="form-input mfa-single-input" 
+                                           placeholder="000000" 
+                                           pattern="[0-9]{6}" 
+                                           maxlength="6" 
+                                           inputmode="numeric" 
+                                           autocomplete="one-time-code"
+                                           required>
                                 </div>
                             </div>
-                            <div class="setup-step">
-                                <span class="step-number">2</span>
-                                <div class="step-content">
-                                    <h3>Scan the QR Code</h3>
-                                    {% if qr_code %}
-                                        <div class="qr-code-container">
-                                            <img src="data:image/png;base64,{{ qr_code }}"
-                                                 alt="QR Code for 2FA setup"
-                                                 class="qr-code">
-                                        </div>
-                                        <p class="manual-key">
-                                            Or enter this key manually: <code>{{ secret_key }}</code>
-                                        </p>
-                                    {% else %}
-                                        <p class="error-text">Unable to generate QR code. Please try again.</p>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="setup-step">
-                                <span class="step-number">3</span>
-                                <div class="step-content">
-                                    <h3>Enter Verification Code</h3>
-                                    <form method="post" class="mfa-verify-form">
-                                        {% csrf_token %}
-                                        <div class="form-group">
-                                            <input type="text"
-                                                   name="token"
-                                                   class="form-control mfa-code-input"
-                                                   placeholder="000000"
-                                                   pattern="[0-9]{6}"
-                                                   maxlength="6"
-                                                   inputmode="numeric"
-                                                   autocomplete="one-time-code"
-                                                   required>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary btn-full">Enable 2FA</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                    <div class="auth-footer">
-                        <a href="{% url 'settings_security' %}" class="link-secondary">Back to Security Settings</a>
+                            <button type="submit" class="btn-auth" id="enableBtn">
+                                <span class="btn-text">Enable 2FA</span>
+                                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                </svg>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
+        {% endif %}
+
+        <div class="auth-footer">
+            <p><a href="{% url 'settings_security' %}" class="auth-link">Back to Security Settings</a></p>
         </div>
-    </section>
+    </div>
+</div>
 {% endblock %}
-{% block extra_css %}
-    <style>
-.auth-container {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: var(--spacing-8) 0;
-}
 
-.auth-card {
-    padding: var(--spacing-8);
-}
-
-.auth-header {
-    text-align: center;
-    margin-bottom: var(--spacing-8);
-}
-
-.auth-title {
-    font-size: var(--font-size-2xl);
-    color: var(--color-neutral-0);
-    margin-bottom: var(--spacing-2);
-}
-
-.auth-subtitle {
-    color: var(--color-neutral-400);
-}
-
-.mfa-status {
-    text-align: center;
-}
-
-.mfa-enabled-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-2);
-    background: rgba(34, 197, 94, 0.1);
-    color: #22c55e;
-    padding: var(--spacing-3) var(--spacing-4);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--spacing-4);
-}
-
-.mfa-icon {
-    width: 20px;
-    height: 20px;
-}
-
-.mfa-info {
-    color: var(--color-neutral-400);
-    margin-bottom: var(--spacing-6);
-}
-
-.mfa-disable-form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-3);
-}
-
-.mfa-setup-steps {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-6);
-}
-
-.setup-step {
-    display: flex;
-    gap: var(--spacing-4);
-}
-
-.step-number {
-    flex-shrink: 0;
-    width: 32px;
-    height: 32px;
-    background: var(--color-primary-500);
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-}
-
-.step-content h3 {
-    font-size: var(--font-size-lg);
-    color: var(--color-neutral-0);
-    margin-bottom: var(--spacing-2);
-}
-
-.step-content p {
-    color: var(--color-neutral-400);
-    font-size: var(--font-size-sm);
-}
-
-.qr-code-container {
-    background: white;
-    padding: var(--spacing-4);
-    border-radius: var(--radius-lg);
-    display: inline-block;
-    margin: var(--spacing-4) 0;
-}
-
-.qr-code {
-    width: 200px;
-    height: 200px;
-}
-
-.manual-key {
-    font-size: var(--font-size-sm);
-    margin-top: var(--spacing-2);
-}
-
-.manual-key code {
-    background: rgba(255, 255, 255, 0.1);
-    padding: var(--spacing-1) var(--spacing-2);
-    border-radius: var(--radius-sm);
-    font-family: monospace;
-    word-break: break-all;
-}
-
-.mfa-code-input {
-    text-align: center;
-    font-size: var(--font-size-2xl);
-    letter-spacing: 0.5em;
-    padding: var(--spacing-4);
-}
-
-.auth-footer {
-    text-align: center;
-    margin-top: var(--spacing-6);
-    padding-top: var(--spacing-6);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.btn-danger-outline {
-    border-color: #ef4444;
-    color: #ef4444;
-}
-
-.btn-danger-outline:hover {
-    background: rgba(239, 68, 68, 0.1);
-}
-
-.alert-error {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
-    padding: var(--spacing-3) var(--spacing-4);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--spacing-6);
-}
-    </style>
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('mfaVerifyForm');
+    const enableBtn = document.getElementById('enableBtn');
+    
+    if (form && enableBtn) {
+        form.addEventListener('submit', function() {
+            enableBtn.classList.add('loading');
+            enableBtn.innerHTML = '<div class="spinner"></div><span>Verifying...</span>';
+            enableBtn.disabled = true;
+        });
+    }
+    
+    const disableForm = document.getElementById('mfaDisableForm');
+    if (disableForm) {
+        disableForm.addEventListener('submit', function(e) {
+            if (!confirm('Are you sure you want to disable two-factor authentication? This will make your account less secure.')) {
+                e.preventDefault();
+            }
+        });
+    }
+});
+</script>
 {% endblock %}
