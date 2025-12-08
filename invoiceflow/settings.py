@@ -26,14 +26,16 @@ PRODUCTION_URL = f"https://{PRODUCTION_DOMAIN}"
 IS_REPLIT = os.environ.get("REPL_ID") is not None or os.environ.get("REPLIT") is not None
 IS_RENDER = os.environ.get("RENDER") is not None
 
-# Default to True in Replit for development, False otherwise
-if IS_REPLIT:
-    DEBUG = True
+# Production flag takes precedence - allows production mode on Replit
+IS_PRODUCTION = os.environ.get("PRODUCTION") == "true"
+
+# DEBUG mode: False if explicitly in production, otherwise check environment
+if IS_PRODUCTION:
+    DEBUG = False  # Production mode always disables debug
+elif IS_REPLIT:
+    DEBUG = env.bool("DEBUG", default=True)  # Replit dev defaults to True, but can be overridden
 else:
     DEBUG = env.bool("DEBUG", default=False)  # type: ignore
-
-# Production detection (after DEBUG is defined)
-IS_PRODUCTION = os.environ.get("PRODUCTION") == "true" or (not IS_REPLIT and not DEBUG)
 
 # =============================================================================
 # SECURITY CONFIGURATION
@@ -43,8 +45,8 @@ SECRET_KEY = env("SECRET_KEY", default="django-insecure-dev-key-CHANGE-IN-PRODUC
 # Encryption salt for field-level encryption (bank account numbers, etc.)
 ENCRYPTION_SALT = env("ENCRYPTION_SALT", default="dev-salt-only-for-local-testing")  # type: ignore
 
-# PRODUCTION SAFETY GUARDS
-if not DEBUG and not IS_REPLIT:
+# PRODUCTION SAFETY GUARDS - enforced when IS_PRODUCTION is true
+if IS_PRODUCTION:
     if SECRET_KEY.startswith("django-insecure-"):
         raise ValueError(
             "PRODUCTION ERROR: You must set a secure SECRET_KEY environment variable! "
@@ -60,12 +62,12 @@ if not DEBUG and not IS_REPLIT:
 # =============================================================================
 # ALLOWED HOSTS & CSRF CONFIGURATION
 # =============================================================================
-if not DEBUG and not IS_REPLIT:
+if IS_PRODUCTION:
     # Production: strict allowed hosts
     allowed_hosts = env.list("ALLOWED_HOSTS", default=[PRODUCTION_DOMAIN, f".{PRODUCTION_DOMAIN}", "www." + PRODUCTION_DOMAIN])  # type: ignore
     ALLOWED_HOSTS = allowed_hosts
 else:
-    # Development or Replit: allow configured hosts or wildcard
+    # Development: allow configured hosts or wildcard
     ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])  # type: ignore
 
 # CSRF Trusted Origins - Production domain first
@@ -104,7 +106,7 @@ HAS_SSL_CERTS = os.path.exists("/tmp/invoiceflow-certs/certificate.pem") and os.
     "/tmp/invoiceflow-certs/private-key-rsa.pem"
 )
 
-if not DEBUG and not IS_REPLIT:
+if IS_PRODUCTION:
     # Production security hardening
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
