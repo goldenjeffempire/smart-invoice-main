@@ -1,2 +1,0 @@
-6de857b Add essential dependencies to the project for improved functionality
-9a6f717 Saved progress at the end of the loop
