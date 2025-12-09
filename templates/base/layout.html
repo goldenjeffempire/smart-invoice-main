@@ -106,6 +106,7 @@
         {% endif %}
         <link rel="stylesheet" href="{% static 'css/tailwind.output.css' %}">
         <link rel="stylesheet" href="{% static 'css/enhancements-v2.css' %}">
+        <link rel="stylesheet" href="{% static 'css/accessibility.css' %}">
         {% block extra_css %}{% endblock %}
         <script type="application/ld+json" nonce="{{ request.csp_nonce }}">
     {
@@ -152,6 +153,7 @@
     <body class="no-js {% block body_class %}{% endblock %}">
         <script nonce="{{ request.csp_nonce }}">document.body.classList.remove('no-js');</script>
         <a href="#main-content" class="skip-link">Skip to main content</a>
+        <div id="live-announcer" class="live-region" aria-live="polite" aria-atomic="true"></div>
         {% block nav %}
             <nav class="nav" role="navigation" aria-label="Main navigation">
                 <div class="container">
