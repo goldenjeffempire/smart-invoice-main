@@ -312,7 +312,7 @@
             </div>
         </div>
     </section>
-    <script>
+    <script nonce="{{ request.csp_nonce }}">
 function submitSAR() {
     if (confirm('This will submit a Subject Access Request. We will respond within 30 days. Continue?')) {
         fetch('{% url "gdpr_sar" %}', {

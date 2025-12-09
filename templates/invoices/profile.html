@@ -603,7 +603,7 @@
     </style>
 {% endblock %}
 {% block extra_js %}
-    <script>
+    <script nonce="{{ request.csp_nonce }}">
 document.addEventListener('DOMContentLoaded', function() {
     const mobileToggle = document.querySelector('.mobile-menu-toggle');
     const sidebar = document.querySelector('.app-sidebar');

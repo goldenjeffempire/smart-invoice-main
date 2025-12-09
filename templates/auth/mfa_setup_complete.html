@@ -111,7 +111,7 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
+<script nonce="{{ request.csp_nonce }}">
 document.addEventListener('DOMContentLoaded', function() {
     const recoveryCodes = [{% for code in recovery_codes %}"{{ code }}"{% if not forloop.last %}, {% endif %}{% endfor %}];
     const continueBtn = document.getElementById('continueBtn');

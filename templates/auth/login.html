@@ -320,7 +320,7 @@
 
 {% block extra_js %}
 <script src="{% static 'js/modules/auth-validation.js' %}" defer></script>
-<script>
+<script nonce="{{ request.csp_nonce }}">
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('loginForm');
     const submitBtn = document.getElementById('submitBtn');

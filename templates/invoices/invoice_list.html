@@ -1114,7 +1114,7 @@
     </style>
 {% endblock %}
 {% block extra_js %}
-<script>
+<script nonce="{{ request.csp_nonce }}">
 let selectedInvoices = new Set();
 
 function toggleSelectAll(checkbox) {

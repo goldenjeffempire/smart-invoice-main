@@ -90,9 +90,11 @@ class UnifiedMiddleware:
         response["Referrer-Policy"] = "strict-origin-when-cross-origin"
         response["Permissions-Policy"] = (
             "camera=(), microphone=(), geolocation=(), payment=(), "
-            "usb=(), magnetometer=(), accelerometer=(), gyroscope=()"
+            "usb=(), magnetometer=(), accelerometer=(), gyroscope=(), "
+            "autoplay=(), fullscreen=(self), picture-in-picture=()"
         )
         response["Cross-Origin-Opener-Policy"] = "same-origin"
+        response["Cross-Origin-Resource-Policy"] = "same-origin"
 
         if request.is_secure() or self.is_production or self.is_replit:
             response["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"

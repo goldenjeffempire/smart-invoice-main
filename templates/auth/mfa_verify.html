@@ -138,7 +138,7 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
+<script nonce="{{ request.csp_nonce }}">
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('mfaForm');
     const verifyBtn = document.getElementById('verifyBtn');

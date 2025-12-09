@@ -234,6 +234,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.media",
                 "invoiceflow.context_processors.assets_config",
+                "csp.context_processors.nonce",
             ],
             "builtins": [
                 "django.template.defaulttags",
@@ -443,9 +444,9 @@ CONTENT_SECURITY_POLICY = {
         "default-src": ("'self'",),
         "script-src": (
             "'self'",
-            "'unsafe-inline'",
             "https://fonts.googleapis.com",
             "https://js.hcaptcha.com",
+            "https://cdn.jsdelivr.net",
         ),
         "style-src": (
             "'self'",
@@ -468,7 +469,8 @@ CONTENT_SECURITY_POLICY = {
         "object-src": ("'none'",),
         "upgrade-insecure-requests": True,
         "block-all-mixed-content": True,
-    }
+    },
+    "INCLUDE_NONCE_IN": ["script-src"],
 }
 
 # =============================================================================

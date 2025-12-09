@@ -788,7 +788,7 @@
     </style>
 {% endblock %}
 {% block extra_js %}
-    <script>
+    <script nonce="{{ request.csp_nonce }}">
 document.addEventListener('DOMContentLoaded', function() {
     const lineItemsList = document.getElementById('line-items-list');
     const addItemBtn = document.getElementById('add-line-item');
