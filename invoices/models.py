@@ -624,3 +624,64 @@ class SocialAccount(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user.username} - {self.get_provider_display()} ({self.email})"
+
+
+class GDPRRequest(models.Model):
+    """Persistent GDPR compliance request tracking for audit and fulfillment."""
+
+    objects: "models.Manager[GDPRRequest]"
+
+    REQUEST_TYPE_CHOICES = [
+        ("data_export", "Data Export (Article 20)"),
+        ("data_deletion", "Data Deletion (Article 17)"),
+        ("subject_access", "Subject Access Request (Article 15)"),
+        ("rectification", "Rectification (Article 16)"),
+        ("restriction", "Restriction (Article 18)"),
+    ]
+
+    STATUS_CHOICES = [
+        ("pending", "Pending"),
+        ("in_progress", "In Progress"),
+        ("completed", "Completed"),
+        ("cancelled", "Cancelled"),
+        ("failed", "Failed"),
+    ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="gdpr_requests",
+    )
+    user_email = models.EmailField(help_text="Preserved in case user is deleted")
+    user_username = models.CharField(max_length=150, help_text="Preserved in case user is deleted")
+    request_type = models.CharField(max_length=20, choices=REQUEST_TYPE_CHOICES)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    details = models.TextField(blank=True, help_text="Additional request details from user")
+    admin_notes = models.TextField(blank=True, help_text="Internal notes for processing")
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.TextField(blank=True)
+    email_sent = models.BooleanField(default=False)
+    email_error = models.TextField(blank=True, help_text="Error message if email delivery failed")
+    requested_at = models.DateTimeField(auto_now_add=True)
+    processed_at = models.DateTimeField(null=True, blank=True)
+    processed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="gdpr_requests_processed",
+    )
+
+    class Meta:
+        ordering = ["-requested_at"]
+        verbose_name = "GDPR Request"
+        verbose_name_plural = "GDPR Requests"
+        indexes = [
+            models.Index(fields=["status", "-requested_at"], name="idx_gdpr_status"),
+            models.Index(fields=["request_type", "-requested_at"], name="idx_gdpr_type"),
+            models.Index(fields=["user_email"], name="idx_gdpr_email"),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.user_email} - {self.get_request_type_display()} ({self.status})"

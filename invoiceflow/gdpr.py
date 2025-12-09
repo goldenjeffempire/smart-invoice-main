@@ -1,6 +1,7 @@
 """
 GDPR Compliance Endpoints for InvoiceFlow.
 Implements Subject Access Request (SAR), data export, and deletion.
+All requests are persisted to database for audit trail and compliance tracking.
 """
 
 import json
@@ -19,6 +20,39 @@ logger = logging.getLogger(__name__)
 User = get_user_model()
 
 
+def get_client_ip(request):
+    """Extract client IP address from request."""
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if x_forwarded_for:
+        return x_forwarded_for.split(",")[0].strip()
+    return request.META.get("REMOTE_ADDR")
+
+
+def send_gdpr_email(subject, message, recipient_list, gdpr_request=None):
+    """
+    Send GDPR-related email with error tracking.
+    Returns True if successful, False otherwise.
+    """
+    try:
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=recipient_list,
+            fail_silently=False,
+        )
+        if gdpr_request:
+            gdpr_request.email_sent = True
+            gdpr_request.save(update_fields=["email_sent"])
+        return True
+    except Exception as e:
+        logger.error(f"GDPR email delivery failed: {e}")
+        if gdpr_request:
+            gdpr_request.email_error = str(e)
+            gdpr_request.save(update_fields=["email_error"])
+        return False
+
+
 @login_required
 @require_GET
 def export_user_data(request):
@@ -26,10 +60,21 @@ def export_user_data(request):
     GDPR Article 20 - Right to Data Portability.
     Export all user data in machine-readable format (JSON).
     """
+    from invoices.models import GDPRRequest
+
     try:
         user = request.user
 
-        # Collect user profile data
+        gdpr_request = GDPRRequest.objects.create(
+            user=user,
+            user_email=user.email,
+            user_username=user.username,
+            request_type="data_export",
+            status="completed",
+            ip_address=get_client_ip(request),
+            user_agent=request.META.get("HTTP_USER_AGENT", "")[:500],
+        )
+
         user_data = {
             "personal_information": {
                 "username": user.username,
@@ -43,10 +88,10 @@ def export_user_data(request):
                 "exported_at": datetime.utcnow().isoformat(),
                 "format_version": "1.0",
                 "platform": "InvoiceFlow",
+                "request_id": gdpr_request.id,
             },
         }
 
-        # Get user profile if exists
         try:
             from invoices.models import Invoice, UserProfile
 
@@ -54,13 +99,12 @@ def export_user_data(request):
             if profile:
                 user_data["business_profile"] = {
                     "company_name": profile.company_name or "",
-                    "company_address": profile.company_address or "",
-                    "phone": profile.phone or "",
-                    "website": profile.website or "",
-                    "tax_number": profile.tax_number or "",
+                    "company_address": profile.business_address or "",
+                    "phone": profile.business_phone or "",
+                    "website": "",
+                    "tax_number": "",
                 }
 
-            # Get invoice data
             invoices = Invoice.objects.filter(user=user)
             user_data["invoices"] = [
                 {
@@ -77,7 +121,6 @@ def export_user_data(request):
         except ImportError:
             pass
 
-        # Create downloadable JSON file
         response = HttpResponse(
             json.dumps(user_data, indent=2).encode("utf-8"),
             content_type="application/json; charset=utf-8",
@@ -86,7 +129,7 @@ def export_user_data(request):
             f'attachment; filename="invoiceflow_data_export_{user.username}_{datetime.now().strftime("%Y%m%d")}.json"'
         )
 
-        logger.info(f"Data export requested by user: {user.username}")
+        logger.info(f"Data export completed for user: {user.username} (request_id={gdpr_request.id})")
 
         return response
 
@@ -108,12 +151,24 @@ def request_data_deletion(request):
     """
     GDPR Article 17 - Right to Erasure (Right to be Forgotten).
     Submit a request to delete all user data.
+    Request is persisted to database before email notification.
     """
+    from invoices.models import GDPRRequest
+
     try:
         user = request.user
 
-        # Send confirmation email to user
-        send_mail(
+        gdpr_request = GDPRRequest.objects.create(
+            user=user,
+            user_email=user.email,
+            user_username=user.username,
+            request_type="data_deletion",
+            status="pending",
+            ip_address=get_client_ip(request),
+            user_agent=request.META.get("HTTP_USER_AGENT", "")[:500],
+        )
+
+        user_email_sent = send_gdpr_email(
             subject="[InvoiceFlow] Data Deletion Request Received",
             message=f"""
 Dear {user.first_name or user.username},
@@ -121,6 +176,7 @@ Dear {user.first_name or user.username},
 We have received your request to delete your InvoiceFlow account and associated data.
 
 Request Details:
+- Request ID: {gdpr_request.id}
 - Account: {user.email}
 - Requested: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC
 
@@ -131,34 +187,39 @@ If you did not make this request, please contact us immediately at privacy@invoi
 Best regards,
 The InvoiceFlow Team
             """,
-            from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[user.email],
-            fail_silently=True,
+            gdpr_request=gdpr_request,
         )
 
-        # Send notification to admin
-        send_mail(
+        admin_email_sent = send_gdpr_email(
             subject=f"[InvoiceFlow Admin] Data Deletion Request - {user.username}",
             message=f"""
 Data Deletion Request Received
 
+Request ID: {gdpr_request.id}
 User: {user.username}
 Email: {user.email}
 Requested: {datetime.utcnow().isoformat()}
 
 Please process this request within 30 days as required by GDPR.
+View in admin: /admin/invoices/gdprrequest/{gdpr_request.id}/
             """,
-            from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=["privacy@invoiceflow.com.ng"],
-            fail_silently=True,
         )
 
-        logger.info(f"Data deletion requested by user: {user.username}")
+        if not user_email_sent:
+            logger.warning(f"User notification email failed for deletion request {gdpr_request.id}")
+
+        if not admin_email_sent:
+            logger.warning(f"Admin notification email failed for deletion request {gdpr_request.id}")
+
+        logger.info(f"Data deletion requested by user: {user.username} (request_id={gdpr_request.id})")
 
         return JsonResponse(
             {
                 "success": True,
-                "message": "Your data deletion request has been submitted. You will receive a confirmation email shortly.",
+                "message": "Your data deletion request has been submitted and recorded. You will receive a confirmation email shortly.",
+                "request_id": gdpr_request.id,
             }
         )
 
@@ -180,15 +241,28 @@ def submit_sar(request):
     """
     GDPR Article 15 - Right of Access (Subject Access Request).
     Submit a formal SAR for comprehensive data disclosure.
+    Request is persisted to database before email notification.
     """
+    from invoices.models import GDPRRequest
+
     try:
         user = request.user
         data = json.loads(request.body) if request.body else {}
 
         request_details = data.get("details", "Full data access request")
 
-        # Send confirmation to user
-        send_mail(
+        gdpr_request = GDPRRequest.objects.create(
+            user=user,
+            user_email=user.email,
+            user_username=user.username,
+            request_type="subject_access",
+            status="pending",
+            details=request_details,
+            ip_address=get_client_ip(request),
+            user_agent=request.META.get("HTTP_USER_AGENT", "")[:500],
+        )
+
+        user_email_sent = send_gdpr_email(
             subject="[InvoiceFlow] Subject Access Request Received",
             message=f"""
 Dear {user.first_name or user.username},
@@ -196,6 +270,7 @@ Dear {user.first_name or user.username},
 We have received your Subject Access Request (SAR) under GDPR Article 15.
 
 Request Details:
+- Request ID: {gdpr_request.id}
 - Account: {user.email}
 - Request: {request_details}
 - Submitted: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC
@@ -205,35 +280,40 @@ We will respond to your request within 30 days. If you need immediate access to 
 Best regards,
 The InvoiceFlow Team
             """,
-            from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[user.email],
-            fail_silently=True,
+            gdpr_request=gdpr_request,
         )
 
-        # Notify privacy team
-        send_mail(
+        admin_email_sent = send_gdpr_email(
             subject=f"[InvoiceFlow Admin] SAR Request - {user.username}",
             message=f"""
 Subject Access Request Received
 
+Request ID: {gdpr_request.id}
 User: {user.username}
 Email: {user.email}
 Request: {request_details}
 Submitted: {datetime.utcnow().isoformat()}
 
 Please respond within 30 days as required by GDPR Article 15.
+View in admin: /admin/invoices/gdprrequest/{gdpr_request.id}/
             """,
-            from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=["privacy@invoiceflow.com.ng"],
-            fail_silently=True,
         )
 
-        logger.info(f"SAR submitted by user: {user.username}")
+        if not user_email_sent:
+            logger.warning(f"User notification email failed for SAR request {gdpr_request.id}")
+
+        if not admin_email_sent:
+            logger.warning(f"Admin notification email failed for SAR request {gdpr_request.id}")
+
+        logger.info(f"SAR submitted by user: {user.username} (request_id={gdpr_request.id})")
 
         return JsonResponse(
             {
                 "success": True,
-                "message": "Your Subject Access Request has been submitted. You will receive a response within 30 days.",
+                "message": "Your Subject Access Request has been submitted and recorded. You will receive a response within 30 days.",
+                "request_id": gdpr_request.id,
             }
         )
 
