@@ -32,6 +32,9 @@ class Waitlist(models.Model):
     class Meta:
         ordering = ["-subscribed_at"]
         verbose_name_plural = "Waitlist entries"
+        indexes = [
+            models.Index(fields=["feature", "is_notified"], name="idx_waitlist_feature"),
+        ]
 
     def __str__(self) -> str:
         return f"{self.email} - {self.get_feature_display()}"
@@ -72,6 +75,10 @@ class ContactSubmission(models.Model):
     class Meta:
         ordering = ["-submitted_at"]
         verbose_name_plural = "Contact submissions"
+        indexes = [
+            models.Index(fields=["status", "-submitted_at"], name="idx_contact_status"),
+            models.Index(fields=["email"], name="idx_contact_email"),
+        ]
 
     def __str__(self) -> str:
         return f"{self.name} - {self.get_subject_display()} ({self.status})"
@@ -144,6 +151,9 @@ class InvoiceTemplate(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["user", "is_default"], name="idx_template_user_default"),
+        ]
 
     def __str__(self) -> str:
         return f"{self.name} - {self.user.username}"
@@ -194,6 +204,10 @@ class RecurringInvoice(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["user", "status"], name="idx_recurring_user_status"),
+            models.Index(fields=["status", "next_generation"], name="idx_recurring_schedule"),
+        ]
 
     def __str__(self) -> str:
         return f"Recurring - {self.client_name} ({self.frequency})"
