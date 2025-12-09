@@ -4,6 +4,7 @@
     Get in touch with InvoiceFlow. We're here to help with any questions about our invoicing platform.
 {% endblock %}
 {% block head_extra %}
+{% if hcaptcha_enabled %}<script src="https://js.hcaptcha.com/1/api.js" async defer></script>{% endif %}
 <script type="application/ld+json" nonce="{{ request.csp_nonce }}">
 {
     "@context": "https://schema.org",
@@ -217,9 +218,6 @@
         </div>
     </section>
 {% endblock %}
-{% if hcaptcha_enabled %}
-    {% block head_extra %}<script src="https://js.hcaptcha.com/1/api.js" async defer></script>{% endblock %}
-{% endif %}
 {% block extra_css %}
     <style>
 .page-hero {
