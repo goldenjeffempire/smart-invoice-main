@@ -4,6 +4,68 @@
 {% block meta_description %}
     Choose the InvoiceFlow plan that fits your business. From free starter to enterprise - transparent pricing with no hidden fees. Start free today.
 {% endblock %}
+{% block head_extra %}
+<script type="application/ld+json" nonce="{{ request.csp_nonce }}">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.get_host }}/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Pricing",
+            "item": "{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.get_host }}/pricing/"
+        }
+    ]
+}
+</script>
+<script type="application/ld+json" nonce="{{ request.csp_nonce }}">
+{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "InvoiceFlow Professional",
+    "description": "Professional invoicing software for growing businesses. Unlimited invoices, custom branding, recurring invoices, and advanced analytics.",
+    "brand": {
+        "@type": "Brand",
+        "name": "InvoiceFlow"
+    },
+    "offers": [
+        {
+            "@type": "Offer",
+            "name": "Starter Plan",
+            "price": "0",
+            "priceCurrency": "USD",
+            "description": "Free forever - 5 invoices per month, 1 user, basic features",
+            "availability": "https://schema.org/InStock"
+        },
+        {
+            "@type": "Offer",
+            "name": "Professional Plan",
+            "price": "19",
+            "priceCurrency": "USD",
+            "priceValidUntil": "2026-12-31",
+            "description": "Unlimited invoices, 3 users, custom branding, recurring invoices",
+            "availability": "https://schema.org/InStock"
+        },
+        {
+            "@type": "Offer",
+            "name": "Enterprise Plan",
+            "price": "49",
+            "priceCurrency": "USD",
+            "priceValidUntil": "2026-12-31",
+            "description": "Unlimited users, API access, team collaboration, dedicated support",
+            "availability": "https://schema.org/InStock"
+        }
+    ]
+}
+</script>
+{% endblock %}
 {% block content %}
     <section class="page-hero pricing-hero">
         <div class="hero-bg"></div>

@@ -3,6 +3,84 @@
 {% block meta_description %}
     Find answers to frequently asked questions about InvoiceFlow - getting started, billing, features, security, and account management.
 {% endblock %}
+{% block head_extra %}
+<script type="application/ld+json" nonce="{{ request.csp_nonce }}">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "How do I create my first invoice?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "After signing up, go to your dashboard and click 'Create Invoice'. Fill in your business details, add your client information, and include line items for your services or products. You can preview the invoice before sending it to your client."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "How long does it take to set up my account?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Setting up your InvoiceFlow account takes just a few minutes. Sign up with your email, add your business information, and you're ready to create your first invoice. You can always update your business details later from the Settings page."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What payment methods do you accept?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We accept all major credit cards (Visa, Mastercard, American Express), debit cards, and PayPal. For annual plans, we also offer bank transfer options. All payments are processed securely through our PCI-compliant payment partners."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Can I customize my invoice design?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! You can add your company logo, customize colors, and save templates for future use. Go to Settings > Business to add your branding, or use our template system to create reusable invoice designs."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Is my data secure?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Absolutely. We use industry-standard AES-256 encryption for data at rest and TLS 1.3 for data in transit. Our infrastructure includes firewalls, intrusion detection, and regular security audits. We're SOC 2 Type II compliant and follow GDPR requirements."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Do you offer two-factor authentication?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! We support two-factor authentication (2FA) using authenticator apps like Google Authenticator or Authy. You can enable 2FA from your Security Settings for an extra layer of protection on your account."
+            }
+        }
+    ]
+}
+</script>
+<script type="application/ld+json" nonce="{{ request.csp_nonce }}">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.get_host }}/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "FAQ",
+            "item": "{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.get_host }}/faq/"
+        }
+    ]
+}
+</script>
+{% endblock %}
 {% block content %}
     <div style="min-height: 100vh;
                 background: linear-gradient(to bottom, #0f172a, #1e1b4b)">

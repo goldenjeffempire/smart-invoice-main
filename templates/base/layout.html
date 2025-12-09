@@ -148,6 +148,15 @@
         }
     }
         </script>
+        <script type="application/ld+json" nonce="{{ request.csp_nonce }}">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "InvoiceFlow",
+        "url": "{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.get_host }}/",
+        "description": "Professional invoicing platform that helps businesses create stunning invoices, automate billing, and get paid faster."
+    }
+        </script>
         {% block head_extra %}{% endblock %}
     </head>
     <body class="no-js {% block body_class %}{% endblock %}">
