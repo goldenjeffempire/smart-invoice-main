@@ -121,7 +121,7 @@
     },
 
     initNavigation() {
-      const nav = document.querySelector('.nav');
+      const nav = document.querySelector('.navbar') || document.querySelector('.nav');
       if (!nav) return;
 
       let lastScroll = 0;
@@ -147,7 +147,9 @@
 
     initActiveLinks() {
       const currentPath = window.location.pathname;
-      const navLinks = document.querySelectorAll('.nav-link, .nav-mobile-link');
+      const newNavLinks = document.querySelectorAll('.navbar-link, .navbar-mobile-link');
+      const legacyNavLinks = document.querySelectorAll('.nav-link, .nav-mobile-link');
+      const navLinks = newNavLinks.length > 0 ? newNavLinks : legacyNavLinks;
       
       navLinks.forEach(link => {
         const href = link.getAttribute('href');
@@ -166,24 +168,29 @@
     },
 
     initMobileMenu() {
-      const toggle = document.querySelector('.nav-mobile-toggle');
-      const menu = document.querySelector('.nav-mobile-menu');
-      const nav = document.querySelector('.nav');
+      const toggle = document.querySelector('.navbar-toggle') || document.querySelector('.nav-mobile-toggle');
+      const menu = document.querySelector('.navbar-mobile') || document.querySelector('.nav-mobile-menu');
+      const nav = document.querySelector('.navbar') || document.querySelector('.nav');
       
       if (!toggle || !menu) return;
 
-      let overlay = document.querySelector('.nav-mobile-overlay');
-      if (!overlay && nav) {
+      let overlay = document.querySelector('.navbar-overlay');
+      if (!overlay) {
         overlay = document.createElement('div');
-        overlay.className = 'nav-mobile-overlay';
+        overlay.className = 'navbar-overlay';
         overlay.setAttribute('aria-hidden', 'true');
-        nav.parentNode.insertBefore(overlay, nav.nextSibling);
+        document.body.appendChild(overlay);
       }
 
       const openMenu = () => {
+        toggle.classList.add('active');
         toggle.setAttribute('aria-expanded', 'true');
+        menu.classList.add('active');
         menu.setAttribute('aria-hidden', 'false');
+        menu.setAttribute('aria-modal', 'true');
+        menu.setAttribute('role', 'dialog');
         if (overlay) overlay.classList.add('active');
+        document.body.classList.add('nav-open');
         document.body.style.overflow = 'hidden';
         
         const firstLink = menu.querySelector('a, button');
@@ -193,9 +200,13 @@
       };
 
       const closeMenu = () => {
+        toggle.classList.remove('active');
         toggle.setAttribute('aria-expanded', 'false');
+        menu.classList.remove('active');
         menu.setAttribute('aria-hidden', 'true');
+        menu.removeAttribute('aria-modal');
         if (overlay) overlay.classList.remove('active');
+        document.body.classList.remove('nav-open');
         document.body.style.overflow = '';
       };
 
@@ -246,7 +257,7 @@
       }
 
       window.addEventListener('resize', this.debounce(() => {
-        if (window.innerWidth >= 768 && toggle.getAttribute('aria-expanded') === 'true') {
+        if (window.innerWidth >= 1024 && toggle.getAttribute('aria-expanded') === 'true') {
           closeMenu();
         }
       }, 100));
