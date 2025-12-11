@@ -23,7 +23,7 @@ from .paystack_service import get_paystack_service
 @require_POST
 def initiate_invoice_payment(request, invoice_id):
     """Initiate payment for an invoice."""
-    invoice = get_object_or_404(Invoice, id=invoice_id)
+    invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)
     
     if invoice.status == "paid":
         messages.info(request, "This invoice has already been paid.")
@@ -74,10 +74,19 @@ def payment_callback(request, invoice_id):
         messages.error(request, "Invalid payment callback.")
         return redirect("invoice_detail", invoice_id=invoice.id)
     
+    if invoice.payment_reference and invoice.payment_reference != reference:
+        messages.error(request, "Invalid payment reference.")
+        return redirect("invoice_detail", invoice_id=invoice.id)
+    
     paystack = get_paystack_service()
     result = paystack.verify_payment(reference)
     
     if result["status"] == "success" and result.get("verified"):
+        metadata = result.get("raw_data", {}).get("metadata", {})
+        if str(metadata.get("invoice_id")) != str(invoice.id):
+            messages.error(request, "Payment verification failed: Invoice mismatch.")
+            return redirect("invoice_detail", invoice_id=invoice.id)
+        
         invoice.status = "paid"
         invoice.payment_reference = reference
         invoice.save(update_fields=["status", "payment_reference"])
@@ -117,7 +126,7 @@ def paystack_webhook(request):
                         invoice.status = "paid"
                         invoice.payment_reference = reference
                         invoice.save(update_fields=["status", "payment_reference"])
-                except Invoice.DoesNotExist:
+                except Invoice.DoesNotExist:  # type: ignore[attr-defined]
                     pass
         
         return HttpResponse(status=200)

@@ -44,6 +44,12 @@ DEBUG = "True"
 ALLOWED_HOSTS = "*.replit.dev,*.repl.co,localhost,127.0.0.1,invoice.com.ng,www.invoice.com.ng,invoiceflow.com.ng,www.invoiceflow.com.ng"
 ENCRYPTION_SALT = "d23404b518e957b03bc7f23e1ee79de5b964e9feedc2ccdb1a4d4aa010275d15"
 
+[userenv.development]
+PRODUCTION = "false"
+
+[userenv.production]
+PRODUCTION = "true"
+
 [deployment]
 deploymentTarget = "autoscale"
 run = ["python3.12", "-m", "gunicorn", "--bind=0.0.0.0:5000", "--workers=2", "--timeout=120", "invoiceflow.wsgi:application"]

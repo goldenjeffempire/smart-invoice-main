@@ -71,6 +71,31 @@ The platform features a modern, professional UI/UX with a focus on clean light t
 - Quick navigation to all major sections
 - Keyboard-driven interface with arrow key navigation
 
+### OAuth & Payment Integrations (December 2025)
+The platform now includes full OAuth social login and payment processing integrations:
+
+**Social Login (OAuth 2.0):**
+- **Google OAuth**: Full implementation in `invoices/oauth_views.py`
+- **GitHub OAuth**: Full implementation in `invoices/github_oauth_views.py`
+- Both integrate with the `SocialAccount` model for linking accounts
+- Login/signup templates updated with working social login buttons
+
+**Payment Processing (Paystack):**
+- **Payment Service**: `invoices/paystack_service.py` - Full Paystack API integration
+- **Payment Views**: `invoices/paystack_views.py` - Invoice payment initiation, callbacks, webhooks
+- Supports NGN, USD, GHS, ZAR, KES currencies
+- Webhook signature verification for secure payment notifications
+
+**Environment Configuration:**
+- `PRODUCTION=true` (production) / `PRODUCTION=false` (development)
+- Production mode enables: SSL redirect, HSTS, secure cookies, strict security headers
+
+**Required Secrets (for full functionality):**
+- `SENDGRID_API_KEY` - Email functionality
+- `GOOGLE_OAUTH_CLIENT_ID` / `GOOGLE_OAUTH_CLIENT_SECRET` - Google login
+- `GITHUB_OAUTH_CLIENT_ID` / `GITHUB_OAUTH_CLIENT_SECRET` - GitHub login
+- `PAYSTACK_SECRET_KEY` / `PAYSTACK_PUBLIC_KEY` - Payment processing
+
 ### Enterprise Authentication System Rebuild (December 2025)
 The authentication system has been completely rebuilt with a modern, enterprise-ready design:
 
