@@ -6,7 +6,7 @@ from django.contrib.sitemaps.views import sitemap as sitemap_view
 from django.urls import include, path
 
 from invoiceflow import cookie_consent, gdpr, mfa
-from invoices import oauth_views, views
+from invoices import github_oauth_views, oauth_views, paystack_views, views
 from invoices.health import detailed_health, health_check, liveness_check, readiness_check
 from invoices.sitemap import sitemaps
 
@@ -60,6 +60,9 @@ urlpatterns = [
     # OAuth routes (Google OAuth)
     path("oauth/google/", oauth_views.google_login, name="google_login"),
     path("oauth/google/callback/", oauth_views.google_callback, name="google_callback"),
+    # OAuth routes (GitHub OAuth)
+    path("oauth/github/", github_oauth_views.github_login, name="github_login"),
+    path("oauth/github/callback/", github_oauth_views.github_callback, name="github_callback"),
     path("forgot-password/", views.forgot_password, name="forgot_password"),
     path("forgot-password/sent/", views.forgot_password_sent, name="forgot_password_sent"),
     path("reset-password/<str:token>/", views.reset_password, name="reset_password"),
@@ -108,6 +111,11 @@ urlpatterns = [
     path("admin-users/", views.admin_users, name="admin_users"),
     path("admin-content/", views.admin_content, name="admin_content"),
     path("admin-settings/", views.admin_settings, name="admin_settings"),
+    # Payment routes (Paystack)
+    path("payments/invoice/<int:invoice_id>/pay/", paystack_views.initiate_invoice_payment, name="initiate_payment"),
+    path("payments/callback/<int:invoice_id>/", paystack_views.payment_callback, name="payment_callback"),
+    path("payments/webhook/", paystack_views.paystack_webhook, name="paystack_webhook"),
+    path("payments/status/<int:invoice_id>/", paystack_views.payment_status, name="payment_status"),
     path("invoices/", include("invoices.urls")),
 ]
 
