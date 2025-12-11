@@ -1,826 +1,567 @@
 {% extends "base/layout.html" %}
-{% block title %}Edit Invoice {{ invoice.invoice_id }} - InvoiceFlow{% endblock %}
-{% block body_class %}app-page{% endblock %}
-{% block nav %}{% endblock %}
-{% block footer %}{% endblock %}
-{% block content %}
-    <div class="app-layout">
-        <aside class="app-sidebar">
-            <div class="sidebar-header">
-                <a href="{% url 'home' %}" class="nav-logo">
-                    <div class="nav-logo-icon">
-                        <svg viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="2"
-                             stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                            <polyline points="14 2 14 8 20 8" />
-                            <line x1="16" y1="13" x2="8" y2="13" />
-                            <line x1="16" y1="17" x2="8" y2="17" />
-                        </svg>
-                    </div>
-                    <span class="nav-logo-text">InvoiceFlow</span>
-                </a>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="{% url 'dashboard' %}" class="sidebar-link">
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2">
-                        <rect x="3" y="3" width="7" height="7" />
-                        <rect x="14" y="3" width="7" height="7" />
-                        <rect x="14" y="14" width="7" height="7" />
-                        <rect x="3" y="14" width="7" height="7" />
-                    </svg>
-                    Dashboard
-                </a>
-                <a href="{% url 'create_invoice' %}" class="sidebar-link">
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2">
-                        <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="8" x2="12" y2="16" />
-                        <line x1="8" y1="12" x2="16" y2="12" />
-                    </svg>
-                    New Invoice
-                </a>
-                <a href="{% url 'analytics' %}" class="sidebar-link">
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2">
-                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-                    </svg>
-                    Analytics
-                </a>
-                <a href="{% url 'settings' %}" class="sidebar-link">
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2">
-                        <circle cx="12" cy="12" r="3" />
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-                    </svg>
-                    Settings
-                </a>
-            </nav>
-            <div class="sidebar-footer">
-                <a href="{% url 'logout' %}" class="sidebar-link">
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                        <polyline points="16 17 21 12 16 7" />
-                        <line x1="21" y1="12" x2="9" y2="12" />
-                    </svg>
-                    Log out
-                </a>
-            </div>
-        </aside>
-        <button class="mobile-menu-toggle" aria-label="Toggle sidebar">
-            <svg viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="2">
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-            </svg>
-        </button>
-        <main class="app-main">
-            <header class="page-header">
-                <div class="page-header-content">
-                    <a href="{% url 'invoice_detail' invoice.id %}" class="back-link">
-                        <svg viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="2">
-                            <line x1="19" y1="12" x2="5" y2="12" />
-                            <polyline points="12 19 5 12 12 5" />
-                        </svg>
-                        Back to Invoice
-                    </a>
-                    <h1 class="page-title">Edit Invoice {{ invoice.invoice_id }}</h1>
-                    <p class="page-subtitle">Update the invoice details below</p>
-                </div>
-            </header>
-            <script type="application/json" id="existing-line-items">{{ line_items_json|safe }}</script>
-            <form method="post" class="invoice-form" id="invoice-form">
-                {% csrf_token %}
-                <input type="hidden" name="line_items" id="line_items_data" value="[]">
-                <div class="form-sections">
-                    <div class="form-section glass-card">
-                        <div class="section-header">
-                            <div class="section-icon">
-                                <svg viewBox="0 0 24 24"
-                                     fill="none"
-                                     stroke="currentColor"
-                                     stroke-width="2">
-                                    <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                                </svg>
-                            </div>
-                            <h2 class="section-title">Your Business</h2>
-                        </div>
-                        <div class="form-grid">
-                            <div class="form-group full-width">
-                                <label for="id_business_name" class="form-label">
-                                    Business Name <span class="required">*</span>
-                                </label>
-                                {{ invoice_form.business_name }}
-                                {% if invoice_form.business_name.errors %}
-                                    <p class="form-error">{{ invoice_form.business_name.errors.0 }}</p>
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                <label for="id_business_email" class="form-label">Business Email</label>
-                                {{ invoice_form.business_email }}
-                            </div>
-                            <div class="form-group">
-                                <label for="id_business_phone" class="form-label">Phone Number</label>
-                                {{ invoice_form.business_phone }}
-                            </div>
-                            <div class="form-group full-width">
-                                <label for="id_business_address" class="form-label">Address</label>
-                                {{ invoice_form.business_address }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-section glass-card">
-                        <div class="section-header">
-                            <div class="section-icon client-icon">
-                                <svg viewBox="0 0 24 24"
-                                     fill="none"
-                                     stroke="currentColor"
-                                     stroke-width="2">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                    <circle cx="12" cy="7" r="4" />
-                                </svg>
-                            </div>
-                            <h2 class="section-title">Client Details</h2>
-                        </div>
-                        <div class="form-grid">
-                            <div class="form-group full-width">
-                                <label for="id_client_name" class="form-label">
-                                    Client Name <span class="required">*</span>
-                                </label>
-                                {{ invoice_form.client_name }}
-                            </div>
-                            <div class="form-group">
-                                <label for="id_client_email" class="form-label">Client Email</label>
-                                {{ invoice_form.client_email }}
-                            </div>
-                            <div class="form-group">
-                                <label for="id_client_phone" class="form-label">Client Phone</label>
-                                {{ invoice_form.client_phone }}
-                            </div>
-                            <div class="form-group full-width">
-                                <label for="id_client_address" class="form-label">Client Address</label>
-                                {{ invoice_form.client_address }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-section glass-card">
-                    <div class="section-header">
-                        <div class="section-icon invoice-icon">
-                            <svg viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                <polyline points="14 2 14 8 20 8" />
-                                <line x1="16" y1="13" x2="8" y2="13" />
-                                <line x1="16" y1="17" x2="8" y2="17" />
-                            </svg>
-                        </div>
-                        <h2 class="section-title">Invoice Details</h2>
-                    </div>
-                    <div class="form-grid form-grid-3">
-                        <div class="form-group">
-                            <label for="id_invoice_date" class="form-label">
-                                Invoice Date <span class="required">*</span>
-                            </label>
-                            {{ invoice_form.invoice_date }}
-                        </div>
-                        <div class="form-group">
-                            <label for="id_due_date" class="form-label">
-                                Due Date <span class="required">*</span>
-                            </label>
-                            {{ invoice_form.due_date }}
-                        </div>
-                        <div class="form-group">
-                            <label for="id_currency" class="form-label">Currency</label>
-                            {{ invoice_form.currency }}
-                        </div>
-                    </div>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="id_tax_rate" class="form-label">Tax Rate (%)</label>
-                            {{ invoice_form.tax_rate }}
-                        </div>
-                        <div class="form-group">
-                            <label for="id_notes" class="form-label">Notes</label>
-                            {{ invoice_form.notes }}
-                        </div>
-                    </div>
-                </div>
-                <div class="form-section glass-card">
-                    <div class="section-header">
-                        <div class="section-icon items-icon">
-                            <svg viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="2">
-                                <line x1="8" y1="6" x2="21" y2="6" />
-                                <line x1="8" y1="12" x2="21" y2="12" />
-                                <line x1="8" y1="18" x2="21" y2="18" />
-                                <line x1="3" y1="6" x2="3.01" y2="6" />
-                                <line x1="3" y1="12" x2="3.01" y2="12" />
-                                <line x1="3" y1="18" x2="3.01" y2="18" />
-                            </svg>
-                        </div>
-                        <h2 class="section-title">Line Items</h2>
-                    </div>
-                    <div class="line-items-container">
-                        <div class="line-items-header">
-                            <span class="col-description">Description</span>
-                            <span class="col-quantity">Qty</span>
-                            <span class="col-price">Unit Price</span>
-                            <span class="col-total">Total</span>
-                            <span class="col-actions"></span>
-                        </div>
-                        <div id="line-items-list" class="line-items-list"></div>
-                        <button type="button" id="add-line-item" class="add-item-btn">
-                            <svg viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="2">
-                                <circle cx="12" cy="12" r="10" />
-                                <line x1="12" y1="8" x2="12" y2="16" />
-                                <line x1="8" y1="12" x2="16" y2="12" />
-                            </svg>
-                            Add Line Item
-                        </button>
-                    </div>
-                    <div class="invoice-totals">
-                        <div class="totals-row">
-                            <span class="totals-label">Subtotal</span>
-                            <span class="totals-value" id="subtotal">$0.00</span>
-                        </div>
-                        <div class="totals-row">
-                            <span class="totals-label">Tax (<span id="tax-rate-display">0</span>%)</span>
-                            <span class="totals-value" id="tax-amount">$0.00</span>
-                        </div>
-                        <div class="totals-row total-row">
-                            <span class="totals-label">Total</span>
-                            <span class="totals-value" id="grand-total">$0.00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-actions">
-                    <a href="{% url 'invoice_detail' invoice.id %}"
-                       class="btn btn-secondary btn-lg">Cancel</a>
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        <svg class="btn-icon"
-                             style="transform: none"
-                             viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="2">
-                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
-                            <polyline points="17 21 17 13 7 13 7 21" />
-                            <polyline points="7 3 7 8 15 8" />
-                        </svg>
-                        Update Invoice
-                    </button>
-                </div>
-            </form>
-        </main>
-    </div>
-{% endblock %}
+{% load static %}
+{% block title %}Edit Invoice {{ invoice.invoice_id }}{% endblock %}
+{% block body_class %}dashboard-light-page{% endblock %}
+
 {% block extra_css %}
-    <style>
-.app-page {
-    background: var(--gradient-dark);
-}
-
-.app-layout {
-    display: flex;
-    min-height: 100vh;
-}
-
-.app-sidebar {
-    width: 260px;
-    background: rgba(0, 0, 0, 0.3);
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    z-index: 100;
-    transition: transform var(--transition-base);
-}
-
-@media (max-width: 1024px) {
-    .app-sidebar {
-        transform: translateX(-100%);
-    }
-    
-    .app-sidebar.open {
-        transform: translateX(0);
-    }
-}
-
-.sidebar-header {
-    padding: var(--spacing-6);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.sidebar-nav {
-    flex: 1;
-    padding: var(--spacing-4);
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-1);
-}
-
-.sidebar-link {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-3);
-    padding: var(--spacing-3) var(--spacing-4);
-    border-radius: var(--radius-xl);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-neutral-400);
-    transition: all var(--transition-fast);
-}
-
-.sidebar-link svg {
-    width: 20px;
-    height: 20px;
-}
-
-.sidebar-link:hover {
-    color: var(--color-neutral-0);
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.sidebar-link.active {
-    color: var(--color-neutral-0);
-    background: var(--gradient-primary);
-}
-
-.sidebar-footer {
-    padding: var(--spacing-4);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.mobile-menu-toggle {
-    display: none;
-    position: fixed;
-    top: var(--spacing-4);
-    left: var(--spacing-4);
-    z-index: 150;
-    width: 44px;
-    height: 44px;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    border-radius: var(--radius-xl);
-    align-items: center;
-    justify-content: center;
-    color: var(--color-neutral-0);
-}
-
-.mobile-menu-toggle svg {
-    width: 24px;
-    height: 24px;
-}
-
-@media (max-width: 1024px) {
-    .mobile-menu-toggle {
-        display: flex;
-    }
-}
-
-.app-main {
-    flex: 1;
-    margin-left: 260px;
-    padding: var(--spacing-8);
-    max-width: 1200px;
-}
-
-@media (max-width: 1024px) {
-    .app-main {
-        margin-left: 0;
-        padding: var(--spacing-6);
-        padding-top: 80px;
-    }
-}
-
-.page-header {
-    margin-bottom: var(--spacing-8);
-}
-
-.back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-2);
-    font-size: var(--font-size-sm);
-    color: var(--color-neutral-400);
-    margin-bottom: var(--spacing-4);
-    transition: color var(--transition-fast);
-}
-
-.back-link:hover {
-    color: var(--color-neutral-0);
-}
-
-.back-link svg {
-    width: 16px;
-    height: 16px;
-}
-
-.page-title {
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-neutral-0);
-    margin-bottom: var(--spacing-2);
-}
-
-.page-subtitle {
-    color: var(--color-neutral-400);
-}
-
-.form-sections {
+<link rel="stylesheet" href="{% static 'css/dashboard-light.css' %}">
+<style>
+.form-light-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-6);
-    margin-bottom: var(--spacing-6);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
 }
 
-@media (max-width: 1024px) {
-    .form-sections {
-        grid-template-columns: 1fr;
-    }
-}
-
-.form-section {
-    padding: var(--spacing-6);
-    margin-bottom: var(--spacing-6);
-}
-
-.form-sections .form-section {
-    margin-bottom: 0;
-}
-
-.section-header {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-4);
-    margin-bottom: var(--spacing-6);
-    padding-bottom: var(--spacing-4);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.section-icon {
-    width: 48px;
-    height: 48px;
-    background: rgba(99, 102, 241, 0.1);
-    border-radius: var(--radius-xl);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-primary-400);
-}
-
-.section-icon svg {
-    width: 24px;
-    height: 24px;
-}
-
-.section-icon.client-icon {
-    background: rgba(16, 185, 129, 0.1);
-    color: var(--color-accent-500);
-}
-
-.section-icon.invoice-icon {
-    background: rgba(139, 92, 246, 0.1);
-    color: var(--color-purple-400);
-}
-
-.section-icon.items-icon {
-    background: rgba(245, 158, 11, 0.1);
-    color: var(--color-warning);
-}
-
-.section-title {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-0);
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-5);
-}
-
-.form-grid-3 {
+.form-light-grid-3 {
     grid-template-columns: repeat(3, 1fr);
 }
 
 @media (max-width: 768px) {
-    .form-grid,
-    .form-grid-3 {
+    .form-light-grid,
+    .form-light-grid-3 {
         grid-template-columns: 1fr;
     }
 }
 
-.form-group.full-width {
+.form-light-group.full-width {
     grid-column: 1 / -1;
 }
 
-.form-group {
+.section-light {
+    background: var(--light-bg-secondary);
+    border-radius: var(--light-radius-xl);
+    border: 1px solid var(--light-border-primary);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.section-light-header {
     display: flex;
-    flex-direction: column;
-    gap: var(--spacing-2);
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--light-border-primary);
 }
 
-.form-label {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-neutral-300);
+.section-light-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--light-radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.form-label .required {
-    color: var(--color-error);
+.section-light-icon svg {
+    width: 24px;
+    height: 24px;
 }
 
-.form-error {
-    font-size: var(--font-size-sm);
-    color: var(--color-error);
-    margin-top: var(--spacing-1);
+.section-light-icon.icon-business {
+    background: var(--light-primary-light);
 }
 
-.invoice-form input,
-.invoice-form select,
-.invoice-form textarea {
-    width: 100%;
-    padding: var(--spacing-3) var(--spacing-4);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-xl);
-    color: var(--color-neutral-0);
-    font-size: var(--font-size-base);
-    font-family: inherit;
-    transition: all var(--transition-fast);
+.section-light-icon.icon-business svg {
+    stroke: var(--light-primary);
 }
 
-.invoice-form input::placeholder,
-.invoice-form textarea::placeholder {
-    color: var(--color-neutral-500);
+.section-light-icon.icon-client {
+    background: var(--light-success-light);
 }
 
-.invoice-form input:focus,
-.invoice-form select:focus,
-.invoice-form textarea:focus {
-    outline: none;
-    border-color: var(--color-primary-500);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+.section-light-icon.icon-client svg {
+    stroke: var(--light-success);
 }
 
-.invoice-form textarea {
-    min-height: 80px;
-    resize: vertical;
+.section-light-icon.icon-invoice {
+    background: var(--light-accent-light);
 }
 
-.line-items-container {
-    margin-top: var(--spacing-4);
+.section-light-icon.icon-invoice svg {
+    stroke: var(--light-accent);
 }
 
-.line-items-header {
+.section-light-icon.icon-items {
+    background: var(--light-warning-light);
+}
+
+.section-light-icon.icon-items svg {
+    stroke: var(--light-warning);
+}
+
+.section-light-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--light-text-primary);
+    margin: 0;
+}
+
+.form-light-sections {
     display: grid;
-    grid-template-columns: 2fr 80px 120px 120px 50px;
-    gap: var(--spacing-4);
-    padding: var(--spacing-3) var(--spacing-4);
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-400);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 1024px) {
+    .form-light-sections {
+        grid-template-columns: 1fr;
+    }
+}
+
+.line-items-light {
+    margin-top: 16px;
+}
+
+.line-items-light-header {
+    display: grid;
+    grid-template-columns: 2fr 80px 120px 120px 48px;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--light-bg-tertiary);
+    border-radius: var(--light-radius-lg) var(--light-radius-lg) 0 0;
+    font-size: 0.75rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 0.05em;
+    color: var(--light-text-tertiary);
 }
 
 @media (max-width: 768px) {
-    .line-items-header {
+    .line-items-light-header {
         display: none;
     }
 }
 
-.line-items-list {
-    min-height: 60px;
-}
-
-.line-item {
+.line-item-light {
     display: grid;
-    grid-template-columns: 2fr 80px 120px 120px 50px;
-    gap: var(--spacing-4);
-    padding: var(--spacing-4);
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    grid-template-columns: 2fr 80px 120px 120px 48px;
+    gap: 12px;
+    padding: 16px;
+    background: var(--light-bg-secondary);
+    border: 1px solid var(--light-border-primary);
     border-top: none;
     align-items: center;
-    animation: slideIn 0.3s ease;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 @media (max-width: 768px) {
-    .line-item {
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-3);
-        padding: var(--spacing-4);
-    }
-    
-    .line-item input {
-        width: 100%;
+    .line-item-light {
+        grid-template-columns: 1fr;
+        gap: 16px;
     }
 }
 
-.line-item input {
-    padding: var(--spacing-2) var(--spacing-3);
-    font-size: var(--font-size-sm);
+.line-item-light:last-child {
+    border-radius: 0 0 var(--light-radius-lg) var(--light-radius-lg);
 }
 
-.line-item-total {
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-0);
+.line-item-light input {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 0.875rem;
+    border: 1px solid var(--light-border-primary);
+    border-radius: var(--light-radius-md);
+    background: var(--light-bg-tertiary);
+}
+
+.line-item-light input:focus {
+    outline: none;
+    border-color: var(--light-primary);
+    background: var(--light-bg-secondary);
+}
+
+.line-item-light .item-total {
+    font-weight: 600;
+    color: var(--light-text-primary);
     text-align: right;
 }
 
 .remove-item-btn {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(239, 68, 68, 0.1);
-    border-radius: var(--radius-lg);
-    color: var(--color-error);
-    transition: all var(--transition-fast);
+    background: var(--light-danger-light);
+    border: none;
+    border-radius: var(--light-radius-md);
+    color: var(--light-danger);
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .remove-item-btn:hover {
-    background: rgba(239, 68, 68, 0.2);
+    background: var(--light-danger);
+    color: white;
 }
 
 .remove-item-btn svg {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
 }
 
-.add-item-btn {
+.add-item-light-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-2);
+    gap: 8px;
     width: 100%;
-    padding: var(--spacing-4);
-    background: rgba(99, 102, 241, 0.1);
-    border: 1px dashed rgba(99, 102, 241, 0.3);
-    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
-    color: var(--color-primary-400);
-    font-weight: var(--font-weight-medium);
-    transition: all var(--transition-fast);
+    padding: 16px;
+    background: var(--light-bg-tertiary);
+    border: 2px dashed var(--light-border-secondary);
+    border-radius: var(--light-radius-lg);
+    color: var(--light-text-secondary);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 16px;
 }
 
-.add-item-btn:hover {
-    background: rgba(99, 102, 241, 0.15);
-    border-color: var(--color-primary-400);
+.add-item-light-btn:hover {
+    background: var(--light-primary-light);
+    border-color: var(--light-primary);
+    color: var(--light-primary);
 }
 
-.add-item-btn svg {
+.add-item-light-btn svg {
     width: 20px;
     height: 20px;
 }
 
-.invoice-totals {
-    margin-top: var(--spacing-6);
-    padding-top: var(--spacing-6);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: var(--spacing-3);
+.invoice-totals-light {
+    margin-top: 24px;
+    padding: 24px;
+    background: var(--light-bg-tertiary);
+    border-radius: var(--light-radius-lg);
+    max-width: 320px;
+    margin-left: auto;
 }
 
-.totals-row {
+.totals-light-row {
     display: flex;
     justify-content: space-between;
-    width: 280px;
-    padding: var(--spacing-2) 0;
+    padding: 8px 0;
+    font-size: 0.9375rem;
 }
 
-@media (max-width: 480px) {
-    .totals-row {
-        width: 100%;
-    }
+.totals-light-row.total-row {
+    border-top: 2px solid var(--light-border-primary);
+    margin-top: 8px;
+    padding-top: 16px;
+    font-size: 1.125rem;
+    font-weight: 700;
 }
 
-.totals-label {
-    color: var(--color-neutral-400);
-}
-
-.totals-value {
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-0);
-}
-
-.total-row {
-    padding-top: var(--spacing-4);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.total-row .totals-label,
-.total-row .totals-value {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-bold);
-}
-
-.total-row .totals-value {
-    color: var(--color-accent-500);
-}
-
-.form-actions {
+.form-actions-light {
     display: flex;
     justify-content: flex-end;
-    gap: var(--spacing-4);
-    padding-top: var(--spacing-6);
+    gap: 16px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--light-border-primary);
 }
 
-@media (max-width: 480px) {
-    .form-actions {
-        flex-direction: column-reverse;
+.back-light-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: var(--light-text-secondary);
+    text-decoration: none;
+    margin-bottom: 16px;
+}
+
+.back-light-link:hover {
+    color: var(--light-primary);
+}
+
+.back-light-link svg {
+    width: 16px;
+    height: 16px;
+}
+</style>
+{% endblock %}
+
+{% block nav %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="dashboard-light">
+    {% include 'components/sidebar-light.html' with active='invoices' %}
+    
+    <main class="dashboard-light-main">
+        <a href="{% url 'invoice_detail' invoice.id %}" class="back-light-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"/>
+                <polyline points="12 19 5 12 12 5"/>
+            </svg>
+            Back to Invoice
+        </a>
+        
+        <header class="dashboard-light-header">
+            <div class="dashboard-light-header-content">
+                <h1>Edit Invoice {{ invoice.invoice_id }}</h1>
+                <p>Update the invoice details below</p>
+            </div>
+        </header>
+        
+        <script type="application/json" id="existing-line-items">{{ line_items_json|safe }}</script>
+        
+        <form method="post" id="invoice-form">
+            {% csrf_token %}
+            <input type="hidden" name="line_items" id="line_items_data" value="[]">
+            
+            <div class="form-light-sections">
+                <div class="section-light">
+                    <div class="section-light-header">
+                        <div class="section-light-icon icon-business">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
+                        </div>
+                        <h2 class="section-light-title">Your Business</h2>
+                    </div>
+                    <div class="form-light-grid">
+                        <div class="form-light-group full-width">
+                            <label class="form-light-label">Business Name *</label>
+                            <input type="text" name="business_name" class="form-light-input" required value="{{ invoice.business_name|default:'' }}">
+                        </div>
+                        <div class="form-light-group">
+                            <label class="form-light-label">Business Email</label>
+                            <input type="email" name="business_email" class="form-light-input" value="{{ invoice.business_email|default:'' }}">
+                        </div>
+                        <div class="form-light-group">
+                            <label class="form-light-label">Phone Number</label>
+                            <input type="text" name="business_phone" class="form-light-input" value="{{ invoice.business_phone|default:'' }}">
+                        </div>
+                        <div class="form-light-group full-width">
+                            <label class="form-light-label">Address</label>
+                            <textarea name="business_address" class="form-light-textarea" rows="2">{{ invoice.business_address|default:'' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-light">
+                    <div class="section-light-header">
+                        <div class="section-light-icon icon-client">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                        <h2 class="section-light-title">Client Details</h2>
+                    </div>
+                    <div class="form-light-grid">
+                        <div class="form-light-group full-width">
+                            <label class="form-light-label">Client Name *</label>
+                            <input type="text" name="client_name" class="form-light-input" required value="{{ invoice.client_name|default:'' }}">
+                        </div>
+                        <div class="form-light-group">
+                            <label class="form-light-label">Client Email</label>
+                            <input type="email" name="client_email" class="form-light-input" value="{{ invoice.client_email|default:'' }}">
+                        </div>
+                        <div class="form-light-group">
+                            <label class="form-light-label">Client Phone</label>
+                            <input type="text" name="client_phone" class="form-light-input" value="{{ invoice.client_phone|default:'' }}">
+                        </div>
+                        <div class="form-light-group full-width">
+                            <label class="form-light-label">Client Address</label>
+                            <textarea name="client_address" class="form-light-textarea" rows="2">{{ invoice.client_address|default:'' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-light">
+                <div class="section-light-header">
+                    <div class="section-light-icon icon-invoice">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                    </div>
+                    <h2 class="section-light-title">Invoice Details</h2>
+                </div>
+                <div class="form-light-grid form-light-grid-3">
+                    <div class="form-light-group">
+                        <label class="form-light-label">Invoice Date *</label>
+                        <input type="date" name="invoice_date" class="form-light-input" required value="{{ invoice.invoice_date|date:'Y-m-d' }}">
+                    </div>
+                    <div class="form-light-group">
+                        <label class="form-light-label">Due Date *</label>
+                        <input type="date" name="due_date" class="form-light-input" required value="{{ invoice.due_date|date:'Y-m-d' }}">
+                    </div>
+                    <div class="form-light-group">
+                        <label class="form-light-label">Currency</label>
+                        <select name="currency" class="form-light-select">
+                            <option value="USD" {% if invoice.currency == 'USD' %}selected{% endif %}>USD ($)</option>
+                            <option value="EUR" {% if invoice.currency == 'EUR' %}selected{% endif %}>EUR (&euro;)</option>
+                            <option value="GBP" {% if invoice.currency == 'GBP' %}selected{% endif %}>GBP (&pound;)</option>
+                            <option value="NGN" {% if invoice.currency == 'NGN' %}selected{% endif %}>NGN (&#8358;)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-light-grid" style="margin-top: 20px;">
+                    <div class="form-light-group">
+                        <label class="form-light-label">Tax Rate (%)</label>
+                        <input type="number" name="tax_rate" id="tax_rate" class="form-light-input" step="0.01" min="0" max="100" value="{{ invoice.tax_rate|default:'0' }}">
+                    </div>
+                    <div class="form-light-group">
+                        <label class="form-light-label">Notes</label>
+                        <textarea name="notes" class="form-light-textarea" rows="2" placeholder="Payment terms, bank details, etc.">{{ invoice.notes|default:'' }}</textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-light">
+                <div class="section-light-header">
+                    <div class="section-light-icon icon-items">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="8" y1="6" x2="21" y2="6"/>
+                            <line x1="8" y1="12" x2="21" y2="12"/>
+                            <line x1="8" y1="18" x2="21" y2="18"/>
+                            <line x1="3" y1="6" x2="3.01" y2="6"/>
+                            <line x1="3" y1="12" x2="3.01" y2="12"/>
+                            <line x1="3" y1="18" x2="3.01" y2="18"/>
+                        </svg>
+                    </div>
+                    <h2 class="section-light-title">Line Items</h2>
+                </div>
+                
+                <div class="line-items-light">
+                    <div class="line-items-light-header">
+                        <span>Description</span>
+                        <span>Qty</span>
+                        <span>Unit Price</span>
+                        <span>Total</span>
+                        <span></span>
+                    </div>
+                    <div id="line-items-list"></div>
+                    <button type="button" id="add-line-item" class="add-item-light-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="16"/>
+                            <line x1="8" y1="12" x2="16" y2="12"/>
+                        </svg>
+                        Add Line Item
+                    </button>
+                </div>
+                
+                <div class="invoice-totals-light">
+                    <div class="totals-light-row">
+                        <span>Subtotal</span>
+                        <span id="subtotal">$0.00</span>
+                    </div>
+                    <div class="totals-light-row">
+                        <span>Tax (<span id="tax-rate-display">0</span>%)</span>
+                        <span id="tax-amount">$0.00</span>
+                    </div>
+                    <div class="totals-light-row total-row">
+                        <span>Total</span>
+                        <span id="grand-total">$0.00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-actions-light">
+                <a href="{% url 'invoice_detail' invoice.id %}" class="btn-light-secondary">Cancel</a>
+                <button type="submit" class="btn-light-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                        <polyline points="17 21 17 13 7 13 7 21"/>
+                        <polyline points="7 3 7 8 15 8"/>
+                    </svg>
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script nonce="{{ request.csp_nonce }}">
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const sidebar = document.getElementById('dashboard-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        });
     }
     
-    .form-actions .btn {
-        width: 100%;
+    if (overlay) {
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        });
     }
-}
-    </style>
-{% endblock %}
-{% block extra_js %}
-    <script nonce="{{ request.csp_nonce }}">
-document.addEventListener('DOMContentLoaded', function() {
+    
+    let lineItems = [];
+    let itemId = 0;
+    
     const lineItemsList = document.getElementById('line-items-list');
     const addItemBtn = document.getElementById('add-line-item');
     const lineItemsData = document.getElementById('line_items_data');
-    const taxRateInput = document.querySelector('[name="tax_rate"]');
-    const currencySelect = document.querySelector('[name="currency"]');
-    
-    let lineItems = [];
-    let itemCounter = 0;
-    
-    function getCurrencySymbol() {
-        const currency = currencySelect ? currencySelect.value : 'USD';
-        const symbols = {
-            'USD': '$', 'EUR': '€', 'GBP': '£', 'NGN': '₦', 
-            'JPY': '¥', 'CAD': 'C$', 'AUD': 'A$', 'INR': '₹'
-        };
-        return symbols[currency] || currency + ' ';
-    }
+    const taxRateInput = document.getElementById('tax_rate');
     
     function formatCurrency(amount) {
-        return getCurrencySymbol() + parseFloat(amount || 0).toFixed(2);
+        return '$' + parseFloat(amount || 0).toFixed(2);
+    }
+    
+    function createLineItem(id, data = {}) {
+        const div = document.createElement('div');
+        div.className = 'line-item-light';
+        div.dataset.id = id;
+        div.innerHTML = `
+            <input type="text" placeholder="Item description" class="item-description" value="${data.description || ''}" required>
+            <input type="number" placeholder="1" value="${data.quantity || 1}" min="1" class="item-quantity">
+            <input type="number" placeholder="0.00" step="0.01" min="0" value="${data.unit_price || ''}" class="item-price">
+            <span class="item-total">$0.00</span>
+            <button type="button" class="remove-item-btn" onclick="removeItem(${id})">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        `;
+        
+        const inputs = div.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                updateItemTotal(div);
+                updateTotals();
+            });
+        });
+        
+        return div;
+    }
+    
+    function updateItemTotal(itemDiv) {
+        const qty = parseFloat(itemDiv.querySelector('.item-quantity').value) || 0;
+        const price = parseFloat(itemDiv.querySelector('.item-price').value) || 0;
+        const total = qty * price;
+        itemDiv.querySelector('.item-total').textContent = formatCurrency(total);
     }
     
     function updateTotals() {
-        const taxRate = parseFloat(taxRateInput?.value || 0);
         let subtotal = 0;
+        const items = lineItemsList.querySelectorAll('.line-item-light');
         
-        lineItems.forEach(item => {
-            subtotal += item.quantity * item.unit_price;
+        items.forEach(item => {
+            const qty = parseFloat(item.querySelector('.item-quantity').value) || 0;
+            const price = parseFloat(item.querySelector('.item-price').value) || 0;
+            subtotal += qty * price;
         });
         
+        const taxRate = parseFloat(taxRateInput.value) || 0;
         const taxAmount = subtotal * (taxRate / 100);
         const total = subtotal + taxAmount;
         
@@ -829,112 +570,61 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('tax-amount').textContent = formatCurrency(taxAmount);
         document.getElementById('grand-total').textContent = formatCurrency(total);
         
-        lineItemsData.value = JSON.stringify(lineItems.map(item => ({
-            description: item.description,
-            quantity: item.quantity,
-            unit_price: item.unit_price
-        })));
+        saveLineItems();
     }
     
-    function createLineItem(item = {}) {
-        const id = ++itemCounter;
-        const itemData = {
-            id,
-            description: item.description || '',
-            quantity: parseFloat(item.quantity) || 1,
-            unit_price: parseFloat(item.unit_price) || 0
-        };
-        lineItems.push(itemData);
+    function saveLineItems() {
+        const items = [];
+        const itemDivs = lineItemsList.querySelectorAll('.line-item-light');
         
-        const itemEl = document.createElement('div');
-        itemEl.className = 'line-item';
-        itemEl.dataset.id = id;
-        itemEl.innerHTML = `
-            <input type="text" placeholder="Item description" value="${itemData.description}" class="item-description">
-            <input type="number" min="1" value="${itemData.quantity}" class="item-quantity">
-            <input type="number" min="0" step="0.01" value="${itemData.unit_price}" class="item-price">
-            <span class="line-item-total">${formatCurrency(itemData.quantity * itemData.unit_price)}</span>
-            <button type="button" class="remove-item-btn" title="Remove item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-            </button>
-        `;
-        
-        const descInput = itemEl.querySelector('.item-description');
-        const qtyInput = itemEl.querySelector('.item-quantity');
-        const priceInput = itemEl.querySelector('.item-price');
-        const totalEl = itemEl.querySelector('.line-item-total');
-        const removeBtn = itemEl.querySelector('.remove-item-btn');
-        
-        function updateItem() {
-            const item = lineItems.find(i => i.id === id);
-            if (item) {
-                item.description = descInput.value;
-                item.quantity = parseFloat(qtyInput.value) || 0;
-                item.unit_price = parseFloat(priceInput.value) || 0;
-                totalEl.textContent = formatCurrency(item.quantity * item.unit_price);
-                updateTotals();
+        itemDivs.forEach(div => {
+            const description = div.querySelector('.item-description').value;
+            const quantity = parseFloat(div.querySelector('.item-quantity').value) || 0;
+            const price = parseFloat(div.querySelector('.item-price').value) || 0;
+            
+            if (description && quantity > 0) {
+                items.push({ description, quantity, unit_price: price });
             }
-        }
+        });
         
-        descInput.addEventListener('input', updateItem);
-        qtyInput.addEventListener('input', updateItem);
-        priceInput.addEventListener('input', updateItem);
-        
-        removeBtn.addEventListener('click', function() {
-            lineItems = lineItems.filter(i => i.id !== id);
-            itemEl.remove();
+        lineItemsData.value = JSON.stringify(items);
+    }
+    
+    window.removeItem = function(id) {
+        const item = lineItemsList.querySelector(`[data-id="${id}"]`);
+        if (item) {
+            item.remove();
             updateTotals();
-        });
-        
-        lineItemsList.appendChild(itemEl);
-        updateTotals();
-    }
-    
-    addItemBtn.addEventListener('click', () => createLineItem());
-    
-    if (taxRateInput) {
-        taxRateInput.addEventListener('input', updateTotals);
-    }
-    
-    if (currencySelect) {
-        currencySelect.addEventListener('change', function() {
-            document.querySelectorAll('.line-item').forEach(item => {
-                const id = parseInt(item.dataset.id);
-                const itemData = lineItems.find(i => i.id === id);
-                if (itemData) {
-                    item.querySelector('.line-item-total').textContent = 
-                        formatCurrency(itemData.quantity * itemData.unit_price);
-                }
-            });
-            updateTotals();
-        });
-    }
-    
-    // Load existing line items from server data
-    try {
-        const existingItemsScript = document.getElementById('existing-line-items');
-        const existingItems = existingItemsScript ? JSON.parse(existingItemsScript.textContent || '[]') : [];
-        if (existingItems.length > 0) {
-            existingItems.forEach(item => createLineItem(item));
-        } else {
-            createLineItem();
         }
-    } catch (e) {
-        console.error('Error parsing line items:', e);
-        createLineItem();
-    }
+    };
     
-    const mobileToggle = document.querySelector('.mobile-menu-toggle');
-    const sidebar = document.querySelector('.app-sidebar');
+    addItemBtn.addEventListener('click', function() {
+        const item = createLineItem(itemId++);
+        lineItemsList.appendChild(item);
+    });
     
-    if (mobileToggle && sidebar) {
-        mobileToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('open');
-        });
+    taxRateInput.addEventListener('input', updateTotals);
+    
+    const existingItems = document.getElementById('existing-line-items');
+    if (existingItems) {
+        try {
+            const items = JSON.parse(existingItems.textContent);
+            if (items && items.length > 0) {
+                items.forEach(itemData => {
+                    const item = createLineItem(itemId++, itemData);
+                    lineItemsList.appendChild(item);
+                    updateItemTotal(item);
+                });
+                updateTotals();
+            } else {
+                addItemBtn.click();
+            }
+        } catch (e) {
+            addItemBtn.click();
+        }
+    } else {
+        addItemBtn.click();
     }
 });
-    </script>
+</script>
 {% endblock %}
