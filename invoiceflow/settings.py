@@ -131,6 +131,7 @@ else:
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
+    X_FRAME_OPTIONS = "SAMEORIGIN"  # Allow iframe embedding in Replit
 
 # =============================================================================
 # INSTALLED APPS
@@ -439,39 +440,77 @@ LOGGING = {
 # =============================================================================
 # CONTENT SECURITY POLICY
 # =============================================================================
-CONTENT_SECURITY_POLICY = {
-    "DIRECTIVES": {
-        "default-src": ("'self'",),
-        "script-src": (
-            "'self'",
-            "https://fonts.googleapis.com",
-            "https://js.hcaptcha.com",
-            "https://cdn.jsdelivr.net",
-        ),
-        "style-src": (
-            "'self'",
-            "'unsafe-inline'",
-            "https://fonts.googleapis.com",
-            "https://hcaptcha.com",
-        ),
-        "img-src": ("'self'", "data:", "https:", "https://ui-avatars.com"),
-        "font-src": ("'self'", "https://fonts.gstatic.com", "data:"),
-        "connect-src": (
-            "'self'",
-            PRODUCTION_URL,
-            "https://hcaptcha.com",
-            "https://api.hcaptcha.com",
-        ),
-        "frame-src": ("https://hcaptcha.com", "https://newassets.hcaptcha.com"),
-        "frame-ancestors": ("'none'",),
-        "base-uri": ("'self'",),
-        "form-action": ("'self'",),
-        "object-src": ("'none'",),
-        "upgrade-insecure-requests": True,
-        "block-all-mixed-content": True,
-    },
-    "INCLUDE_NONCE_IN": ["script-src"],
-}
+if IS_PRODUCTION:
+    # Production: Strict CSP with nonces
+    CONTENT_SECURITY_POLICY = {
+        "DIRECTIVES": {
+            "default-src": ("'self'",),
+            "script-src": (
+                "'self'",
+                "https://fonts.googleapis.com",
+                "https://js.hcaptcha.com",
+                "https://cdn.jsdelivr.net",
+            ),
+            "style-src": (
+                "'self'",
+                "'unsafe-inline'",
+                "https://fonts.googleapis.com",
+                "https://hcaptcha.com",
+            ),
+            "img-src": ("'self'", "data:", "https:", "https://ui-avatars.com"),
+            "font-src": ("'self'", "https://fonts.gstatic.com", "data:"),
+            "connect-src": (
+                "'self'",
+                PRODUCTION_URL,
+                "https://hcaptcha.com",
+                "https://api.hcaptcha.com",
+            ),
+            "frame-src": ("https://hcaptcha.com", "https://newassets.hcaptcha.com"),
+            "frame-ancestors": ("'none'",),
+            "base-uri": ("'self'",),
+            "form-action": ("'self'",),
+            "object-src": ("'none'",),
+            "upgrade-insecure-requests": True,
+            "block-all-mixed-content": True,
+        },
+        "INCLUDE_NONCE_IN": ["script-src"],
+    }
+else:
+    # Development: More permissive CSP for Replit iframe environment
+    CONTENT_SECURITY_POLICY = {
+        "DIRECTIVES": {
+            "default-src": ("'self'",),
+            "script-src": (
+                "'self'",
+                "'unsafe-inline'",
+                "https://fonts.googleapis.com",
+                "https://js.hcaptcha.com",
+                "https://cdn.jsdelivr.net",
+            ),
+            "style-src": (
+                "'self'",
+                "'unsafe-inline'",
+                "https://fonts.googleapis.com",
+                "https://hcaptcha.com",
+            ),
+            "img-src": ("'self'", "data:", "https:", "https://ui-avatars.com"),
+            "font-src": ("'self'", "https://fonts.gstatic.com", "data:"),
+            "connect-src": (
+                "'self'",
+                PRODUCTION_URL,
+                "https://*.replit.dev",
+                "https://*.repl.co",
+                "https://hcaptcha.com",
+                "https://api.hcaptcha.com",
+            ),
+            "frame-src": ("https://hcaptcha.com", "https://newassets.hcaptcha.com", "'self'"),
+            "frame-ancestors": ("'self'", "https://*.replit.dev", "https://*.repl.co"),
+            "base-uri": ("'self'",),
+            "form-action": ("'self'",),
+            "object-src": ("'none'",),
+        },
+        "INCLUDE_NONCE_IN": ["script-src"],
+    }
 
 # =============================================================================
 # RATE LIMITING
