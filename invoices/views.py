@@ -744,12 +744,12 @@ Thank you for your business! 🙏
 
 def features(request):
     """Features page showcasing platform capabilities."""
-    return render(request, "pages/features.html")
+    return render(request, "pages/features-light.html")
 
 
 def pricing(request):
-    """Pricing page with subscription plans."""
-    return render(request, "pages/pricing.html")
+    """Free platform - no pricing tiers needed."""
+    return render(request, "pages/pricing-light.html")
 
 
 def templates_page(request):
@@ -764,7 +764,7 @@ def api_access(request):
 
 def about(request):
     """About Us page - company story and values."""
-    return render(request, "pages/about.html")
+    return render(request, "pages/about-light.html")
 
 
 def careers(request):
@@ -805,7 +805,7 @@ def contact(request):
             )
             logger.warning(f"Contact form rate limit exceeded for IP: {client_ip}")
             return render(
-                request, "pages/contact.html", {"form": ContactForm(), "rate_limited": True}
+                request, "pages/contact-light.html", {"form": ContactForm(), "rate_limited": True}
             )
 
         form = ContactForm(request.POST)
@@ -897,7 +897,7 @@ Submitted: {submission.submitted_at}
 
     return render(
         request,
-        "pages/contact.html",
+        "pages/contact-light.html",
         {
             "form": form,
             "hcaptcha_enabled": getattr(settings, "HCAPTCHA_ENABLED", False),

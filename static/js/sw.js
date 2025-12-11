@@ -3,7 +3,7 @@
  * Offline support and caching strategies
  */
 
-const CACHE_VERSION = 'v1.0.0';
+const CACHE_VERSION = 'v2.0.0';
 const STATIC_CACHE = `invoiceflow-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `invoiceflow-dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `invoiceflow-images-${CACHE_VERSION}`;

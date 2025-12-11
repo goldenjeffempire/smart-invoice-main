@@ -1,6 +1,6 @@
 {% extends "base/layout.html" %}
 {% load static %}
-{% block title %}Billing Settings{% endblock %}
+{% block title %}Account Settings{% endblock %}
 {% block body_class %}dashboard-light-page{% endblock %}
 
 {% block extra_css %}
@@ -66,7 +66,7 @@
                                 <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
                                 <line x1="1" y1="10" x2="23" y2="10"/>
                             </svg>
-                            Billing
+                            Account
                         </a>
                     </li>
                 </ul>
@@ -74,62 +74,72 @@
             
             <div class="settings-light-content">
                 <div class="settings-light-section">
-                    <h2 class="settings-light-section-title">Current Plan</h2>
-                    <p class="settings-light-section-description">Manage your subscription and billing</p>
+                    <h2 class="settings-light-section-title">Your Plan</h2>
+                    <p class="settings-light-section-description">InvoiceFlow is completely free for everyone</p>
                     
-                    <div style="padding: 24px; background: var(--light-primary-light); border: 2px solid var(--light-primary); border-radius: var(--light-radius-xl); margin-bottom: 24px;">
-                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
-                            <div>
-                                <span style="display: inline-block; padding: 4px 12px; background: var(--light-primary); color: white; font-size: 0.75rem; font-weight: 600; border-radius: 999px; margin-bottom: 8px;">Active</span>
-                                <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--light-text-primary); margin: 0 0 4px 0;">Free Plan</h3>
-                                <p style="font-size: 0.9375rem; color: var(--light-text-secondary); margin: 0;">5 invoices per month</p>
+                    <div style="padding: 24px; background: linear-gradient(135deg, var(--light-success-light) 0%, #ecfdf5 100%); border: 2px solid var(--light-success); border-radius: var(--light-radius-xl); margin-bottom: 24px;">
+                        <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+                            <div style="width: 56px; height: 56px; background: var(--light-success); border-radius: var(--light-radius-lg); display: flex; align-items: center; justify-content: center;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" style="width: 28px; height: 28px;">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
                             </div>
-                            <a href="{% url 'pricing' %}" class="btn-light-primary">View Plans</a>
+                            <div style="flex: 1;">
+                                <span style="display: inline-block; padding: 4px 12px; background: var(--light-success); color: white; font-size: 0.75rem; font-weight: 600; border-radius: 999px; margin-bottom: 8px;">Free Forever</span>
+                                <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--light-text-primary); margin: 0 0 4px 0;">Full Access Plan</h3>
+                                <p style="font-size: 0.9375rem; color: var(--light-text-secondary); margin: 0;">Unlimited invoices, all features included</p>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="alert-light alert-warning" style="margin-bottom: 0;">
-                        <div class="alert-light-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                                <line x1="12" y1="9" x2="12" y2="13"/>
-                                <line x1="12" y1="17" x2="12.01" y2="17"/>
-                            </svg>
-                        </div>
-                        <div class="alert-light-content">
-                            <div class="alert-light-title">Coming Soon</div>
-                            <div class="alert-light-message">Paid plan upgrades with online payment will be available shortly. <a href="{% url 'contact' %}" style="color: inherit; text-decoration: underline;">Contact us</a> for enterprise inquiries.</div>
+                    <div class="card-light" style="padding: 24px;">
+                        <h4 style="font-size: 1rem; font-weight: 600; color: var(--light-text-primary); margin: 0 0 16px 0;">What's included:</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--light-success)" stroke-width="2.5" style="width: 16px; height: 16px; flex-shrink: 0;"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span style="font-size: 0.875rem; color: var(--light-text-secondary);">Unlimited invoices</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--light-success)" stroke-width="2.5" style="width: 16px; height: 16px; flex-shrink: 0;"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span style="font-size: 0.875rem; color: var(--light-text-secondary);">All templates</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--light-success)" stroke-width="2.5" style="width: 16px; height: 16px; flex-shrink: 0;"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span style="font-size: 0.875rem; color: var(--light-text-secondary);">Analytics dashboard</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--light-success)" stroke-width="2.5" style="width: 16px; height: 16px; flex-shrink: 0;"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span style="font-size: 0.875rem; color: var(--light-text-secondary);">Recurring invoices</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--light-success)" stroke-width="2.5" style="width: 16px; height: 16px; flex-shrink: 0;"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span style="font-size: 0.875rem; color: var(--light-text-secondary);">Email delivery</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--light-success)" stroke-width="2.5" style="width: 16px; height: 16px; flex-shrink: 0;"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span style="font-size: 0.875rem; color: var(--light-text-secondary);">PDF export</span>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="settings-light-section">
-                    <h2 class="settings-light-section-title">Usage This Month</h2>
-                    <p class="settings-light-section-description">Track your current usage</p>
+                    <h2 class="settings-light-section-title">Your Usage</h2>
+                    <p class="settings-light-section-description">Track your invoicing activity</p>
                     
-                    <div style="margin-top: 16px;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                            <span style="font-size: 0.9375rem; color: var(--light-text-secondary);">Invoices Created</span>
-                            <span style="font-size: 0.9375rem; font-weight: 600; color: var(--light-text-primary);">{{ invoices_this_month|default:0 }} / 5</span>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-top: 16px;">
+                        <div class="card-light" style="padding: 20px; text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--light-primary);">{{ total_invoices|default:0 }}</div>
+                            <div style="font-size: 0.875rem; color: var(--light-text-tertiary);">Total Invoices</div>
                         </div>
-                        <div style="width: 100%; height: 12px; background: var(--light-bg-tertiary); border-radius: 999px; overflow: hidden;">
-                            <div style="height: 100%; background: linear-gradient(90deg, var(--light-primary) 0%, var(--light-accent) 100%); border-radius: 999px; width: {% widthratio invoices_this_month|default:0 5 100 %}%;"></div>
+                        <div class="card-light" style="padding: 20px; text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--light-success);">{{ paid_invoices|default:0 }}</div>
+                            <div style="font-size: 0.875rem; color: var(--light-text-tertiary);">Paid</div>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="settings-light-section">
-                    <h2 class="settings-light-section-title">Billing History</h2>
-                    <p class="settings-light-section-description">View your past invoices and payments</p>
-                    
-                    <div class="empty-light-state" style="padding: 32px; text-align: center;">
-                        <div class="empty-light-icon" style="margin: 0 auto 16px;">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 40px; height: 40px;">
-                                <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                            </svg>
+                        <div class="card-light" style="padding: 20px; text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--light-warning);">{{ pending_invoices|default:0 }}</div>
+                            <div style="font-size: 0.875rem; color: var(--light-text-tertiary);">Pending</div>
                         </div>
-                        <p style="color: var(--light-text-tertiary); margin: 0 0 4px 0;">No billing history available</p>
-                        <p style="font-size: 0.875rem; color: var(--light-text-muted); margin: 0;">Upgrade to a paid plan to see your invoices here</p>
                     </div>
                 </div>
             </div>
