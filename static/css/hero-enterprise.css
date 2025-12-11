@@ -673,28 +673,6 @@
 }
 
 /* ============================================
-   DARK MODE SUPPORT
-   ============================================ */
-@media (prefers-color-scheme: dark) {
-  .hero-enterprise .hero-description {
-    color: var(--color-slate-400, #94a3b8);
-  }
-
-  .hero-social-proof {
-    border-top-color: rgba(148, 163, 184, 0.15);
-  }
-
-  .trust-bar-label,
-  .hero-stat-label {
-    color: var(--color-slate-500, #64748b);
-  }
-
-  .trust-logo {
-    color: var(--color-slate-500, #64748b);
-  }
-}
-
-/* ============================================
    PRINT STYLES
    ============================================ */
 @media print {
