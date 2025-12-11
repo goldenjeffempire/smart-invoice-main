@@ -38,7 +38,7 @@ def get_client_ip(request):
 
 def home(request):
     """Render the public landing page."""
-    return render(request, "pages/home.html")
+    return render(request, "pages/home-light.html")
 
 
 def signup(request):

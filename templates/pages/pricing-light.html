@@ -1,0 +1,162 @@
+{% extends "base/layout-light.html" %}
+{% load static %}
+
+{% block title %}Pricing{% endblock %}
+
+{% block meta_description %}
+Simple, transparent pricing for InvoiceFlow. Choose the plan that fits your business - from free forever to enterprise solutions.
+{% endblock %}
+
+{% block content %}
+<section class="hero-light" style="padding-bottom: 80px;">
+    <div class="hero-light-bg" aria-hidden="true">
+        <div class="hero-light-pattern"></div>
+        <div class="hero-light-gradient-1"></div>
+    </div>
+    
+    <div class="section-light-container" style="position: relative; z-index: 1;">
+        <div class="section-light-header" style="padding-top: 40px;">
+            <span class="section-light-label">Pricing</span>
+            <h1 class="section-light-title">Simple, Transparent Pricing</h1>
+            <p class="section-light-subtitle">
+                Choose the plan that fits your business. No hidden fees. Cancel anytime.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="section-light" aria-label="Pricing plans">
+    <div class="section-light-container">
+        <div class="pricing-light-grid">
+            <div class="pricing-light-card">
+                <div class="pricing-light-header">
+                    <h3 class="pricing-light-name">Free</h3>
+                    <p class="pricing-light-description">Perfect for getting started</p>
+                    <div class="pricing-light-price">
+                        <span class="pricing-light-currency">$</span>
+                        <span class="pricing-light-amount">0</span>
+                        <span class="pricing-light-period">/month</span>
+                    </div>
+                </div>
+                <ul class="pricing-light-features">
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        Up to 5 invoices/month
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        1 user
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        Basic templates
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        Email support
+                    </li>
+                </ul>
+                <a href="{% url 'signup' %}" class="pricing-light-btn pricing-light-btn-outline">Get Started Free</a>
+            </div>
+            
+            <div class="pricing-light-card featured">
+                <span class="pricing-light-badge">Most Popular</span>
+                <div class="pricing-light-header">
+                    <h3 class="pricing-light-name">Pro</h3>
+                    <p class="pricing-light-description">For growing businesses</p>
+                    <div class="pricing-light-price">
+                        <span class="pricing-light-currency">$</span>
+                        <span class="pricing-light-amount">19</span>
+                        <span class="pricing-light-period">/month</span>
+                    </div>
+                </div>
+                <ul class="pricing-light-features">
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        Unlimited invoices
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        Up to 5 team members
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        All premium templates
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        Recurring invoices
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        Analytics dashboard
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        Priority support
+                    </li>
+                </ul>
+                <a href="{% url 'signup' %}" class="pricing-light-btn pricing-light-btn-primary">Start Free Trial</a>
+            </div>
+            
+            <div class="pricing-light-card">
+                <div class="pricing-light-header">
+                    <h3 class="pricing-light-name">Enterprise</h3>
+                    <p class="pricing-light-description">For large organizations</p>
+                    <div class="pricing-light-price">
+                        <span class="pricing-light-currency">$</span>
+                        <span class="pricing-light-amount">49</span>
+                        <span class="pricing-light-period">/month</span>
+                    </div>
+                </div>
+                <ul class="pricing-light-features">
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        Everything in Pro
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        Unlimited team members
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        Custom branding
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        API access
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        Dedicated account manager
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        24/7 phone support
+                    </li>
+                </ul>
+                <a href="{% url 'contact' %}" class="pricing-light-btn pricing-light-btn-outline">Contact Sales</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-light" aria-label="Call to action">
+    <div class="cta-light-bg"></div>
+    <div class="cta-light-container">
+        <h2 class="cta-light-title">Have Questions?</h2>
+        <p class="cta-light-description">
+            Our team is here to help you choose the right plan for your business needs.
+        </p>
+        <div class="cta-light-buttons">
+            <a href="{% url 'contact' %}" class="cta-light-btn-primary">
+                Contact Us
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
