@@ -1,90 +1,281 @@
 {% extends "base/layout.html" %}
-{% block title %}Notification Settings - InvoiceFlow{% endblock %}
+{% load static %}
+{% block title %}Notification Settings{% endblock %}
+{% block body_class %}dashboard-light-page{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard-light.css' %}">
+<style>
+.toggle-light {
+    position: relative;
+    width: 48px;
+    height: 26px;
+    background: var(--light-border-secondary);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.toggle-light input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-light-slider {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-light input:checked + .toggle-light-slider {
+    transform: translateX(22px);
+}
+
+.toggle-light:has(input:checked) {
+    background: var(--light-primary);
+}
+
+.notification-item-light {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background: var(--light-bg-tertiary);
+    border-radius: var(--light-radius-lg);
+    margin-bottom: 12px;
+    transition: background 0.2s ease;
+}
+
+.notification-item-light:hover {
+    background: var(--light-bg-hover);
+}
+
+.notification-info-light h4 {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--light-text-primary);
+    margin: 0 0 4px 0;
+}
+
+.notification-info-light p {
+    font-size: 0.875rem;
+    color: var(--light-text-tertiary);
+    margin: 0;
+}
+
+.notification-group-light {
+    margin-bottom: 32px;
+}
+
+.notification-group-light h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--light-text-primary);
+    margin: 0 0 16px 0;
+}
+</style>
+{% endblock %}
+
+{% block nav %}{% endblock %}
+{% block footer %}{% endblock %}
+
 {% block content %}
-    <div class="min-h-screen bg-gray-50 py-8">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="mb-8">
-                <h1 class="text-3xl font-bold text-gray-900">Notification Settings</h1>
-                <p class="mt-2 text-gray-600">Control how and when you receive notifications.</p>
+<div class="dashboard-light">
+    {% include 'components/sidebar-light.html' with active='settings' %}
+    
+    <main class="dashboard-light-main">
+        <header class="dashboard-light-header">
+            <div class="dashboard-light-header-content">
+                <h1>Settings</h1>
+                <p>Manage your account preferences and business settings</p>
             </div>
-            {% include "components/settings-nav.html" with active="notifications" %}
-            <div class="bg-white shadow-lg rounded-2xl p-8">
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="space-y-8">
-                        <div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Invoice Notifications</h3>
-                            <div class="space-y-4">
-                                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
-                                    <div>
-                                        <p class="font-medium text-gray-900">Invoice Created</p>
-                                        <p class="text-sm text-gray-500">Get notified when a new invoice is created.</p>
-                                    </div>
-                                    {{ notification_form.notify_invoice_created }}
+        </header>
+        
+        <div class="settings-light-layout">
+            <nav class="settings-light-nav">
+                <ul class="settings-light-nav-list">
+                    <li>
+                        <a href="{% url 'settings' %}" class="settings-light-nav-link">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'settings_business' %}" class="settings-light-nav-link">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
+                            Business
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'settings_security' %}" class="settings-light-nav-link">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            Security
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'settings_notifications' %}" class="settings-light-nav-link active">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                            </svg>
+                            Notifications
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'settings_billing' %}" class="settings-light-nav-link">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                                <line x1="1" y1="10" x2="23" y2="10"/>
+                            </svg>
+                            Billing
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="settings-light-content">
+                <div class="settings-light-section">
+                    <h2 class="settings-light-section-title">Notification Preferences</h2>
+                    <p class="settings-light-section-description">Control how and when you receive notifications</p>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="notification-group-light">
+                            <h3>Invoice Notifications</h3>
+                            
+                            <div class="notification-item-light">
+                                <div class="notification-info-light">
+                                    <h4>Invoice Created</h4>
+                                    <p>Get notified when a new invoice is created</p>
+                                </div>
+                                <label class="toggle-light">
+                                    <input type="checkbox" name="notify_invoice_created" {% if notification_form.notify_invoice_created.value %}checked{% endif %}>
+                                    <span class="toggle-light-slider"></span>
                                 </label>
-                                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
-                                    <div>
-                                        <p class="font-medium text-gray-900">Payment Received</p>
-                                        <p class="text-sm text-gray-500">Get notified when a payment is received.</p>
-                                    </div>
-                                    {{ notification_form.notify_payment_received }}
+                            </div>
+                            
+                            <div class="notification-item-light">
+                                <div class="notification-info-light">
+                                    <h4>Payment Received</h4>
+                                    <p>Get notified when a payment is received</p>
+                                </div>
+                                <label class="toggle-light">
+                                    <input type="checkbox" name="notify_payment_received" {% if notification_form.notify_payment_received.value %}checked{% endif %}>
+                                    <span class="toggle-light-slider"></span>
                                 </label>
-                                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
-                                    <div>
-                                        <p class="font-medium text-gray-900">Invoice Viewed</p>
-                                        <p class="text-sm text-gray-500">Get notified when a client views your invoice.</p>
-                                    </div>
-                                    {{ notification_form.notify_invoice_viewed }}
+                            </div>
+                            
+                            <div class="notification-item-light">
+                                <div class="notification-info-light">
+                                    <h4>Invoice Viewed</h4>
+                                    <p>Get notified when a client views your invoice</p>
+                                </div>
+                                <label class="toggle-light">
+                                    <input type="checkbox" name="notify_invoice_viewed" {% if notification_form.notify_invoice_viewed.value %}checked{% endif %}>
+                                    <span class="toggle-light-slider"></span>
                                 </label>
-                                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
-                                    <div>
-                                        <p class="font-medium text-gray-900">Invoice Overdue</p>
-                                        <p class="text-sm text-gray-500">Get notified when an invoice becomes overdue.</p>
-                                    </div>
-                                    {{ notification_form.notify_invoice_overdue }}
+                            </div>
+                            
+                            <div class="notification-item-light">
+                                <div class="notification-info-light">
+                                    <h4>Invoice Overdue</h4>
+                                    <p>Get notified when an invoice becomes overdue</p>
+                                </div>
+                                <label class="toggle-light">
+                                    <input type="checkbox" name="notify_invoice_overdue" {% if notification_form.notify_invoice_overdue.value %}checked{% endif %}>
+                                    <span class="toggle-light-slider"></span>
                                 </label>
                             </div>
                         </div>
-                        <div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Summary & Reports</h3>
-                            <div class="space-y-4">
-                                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
-                                    <div>
-                                        <p class="font-medium text-gray-900">Weekly Summary</p>
-                                        <p class="text-sm text-gray-500">Receive a weekly summary of your invoicing activity.</p>
-                                    </div>
-                                    {{ notification_form.notify_weekly_summary }}
+                        
+                        <div class="notification-group-light">
+                            <h3>Summary & Reports</h3>
+                            
+                            <div class="notification-item-light">
+                                <div class="notification-info-light">
+                                    <h4>Weekly Summary</h4>
+                                    <p>Receive a weekly summary of your invoicing activity</p>
+                                </div>
+                                <label class="toggle-light">
+                                    <input type="checkbox" name="notify_weekly_summary" {% if notification_form.notify_weekly_summary.value %}checked{% endif %}>
+                                    <span class="toggle-light-slider"></span>
                                 </label>
                             </div>
                         </div>
-                        <div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Security Alerts</h3>
-                            <div class="space-y-4">
-                                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
-                                    <div>
-                                        <p class="font-medium text-gray-900">Security Alerts</p>
-                                        <p class="text-sm text-gray-500">Get notified about security-related events.</p>
-                                    </div>
-                                    {{ notification_form.notify_security_alerts }}
+                        
+                        <div class="notification-group-light">
+                            <h3>Security Alerts</h3>
+                            
+                            <div class="notification-item-light">
+                                <div class="notification-info-light">
+                                    <h4>Security Alerts</h4>
+                                    <p>Get notified about security-related events</p>
+                                </div>
+                                <label class="toggle-light">
+                                    <input type="checkbox" name="notify_security_alerts" {% if notification_form.notify_security_alerts.value %}checked{% endif %}>
+                                    <span class="toggle-light-slider"></span>
                                 </label>
-                                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
-                                    <div>
-                                        <p class="font-medium text-gray-900">Password Changes</p>
-                                        <p class="text-sm text-gray-500">Get notified when your password is changed.</p>
-                                    </div>
-                                    {{ notification_form.notify_password_changes }}
+                            </div>
+                            
+                            <div class="notification-item-light">
+                                <div class="notification-info-light">
+                                    <h4>Password Changes</h4>
+                                    <p>Get notified when your password is changed</p>
+                                </div>
+                                <label class="toggle-light">
+                                    <input type="checkbox" name="notify_password_changes" {% if notification_form.notify_password_changes.value %}checked{% endif %}>
+                                    <span class="toggle-light-slider"></span>
                                 </label>
                             </div>
                         </div>
-                    </div>
-                    <div class="mt-8 flex justify-end">
-                        <button type="submit"
-                                class="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
-                            Save Preferences
-                        </button>
-                    </div>
-                </form>
+                        
+                        <div style="margin-top: 32px; display: flex; justify-content: flex-end;">
+                            <button type="submit" class="btn-light-primary">Save Preferences</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script nonce="{{ request.csp_nonce }}">
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const sidebar = document.getElementById('dashboard-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        });
+    }
+    
+    if (overlay) {
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+    }
+});
+</script>
 {% endblock %}

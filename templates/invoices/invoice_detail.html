@@ -1,922 +1,584 @@
 {% extends "base/layout.html" %}
-{% block title %}Invoice {{ invoice.invoice_id }} - InvoiceFlow{% endblock %}
-{% block body_class %}app-page{% endblock %}
+{% load static %}
+{% block title %}Invoice {{ invoice.invoice_id }}{% endblock %}
+{% block body_class %}dashboard-light-page{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard-light.css' %}">
+<style>
+.invoice-detail-light {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 32px;
+}
+
+@media (max-width: 1024px) {
+    .invoice-detail-light {
+        grid-template-columns: 1fr;
+    }
+}
+
+.invoice-preview-light {
+    background: var(--light-bg-secondary);
+    border-radius: var(--light-radius-xl);
+    border: 1px solid var(--light-border-primary);
+    padding: 32px;
+}
+
+.invoice-meta-light {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--light-border-primary);
+}
+
+.meta-item-light {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.meta-label-light {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--light-text-tertiary);
+}
+
+.meta-value-light {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--light-text-primary);
+}
+
+.meta-value-light.overdue {
+    color: var(--light-danger);
+}
+
+.invoice-parties-light {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 32px;
+}
+
+@media (max-width: 768px) {
+    .invoice-parties-light {
+        grid-template-columns: 1fr;
+    }
+}
+
+.party-card-light {
+    padding: 20px;
+    background: var(--light-bg-tertiary);
+    border-radius: var(--light-radius-lg);
+}
+
+.party-header-light {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.party-icon-light {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--light-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.party-icon-light svg {
+    width: 20px;
+    height: 20px;
+}
+
+.party-icon-light.from {
+    background: var(--light-primary-light);
+}
+
+.party-icon-light.from svg {
+    stroke: var(--light-primary);
+}
+
+.party-icon-light.to {
+    background: var(--light-success-light);
+}
+
+.party-icon-light.to svg {
+    stroke: var(--light-success);
+}
+
+.party-label-light {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--light-text-tertiary);
+}
+
+.party-name-light {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--light-text-primary);
+    margin: 0 0 8px 0;
+}
+
+.party-detail-light {
+    font-size: 0.875rem;
+    color: var(--light-text-secondary);
+    margin: 0 0 4px 0;
+}
+
+.party-arrow-light {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--light-text-muted);
+}
+
+.party-arrow-light svg {
+    width: 24px;
+    height: 24px;
+}
+
+@media (max-width: 768px) {
+    .party-arrow-light {
+        transform: rotate(90deg);
+        margin: 8px 0;
+    }
+}
+
+.items-section-light {
+    margin-bottom: 24px;
+}
+
+.items-title-light {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--light-text-primary);
+    margin: 0 0 16px 0;
+}
+
+.items-table-light {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.items-table-light th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--light-text-tertiary);
+    background: var(--light-bg-tertiary);
+    border-bottom: 1px solid var(--light-border-primary);
+}
+
+.items-table-light th:last-child {
+    text-align: right;
+}
+
+.items-table-light td {
+    padding: 16px;
+    font-size: 0.9375rem;
+    color: var(--light-text-secondary);
+    border-bottom: 1px solid var(--light-border-primary);
+}
+
+.items-table-light td:first-child {
+    font-weight: 500;
+    color: var(--light-text-primary);
+}
+
+.items-table-light td:last-child {
+    text-align: right;
+    font-weight: 600;
+}
+
+.invoice-summary-light {
+    padding: 24px;
+    background: var(--light-bg-tertiary);
+    border-radius: var(--light-radius-lg);
+    margin-bottom: 24px;
+}
+
+.summary-row-light {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 0.9375rem;
+}
+
+.summary-row-light.total {
+    border-top: 2px solid var(--light-border-primary);
+    margin-top: 8px;
+    padding-top: 16px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--light-text-primary);
+}
+
+.invoice-notes-light {
+    padding: 20px;
+    background: var(--light-bg-tertiary);
+    border-radius: var(--light-radius-lg);
+}
+
+.notes-title-light {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--light-text-primary);
+    margin: 0 0 12px 0;
+}
+
+.notes-content-light {
+    font-size: 0.9375rem;
+    color: var(--light-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.invoice-actions-light {
+    background: var(--light-bg-secondary);
+    border-radius: var(--light-radius-xl);
+    border: 1px solid var(--light-border-primary);
+    padding: 24px;
+    height: fit-content;
+    position: sticky;
+    top: 24px;
+}
+
+.actions-title-light {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--light-text-primary);
+    margin: 0 0 20px 0;
+}
+
+.status-card-light {
+    padding: 16px;
+    background: var(--light-bg-tertiary);
+    border-radius: var(--light-radius-lg);
+    margin-bottom: 20px;
+}
+
+.status-label-light {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--light-text-tertiary);
+    margin-bottom: 8px;
+}
+
+.status-value-light {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.status-value-light.paid {
+    color: var(--light-success);
+}
+
+.status-value-light.unpaid {
+    color: var(--light-warning);
+}
+
+.status-value-light.overdue {
+    color: var(--light-danger);
+}
+
+.actions-list-light {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.status-form-light {
+    padding: 16px;
+    background: var(--light-bg-tertiary);
+    border-radius: var(--light-radius-lg);
+    margin-bottom: 20px;
+}
+
+.status-form-light label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--light-text-tertiary);
+    margin-bottom: 8px;
+}
+
+.status-form-light select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 0.875rem;
+    border: 1px solid var(--light-border-primary);
+    border-radius: var(--light-radius-md);
+    background: var(--light-bg-secondary);
+    margin-bottom: 12px;
+}
+
+.back-light-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: var(--light-text-secondary);
+    text-decoration: none;
+    margin-bottom: 16px;
+}
+
+.back-light-link:hover {
+    color: var(--light-primary);
+}
+
+.back-light-link svg {
+    width: 16px;
+    height: 16px;
+}
+
+.invoice-header-light {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+</style>
+{% endblock %}
+
 {% block nav %}{% endblock %}
 {% block footer %}{% endblock %}
+
 {% block content %}
-    <div class="app-layout">
-        <aside class="app-sidebar">
-            <div class="sidebar-header">
-                <a href="{% url 'home' %}" class="nav-logo">
-                    <div class="nav-logo-icon">
-                        <svg viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="2"
-                             stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                            <polyline points="14 2 14 8 20 8" />
-                            <line x1="16" y1="13" x2="8" y2="13" />
-                            <line x1="16" y1="17" x2="8" y2="17" />
-                        </svg>
-                    </div>
-                    <span class="nav-logo-text">InvoiceFlow</span>
-                </a>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="{% url 'dashboard' %}" class="sidebar-link">
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2">
-                        <rect x="3" y="3" width="7" height="7" />
-                        <rect x="14" y="3" width="7" height="7" />
-                        <rect x="14" y="14" width="7" height="7" />
-                        <rect x="3" y="14" width="7" height="7" />
-                    </svg>
-                    Dashboard
-                </a>
-                <a href="{% url 'create_invoice' %}" class="sidebar-link">
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2">
-                        <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="8" x2="12" y2="16" />
-                        <line x1="8" y1="12" x2="16" y2="12" />
-                    </svg>
-                    New Invoice
-                </a>
-                <a href="{% url 'analytics' %}" class="sidebar-link">
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2">
-                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-                    </svg>
-                    Analytics
-                </a>
-                <a href="{% url 'settings' %}" class="sidebar-link">
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2">
-                        <circle cx="12" cy="12" r="3" />
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-                    </svg>
-                    Settings
-                </a>
-            </nav>
-            <div class="sidebar-footer">
-                <a href="{% url 'logout' %}" class="sidebar-link">
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                        <polyline points="16 17 21 12 16 7" />
-                        <line x1="21" y1="12" x2="9" y2="12" />
-                    </svg>
-                    Log out
-                </a>
-            </div>
-        </aside>
-        <button class="mobile-menu-toggle" aria-label="Toggle sidebar">
-            <svg viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="2">
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="18" x2="21" y2="18" />
+<div class="dashboard-light">
+    {% include 'components/sidebar-light.html' with active='invoices' %}
+    
+    <main class="dashboard-light-main">
+        <a href="{% url 'invoice_list' %}" class="back-light-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"/>
+                <polyline points="12 19 5 12 12 5"/>
             </svg>
-        </button>
-        <main class="app-main">
-            <header class="page-header">
-                <div class="page-header-top">
-                    <a href="{% url 'dashboard' %}" class="back-link">
-                        <svg viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="2">
-                            <line x1="19" y1="12" x2="5" y2="12" />
-                            <polyline points="12 19 5 12 12 5" />
-                        </svg>
-                        Back to Dashboard
-                    </a>
+            Back to Invoices
+        </a>
+        
+        <header class="dashboard-light-header">
+            <div class="dashboard-light-header-content">
+                <div class="invoice-header-light">
+                    <h1>{{ invoice.invoice_id }}</h1>
+                    <span class="badge-light badge-{{ invoice.status }}">{{ invoice.get_status_display }}</span>
                 </div>
-                <div class="page-header-content">
-                    <div class="page-header-info">
-                        <div class="invoice-id-wrapper">
-                            <h1 class="page-title">{{ invoice.invoice_id }}</h1>
-                            <span class="status-badge status-{{ invoice.status }}">{{ invoice.get_status_display }}</span>
-                        </div>
-                        <p class="page-subtitle">Created on {{ invoice.created_at|date:"F d, Y" }}</p>
+                <p>Created on {{ invoice.created_at|date:"F d, Y" }}</p>
+            </div>
+            <div class="dashboard-light-actions" style="display: flex; gap: 12px;">
+                <a href="{% url 'edit_invoice' invoice.id %}" class="btn-light-secondary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                    Edit
+                </a>
+                <a href="{% url 'generate_pdf' invoice.id %}" class="btn-light-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Download PDF
+                </a>
+            </div>
+        </header>
+        
+        <div class="invoice-detail-light">
+            <div class="invoice-preview-light">
+                <div class="invoice-meta-light">
+                    <div class="meta-item-light">
+                        <span class="meta-label-light">Invoice Date</span>
+                        <span class="meta-value-light">{{ invoice.invoice_date|date:"F d, Y" }}</span>
                     </div>
-                    <div class="page-header-actions">
-                        <a href="{% url 'edit_invoice' invoice.id %}" class="btn btn-secondary">
-                            <svg viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="2">
-                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                            </svg>
-                            Edit
-                        </a>
-                        <a href="{% url 'generate_pdf' invoice.id %}" class="btn btn-primary">
-                            <svg viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                <polyline points="7 10 12 15 17 10" />
-                                <line x1="12" y1="15" x2="12" y2="3" />
-                            </svg>
-                            Download PDF
-                        </a>
+                    <div class="meta-item-light">
+                        <span class="meta-label-light">Due Date</span>
+                        <span class="meta-value-light {% if invoice.is_overdue %}overdue{% endif %}">
+                            {{ invoice.due_date|date:"F d, Y" }}
+                            {% if invoice.is_overdue %}<span style="margin-left: 8px; padding: 2px 8px; background: var(--light-danger-light); color: var(--light-danger); border-radius: 999px; font-size: 0.75rem;">Overdue</span>{% endif %}
+                        </span>
                     </div>
-                </div>
-            </header>
-            <div class="invoice-detail glass-card">
-                <div class="invoice-meta">
-                    <div class="meta-row">
-                        <div class="meta-item">
-                            <span class="meta-label">Invoice Date</span>
-                            <span class="meta-value">{{ invoice.invoice_date|date:"F d, Y" }}</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">Due Date</span>
-                            <span class="meta-value {% if invoice.is_overdue %}overdue{% endif %}">
-                                {{ invoice.due_date|date:"F d, Y" }}
-                                {% if invoice.is_overdue %}<span class="overdue-badge">Overdue</span>{% endif %}
-                            </span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">Currency</span>
-                            <span class="meta-value">{{ invoice.currency }}</span>
-                        </div>
+                    <div class="meta-item-light">
+                        <span class="meta-label-light">Currency</span>
+                        <span class="meta-value-light">{{ invoice.currency }}</span>
                     </div>
                 </div>
-                <div class="invoice-parties">
-                    <div class="party-card">
-                        <div class="party-header">
-                            <div class="party-icon">
-                                <svg viewBox="0 0 24 24"
-                                     fill="none"
-                                     stroke="currentColor"
-                                     stroke-width="2">
-                                    <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                
+                <div class="invoice-parties-light">
+                    <div class="party-card-light">
+                        <div class="party-header-light">
+                            <div class="party-icon-light from">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                 </svg>
                             </div>
-                            <span class="party-label">From</span>
+                            <span class="party-label-light">From</span>
                         </div>
-                        <div class="party-content">
-                            <h3 class="party-name">{{ invoice.business_name }}</h3>
-                            {% if invoice.business_email %}<p class="party-detail">{{ invoice.business_email }}</p>{% endif %}
-                            {% if invoice.business_phone %}<p class="party-detail">{{ invoice.business_phone }}</p>{% endif %}
-                            {% if invoice.business_address %}
-                                <p class="party-detail party-address">{{ invoice.business_address|linebreaksbr }}</p>
-                            {% endif %}
-                        </div>
+                        <h3 class="party-name-light">{{ invoice.business_name }}</h3>
+                        {% if invoice.business_email %}<p class="party-detail-light">{{ invoice.business_email }}</p>{% endif %}
+                        {% if invoice.business_phone %}<p class="party-detail-light">{{ invoice.business_phone }}</p>{% endif %}
+                        {% if invoice.business_address %}<p class="party-detail-light">{{ invoice.business_address|linebreaksbr }}</p>{% endif %}
                     </div>
-                    <div class="party-arrow">
-                        <svg viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="2">
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                            <polyline points="12 5 19 12 12 19" />
+                    
+                    <div class="party-arrow-light">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <polyline points="12 5 19 12 12 19"/>
                         </svg>
                     </div>
-                    <div class="party-card">
-                        <div class="party-header">
-                            <div class="party-icon client">
-                                <svg viewBox="0 0 24 24"
-                                     fill="none"
-                                     stroke="currentColor"
-                                     stroke-width="2">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                    <circle cx="12" cy="7" r="4" />
+                    
+                    <div class="party-card-light">
+                        <div class="party-header-light">
+                            <div class="party-icon-light to">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
                                 </svg>
                             </div>
-                            <span class="party-label">To</span>
+                            <span class="party-label-light">To</span>
                         </div>
-                        <div class="party-content">
-                            <h3 class="party-name">{{ invoice.client_name }}</h3>
-                            {% if invoice.client_email %}<p class="party-detail">{{ invoice.client_email }}</p>{% endif %}
-                            {% if invoice.client_phone %}<p class="party-detail">{{ invoice.client_phone }}</p>{% endif %}
-                            {% if invoice.client_address %}
-                                <p class="party-detail party-address">{{ invoice.client_address|linebreaksbr }}</p>
-                            {% endif %}
-                        </div>
+                        <h3 class="party-name-light">{{ invoice.client_name }}</h3>
+                        {% if invoice.client_email %}<p class="party-detail-light">{{ invoice.client_email }}</p>{% endif %}
+                        {% if invoice.client_phone %}<p class="party-detail-light">{{ invoice.client_phone }}</p>{% endif %}
+                        {% if invoice.client_address %}<p class="party-detail-light">{{ invoice.client_address|linebreaksbr }}</p>{% endif %}
                     </div>
                 </div>
-                <div class="invoice-items">
-                    <h3 class="items-title">Line Items</h3>
-                    <div class="items-table">
-                        <div class="items-header">
-                            <span class="col-description">Description</span>
-                            <span class="col-quantity">Qty</span>
-                            <span class="col-price">Unit Price</span>
-                            <span class="col-total">Total</span>
-                        </div>
-                        <div class="items-body">
+                
+                <div class="items-section-light">
+                    <h3 class="items-title-light">Line Items</h3>
+                    <table class="items-table-light">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>Unit Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             {% for item in invoice.line_items.all %}
-                                <div class="item-row">
-                                    <span class="col-description">{{ item.description }}</span>
-                                    <span class="col-quantity">{{ item.quantity }}</span>
-                                    <span class="col-price">{{ invoice.currency }} {{ item.unit_price }}</span>
-                                    <span class="col-total">{{ invoice.currency }} {{ item.total }}</span>
-                                </div>
+                            <tr>
+                                <td>{{ item.description }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ invoice.currency }} {{ item.unit_price|floatformat:2 }}</td>
+                                <td>{{ invoice.currency }} {{ item.total|floatformat:2 }}</td>
+                            </tr>
                             {% empty %}
-                                <div class="item-row empty">
-                                    <span>No line items</span>
-                                </div>
+                            <tr>
+                                <td colspan="4" style="text-align: center; color: var(--light-text-muted);">No line items</td>
+                            </tr>
                             {% endfor %}
-                        </div>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="invoice-summary-light">
+                    <div class="summary-row-light">
+                        <span>Subtotal</span>
+                        <span>{{ invoice.currency }} {{ invoice.subtotal|floatformat:2 }}</span>
+                    </div>
+                    <div class="summary-row-light">
+                        <span>Tax ({{ invoice.tax_rate }}%)</span>
+                        <span>{{ invoice.currency }} {{ invoice.tax_amount|floatformat:2 }}</span>
+                    </div>
+                    <div class="summary-row-light total">
+                        <span>Total</span>
+                        <span>{{ invoice.currency }} {{ invoice.total|floatformat:2 }}</span>
                     </div>
                 </div>
-                <div class="invoice-summary">
-                    <div class="summary-row">
-                        <span class="summary-label">Subtotal</span>
-                        <span class="summary-value">{{ invoice.currency }} {{ invoice.subtotal }}</span>
-                    </div>
-                    <div class="summary-row">
-                        <span class="summary-label">Tax ({{ invoice.tax_rate }}%)</span>
-                        <span class="summary-value">{{ invoice.currency }} {{ invoice.tax_amount }}</span>
-                    </div>
-                    <div class="summary-row total">
-                        <span class="summary-label">Total</span>
-                        <span class="summary-value">{{ invoice.currency }} {{ invoice.total }}</span>
-                    </div>
-                </div>
+                
                 {% if invoice.notes %}
-                    <div class="invoice-notes">
-                        <h3 class="notes-title">Notes</h3>
-                        <p class="notes-content">{{ invoice.notes|linebreaksbr }}</p>
-                    </div>
+                <div class="invoice-notes-light">
+                    <h3 class="notes-title-light">Notes</h3>
+                    <p class="notes-content-light">{{ invoice.notes|linebreaksbr }}</p>
+                </div>
                 {% endif %}
             </div>
-            <div class="invoice-actions">
-                <form method="post"
-                      action="{% url 'update_invoice_status' invoice.id %}"
-                      class="status-form">
+            
+            <div class="invoice-actions-light">
+                <h3 class="actions-title-light">Actions</h3>
+                
+                <div class="status-card-light">
+                    <div class="status-label-light">Current Status</div>
+                    <div class="status-value-light {{ invoice.status }}">{{ invoice.get_status_display }}</div>
+                </div>
+                
+                <form method="post" action="{% url 'update_invoice_status' invoice.id %}" class="status-form-light">
                     {% csrf_token %}
-                    <label class="status-label">Update Status:</label>
-                    <select name="status" class="status-select">
+                    <label>Update Status</label>
+                    <select name="status">
                         <option value="unpaid" {% if invoice.status == 'unpaid' %}selected{% endif %}>Unpaid</option>
                         <option value="paid" {% if invoice.status == 'paid' %}selected{% endif %}>Paid</option>
                     </select>
-                    <button type="submit" class="btn btn-secondary btn-sm">Update</button>
+                    <button type="submit" class="btn-light-primary btn-light-block">Update Status</button>
                 </form>
-                <div class="action-links">
-                    <a href="{% url 'send_invoice_email' invoice.id %}" class="action-link">
-                        <svg viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                            <polyline points="22,6 12,13 2,6" />
+                
+                <div class="actions-list-light">
+                    <a href="{% url 'send_invoice_email' invoice.id %}" class="btn-light-secondary btn-light-block">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
                         </svg>
                         Send via Email
                     </a>
-                    <a href="{% url 'whatsapp_share' invoice.id %}"
-                       class="action-link"
-                       target="_blank">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    <a href="{% url 'whatsapp_share' invoice.id %}" target="_blank" class="btn-light-secondary btn-light-block">
+                        <svg viewBox="0 0 24 24" fill="currentColor" style="width: 18px; height: 18px;">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
                         </svg>
                         Share on WhatsApp
                     </a>
-                    <a href="{% url 'delete_invoice' invoice.id %}"
-                       class="action-link danger">
-                        <svg viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="2">
-                            <polyline points="3 6 5 6 21 6" />
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                            <line x1="10" y1="11" x2="10" y2="17" />
-                            <line x1="14" y1="11" x2="14" y2="17" />
+                    <a href="{% url 'delete_invoice' invoice.id %}" class="btn-light-danger btn-light-block">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                         </svg>
                         Delete Invoice
                     </a>
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
+</div>
 {% endblock %}
-{% block extra_css %}
-    <style>
-.app-page {
-    background: var(--gradient-dark);
-}
 
-.app-layout {
-    display: flex;
-    min-height: 100vh;
-}
-
-.app-sidebar {
-    width: 260px;
-    background: rgba(0, 0, 0, 0.3);
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    z-index: 100;
-    transition: transform var(--transition-base);
-}
-
-@media (max-width: 1024px) {
-    .app-sidebar {
-        transform: translateX(-100%);
-    }
-    
-    .app-sidebar.open {
-        transform: translateX(0);
-    }
-}
-
-.sidebar-header {
-    padding: var(--spacing-6);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.sidebar-nav {
-    flex: 1;
-    padding: var(--spacing-4);
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-1);
-}
-
-.sidebar-link {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-3);
-    padding: var(--spacing-3) var(--spacing-4);
-    border-radius: var(--radius-xl);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-neutral-400);
-    transition: all var(--transition-fast);
-}
-
-.sidebar-link svg {
-    width: 20px;
-    height: 20px;
-}
-
-.sidebar-link:hover {
-    color: var(--color-neutral-0);
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.sidebar-link.active {
-    color: var(--color-neutral-0);
-    background: var(--gradient-primary);
-}
-
-.sidebar-footer {
-    padding: var(--spacing-4);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.mobile-menu-toggle {
-    display: none;
-    position: fixed;
-    top: var(--spacing-4);
-    left: var(--spacing-4);
-    z-index: 150;
-    width: 44px;
-    height: 44px;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    border-radius: var(--radius-xl);
-    align-items: center;
-    justify-content: center;
-    color: var(--color-neutral-0);
-}
-
-.mobile-menu-toggle svg {
-    width: 24px;
-    height: 24px;
-}
-
-@media (max-width: 1024px) {
-    .mobile-menu-toggle {
-        display: flex;
-    }
-}
-
-.app-main {
-    flex: 1;
-    margin-left: 260px;
-    padding: var(--spacing-8);
-    max-width: 1000px;
-}
-
-@media (max-width: 1024px) {
-    .app-main {
-        margin-left: 0;
-        padding: var(--spacing-6);
-        padding-top: 80px;
-    }
-}
-
-.page-header {
-    margin-bottom: var(--spacing-8);
-}
-
-.page-header-top {
-    margin-bottom: var(--spacing-4);
-}
-
-.back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-2);
-    font-size: var(--font-size-sm);
-    color: var(--color-neutral-400);
-    transition: color var(--transition-fast);
-}
-
-.back-link:hover {
-    color: var(--color-neutral-0);
-}
-
-.back-link svg {
-    width: 16px;
-    height: 16px;
-}
-
-.page-header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: var(--spacing-4);
-    flex-wrap: wrap;
-}
-
-.invoice-id-wrapper {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-4);
-    flex-wrap: wrap;
-}
-
-.page-title {
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-neutral-0);
-}
-
-.status-badge {
-    display: inline-flex;
-    padding: var(--spacing-2) var(--spacing-4);
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-}
-
-.status-paid {
-    background: rgba(16, 185, 129, 0.15);
-    color: var(--color-accent-500);
-    border: 1px solid rgba(16, 185, 129, 0.3);
-}
-
-.status-unpaid {
-    background: rgba(245, 158, 11, 0.15);
-    color: var(--color-warning);
-    border: 1px solid rgba(245, 158, 11, 0.3);
-}
-
-.page-subtitle {
-    color: var(--color-neutral-400);
-    margin-top: var(--spacing-2);
-}
-
-.page-header-actions {
-    display: flex;
-    gap: var(--spacing-3);
-}
-
-@media (max-width: 640px) {
-    .page-header-actions {
-        width: 100%;
-    }
-    
-    .page-header-actions .btn {
-        flex: 1;
-    }
-}
-
-.page-header-actions .btn svg {
-    width: 18px;
-    height: 18px;
-}
-
-.invoice-detail {
-    padding: var(--spacing-8);
-}
-
-@media (max-width: 640px) {
-    .invoice-detail {
-        padding: var(--spacing-5);
-    }
-}
-
-.invoice-meta {
-    margin-bottom: var(--spacing-8);
-    padding-bottom: var(--spacing-6);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.meta-row {
-    display: flex;
-    gap: var(--spacing-8);
-    flex-wrap: wrap;
-}
-
-.meta-item {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-1);
-}
-
-.meta-label {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-neutral-400);
-    text-transform: uppercase;
-    letter-spacing: var(--letter-spacing-wide);
-}
-
-.meta-value {
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-neutral-0);
-}
-
-.meta-value.overdue {
-    color: var(--color-error);
-}
-
-.overdue-badge {
-    display: inline-flex;
-    margin-left: var(--spacing-2);
-    padding: 2px 8px;
-    font-size: var(--font-size-xs);
-    background: rgba(239, 68, 68, 0.15);
-    border-radius: var(--radius-full);
-}
-
-.invoice-parties {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    gap: var(--spacing-6);
-    align-items: center;
-    margin-bottom: var(--spacing-8);
-}
-
-@media (max-width: 768px) {
-    .invoice-parties {
-        grid-template-columns: 1fr;
-    }
-    
-    .party-arrow {
-        display: none;
-    }
-}
-
-.party-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: var(--radius-2xl);
-    padding: var(--spacing-5);
-}
-
-.party-header {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-3);
-    margin-bottom: var(--spacing-4);
-}
-
-.party-icon {
-    width: 40px;
-    height: 40px;
-    background: rgba(99, 102, 241, 0.1);
-    border-radius: var(--radius-xl);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-primary-400);
-}
-
-.party-icon.client {
-    background: rgba(16, 185, 129, 0.1);
-    color: var(--color-accent-500);
-}
-
-.party-icon svg {
-    width: 20px;
-    height: 20px;
-}
-
-.party-label {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-400);
-    text-transform: uppercase;
-    letter-spacing: var(--letter-spacing-wide);
-}
-
-.party-name {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-0);
-    margin-bottom: var(--spacing-2);
-}
-
-.party-detail {
-    font-size: var(--font-size-sm);
-    color: var(--color-neutral-400);
-    margin-bottom: var(--spacing-1);
-}
-
-.party-address {
-    margin-top: var(--spacing-2);
-    line-height: var(--line-height-relaxed);
-}
-
-.party-arrow {
-    color: var(--color-neutral-600);
-}
-
-.party-arrow svg {
-    width: 32px;
-    height: 32px;
-}
-
-.invoice-items {
-    margin-bottom: var(--spacing-8);
-}
-
-.items-title {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-0);
-    margin-bottom: var(--spacing-4);
-}
-
-.items-table {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: var(--radius-xl);
-    overflow: hidden;
-}
-
-.items-header {
-    display: grid;
-    grid-template-columns: 2fr 80px 120px 120px;
-    gap: var(--spacing-4);
-    padding: var(--spacing-4);
-    background: rgba(0, 0, 0, 0.2);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-400);
-    text-transform: uppercase;
-    letter-spacing: var(--letter-spacing-wide);
-}
-
-@media (max-width: 640px) {
-    .items-header {
-        display: none;
-    }
-}
-
-.item-row {
-    display: grid;
-    grid-template-columns: 2fr 80px 120px 120px;
-    gap: var(--spacing-4);
-    padding: var(--spacing-4);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    align-items: center;
-}
-
-.item-row:last-child {
-    border-bottom: none;
-}
-
-@media (max-width: 640px) {
-    .item-row {
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-2);
-        align-items: flex-start;
-    }
-    
-    .item-row .col-description {
-        font-weight: var(--font-weight-medium);
-        color: var(--color-neutral-0);
-    }
-    
-    .item-row .col-quantity::before {
-        content: 'Qty: ';
-        color: var(--color-neutral-500);
-    }
-    
-    .item-row .col-price::before {
-        content: 'Price: ';
-        color: var(--color-neutral-500);
-    }
-    
-    .item-row .col-total::before {
-        content: 'Total: ';
-        color: var(--color-neutral-500);
-    }
-}
-
-.col-description {
-    color: var(--color-neutral-200);
-}
-
-.col-quantity,
-.col-price {
-    color: var(--color-neutral-400);
-    text-align: right;
-}
-
-.col-total {
-    color: var(--color-neutral-0);
-    font-weight: var(--font-weight-medium);
-    text-align: right;
-}
-
-.item-row.empty {
-    display: flex;
-    justify-content: center;
-    color: var(--color-neutral-500);
-    font-style: italic;
-}
-
-.invoice-summary {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: var(--spacing-3);
-    margin-bottom: var(--spacing-8);
-    padding-top: var(--spacing-6);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.summary-row {
-    display: flex;
-    justify-content: space-between;
-    width: 280px;
-    padding: var(--spacing-2) 0;
-}
-
-@media (max-width: 480px) {
-    .summary-row {
-        width: 100%;
-    }
-}
-
-.summary-label {
-    color: var(--color-neutral-400);
-}
-
-.summary-value {
-    font-weight: var(--font-weight-medium);
-    color: var(--color-neutral-0);
-}
-
-.summary-row.total {
-    padding-top: var(--spacing-4);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.summary-row.total .summary-label,
-.summary-row.total .summary-value {
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-bold);
-}
-
-.summary-row.total .summary-value {
-    color: var(--color-accent-500);
-}
-
-.invoice-notes {
-    padding-top: var(--spacing-6);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.notes-title {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-400);
-    text-transform: uppercase;
-    letter-spacing: var(--letter-spacing-wide);
-    margin-bottom: var(--spacing-3);
-}
-
-.notes-content {
-    color: var(--color-neutral-300);
-    line-height: var(--line-height-relaxed);
-}
-
-.invoice-actions {
-    margin-top: var(--spacing-6);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: var(--spacing-4);
-}
-
-@media (max-width: 768px) {
-    .invoice-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
-}
-
-.status-form {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-3);
-}
-
-.status-label {
-    font-size: var(--font-size-sm);
-    color: var(--color-neutral-400);
-}
-
-.status-select {
-    padding: var(--spacing-2) var(--spacing-3);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-lg);
-    color: var(--color-neutral-0);
-    font-size: var(--font-size-sm);
-}
-
-.status-select:focus {
-    outline: none;
-    border-color: var(--color-primary-500);
-}
-
-.action-links {
-    display: flex;
-    gap: var(--spacing-4);
-    flex-wrap: wrap;
-}
-
-.action-link {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-2);
-    font-size: var(--font-size-sm);
-    color: var(--color-primary-400);
-    transition: color var(--transition-fast);
-}
-
-.action-link:hover {
-    color: var(--color-primary-300);
-}
-
-.action-link svg {
-    width: 18px;
-    height: 18px;
-}
-
-.action-link.danger {
-    color: var(--color-error);
-}
-
-.action-link.danger:hover {
-    color: #f87171;
-}
-    </style>
-{% endblock %}
 {% block extra_js %}
-    <script nonce="{{ request.csp_nonce }}">
+<script nonce="{{ request.csp_nonce }}">
 document.addEventListener('DOMContentLoaded', function() {
-    const mobileToggle = document.querySelector('.mobile-menu-toggle');
-    const sidebar = document.querySelector('.app-sidebar');
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const sidebar = document.getElementById('dashboard-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
     
-    if (mobileToggle && sidebar) {
+    if (mobileToggle) {
         mobileToggle.addEventListener('click', function() {
             sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        });
+    }
+    
+    if (overlay) {
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
         });
     }
 });
-    </script>
+</script>
 {% endblock %}

@@ -1,846 +1,277 @@
 {% extends "base/layout.html" %}
-{% block title %}Analytics - InvoiceFlow{% endblock %}
-{% block body_class %}app-page{% endblock %}
+{% load static %}
+{% block title %}Analytics{% endblock %}
+{% block body_class %}dashboard-light-page{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard-light.css' %}">
+{% endblock %}
+
 {% block nav %}{% endblock %}
 {% block footer %}{% endblock %}
+
 {% block content %}
-    <div class="app-layout">
-        <aside class="app-sidebar">
-            <div class="sidebar-header">
-                <a href="{% url 'home' %}" class="nav-logo">
-                    <div class="nav-logo-icon">
-                        <svg viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="2"
-                             stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                            <polyline points="14 2 14 8 20 8" />
-                            <line x1="16" y1="13" x2="8" y2="13" />
-                            <line x1="16" y1="17" x2="8" y2="17" />
+<div class="dashboard-light">
+    {% include 'components/sidebar-light.html' with active='analytics' %}
+    
+    <main class="dashboard-light-main">
+        <header class="dashboard-light-header">
+            <div class="dashboard-light-header-content">
+                <h1>Analytics</h1>
+                <p>Track your business performance and revenue insights</p>
+            </div>
+        </header>
+        
+        <div class="stats-light-grid">
+            <div class="stat-light-card stat-revenue">
+                <div class="stat-light-header">
+                    <div class="stat-light-icon icon-success">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="1" x2="12" y2="23"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                         </svg>
                     </div>
-                    <span class="nav-logo-text">InvoiceFlow</span>
-                </a>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="{% url 'dashboard' %}" class="sidebar-link">
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2">
-                        <rect x="3" y="3" width="7" height="7" />
-                        <rect x="14" y="3" width="7" height="7" />
-                        <rect x="14" y="14" width="7" height="7" />
-                        <rect x="3" y="14" width="7" height="7" />
-                    </svg>
-                    Dashboard
-                </a>
-                <a href="{% url 'create_invoice' %}" class="sidebar-link">
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2">
-                        <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="8" x2="12" y2="16" />
-                        <line x1="8" y1="12" x2="16" y2="12" />
-                    </svg>
-                    New Invoice
-                </a>
-                <a href="{% url 'analytics' %}" class="sidebar-link active">
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2">
-                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-                    </svg>
-                    Analytics
-                </a>
-                <a href="{% url 'settings' %}" class="sidebar-link">
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2">
-                        <circle cx="12" cy="12" r="3" />
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-                    </svg>
-                    Settings
-                </a>
-            </nav>
-            <div class="sidebar-footer">
-                <a href="{% url 'logout' %}" class="sidebar-link">
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                        <polyline points="16 17 21 12 16 7" />
-                        <line x1="21" y1="12" x2="9" y2="12" />
-                    </svg>
-                    Log out
-                </a>
-            </div>
-        </aside>
-        <button class="mobile-menu-toggle" aria-label="Toggle sidebar">
-            <svg viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="2">
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-            </svg>
-        </button>
-        <main class="app-main">
-            <header class="page-header">
-                <h1 class="page-title">Analytics</h1>
-                <p class="page-subtitle">Track your invoicing performance and revenue insights</p>
-            </header>
-            <div class="stats-grid">
-                <div class="stat-card glass-card">
-                    <div class="stat-header">
-                        <span class="stat-label">Total Revenue</span>
-                        <div class="stat-icon revenue">
-                            <svg viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="2">
-                                <circle cx="12" cy="12" r="10" />
-                                <path d="M12 6v12M16 10l-4-4-4 4" />
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="stat-value">{{ currency_symbol|default:"$" }}{{ total_revenue|default:"0.00" }}</div>
-                    <div class="stat-trend positive">
-                        <svg viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="2">
-                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                    {% if revenue_growth > 0 %}
+                    <div class="stat-light-trend trend-up">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
                         </svg>
-                        <span>From paid invoices</span>
+                        +{{ revenue_growth|floatformat:1 }}%
                     </div>
-                </div>
-                <div class="stat-card glass-card">
-                    <div class="stat-header">
-                        <span class="stat-label">Total Invoices</span>
-                        <div class="stat-icon invoices">
-                            <svg viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                <polyline points="14 2 14 8 20 8" />
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="stat-value">{{ total_invoices|default:0 }}</div>
-                    <div class="stat-trend neutral">
-                        <span>All time invoices created</span>
-                    </div>
-                </div>
-                <div class="stat-card glass-card">
-                    <div class="stat-header">
-                        <span class="stat-label">Paid Invoices</span>
-                        <div class="stat-icon paid">
-                            <svg viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="2">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                                <polyline points="22 4 12 14.01 9 11.01" />
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="stat-value">{{ paid_count|default:0 }}</div>
-                    <div class="stat-trend positive">
-                        <svg viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="2">
-                            <polyline points="20 6 9 17 4 12" />
+                    {% elif revenue_growth < 0 %}
+                    <div class="stat-light-trend trend-down">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
                         </svg>
-                        <span>Successfully collected</span>
+                        {{ revenue_growth|floatformat:1 }}%
                     </div>
-                </div>
-                <div class="stat-card glass-card">
-                    <div class="stat-header">
-                        <span class="stat-label">Unpaid Invoices</span>
-                        <div class="stat-icon unpaid">
-                            <svg viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="2">
-                                <circle cx="12" cy="12" r="10" />
-                                <line x1="12" y1="8" x2="12" y2="12" />
-                                <line x1="12" y1="16" x2="12.01" y2="16" />
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="stat-value">{{ unpaid_count|default:0 }}</div>
-                    <div class="stat-trend warning">
-                        <span>Awaiting payment</span>
-                    </div>
-                </div>
-            </div>
-            <div class="analytics-grid">
-                <div class="analytics-card glass-card">
-                    <div class="card-header">
-                        <h3 class="card-title">Invoice Status Breakdown</h3>
-                    </div>
-                    <div class="card-content">
-                        <div class="status-chart">
-                            {% if total_invoices > 0 %}
-                                <div class="chart-visual">
-                                    <div class="chart-ring">
-                                        <svg viewBox="0 0 36 36">
-                                            <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                            <path class="ring-paid" stroke-dasharray="{{ paid_percentage|default:0 }}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                        </svg>
-                                        <div class="chart-center">
-                                            <span class="chart-percent">{{ paid_percentage|default:0 }}%</span>
-                                            <span class="chart-label">Paid</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% else %}
-                                <div class="empty-chart">
-                                    <svg viewBox="0 0 24 24"
-                                         fill="none"
-                                         stroke="currentColor"
-                                         stroke-width="2">
-                                        <circle cx="12" cy="12" r="10" />
-                                        <line x1="12" y1="8" x2="12" y2="12" />
-                                        <line x1="12" y1="16" x2="12.01" y2="16" />
-                                    </svg>
-                                    <p>No invoices yet</p>
-                                </div>
-                            {% endif %}
-                        </div>
-                        <div class="status-legend">
-                            <div class="legend-item">
-                                <span class="legend-dot paid"></span>
-                                <span class="legend-label">Paid</span>
-                                <span class="legend-value">{{ paid_count|default:0 }}</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-dot unpaid"></span>
-                                <span class="legend-label">Unpaid</span>
-                                <span class="legend-value">{{ unpaid_count|default:0 }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="analytics-card glass-card">
-                    <div class="card-header">
-                        <h3 class="card-title">Revenue Overview</h3>
-                    </div>
-                    <div class="card-content">
-                        <div class="revenue-stats">
-                            <div class="revenue-item">
-                                <div class="revenue-icon total">
-                                    <svg viewBox="0 0 24 24"
-                                         fill="none"
-                                         stroke="currentColor"
-                                         stroke-width="2">
-                                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
-                                        <line x1="1" y1="10" x2="23" y2="10" />
-                                    </svg>
-                                </div>
-                                <div class="revenue-info">
-                                    <span class="revenue-label">Total Invoiced</span>
-                                    <span class="revenue-value">{{ currency_symbol|default:"$" }}{{ total_invoiced|default:"0.00" }}</span>
-                                </div>
-                            </div>
-                            <div class="revenue-item">
-                                <div class="revenue-icon collected">
-                                    <svg viewBox="0 0 24 24"
-                                         fill="none"
-                                         stroke="currentColor"
-                                         stroke-width="2">
-                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                                        <polyline points="9 12 11 14 15 10" />
-                                    </svg>
-                                </div>
-                                <div class="revenue-info">
-                                    <span class="revenue-label">Collected</span>
-                                    <span class="revenue-value success">{{ currency_symbol|default:"$" }}{{ total_revenue|default:"0.00" }}</span>
-                                </div>
-                            </div>
-                            <div class="revenue-item">
-                                <div class="revenue-icon pending">
-                                    <svg viewBox="0 0 24 24"
-                                         fill="none"
-                                         stroke="currentColor"
-                                         stroke-width="2">
-                                        <circle cx="12" cy="12" r="10" />
-                                        <polyline points="12 6 12 12 16 14" />
-                                    </svg>
-                                </div>
-                                <div class="revenue-info">
-                                    <span class="revenue-label">Outstanding</span>
-                                    <span class="revenue-value warning">{{ currency_symbol|default:"$" }}{{ outstanding_amount|default:"0.00" }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="analytics-card glass-card full-width">
-                <div class="card-header">
-                    <h3 class="card-title">Recent Activity</h3>
-                    <a href="{% url 'dashboard' %}" class="card-link">View All</a>
-                </div>
-                <div class="card-content">
-                    {% if recent_invoices %}
-                        <div class="activity-list">
-                            {% for invoice in recent_invoices %}
-                                <div class="activity-item">
-                                    <div class="activity-icon {% if invoice.status == 'paid' %}paid{% else %}unpaid{% endif %}">
-                                        <svg viewBox="0 0 24 24"
-                                             fill="none"
-                                             stroke="currentColor"
-                                             stroke-width="2">
-                                            {% if invoice.status == 'paid' %}
-                                                <polyline points="20 6 9 17 4 12" />
-                                            {% else %}
-                                                <circle cx="12" cy="12" r="10" />
-                                                <line x1="12" y1="8" x2="12" y2="12" />
-                                                <line x1="12" y1="16" x2="12.01" y2="16" />
-                                            {% endif %}
-                                        </svg>
-                                    </div>
-                                    <div class="activity-content">
-                                        <span class="activity-title">{{ invoice.invoice_id }}</span>
-                                        <span class="activity-meta">{{ invoice.client_name }} - {{ invoice.created_at|date:"M d, Y" }}</span>
-                                    </div>
-                                    <div class="activity-amount">{{ invoice.currency }} {{ invoice.total }}</div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <div class="empty-state">
-                            <svg viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                <polyline points="14 2 14 8 20 8" />
-                                <line x1="12" y1="11" x2="12" y2="17" />
-                                <line x1="9" y1="14" x2="15" y2="14" />
-                            </svg>
-                            <p>No invoices yet. Create your first invoice to see activity here.</p>
-                            <a href="{% url 'create_invoice' %}" class="btn btn-primary">Create Invoice</a>
-                        </div>
                     {% endif %}
                 </div>
+                <div class="stat-light-value">${{ total_revenue|floatformat:2|default:"0.00" }}</div>
+                <div class="stat-light-label">Total Revenue</div>
             </div>
-        </main>
-    </div>
+            
+            <div class="stat-light-card stat-invoices">
+                <div class="stat-light-header">
+                    <div class="stat-light-icon icon-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="stat-light-value">{{ total_invoices|default:0 }}</div>
+                <div class="stat-light-label">Total Invoices</div>
+            </div>
+            
+            <div class="stat-light-card stat-paid">
+                <div class="stat-light-header">
+                    <div class="stat-light-icon icon-info">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="stat-light-value">{{ paid_invoices|default:0 }}</div>
+                <div class="stat-light-label">Paid Invoices</div>
+            </div>
+            
+            <div class="stat-light-card stat-pending">
+                <div class="stat-light-header">
+                    <div class="stat-light-icon icon-warning">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="stat-light-value">${{ pending_amount|floatformat:2|default:"0.00" }}</div>
+                <div class="stat-light-label">Pending Amount</div>
+            </div>
+        </div>
+        
+        <div class="dashboard-light-grid">
+            <div class="card-light">
+                <div class="card-light-header">
+                    <h2 class="card-light-title">Revenue Over Time</h2>
+                    <span style="font-size: 0.875rem; color: var(--light-text-tertiary);">Last 12 months</span>
+                </div>
+                <div class="card-light-body">
+                    <div class="chart-light-container" style="height: 350px;">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-light">
+                <div class="card-light-header">
+                    <h2 class="card-light-title">Invoice Status</h2>
+                </div>
+                <div class="card-light-body">
+                    <div class="chart-light-container" style="height: 350px;">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-light" style="margin-top: 24px;">
+            <div class="card-light-header">
+                <h2 class="card-light-title">Top Clients</h2>
+                <span style="font-size: 0.875rem; color: var(--light-text-tertiary);">By total revenue</span>
+            </div>
+            {% if top_clients %}
+            <div style="overflow-x: auto;">
+                <table class="table-light">
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Invoices</th>
+                            <th>Total Revenue</th>
+                            <th>Avg Invoice</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for client in top_clients %}
+                        <tr>
+                            <td style="font-weight: 600;">{{ client.name }}</td>
+                            <td>{{ client.invoice_count }}</td>
+                            <td>${{ client.total_revenue|floatformat:2 }}</td>
+                            <td>${{ client.avg_invoice|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="card-light-body">
+                <div class="empty-light-state" style="padding: 32px;">
+                    <p style="color: var(--light-text-tertiary); margin: 0;">No client data available yet</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+</div>
 {% endblock %}
-{% block extra_css %}
-    <style>
-.app-page {
-    background: var(--gradient-dark);
-}
 
-.app-layout {
-    display: flex;
-    min-height: 100vh;
-}
-
-.app-sidebar {
-    width: 260px;
-    background: rgba(0, 0, 0, 0.3);
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    z-index: 100;
-    transition: transform var(--transition-base);
-}
-
-@media (max-width: 1024px) {
-    .app-sidebar {
-        transform: translateX(-100%);
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script nonce="{{ request.csp_nonce }}">
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const sidebar = document.getElementById('dashboard-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        });
     }
     
-    .app-sidebar.open {
-        transform: translateX(0);
+    if (overlay) {
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        });
     }
-}
-
-.sidebar-header {
-    padding: var(--spacing-6);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.sidebar-nav {
-    flex: 1;
-    padding: var(--spacing-4);
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-1);
-}
-
-.sidebar-link {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-3);
-    padding: var(--spacing-3) var(--spacing-4);
-    border-radius: var(--radius-xl);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-neutral-400);
-    transition: all var(--transition-fast);
-}
-
-.sidebar-link svg {
-    width: 20px;
-    height: 20px;
-}
-
-.sidebar-link:hover {
-    color: var(--color-neutral-0);
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.sidebar-link.active {
-    color: var(--color-neutral-0);
-    background: var(--gradient-primary);
-}
-
-.sidebar-footer {
-    padding: var(--spacing-4);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* Mobile menu toggle and app-main styles moved to components.css */
-
-.page-header {
-    margin-bottom: var(--spacing-8);
-}
-
-.page-title {
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-neutral-0);
-    margin-bottom: var(--spacing-2);
-}
-
-.page-subtitle {
-    color: var(--color-neutral-400);
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--spacing-6);
-    margin-bottom: var(--spacing-8);
-}
-
-@media (max-width: 1200px) {
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
+    
+    const revenueCtx = document.getElementById('revenueChart');
+    if (revenueCtx) {
+        const revenueData = {{ revenue_chart_data|safe|default:'{"labels": [], "data": []}' }};
+        
+        new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: revenueData.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: revenueData.data || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    backgroundColor: 'rgba(99, 102, 241, 0.8)',
+                    borderColor: '#6366f1',
+                    borderWidth: 0,
+                    borderRadius: 6,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#0f172a',
+                        titleColor: '#ffffff',
+                        bodyColor: '#ffffff',
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                return '$' + context.parsed.y.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#64748b',
+                            font: { size: 12 }
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: '#e2e8f0'
+                        },
+                        ticks: {
+                            color: '#64748b',
+                            font: { size: 12 },
+                            callback: function(value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
-}
-
-@media (max-width: 640px) {
-    .stats-grid {
-        grid-template-columns: 1fr;
+    
+    const statusCtx = document.getElementById('statusChart');
+    if (statusCtx) {
+        new Chart(statusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Paid', 'Unpaid', 'Overdue'],
+                datasets: [{
+                    data: [{{ paid_invoices|default:0 }}, {{ unpaid_invoices|default:0 }}, {{ overdue_invoices|default:0 }}],
+                    backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                    borderWidth: 0,
+                    spacing: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true,
+                            font: { size: 14 }
+                        }
+                    }
+                }
+            }
+        });
     }
-}
-
-.stat-card {
-    padding: var(--spacing-6);
-}
-
-.stat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: var(--spacing-4);
-}
-
-.stat-label {
-    font-size: var(--font-size-sm);
-    color: var(--color-neutral-400);
-}
-
-.stat-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-xl);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.stat-icon svg {
-    width: 22px;
-    height: 22px;
-}
-
-.stat-icon.revenue {
-    background: rgba(16, 185, 129, 0.15);
-    color: var(--color-accent-500);
-}
-
-.stat-icon.invoices {
-    background: rgba(99, 102, 241, 0.15);
-    color: var(--color-primary-400);
-}
-
-.stat-icon.paid {
-    background: rgba(16, 185, 129, 0.15);
-    color: var(--color-accent-500);
-}
-
-.stat-icon.unpaid {
-    background: rgba(245, 158, 11, 0.15);
-    color: var(--color-warning);
-}
-
-.stat-value {
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-neutral-0);
-    margin-bottom: var(--spacing-2);
-}
-
-.stat-trend {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-2);
-    font-size: var(--font-size-sm);
-}
-
-.stat-trend svg {
-    width: 16px;
-    height: 16px;
-}
-
-.stat-trend.positive {
-    color: var(--color-accent-500);
-}
-
-.stat-trend.warning {
-    color: var(--color-warning);
-}
-
-.stat-trend.neutral {
-    color: var(--color-neutral-400);
-}
-
-.analytics-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-6);
-    margin-bottom: var(--spacing-6);
-}
-
-@media (max-width: 900px) {
-    .analytics-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-.analytics-card {
-    padding: var(--spacing-6);
-}
-
-.analytics-card.full-width {
-    grid-column: 1 / -1;
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--spacing-6);
-}
-
-.card-title {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-0);
-}
-
-.card-link {
-    font-size: var(--font-size-sm);
-    color: var(--color-primary-400);
-    transition: color var(--transition-fast);
-}
-
-.card-link:hover {
-    color: var(--color-primary-300);
-}
-
-.status-chart {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: var(--spacing-6);
-}
-
-.chart-visual {
-    margin-bottom: var(--spacing-4);
-}
-
-.chart-ring {
-    position: relative;
-    width: 160px;
-    height: 160px;
-}
-
-.chart-ring svg {
-    transform: rotate(-90deg);
-}
-
-.ring-bg {
-    fill: none;
-    stroke: rgba(255, 255, 255, 0.1);
-    stroke-width: 3;
-}
-
-.ring-paid {
-    fill: none;
-    stroke: var(--color-accent-500);
-    stroke-width: 3;
-    stroke-linecap: round;
-    transition: stroke-dasharray 0.5s ease;
-}
-
-.chart-center {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.chart-percent {
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-neutral-0);
-}
-
-.chart-label {
-    font-size: var(--font-size-sm);
-    color: var(--color-neutral-400);
-}
-
-.empty-chart {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-3);
-    padding: var(--spacing-8);
-    color: var(--color-neutral-500);
-}
-
-.empty-chart svg {
-    width: 48px;
-    height: 48px;
-}
-
-.status-legend {
-    display: flex;
-    justify-content: center;
-    gap: var(--spacing-6);
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-2);
-}
-
-.legend-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-}
-
-.legend-dot.paid {
-    background: var(--color-accent-500);
-}
-
-.legend-dot.unpaid {
-    background: var(--color-warning);
-}
-
-.legend-label {
-    font-size: var(--font-size-sm);
-    color: var(--color-neutral-400);
-}
-
-.legend-value {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-0);
-}
-
-.revenue-stats {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-4);
-}
-
-.revenue-item {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-4);
-    padding: var(--spacing-4);
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: var(--radius-xl);
-}
-
-.revenue-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-xl);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.revenue-icon svg {
-    width: 22px;
-    height: 22px;
-}
-
-.revenue-icon.total {
-    background: rgba(99, 102, 241, 0.15);
-    color: var(--color-primary-400);
-}
-
-.revenue-icon.collected {
-    background: rgba(16, 185, 129, 0.15);
-    color: var(--color-accent-500);
-}
-
-.revenue-icon.pending {
-    background: rgba(245, 158, 11, 0.15);
-    color: var(--color-warning);
-}
-
-.revenue-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-1);
-}
-
-.revenue-label {
-    font-size: var(--font-size-sm);
-    color: var(--color-neutral-400);
-}
-
-.revenue-value {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-0);
-}
-
-.revenue-value.success {
-    color: var(--color-accent-500);
-}
-
-.revenue-value.warning {
-    color: var(--color-warning);
-}
-
-.activity-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-3);
-}
-
-.activity-item {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-4);
-    padding: var(--spacing-4);
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: var(--radius-xl);
-    transition: background var(--transition-fast);
-}
-
-.activity-item:hover {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.activity-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.activity-icon svg {
-    width: 20px;
-    height: 20px;
-}
-
-.activity-icon.paid {
-    background: rgba(16, 185, 129, 0.15);
-    color: var(--color-accent-500);
-}
-
-.activity-icon.unpaid {
-    background: rgba(245, 158, 11, 0.15);
-    color: var(--color-warning);
-}
-
-.activity-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-1);
-}
-
-.activity-title {
-    font-weight: var(--font-weight-medium);
-    color: var(--color-neutral-0);
-}
-
-.activity-meta {
-    font-size: var(--font-size-sm);
-    color: var(--color-neutral-400);
-}
-
-.activity-amount {
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-0);
-}
-
-.empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-4);
-    padding: var(--spacing-10);
-    text-align: center;
-}
-
-.empty-state svg {
-    width: 64px;
-    height: 64px;
-    color: var(--color-neutral-600);
-}
-
-.empty-state p {
-    color: var(--color-neutral-400);
-    max-width: 300px;
-}
-    </style>
+});
+</script>
 {% endblock %}
-<!-- Sidebar toggle JS moved to app.js initAppSidebar() -->
