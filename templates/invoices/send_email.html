@@ -1,78 +1,254 @@
-{% extends "base/layout.html" %}
+{% extends "base/layout-light.html" %}
+{% load static %}
 {% block title %}Send Invoice - InvoiceFlow{% endblock %}
+{% block body_class %}dashboard-light-page{% endblock %}
+{% block nav %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard-light.css' %}">
+<style>
+.send-email-page-light {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+}
+
+.send-email-card-light {
+    max-width: 600px;
+    width: 100%;
+    background: var(--light-bg-secondary);
+    border-radius: var(--light-radius-2xl);
+    border: 1px solid var(--light-border-primary);
+    padding: 40px;
+    box-shadow: var(--light-shadow-xl);
+}
+
+.send-email-header-light {
+    margin-bottom: 32px;
+}
+
+.send-email-title-light {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--light-text-primary);
+    margin-bottom: 8px;
+}
+
+.send-email-subtitle-light {
+    color: var(--light-text-secondary);
+    font-size: 1rem;
+}
+
+.invoice-summary-light {
+    display: flex;
+    justify-content: space-between;
+    background: var(--light-bg-tertiary);
+    border-radius: var(--light-radius-lg);
+    padding: 16px 20px;
+    margin-bottom: 28px;
+}
+
+.summary-item-light {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.summary-label-light {
+    font-size: 0.75rem;
+    color: var(--light-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.summary-value-light {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--light-text-primary);
+}
+
+.form-group-light {
+    margin-bottom: 20px;
+}
+
+.form-label-light {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--light-text-secondary);
+    margin-bottom: 8px;
+}
+
+.form-input-light {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 1rem;
+    color: var(--light-text-primary);
+    background: var(--light-bg-secondary);
+    border: 2px solid var(--light-border-primary);
+    border-radius: var(--light-radius-lg);
+    transition: all 0.2s ease;
+}
+
+.form-input-light:focus {
+    outline: none;
+    border-color: var(--light-primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.form-input-light::placeholder {
+    color: var(--light-text-muted);
+}
+
+textarea.form-input-light {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.checkbox-group-light {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.checkbox-light {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--light-primary);
+    cursor: pointer;
+}
+
+.checkbox-label-light {
+    font-size: 0.9375rem;
+    color: var(--light-text-secondary);
+    cursor: pointer;
+}
+
+.form-actions-light {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--light-border-primary);
+}
+
+.btn-cancel-email-light {
+    padding: 14px 24px;
+    background: var(--light-bg-tertiary);
+    color: var(--light-text-secondary);
+    font-size: 1rem;
+    font-weight: 500;
+    border: 1px solid var(--light-border-primary);
+    border-radius: var(--light-radius-lg);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-cancel-email-light:hover {
+    background: var(--light-bg-hover);
+    color: var(--light-text-primary);
+}
+
+.btn-send-light {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    background: var(--light-primary);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--light-radius-lg);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-send-light:hover {
+    background: var(--light-primary-hover);
+    transform: translateY(-1px);
+}
+
+.btn-send-light svg {
+    width: 20px;
+    height: 20px;
+}
+
+@media (max-width: 640px) {
+    .send-email-card-light {
+        padding: 28px 20px;
+    }
+    
+    .form-actions-light {
+        flex-direction: column-reverse;
+    }
+    
+    .btn-cancel-email-light,
+    .btn-send-light {
+        width: 100%;
+        justify-content: center;
+    }
+}
+</style>
+{% endblock %}
+
 {% block content %}
-    <div class="min-h-screen bg-gray-50 py-8">
-        <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="mb-8">
-                <h1 class="text-3xl font-bold text-gray-900">Send Invoice</h1>
-                <p class="mt-2 text-gray-600">Send invoice #{{ invoice.invoice_number }} to your client.</p>
+<div class="send-email-page-light">
+    <div class="send-email-card-light">
+        <div class="send-email-header-light">
+            <h1 class="send-email-title-light">Send Invoice</h1>
+            <p class="send-email-subtitle-light">Send invoice #{{ invoice.invoice_number|default:invoice.invoice_id }} to your client</p>
+        </div>
+        
+        <div class="invoice-summary-light">
+            <div class="summary-item-light">
+                <span class="summary-label-light">Invoice</span>
+                <span class="summary-value-light">#{{ invoice.invoice_number|default:invoice.invoice_id }}</span>
             </div>
-            <div class="bg-white shadow-lg rounded-2xl p-8">
-                <div class="mb-6 p-4 bg-gray-50 rounded-xl">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="text-sm text-gray-500">Invoice</p>
-                            <p class="font-semibold text-gray-900">#{{ invoice.invoice_number }}</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-sm text-gray-500">Amount</p>
-                            <p class="font-semibold text-gray-900">{{ invoice.currency }} {{ invoice.total_amount }}</p>
-                        </div>
-                    </div>
-                </div>
-                <form method="post" class="space-y-6">
-                    {% csrf_token %}
-                    <div>
-                        <label for="recipient" class="block text-sm font-medium text-gray-700 mb-1">Recipient Email</label>
-                        <input type="email"
-                               id="recipient"
-                               name="recipient"
-                               value="{{ invoice.client_email }}"
-                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all">
-                    </div>
-                    <div>
-                        <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Email Subject</label>
-                        <input type="text"
-                               id="subject"
-                               name="subject"
-                               value="Invoice #{{ invoice.invoice_number }} from {{ invoice.business_name }}"
-                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all">
-                    </div>
-                    <div>
-                        <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Personal Message (Optional)</label>
-                        <textarea id="message"
-                                  name="message"
-                                  rows="4"
-                                  placeholder="Add a personal note to your client..."
-                                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all"></textarea>
-                    </div>
-                    <div class="flex items-center">
-                        <input type="checkbox"
-                               id="attach_pdf"
-                               name="attach_pdf"
-                               checked
-                               class="w-5 h-5 rounded text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                        <label for="attach_pdf" class="ml-3 text-gray-700">Attach PDF invoice</label>
-                    </div>
-                    <div class="flex justify-end space-x-4 pt-4">
-                        <a href="{% url 'invoice_detail' invoice.id %}"
-                           class="px-6 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors">
-                            Cancel
-                        </a>
-                        <button type="submit"
-                                class="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors flex items-center">
-                            <svg class="w-5 h-5 mr-2"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
-                                </path>
-                            </svg>
-                            Send Invoice
-                        </button>
-                    </div>
-                </form>
+            <div class="summary-item-light" style="text-align: right;">
+                <span class="summary-label-light">Amount</span>
+                <span class="summary-value-light">{{ invoice.currency }} {{ invoice.total_amount|default:invoice.total }}</span>
             </div>
         </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group-light">
+                <label for="recipient" class="form-label-light">Recipient Email</label>
+                <input type="email" id="recipient" name="recipient" value="{{ invoice.client_email }}" class="form-input-light" required>
+            </div>
+            
+            <div class="form-group-light">
+                <label for="subject" class="form-label-light">Email Subject</label>
+                <input type="text" id="subject" name="subject" value="Invoice #{{ invoice.invoice_number|default:invoice.invoice_id }} from {{ invoice.business_name }}" class="form-input-light" required>
+            </div>
+            
+            <div class="form-group-light">
+                <label for="message" class="form-label-light">Personal Message (Optional)</label>
+                <textarea id="message" name="message" rows="4" placeholder="Add a personal note to your client..." class="form-input-light"></textarea>
+            </div>
+            
+            <div class="checkbox-group-light">
+                <input type="checkbox" id="attach_pdf" name="attach_pdf" checked class="checkbox-light">
+                <label for="attach_pdf" class="checkbox-label-light">Attach PDF invoice</label>
+            </div>
+            
+            <div class="form-actions-light">
+                <a href="{% url 'invoice_detail' invoice.id %}" class="btn-cancel-email-light">Cancel</a>
+                <button type="submit" class="btn-send-light">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 2L11 13"/>
+                        <path d="M22 2L15 22L11 13L2 9L22 2Z"/>
+                    </svg>
+                    Send Invoice
+                </button>
+            </div>
+        </form>
     </div>
+</div>
 {% endblock %}
