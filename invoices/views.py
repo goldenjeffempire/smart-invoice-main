@@ -769,7 +769,7 @@ def about(request):
 
 def careers(request):
     """Careers page with open positions."""
-    return render(request, "pages/careers.html")
+    return render(request, "pages/careers-light.html")
 
 
 def contact(request):
@@ -918,22 +918,22 @@ def system_status(request):
 
 def support(request):
     """Support/Help center page."""
-    return render(request, "pages/support.html")
+    return render(request, "pages/support-light.html")
 
 
 def faq(request):
     """FAQ page with common questions and answers."""
-    return render(request, "pages/faq.html")
+    return render(request, "pages/faq-light.html")
 
 
 def terms(request):
     """Terms of Service page."""
-    return render(request, "pages/terms.html")
+    return render(request, "pages/terms-light.html")
 
 
 def privacy(request):
     """Privacy Policy page."""
-    return render(request, "pages/privacy.html")
+    return render(request, "pages/privacy-light.html")
 
 
 def security(request):
@@ -943,7 +943,7 @@ def security(request):
 
 def blog(request):
     """Blog listing page with articles for company credibility."""
-    return render(request, "pages/blog.html")
+    return render(request, "pages/blog-light.html")
 
 
 def blog_article(request, slug):
