@@ -1501,3 +1501,88 @@
     background: var(--light-bg-hover);
     border-color: var(--light-border-secondary);
 }
+
+/* ===========================================
+   Dashboard Footer - Authenticated Pages
+   =========================================== */
+.dashboard-footer {
+    background: var(--light-bg-secondary);
+    border-top: 1px solid var(--light-border-primary);
+    padding: 20px 24px;
+    margin-top: auto;
+}
+
+.dashboard-footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    max-width: 100%;
+}
+
+.dashboard-footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dashboard-footer-copyright {
+    font-size: 0.8125rem;
+    color: var(--light-text-tertiary);
+    margin: 0;
+}
+
+.dashboard-footer-built-with {
+    font-size: 0.8125rem;
+    color: var(--light-text-tertiary);
+    margin: 0;
+}
+
+.dashboard-footer-heart {
+    color: #ef4444;
+}
+
+.dashboard-footer-creator-link {
+    color: var(--light-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.dashboard-footer-creator-link:hover {
+    color: var(--light-primary-hover);
+    text-decoration: underline;
+}
+
+.dashboard-footer-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dashboard-footer-link {
+    font-size: 0.8125rem;
+    color: var(--light-text-tertiary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.dashboard-footer-link:hover {
+    color: var(--light-primary);
+}
+
+.dashboard-footer-divider {
+    color: var(--light-border-secondary);
+}
+
+@media (max-width: 640px) {
+    .dashboard-footer-container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .dashboard-footer-content {
+        align-items: center;
+    }
+}

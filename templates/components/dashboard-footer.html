@@ -1,0 +1,19 @@
+{% load static %}
+<footer class="dashboard-footer" role="contentinfo">
+    <div class="dashboard-footer-container">
+        <div class="dashboard-footer-content">
+            <p class="dashboard-footer-copyright">&copy; {% now "Y" %} InvoiceFlow. All rights reserved.</p>
+            <p class="dashboard-footer-built-with">
+                Built with <span class="dashboard-footer-heart">&#10084;</span> by
+                <a href="https://onome-portfolio-ten.vercel.app" target="_blank" rel="noopener noreferrer" class="dashboard-footer-creator-link">Jeffery Onome Emuodafevware</a>
+            </p>
+        </div>
+        <nav class="dashboard-footer-links" aria-label="Footer links">
+            <a href="{% url 'privacy' %}" class="dashboard-footer-link">Privacy</a>
+            <span class="dashboard-footer-divider">|</span>
+            <a href="{% url 'terms' %}" class="dashboard-footer-link">Terms</a>
+            <span class="dashboard-footer-divider">|</span>
+            <a href="{% url 'contact' %}" class="dashboard-footer-link">Support</a>
+        </nav>
+    </div>
+</footer>
