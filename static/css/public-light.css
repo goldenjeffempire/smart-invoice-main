@@ -1317,6 +1317,41 @@ body.light-public {
     color: white;
 }
 
+.footer-light-credits {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.footer-light-built-with {
+    font-size: 0.875rem;
+    color: var(--pl-gray-500);
+    margin: 0;
+}
+
+.footer-light-heart {
+    color: #ef4444;
+    display: inline-block;
+    animation: footer-heart-beat 1.5s ease-in-out infinite;
+}
+
+@keyframes footer-heart-beat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+.footer-light-creator-link {
+    color: var(--pl-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--pl-transition);
+}
+
+.footer-light-creator-link:hover {
+    color: var(--pl-primary-light);
+    text-decoration: underline;
+}
+
 /* ===========================================
    Responsive Styles
    =========================================== */

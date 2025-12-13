@@ -198,7 +198,13 @@
             </div>
             
             <div class="footer-light-bottom">
-                <p class="footer-light-copyright">&copy; {% now "Y" %} InvoiceFlow. All rights reserved.</p>
+                <div class="footer-light-credits">
+                    <p class="footer-light-copyright">&copy; {% now "Y" %} InvoiceFlow. All rights reserved.</p>
+                    <p class="footer-light-built-with">
+                        Built with <span class="footer-light-heart">&#10084;</span> by
+                        <a href="https://onome-portfolio-ten.vercel.app" target="_blank" rel="noopener noreferrer" class="footer-light-creator-link">Jeffery Onome Emuodafevware</a>
+                    </p>
+                </div>
                 <div class="footer-light-legal">
                     <a href="{% url 'privacy' %}" class="footer-light-legal-link">Privacy</a>
                     <a href="{% url 'terms' %}" class="footer-light-legal-link">Terms</a>
