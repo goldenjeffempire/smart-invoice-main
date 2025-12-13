@@ -185,7 +185,7 @@ class UserProfileForm(forms.ModelForm):
         choices=TIMEZONE_CHOICES,
         widget=forms.Select(
             attrs={
-                "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                "class": "form-light-select",
             }
         ),
     )
@@ -206,50 +206,50 @@ class UserProfileForm(forms.ModelForm):
         widgets = {
             "company_name": forms.TextInput(
                 attrs={
-                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "class": "form-light-input",
                     "placeholder": "Your Company Name",
                 }
             ),
             "company_logo": forms.FileInput(
                 attrs={
-                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "class": "form-light-input",
                     "accept": "image/*",
                 }
             ),
             "business_email": forms.EmailInput(
                 attrs={
-                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "class": "form-light-input",
                     "placeholder": "business@example.com",
                 }
             ),
             "business_phone": forms.TextInput(
                 attrs={
-                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "class": "form-light-input",
                     "placeholder": "+1 (555) 123-4567",
                 }
             ),
             "business_address": forms.Textarea(
                 attrs={
-                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "class": "form-light-textarea",
                     "rows": 3,
                     "placeholder": "123 Business Street, City, State, ZIP",
                 }
             ),
             "default_currency": forms.Select(
                 attrs={
-                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "class": "form-light-select",
                 }
             ),
             "default_tax_rate": forms.NumberInput(
                 attrs={
-                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "class": "form-light-input",
                     "step": "0.01",
                     "placeholder": "0.00",
                 }
             ),
             "invoice_prefix": forms.TextInput(
                 attrs={
-                    "class": "input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all",
+                    "class": "form-light-input",
                     "placeholder": "INV-",
                 }
             ),
