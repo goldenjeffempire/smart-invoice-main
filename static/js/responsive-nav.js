@@ -119,6 +119,7 @@
     function toggleMobileNav() {
         mobileNavOpen = !mobileNavOpen;
         mobileNav.classList.toggle('is-open', mobileNavOpen);
+        mobileNav.setAttribute('aria-hidden', !mobileNavOpen);
         navToggle.setAttribute('aria-expanded', mobileNavOpen);
         document.body.style.overflow = mobileNavOpen ? 'hidden' : '';
         
@@ -130,6 +131,7 @@
     function closeMobileNav() {
         mobileNavOpen = false;
         mobileNav.classList.remove('is-open');
+        mobileNav.setAttribute('aria-hidden', 'true');
         
         if (navToggle) {
             navToggle.setAttribute('aria-expanded', 'false');
