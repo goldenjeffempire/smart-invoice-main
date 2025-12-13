@@ -231,10 +231,10 @@
 {% block footer %}{% endblock %}
 
 {% block content %}
-<div class="dashboard-light">
+<div class="dashboard-layout">
     {% include 'components/sidebar-light.html' with active='settings' %}
     
-    <main class="dashboard-light-main">
+    <main class="dashboard-main">
         <a href="{% url 'settings' %}" class="back-light-link">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="19" y1="12" x2="5" y2="12"/>

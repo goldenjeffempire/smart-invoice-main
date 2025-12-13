@@ -11,10 +11,10 @@
 {% block footer %}{% endblock %}
 
 {% block content %}
-<div class="dashboard-light">
+<div class="dashboard-layout">
     {% include 'components/sidebar-light.html' with active='dashboard' %}
     
-    <main class="dashboard-light-main">
+    <main class="dashboard-main">
         <header class="dashboard-light-header">
             <div class="dashboard-light-header-content">
                 <h1>Welcome back, {{ user.first_name|default:user.username }}</h1>
